@@ -203,7 +203,21 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/AppDelegate.o: \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/uthash.h \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponent.h \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/HelloWorldScene.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../CocosDenshion/android/../include/SimpleAudioEngine.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../CocosDenshion/android/../include/Export.h \
+ jni/../../Classes/IntroScene.h jni/../../Classes/LoadingScene.h \
+ jni/../../Classes/AppMacros.h jni/../../Classes/Utils.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath \
+ jni/../../Classes/StaticSceneManager.h jni/../../Classes/AnalyticX.h \
+ jni/../../Classes/User.h jni/../../Classes/DailyChallenges.h \
+ jni/../../Classes/Crystal.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime \
+ jni/../../Classes/WeeklyChallenges.h jni/../../Classes/UserStats.h \
+ jni/../../Classes/GameStats.h jni/../../Classes/Dwarf.h \
+ jni/../../Classes/MissionManager.h jni/../../Classes/UpgradeScene.h \
+ jni/../../Classes/MissionScene.h jni/../../Classes/PauseScene.h \
+ jni/../../Classes/LoadingScreen.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -614,3 +628,47 @@ jni/../../Classes/AppDelegate.h:
 /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h:
 
 jni/../../Classes/HelloWorldScene.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../CocosDenshion/android/../include/SimpleAudioEngine.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../CocosDenshion/android/../include/Export.h:
+
+jni/../../Classes/IntroScene.h:
+
+jni/../../Classes/LoadingScene.h:
+
+jni/../../Classes/AppMacros.h:
+
+jni/../../Classes/Utils.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath:
+
+jni/../../Classes/StaticSceneManager.h:
+
+jni/../../Classes/AnalyticX.h:
+
+jni/../../Classes/User.h:
+
+jni/../../Classes/DailyChallenges.h:
+
+jni/../../Classes/Crystal.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime:
+
+jni/../../Classes/WeeklyChallenges.h:
+
+jni/../../Classes/UserStats.h:
+
+jni/../../Classes/GameStats.h:
+
+jni/../../Classes/Dwarf.h:
+
+jni/../../Classes/MissionManager.h:
+
+jni/../../Classes/UpgradeScene.h:
+
+jni/../../Classes/MissionScene.h:
+
+jni/../../Classes/PauseScene.h:
+
+jni/../../Classes/LoadingScreen.h:

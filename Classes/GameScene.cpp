@@ -197,6 +197,7 @@ GameScene::~GameScene()
     if(_flyObjects)_flyObjects->release();
 }
 
+/*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void ERRCHECK(FMOD_RESULT result)
 {
@@ -321,6 +322,7 @@ void GameScene::updateSound(float delta)
         system->update();
 }
 #endif
+*/
 
 void GameScene::updateDwarfMusic()
 {
@@ -1279,6 +1281,7 @@ bool GameScene::init()
     mTotalPointsInGame = 0;
     _SpawnSpecialTrolls = 0;
     
+    /*
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if(mFmodEnabled)
     {
@@ -1337,6 +1340,7 @@ bool GameScene::init()
         system->update();
     }
 #endif
+    */
     
     _mission_dwarfs_spawned = 0;
     _mission_dwarfs_max = 0;
@@ -7997,11 +8001,12 @@ void GameScene::update(float delta)
     
     
     
-    
+    /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if(mFmodEnabled)
         updateSound(delta);
 #endif
+    */
     
     if (_gamePause)
         return;//Wait a bit

@@ -22,10 +22,12 @@
 
 #include "MissionManager.h"
 
+/*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
 #include "fmod_errors.h"
 #endif
+*/
 
 #include "TimedSpriteAnimation.h"
 
@@ -505,6 +507,7 @@ public:
     //Fmod stuff
     bool mFmodEnabled;
     
+    /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     FMOD::System     *system;
     FMOD::Sound      *sound1, *sound2, *sound3, *sound4;
@@ -518,6 +521,7 @@ public:
     
     
 #endif
+    */
     
     bool mMusic1_On;
     bool mMusic2_On;

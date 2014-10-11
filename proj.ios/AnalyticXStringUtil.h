@@ -1,14 +1,22 @@
 //
 //  AnalyticXStringUtil.h
-//  DwarfForest
+//  AnalyticX
 //
-//  Created by Kristaps Auzins on 11/10/14.
-//
+//  Created by diwwu on 5/10/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef __DwarfForest__AnalyticXStringUtil__
-#define __DwarfForest__AnalyticXStringUtil__
+#ifndef AnalyticX_AnalyticXStringUtil_h
+#define AnalyticX_AnalyticXStringUtil_h
 
-#include <stdio.h>
+#include "cocos2d.h"
 
-#endif /* defined(__DwarfForest__AnalyticXStringUtil__) */
+@interface AnalyticXStringUtil:NSObject
+
++ (NSString *)nsstringFromCString:(const char *)cstring;
++ (const char *)cstringFromNSString:(NSString *)nsstring;
++ (NSDictionary *)nsDictionaryFromCCDictionary:(cocos2d::CCDictionary *)ccDictionary;
+
+@end
+
+#endif

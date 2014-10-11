@@ -1,7 +1,26 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 
+#include <SimpleAudioEngine.h>
+
+#include <vector>
+#include <string>
+
+#include "IntroScene.h"
+#include "LoadingScene.h"
+#include "AppMacros.h"
+#include "Utils.h"
+#include "StaticSceneManager.h"
+#include "AnalyticX.h"
+#include "User.h"
+#include "UpgradeScene.h"
+#include "MissionScene.h"
+#include "PauseScene.h"
+#include "LoadingScreen.h"
+
 USING_NS_CC;
+using namespace std;
+using namespace CocosDenshion;
 
 AppDelegate::AppDelegate() {
 
@@ -47,4 +66,9 @@ void AppDelegate::applicationWillEnterForeground() {
 
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+}
+
+void AppDelegate::aplicationPathRecieved()
+{
+    CCLog("done !!!");
 }

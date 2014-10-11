@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B55A1EEA-590A-48B5-8AC5-C774A019E778</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DwarfForest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4E60FB5BA53935EF42F03895CA5E1301CFFA343F</key>
+		<string>https://github.com/MatudaGames/DwarfForest.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>proj.ios/DwarfForest.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4E60FB5BA53935EF42F03895CA5E1301CFFA343F</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/MatudaGames/DwarfForest.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4E60FB5BA53935EF42F03895CA5E1301CFFA343F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4E60FB5BA53935EF42F03895CA5E1301CFFA343F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DwarfForest</string>
+		</dict>
+	</array>
+</dict>
+</plist>
