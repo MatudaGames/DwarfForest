@@ -138,13 +138,6 @@ void MissionManager::Donwloaded()
     
     mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
     mCurrentActiveMission = 0;
-    CCLOG("CCDictionary 1");
-    
-//    cocos2d::CCDictionary* plistDictionary=cocos2d::CCDictionary::createWithContentsOfFile("DF_Missions2.plist");
-    //    cocos2d::CCDictionary *myKeyValuePairDictionary = cocos2d::CCDictionary::createWithContentsOfFile("DF_Missions.plist");
-    CCLOG("CCDictionary 2");
-    
-    CCLOG("CCDictionary %u",plistDictionary->count());
     
     MissionSet* mission=new MissionSet();
     //    cocos2d::CCDictElement* pElement = NULL;
@@ -275,12 +268,9 @@ MissionManager::MissionManager()
         std::string saveFileName;
         saveFileName = "DF_Missions2.plist";
         saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
-//        FILE *handle = fopen(saveFileName.c_str(), "w+");
         
-        
-//        pFile = fopen("DF_Missions2.plist", "w+");
         pFile = fopen(saveFileName.c_str(), "w+");
-        curl_easy_setopt(pCurl,CURLOPT_URL,"http://matudagames.com/DF/DF_Missions.plist");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/m8usklijiq1c2u5/DF_Missions.plist?dl=1");
                          if(pFile != NULL)
                          {
                              curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
@@ -289,6 +279,8 @@ MissionManager::MissionManager()
                              curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
                              curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
                              curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+                             curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+                             curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
                              nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
                              curl_easy_cleanup(pCurl);           //Release the related resources
                              fputs ("fopen example",pFile);

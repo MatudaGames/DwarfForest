@@ -56,7 +56,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
     
     //Test resources
-//    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
+    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
     
     //Sprite sheets !!!
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("gadalaiki.plist");
