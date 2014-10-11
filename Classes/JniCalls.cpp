@@ -15,16 +15,16 @@ void JniCalls::openLeaderboards()
 	JniMethodInfo t;
 
 	if (JniHelper::getStaticMethodInfo(t,
-			"lv.elviss.dwarfforest.DwarfForest",
+			"lv.gamevision.dwarfforest.DwarfForest",
 			"getInstance",
-			"()Llv/elviss/dwarfforest/DwarfForest;"))
+			"()Llv/gamevision/dwarfforest/DwarfForest;"))
 	{
 		jobject obj = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 
 		JniMethodInfo openLeaderBoard;
 
 		if (JniHelper::getMethodInfo(openLeaderBoard,
-				"lv.elviss.dwarfforest.DwarfForest",
+				"lv.gamevision.dwarfforest.DwarfForest",
 				"openLeaderboard",
 				"()V"))
 		{
@@ -42,16 +42,16 @@ void JniCalls::submitScore(double points, int level)
 	JniMethodInfo t;
 
 	if (JniHelper::getStaticMethodInfo(t,
-			"lv.elviss.dwarfforest.DwarfForest",
+			"lv.gamevision.dwarfforest.DwarfForest",
 			"getInstance",
-			"()Llv/elviss/dwarfforest/DwarfForest;"))
+			"()Llv/gamevision/dwarfforest/DwarfForest;"))
 	{
 		jobject obj = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 
 		JniMethodInfo submitScoreMethod;
 
 		if (JniHelper::getMethodInfo(submitScoreMethod,
-				"lv.elviss.dwarfforest.DwarfForest",
+				"lv.gamevision.dwarfforest.DwarfForest",
 				"submitScore",
 				"(DI)V"))
 		{
@@ -72,7 +72,7 @@ bool JniCalls::isSignedIn()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "gameServiceIsSigned", "()I")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "gameServiceIsSigned", "()I")) {
         jint version =  t.env->CallStaticIntMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
         if (version>0)
@@ -89,7 +89,7 @@ void JniCalls::openURLJNI(const char* url)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
     if (cocos2d::JniHelper::getStaticMethodInfo(t
-                    , "lv/elviss/dwarfforest/DwarfForest"
+                    , "lv/gamevision/dwarfforest/DwarfForest"
                     , "openURL"
                     , "(Ljava/lang/String;)V"))
     {
@@ -104,7 +104,7 @@ void JniCalls::signPlayerIn()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "gameServicesSignIn", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "gameServicesSignIn", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -115,7 +115,7 @@ void JniCalls::signPlayerOut()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "gameServicesSignOut", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "gameServicesSignOut", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -128,7 +128,7 @@ void JniCalls::showLeaderboards()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "showLeaderboards", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "showLeaderboards", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -139,7 +139,7 @@ void JniCalls::showAchievements()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "showAchievements", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "showAchievements", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -151,7 +151,7 @@ void JniCalls::completedAchievement(const char* theAchievement,int theAmount)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "completeAchievment", "(Ljava/lang/String;I)V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "completeAchievment", "(Ljava/lang/String;I)V")) {
         jstring name = t.env->NewStringUTF(theAchievement);
         
         t.env->CallStaticVoidMethod(t.classID, t.methodID,name,theAmount);
@@ -165,7 +165,7 @@ void JniCalls::submitScroeToLeaderboard(const char* theLeaderboard,int theAmount
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "submitScoreToLeaderboard", "(Ljava/lang/String;I)V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "submitScoreToLeaderboard", "(Ljava/lang/String;I)V")) {
         jstring name = t.env->NewStringUTF(theLeaderboard);
         
         t.env->CallStaticVoidMethod(t.classID, t.methodID,name,theAmount);
@@ -179,7 +179,7 @@ void JniCalls::shareScoreToFB(int theAmount)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "ShareScoreToFB", "(I)V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "ShareScoreToFB", "(I)V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID,theAmount);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -190,7 +190,7 @@ bool JniCalls::isFacebookSigned()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "isFacebookSigned", "()I")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "isFacebookSigned", "()I")) {
         jint version =  t.env->CallStaticIntMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
         if (version>0)
@@ -206,7 +206,7 @@ void JniCalls::loginFacebook()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "loginFacebook", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "loginFacebook", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -217,7 +217,7 @@ void JniCalls::logoutFacebook()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "logoutFacebook", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "logoutFacebook", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -229,7 +229,7 @@ void JniCalls::showTwitterFollow()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "showTwitterFollow", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "showTwitterFollow", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }
@@ -240,7 +240,7 @@ void JniCalls::showFacebookFollow()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/elviss/dwarfforest/DwarfForest", "showFacebookFollow", "()V")) {
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, "lv/gamevision/dwarfforest/DwarfForest", "showFacebookFollow", "()V")) {
         t.env->CallStaticVoidMethod(t.classID, t.methodID);
         t.env->DeleteLocalRef(t.classID);
     }

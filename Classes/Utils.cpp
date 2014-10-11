@@ -35,7 +35,7 @@ void vibrate()
         if (vibrateMethod.methodID == 0)
         {
             if (!cocos2d::JniHelper::getStaticMethodInfo(vibrateMethod,
-                                                         "lv/elviss/dwarfforest/DwarfForest",
+                                                         "lv/gamevision/dwarfforest/DwarfForest",
                                                          "vibrate",
                                                          "()V"))
             {
@@ -134,11 +134,10 @@ std::string getSoundFx(const char* theName)
     char aSoundFX[32];
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    sprintf(aSoundFX,"Sound/%s.ogg",theName);
-//    sprintf(aSoundFX,"NewSounds/%s.ogg",theName);
+//    sprintf(aSoundFX,"Sound/%s.ogg",theName);
+    sprintf(aSoundFX,"Sound/%s.wav",theName);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    sprintf(aSoundFX,"Sound/%s.wav",theName);//Maybe in wav we can use something better?
-//    sprintf(aSoundFX,"NewSounds/%s.aifc",theName);//Maybe in wav we can use something better?
+    sprintf(aSoundFX,"Sound/%s.wav",theName);
 #endif
     
     return aSoundFX;

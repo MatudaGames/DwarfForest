@@ -352,7 +352,9 @@ bool MainMenuScene::init()
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
     
-    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
+//    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
+    
+    CCSprite* MainCave = CCSprite::create("beta_feedback.png");
     MainCave->setTag(100);
     MainCave->setScale(0.4f);
     MainCave->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y-10));
@@ -1423,12 +1425,12 @@ void MainMenuScene::menuOptionsCallback(CCObject* sender)
 extern "C" {
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    jint Java_lv_elviss_dwarfforest_DwarfForest_onLoginSuccess(JNIEnv *env, jobject thiz)
+    jint Java_lv_gamevision_dwarfforest_DwarfForest_onLoginSuccess(JNIEnv *env, jobject thiz)
     {
         CCNotificationCenter::sharedNotificationCenter()->postNotification(EVENT_GOT_BONUS, NULL);
     }
     
-    jint Java_lv_elviss_dwarfforest_DwarfForest_onRecievedSign(JNIEnv *env, jobject thiz)
+    jint Java_lv_gamevision_dwarfforest_DwarfForest_onRecievedSign(JNIEnv *env, jobject thiz)
     {
         CCNotificationCenter::sharedNotificationCenter()->postNotification(EVENT_GOT_SIGN, NULL);
     }

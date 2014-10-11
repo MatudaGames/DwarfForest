@@ -333,6 +333,7 @@
 		75BCB1A319E926B6000C7C65 /* libFlurry_4.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 75BCB1A219E926B6000C7C65 /* libFlurry_4.4.0.a */; };
 		75BCB1A719E9275B000C7C65 /* AnalyticX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB1A519E9275B000C7C65 /* AnalyticX.mm */; };
 		75BCB1AA19E9277E000C7C65 /* AnalyticXStringUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB1A819E9277E000C7C65 /* AnalyticXStringUtil.mm */; };
+		75BCCD8319E93B60000C7C65 /* new_resources in Resources */ = {isa = PBXBuildFile; fileRef = 75BCCD8219E93B60000C7C65 /* new_resources */; };
 		7855E0E1153FEF240059DD9A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7855E0DF153FEF240059DD9A /* Default.png */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
@@ -1039,6 +1040,7 @@
 		75BCB1A619E9275B000C7C65 /* AnalyticX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticX.h; sourceTree = SOURCE_ROOT; };
 		75BCB1A819E9277E000C7C65 /* AnalyticXStringUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticXStringUtil.mm; sourceTree = SOURCE_ROOT; };
 		75BCB1A919E9277E000C7C65 /* AnalyticXStringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticXStringUtil.h; sourceTree = SOURCE_ROOT; };
+		75BCCD8219E93B60000C7C65 /* new_resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = new_resources; sourceTree = "<group>"; };
 		7855E0DF153FEF240059DD9A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -2362,6 +2364,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				75BCCD8219E93B60000C7C65 /* new_resources */,
 				1AFAF8B916D35E4900DB1158 /* CloseNormal.png */,
 				1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */,
 				1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */,
@@ -2451,6 +2454,7 @@
 				D4EF949C15BD2D8E00D803EB /* Icon-114.png in Resources */,
 				D4EF949E15BD2D9600D803EB /* Icon-72.png in Resources */,
 				D4EF94A015BD2D9800D803EB /* Icon-144.png in Resources */,
+				75BCCD8319E93B60000C7C65 /* new_resources in Resources */,
 				D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */,
 				D446FD6E16102124000ADA7B /* Default@2x.png in Resources */,
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,

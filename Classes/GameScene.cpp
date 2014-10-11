@@ -1401,13 +1401,6 @@ bool GameScene::init()
     mComboTimer_CollectCrystal = 0;
     mComboTimer_DwarfEnter = 0;
     
-    //Try to play the ingame music
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/gameplay_music.ogg", true);
-//#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-//    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_1.mp3", true);
-//#endif
-    
 //    PlaySpecialMusic(0);
     
     if (CCUserDefault::sharedUserDefault()->getBoolForKey("musicEnabled", true) == false)
@@ -3665,17 +3658,12 @@ void GameScene::OnFinishedMusicFadeOut()
     
     //Lets use mp3 for all !!! :D
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    //    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/gameplay_music.ogg", true);
-    theMusicPath << "music/music_GriegLoop.ogg";//<< mCurrentMusicID <<".mp3";
+    theMusicPath << "music/music_GriegLoop.ogg";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    //    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_1.mp3", true);
     theMusicPath << "music/music_GriegLoop.aifc";
 #endif
     
-//    theMusicPath << "music/music_"<< mCurrentMusicID <<".mp3";
-    
     SimpleAudioEngine::sharedEngine()->playBackgroundMusic(theMusicPath.str().c_str(), true);
-//    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_justLoop.ogg", false);
     
     mFadeOutMusic = false;
     mFadeInMusic = true;
@@ -8012,17 +8000,6 @@ void GameScene::update(float delta)
         return;//Wait a bit
 //    CCLog("delta: %f",delta);
     
-    //not good for now !!!
-//    if(mIntroPlaying)
-//    {
-//        if(!SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying())
-//        {
-//            mIntroPlaying = false;//We made it
-//            //Lets play the new song !!!
-//            SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_loop.ogg",true);
-//        }
-//    }
-    
     if(mFadeOutMusic)
     {
         //Wtf !!!
@@ -11405,7 +11382,8 @@ void GameScene::CreateComboSound(int theType,int theLevel)
     mFileFormat.clear();
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    mFileFormat<<".ogg";
+//    mFileFormat<<".ogg";
+    mFileFormat<<".aifc";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     mFileFormat<<".aifc";
 #endif
@@ -14854,12 +14832,10 @@ void GameScene::playInGameSound(const char* theName,bool theForce)
     char aSoundFX[32];
     
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    sprintf(aSoundFX,"Sound/%s.ogg",theName);
-//    sprintf(aSoundFX,"NewSounds/%s.ogg",theName);
+//    sprintf(aSoundFX,"Sound/%s.ogg",theName);
+    sprintf(aSoundFX,"Sound/%s.wav",theName);
     #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     sprintf(aSoundFX,"Sound/%s.wav",theName);//Maybe in wav we can use something better?
-//    sprintf(aSoundFX,"Sound/%s.aifc",theName);//Maybe in wav we can use something better?
-//    sprintf(aSoundFX,"NewSounds/%s.aifc",theName);//Maybe in wav we can use something better?
     #endif
     
     //Check if not doubling this sound !!!

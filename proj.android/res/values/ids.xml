@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TODO: Replace these by your achievement/leaderboard IDs! -->
+    <string name="achievement_play_the_game">CgkIt4rcyp8eEAIQAQ</string>
+    <string name="achievement_100_points">CgkIt4rcyp8eEAIQAg</string>
+    <string name="achievement_1K_points">CgkIt4rcyp8eEAIQAw</string>
+    <string name="achievement_know_how_to_play">CgkIt4rcyp8eEAIQBA</string>
+    <string name="achievement_shop_time">CgkIt4rcyp8eEAIQBQ</string>
+    <string name="achievement_want_more">CgkIt4rcyp8eEAIQCA</string>
+    <string name="leaderboard_easy">CgkIt4rcyp8eEAIQBg</string>
+    <string name="leaderboard_hard">CgkIt4rcyp8eEAIQCQ</string>
+
+</resources>
