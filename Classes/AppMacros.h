@@ -1,5 +1,4 @@
-#ifndef __APPMACROS_H__
-#define __APPMACROS_H__
+#pragma once
 
 #include "cocos2d.h"
 
@@ -23,34 +22,26 @@
    [Note] Normally, developer just need to define one design resolution(e.g. 960x640) with one or more resources.
  */
 
-#define DESIGN_RESOLUTION_480X320    0
-#define DESIGN_RESOLUTION_1024X768   1
-#define DESIGN_RESOLUTION_2048X1536  2
-
-/* If you want to switch design resolution, change next line */
-#define TARGET_DESIGN_RESOLUTION_SIZE  DESIGN_RESOLUTION_480X320
-
 typedef struct tagResource
 {
     cocos2d::CCSize size;
     char directory[100];
 }Resource;
 
-static Resource smallResource  =  { cocos2d::CCSizeMake(480, 320),   "iphone" };
-static Resource mediumResource =  { cocos2d::CCSizeMake(1024, 768),  "ipad"   };
-static Resource largeResource  =  { cocos2d::CCSizeMake(2048, 1536), "ipadhd" };
+static Resource smallResource  =  { cocos2d::CCSizeMake(426, 320),   "small" };
+static Resource mediumResource =  { cocos2d::CCSizeMake(470, 320),  "medium"   };
+static Resource largeResource  =  { cocos2d::CCSizeMake(640, 480), "large" };
+static Resource xlargeResource  =  { cocos2d::CCSizeMake(960, 720), "xlarge" };
 
-#if (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_480X320)
-static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
-#elif (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_1024X768)
-static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(1024, 768);
-#elif (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_2048X1536)
-static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(2048, 1536);
-#else
-#error unknown target design resolution!
-#endif
+static Resource iphoneResource  =  { cocos2d::CCSizeMake(480, 320),   "iphone" };
+static Resource iphonehdResource  =  { cocos2d::CCSizeMake(960, 640),   "iphonehd" };
+static Resource ipadResource =  { cocos2d::CCSizeMake(1024, 768),  "ipad"   };
+static Resource ipadhdResource  =  { cocos2d::CCSizeMake(2048, 1536), "ipadhd" };
+
+static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(960, 720);
 
 // The font size 24 is designed for small resolution, so we should change it to fit for current design resolution
-#define TITLE_FONT_SIZE  (cocos2d::CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
+#define TITLE_FONT_SIZE  (float)(cocos2d::CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
 
-#endif /* __APPMACROS_H__ */
+#define FONT_SKRANJI        "Skranji.ttf"
+#define FONT_SKRANJI_BOLD   "Skranji-Bold.ttf"
