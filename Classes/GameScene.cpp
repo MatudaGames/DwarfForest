@@ -12284,8 +12284,6 @@ void GameScene::generateDwarfMission()
         theType = DWARF_TYPE_TALL;
     }
     
-    Dwarf* dwarf = Dwarf::create(this,theType);
-    
     _possibleGeneratePoints.clear();
     bool aCanUseCave = false;//Safe check if can spawn
     int aIndexPos = 0;
@@ -12314,12 +12312,18 @@ void GameScene::generateDwarfMission()
         _lastSpawnPoint = _possibleGeneratePoints[rand() % _possibleGeneratePoints.size()];
         _lastSpawnPoints.push_back(_lastSpawnPoint);
     }
+//    else{
+//        return;
+//    }
     
+    //Should remove on dwarf exit !!!
     if (_lastSpawnPoints.size()>3)
     {
         //Remove first elemet
         _lastSpawnPoints.erase(_lastSpawnPoints.begin(),_lastSpawnPoints.begin()+1);
     }
+    
+    Dwarf* dwarf = Dwarf::create(this,theType);
     
     aIndexPos = _lastSpawnPoint;
     

@@ -536,6 +536,8 @@ void Dwarf::update(float delta)
 	CCObject* entry;
     if (_game->getGhostTimer() <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
     {
+        
+        
         CCARRAY_FOREACH(_game->getDwarves(), entry)
         {
             Dwarf* otherDwarf = (Dwarf*)entry;

@@ -73,50 +73,11 @@ static bool sortByID(MissionSet a, MissionSet b)
 
 void MissionManager::downloadPackage()
 {
-//    CURL *curl;
-//    CURLcode res;
-//    struct FtpFile ftpfile={
-//        "rfc959.txt", /* name to store the file as if succesful */
-//        NULL
-//    };
-//    
-//    curl_global_init(CURL_GLOBAL_DEFAULT);
-//    
-//    curl = curl_easy_init();
-//    if(curl) {
-//        /*
-//         * You better replace the URL with one that works!
-//         */
-//        curl_easy_setopt(curl, CURLOPT_URL,
-//                         "ftp://ftp.funet.fi/pub/standards/RFC/rfc959.txt");
-//        /* Define our callback to get called when there's data to be written */
-//        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
-//        /* Set a pointer to our struct to pass to the callback */
-//        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
-//        
-//        /* Switch on full protocol/debug output */
-//        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-//        
-//        res = curl_easy_perform(curl);
-//        
-//        /* always cleanup */
-//        curl_easy_cleanup(curl);
-//        
-//        if(CURLE_OK != res) {
-//            /* we failed */
-//            fprintf(stderr, "curl told us %d\n", res);
-//        }
-//    }
-//    
-//    if(ftpfile.stream)
-//        fclose(ftpfile.stream); /* close the local file */ 
-//    
-//    curl_global_cleanup();
+    
 }
 
 size_t static pWriteCallback(void *pData, size_t n, size_t nDataSize, FILE *stream)
 {
-    CCLOG("wut 1");
     size_t nWritten = fwrite(pData,n,nDataSize,(FILE *)stream);
     return nWritten;
 }
@@ -270,7 +231,8 @@ MissionManager::MissionManager()
         saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
         
         pFile = fopen(saveFileName.c_str(), "w+");
-        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/m8usklijiq1c2u5/DF_Missions.plist?dl=1");
+//        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/m8usklijiq1c2u5/DF_Missions.plist?dl=1");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/8kdt0m6kz3030v2/DF_Missions.xml?dl=1");
                          if(pFile != NULL)
                          {
                              curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
