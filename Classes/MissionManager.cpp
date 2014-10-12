@@ -89,6 +89,42 @@ int static DownProgresss(void* clientp,double fDownLoadTotal,double fDownLoaded,
     return 0;
 }
 
+void MissionManager::ReDownloadStuff()
+{
+    //Clear old stuff
+    mAllMission.clear();
+    
+    CURL *pCurl;
+    CURLcode nResCode;
+    
+    pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
+    if (pCurl != NULL)
+    {
+        std::string saveFileName;
+        saveFileName = "DF_Missions2.plist";
+        saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+        
+        pFile = fopen(saveFileName.c_str(), "w+");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/8kdt0m6kz3030v2/DF_Missions.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fputs ("fopen example",pFile);
+            fclose(pFile);
+            Donwloaded();
+        }
+    }
+}
+
 
 void MissionManager::Donwloaded()
 {
@@ -208,6 +244,9 @@ void MissionManager::Donwloaded()
     std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
     
     mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file downloaded","Continue");
 }
 
 MissionManager::MissionManager()
@@ -247,7 +286,8 @@ MissionManager::MissionManager()
                              curl_easy_cleanup(pCurl);           //Release the related resources
                              fputs ("fopen example",pFile);
                              fclose(pFile);
-                             nResCode == CURLE_OK ? Donwloaded() : CCLOG("CODE: %d",nResCode);
+                             Donwloaded();
+//                             nResCode == CURLE_OK ? Donwloaded() : CCLOG("CODE: %d",nResCode);
                          }
         
                          }

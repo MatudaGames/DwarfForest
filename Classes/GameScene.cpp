@@ -549,15 +549,25 @@ void GameScene::CreateMap()
     //Now run trough and set the correct places for spawn
     for(int i = 0;i<_dwarfSpawnData.size();i++)
     {
-        if(_dwarfSpawnData[i] == 0){_genearetPoints.push_back((GeneratePoint){959, 719 - 580, M_PI});}
-        else if(_dwarfSpawnData[i] == 1){_genearetPoints.push_back((GeneratePoint){959, 719 - 240, M_PI});}
-        else if(_dwarfSpawnData[i] == 2){_genearetPoints.push_back((GeneratePoint){252, 719 - 719, 1.65});}
-        else if(_dwarfSpawnData[i] == 3){_genearetPoints.push_back((GeneratePoint){756, 719 - 719, 1.65});}
-        else if(_dwarfSpawnData[i] == 4){_genearetPoints.push_back((GeneratePoint){0, 719 - 540, 0});}
-        else if(_dwarfSpawnData[i] == 5){_genearetPoints.push_back((GeneratePoint){0, 719 - 240, 0});}
-        else if(_dwarfSpawnData[i] == 6){_genearetPoints.push_back((GeneratePoint){756, 719 - 0, 4.7});}
-        else if(_dwarfSpawnData[i] == 7){_genearetPoints.push_back((GeneratePoint){252, 719 - 0, 4.7});}
+        if(_dwarfSpawnData[i] == 0){_genearetPoints.push_back((GeneratePoint){0,180,0});}
+        else if(_dwarfSpawnData[i] == 1){_genearetPoints.push_back((GeneratePoint){0,470,0});}
+        else if(_dwarfSpawnData[i] == 2){_genearetPoints.push_back((GeneratePoint){266,719,4.7});}
+        else if(_dwarfSpawnData[i] == 3){_genearetPoints.push_back((GeneratePoint){730,719,4.7});}
+        else if(_dwarfSpawnData[i] == 4){_genearetPoints.push_back((GeneratePoint){959,476,M_PI});}
+        else if(_dwarfSpawnData[i] == 5){_genearetPoints.push_back((GeneratePoint){959,178,M_PI});}
+        else if(_dwarfSpawnData[i] == 6){_genearetPoints.push_back((GeneratePoint){730,0,1.65});}
+        else if(_dwarfSpawnData[i] == 7){_genearetPoints.push_back((GeneratePoint){262,0,1.65});}
     }
+    
+//    _genearetPoints.push_back((GeneratePoint){266,719,4.7}); // 2
+//    _genearetPoints.push_back((GeneratePoint){730,719,4.7}); // 3
+//    _genearetPoints.push_back((GeneratePoint){959,476,M_PI}); // 4
+//    _genearetPoints.push_back((GeneratePoint){959,178,M_PI}); // 5
+//    _genearetPoints.push_back((GeneratePoint){730,0,1.65}); // 6
+//    _genearetPoints.push_back((GeneratePoint){262,0,1.65}); // 7
+    
+//    _genearetPoints.push_back((GeneratePoint){0,470,0}); // 1
+//    _genearetPoints.push_back((GeneratePoint){0,180,0}); // 0
     
     //now do the other nice stuff
     
@@ -5071,6 +5081,8 @@ void GameScene::disableBooster(int theType)
 
 void GameScene::checkBoosterAvailability()
 {
+    return;
+    
     CCMenuItemImage* aButton = static_cast<CCMenuItemImage*>(getChildByTag(kBoosters)->getChildByTag(kBooster_FutureSee));
     if (User::getInstance()->getDiamonds()<BOOSTER_1_PRICE)
         aButton->setOpacity(120);
@@ -5821,6 +5833,7 @@ void GameScene::onSaveFromPause()
 {
     _diamondsLabel->setString(toString(User::getInstance()->getDiamonds()).c_str());
     
+    /*
     if(User::getInstance()->mSpecial_18_Mission || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission
        || User::getInstance()->mSpecial_21_Mission || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission){
         
@@ -5868,14 +5881,15 @@ void GameScene::onSaveFromPause()
         
         return;
     }
+    */
     
     //Remove the crashed trolls and other stuff that made this save me call
-    if (_saveTroll)
-    {
-        _saveTroll->setTag(0);
-        //Fade him out and let dwarf move forward
-        _saveTroll->removeFromSave();
-    }
+//    if (_saveTroll)
+//    {
+//        _saveTroll->setTag(0);
+//        //Fade him out and let dwarf move forward
+//        _saveTroll->removeFromSave();
+//    }
     
     //Small update - remove all objects from map !!!
     if (_saveDwarf1)
@@ -5887,12 +5901,21 @@ void GameScene::onSaveFromPause()
             //Each goes to other direction
             _saveDwarf1->clearCrash(false);
             _saveDwarf2->clearCrash(false);
+            
+            _saveDwarf1->setDisabled(true);
+            _saveDwarf1->removeFromSave();
+            
+            _saveDwarf2->setDisabled(true);
+            _saveDwarf2->removeFromSave();
         }
         else
         {
             _saveDwarf1->setTag(0);
             //Just allow him to move futher !!!
             _saveDwarf1->clearCrash(true);
+            
+            _saveDwarf1->setDisabled(true);
+            _saveDwarf1->removeFromSave();
         }
     }
     
@@ -5902,25 +5925,25 @@ void GameScene::onSaveFromPause()
     */
     
     //Remove all trolls
-    for (int trollIndex = _trolls->count() - 1; trollIndex >= 0; --trollIndex)
-	{
-		Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
-		
-		if (troll->isVisible())
-            troll->removeFromSave();
-    }
+//    for (int trollIndex = _trolls->count() - 1; trollIndex >= 0; --trollIndex)
+//	{
+//		Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
+//		
+//		if (troll->isVisible())
+//            troll->removeFromSave();
+//    }
     
     //Remove all dwarfs
-    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
-	{
-		Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
-		
-		if (dwarf->isVisible())
-        {
-            dwarf->setDisabled(true);
-            dwarf->removeFromSave();
-        }
-    }
+//    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+//	{
+//		Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+//		
+//		if (dwarf->isVisible())
+//        {
+//            dwarf->setDisabled(true);
+//            dwarf->removeFromSave();
+//        }
+//    }
     
     removeAllEffects();
     
@@ -10387,6 +10410,23 @@ void GameScene::updateDwarfs(float delta)
                         if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE && !mTutorialEnabled)
                         {
                             troll->setVictory();
+                            
+                            //Use this for now !!!
+                            stopInGameSound("Footsteps");
+                            stopInGameSound("troll_walk");
+                            
+                            stopInGameSound("dwarf_web_stuck",true);
+                            
+                            dwarf->createTrollCrash();
+                            
+                            //------------------------
+                            
+                            troll->setTag(999);
+                            dwarf->setTag(999);
+                            
+                            menuSaveMeCallBack(dwarf,NULL,troll);
+                            
+                            /*
                             if(User::getInstance()->mDynamicTrolls && (User::getInstance()->mSpecial_19_Mission
                                                                        || User::getInstance()->mSpecial_20_Mission
                                                                        || User::getInstance()->mSpecial_21_Mission
@@ -10480,6 +10520,7 @@ void GameScene::updateDwarfs(float delta)
                                 
                                 menuSaveMeCallBack(dwarf,NULL,troll);
                             }
+                            */
                             
                             //------------------------
                             break;
@@ -12312,23 +12353,28 @@ void GameScene::generateDwarfMission()
         _lastSpawnPoint = _possibleGeneratePoints[rand() % _possibleGeneratePoints.size()];
         _lastSpawnPoints.push_back(_lastSpawnPoint);
     }
-//    else{
-//        return;
-//    }
-    
-    //Should remove on dwarf exit !!!
-    if (_lastSpawnPoints.size()>3)
-    {
-        //Remove first elemet
-        _lastSpawnPoints.erase(_lastSpawnPoints.begin(),_lastSpawnPoints.begin()+1);
+    else{
+        return;//Can't spawn dwarf on dwarf
     }
     
+    //Should remove on dwarf exit !!!
+//    if (_lastSpawnPoints.size()>3)
+//    {
+//        //Remove first elemet
+//        _lastSpawnPoints.erase(_lastSpawnPoints.begin(),_lastSpawnPoints.begin()+1);
+//    }
+    
     Dwarf* dwarf = Dwarf::create(this,theType);
+    
+    //Will remove where next dwarf can spawn !!!
+    dwarf->_SpawnID = _lastSpawnPoint;
     
     aIndexPos = _lastSpawnPoint;
     
     GeneratePoint generatePoint = _genearetPoints[aIndexPos];
     dwarf->setPosition(generatePoint.x,generatePoint.y);
+    dwarf->_SpawnStart = CCPoint(generatePoint.x, generatePoint.y);
+    
     dwarf->setAngle(generatePoint.angle);
     
     this->addChild(dwarf, getSpriteOrderZ(dwarf->getPositionY()));
@@ -14418,6 +14464,8 @@ bool GameScene::getMask(int32_t posX, int32_t posY)
 {
 	bool result = true;
     
+    posY = designResolutionSize.height - posY - 1; //invert Y axis
+    
     if (posX >= 0 && posX < _mask->getWidth() &&
         posY >= 0 && posY < _mask->getHeight())
     {
@@ -14425,6 +14473,8 @@ bool GameScene::getMask(int32_t posX, int32_t posY)
         
         //get alpha channel
         result = (data[4 * (posX + posY * _mask->getWidth()) + 3] != 0);
+        
+//        CCLOG("Result for mask %i",result);
     }
     
     return result;

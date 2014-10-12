@@ -83,6 +83,8 @@ public:
     void menuBackCallback(CCObject* sender);
     void menuPlayCallback(CCObject* sender);
     
+    void reloadMissions(CCObject* sender);
+    
     cocos2d::CCSprite* mMissionPad_1;
     cocos2d::CCSprite* mMissionPad_2;
     cocos2d::CCSprite* mMissionPad_3;

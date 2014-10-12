@@ -570,6 +570,8 @@ public:
     
     std::vector<GeneratePoint> _genearetPoints;
     
+    std::vector<int> _lastSpawnPoints;
+    
 private:
     
     //===========  Mission stuff  ===============
@@ -703,7 +705,7 @@ private:
     
     std::vector<int> _possibleGeneratePoints;
     
-    std::vector<int> _lastSpawnPoints;
+    
     
     std::vector<int> _possiblePowerMushroom;
     

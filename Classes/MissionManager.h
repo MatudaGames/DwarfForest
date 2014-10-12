@@ -160,6 +160,8 @@ public:
 //    size_t pWriteCallback(void *pData, size_t n, size_t nDataSize, FILE *stream);
 //    int DownProgresss(void* clientp,double fDownLoadTotal,double fDownLoaded,double fUpTotal,double fUpLoaded);
     void Donwloaded();
+    void ReDownloadStuff();
+    
     FILE *pFile;
     
     int mCurrentActiveMission;

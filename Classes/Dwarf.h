@@ -83,6 +83,9 @@ public:
     
 	void setDisabled(bool value);
 	bool getDisabled() const { return _disabled; }
+    
+    int _SpawnID;
+    cocos2d::CCPoint _SpawnStart;
 	
 	bool getForceRemove() const { return _forceRemove; }
 	bool getCanPlayAlarm() const { return _canPlayAlarm; }

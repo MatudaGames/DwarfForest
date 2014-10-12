@@ -107,6 +107,22 @@ bool MissionScene::init()
     lowBar->setPosition(mScreenSize.width/2, mScreenSize.height/2);
     this->addChild(lowBar, 1);
     
+    //--------------------------------------
+    
+    //Add the back button !!!
+    CCMenuItemImage* backButtonReload = CCMenuItemImage::create(
+                                                          "Interfeiss/back_btn0001.png",
+                                                          "Interfeiss/back_btn0002.png",
+                                                          this,
+                                                          menu_selector(MissionScene::reloadMissions));
+    backButtonReload->setAnchorPoint(ccp(0,0));
+    
+    CCMenu* backMenuReload = CCMenu::create(backButtonReload, NULL);
+    this->addChild(backMenuReload, 1);
+    backMenuReload->setPosition(-10, 300);
+    
+    //--------------------------------------
+    
     
 //    CCScrollView* aView = CCScrollView::create();
 //    CCScrollView* aView = CCScrollView::create();
@@ -461,6 +477,11 @@ bool MissionScene::init()
     CreateMissions();
     
     return true;
+}
+
+void MissionScene::reloadMissions(CCObject* sender)
+{
+    User::getInstance()->getMissionManager().ReDownloadStuff();
 }
 
 void MissionScene::menuBackCallback(CCObject* sender)

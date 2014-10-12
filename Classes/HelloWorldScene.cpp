@@ -137,7 +137,9 @@ bool HelloWorld::init()
             curl_easy_cleanup(pCurl);           //Release the related resources
             fputs ("fopen example",pFile);
             fclose(pFile);
-            nResCode == CURLE_OK ? downloaded() : CCLOG("CODE: %d",nResCode);
+//            nResCode == CURLE_OK ? downloaded() : CCLOG("CODE: %d",nResCode);
+            downloaded();
+//            nResCode == CURLE_OK ? downloaded(): CCLOG("finish");
         }
     }
 

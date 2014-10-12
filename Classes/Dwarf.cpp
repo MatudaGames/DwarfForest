@@ -83,6 +83,8 @@ bool Dwarf::init(GameScene* game,int theType)
 		return false;
 	}
     
+    _SpawnID = -1;
+    
     mBulletActive = false;
     _knockOutTime = -1;
     
@@ -426,6 +428,29 @@ void Dwarf::update(float delta)
     
 	float x = getPositionX();
 	float y = getPositionY();
+    
+    //--------------------------------------------------------------------------
+    //Check if distance is greater then 100 - then can spawn next dwarf here !!!
+    
+    if(_SpawnID != -1)
+    {
+        //_lastSpawnPoints
+        if (ccpDistanceSQ(_SpawnStart, getPosition()) >= 10000)
+        {
+            for (int i=0; i<_game->_lastSpawnPoints.size(); i++) {
+                if(_game->_lastSpawnPoints[i] == _SpawnID){
+                    //Remove this point !!! But how???
+                    _game->_lastSpawnPoints.erase(_game->_lastSpawnPoints.begin()+i);
+                    break;
+                }
+            }
+            
+            _SpawnID = -1;//Remove it
+//            _game->_lastSpawnPoints.erase(1);
+        }
+    }
+    
+    //--------------------------------------------------------------------------
 	
 	if (_effect)
 	{
@@ -536,8 +561,6 @@ void Dwarf::update(float delta)
 	CCObject* entry;
     if (_game->getGhostTimer() <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
     {
-        
-        
         CCARRAY_FOREACH(_game->getDwarves(), entry)
         {
             Dwarf* otherDwarf = (Dwarf*)entry;
