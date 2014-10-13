@@ -536,6 +536,7 @@ void MissionScene::menuPlayCallback(CCObject* sender)
     }
     else
     {
+        /*
         //Activate the hack mission for test !!!
         if(mLastClickedMission == 10){
             User::getInstance()->mSpecial_10_Mission = true;
@@ -597,6 +598,7 @@ void MissionScene::menuPlayCallback(CCObject* sender)
             User::getInstance()->mDynamicTrolls = true;
             User::getInstance()->setMachine_EnemiesLvl(1);
         }
+        */
         
         
         scene = GameScene::scene();

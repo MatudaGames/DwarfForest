@@ -123,6 +123,13 @@ struct MissionSet
     
     //Point counter for task
     int32_t Task_type;//If 1 then count dwarf for point, if 0 then count crystal points, 2 activate some powerup, 3 collect green crstals? || Task_Type
+    // 0 = crystal point count
+    // 1 = dwarf count
+    // 2 = combo level reach
+    
+    // 10 = collect green crystals
+    // 11 = collect red crystals
+    // 12 = collect blue crystals
     
     //Is this mission completed
     int32_t Completed;//1 Yes, 0 Nope || Comes from save

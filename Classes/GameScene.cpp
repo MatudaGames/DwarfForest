@@ -105,6 +105,13 @@ const unsigned int BOOSTER_2_PRICE = 5;
 const unsigned int BOOSTER_3_PRICE = 5;
 const unsigned int BOOSTER_4_PRICE = 5;
 
+#define MissionType_PointCount 0
+#define MissionType_DwarfCount 1
+#define MissionType_Combo 2
+#define MissionType_Time 3
+
+
+
 #define kBoosters 1000
 #define kBooster_NoEnemy 1003
 #define kBooster_Ghost 1002
@@ -666,6 +673,8 @@ void GameScene::CreateGameByMission()
     _mission_star_points_2 = mCurrentMission.Star_2;
     _mission_star_points_3 = mCurrentMission.Star_3;
     
+    _missionCurrentValue = -1;//So that it does update at 1st
+    
     //=================================================================
     // The mess section ?!@$
     
@@ -904,6 +913,12 @@ void GameScene::CreateGameByMission()
     //+Create the HUD stuff
     CreateGameStartHUD();
     
+    mTotalCombo = 0;
+    mTotalPoints = 0;
+    mTotalBlueDwarfs = 0;
+    mTotalOrangeDwarfs = 0;
+    CheckMissionByValue(mCurrentMission.Task_type,0);
+    
     //For now - use the old map mask stuff
     _mask = new CCImage();
     _mask->initWithImageFile("kartes_maska.png");
@@ -1139,12 +1154,19 @@ void GameScene::CreateGameStartHUD()
     
     //The star stuff
     std::stringstream theComboParticle;
-    if(mCurrentMission.Task_type==1){
+    if(mCurrentMission.Task_type==1)//Dwarf need to collect for stars
+    {
         theComboParticle << _mission_dwarfs_saved_counter <<"/"<<_mission_star_points_3;
     }
-    else if(mCurrentMission.Task_type==0){
+    else if(mCurrentMission.Task_type==0)//Points need to collect for stars
+    {
         theComboParticle <<"0/"<<_mission_star_points_3;
     }
+    else if(mCurrentMission.Task_type == 2)//Combo level reach for stars
+    {
+        theComboParticle <<"0/"<<_mission_star_points_3;
+    }
+    
     _pointsLabel->setString(theComboParticle.str().c_str());
     
     //-----------------------------------------------------------------
@@ -3460,6 +3482,8 @@ void GameScene::OnDecreaseTrollSpeed()
 
 void GameScene::UpdateMissionStars()
 {
+    return;
+    
     //Count dwarfs as points
     if(mCurrentMission.Task_type == 1){
         mTotalPointsInGame = _mission_dwarfs_saved_counter;
@@ -8008,6 +8032,17 @@ void GameScene::update(float delta)
     
     UpdateDwarfSpawn();
     
+    //Update the combo timer
+    if(mTotalComboTimer>0)
+    {
+        mTotalComboTimer-=delta*_gameSpeed;
+        if(mTotalComboTimer<=0)
+        {
+            mTotalComboTimer = 0;
+            mTotalCombo = 1;
+        }
+    }
+    
     return;
     
     
@@ -9965,6 +10000,7 @@ void GameScene::updateDwarfs(float delta)
                 }
             }
             
+            /*
             if(mCheckSpecialSpotTouch)
             {
                 if (ccpDistanceSQ(dwarf->getPosition(), mSpecialTouchSpot) <= (CAVE_DISTANCE * CAVE_DISTANCE) * GLOBAL_SCALE)
@@ -10049,6 +10085,7 @@ void GameScene::updateDwarfs(float delta)
                     }
                 }
             }
+            */
 			
 			//check if cave is reached
             if (dwarf && dwarf->getType() == DWARF_TYPE_FAT)
@@ -10070,6 +10107,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     //========================================
                     
+                    /*
                     if(User::getInstance()->mNewMissionBuild){
                         
                     }
@@ -10086,6 +10124,7 @@ void GameScene::updateDwarfs(float delta)
                             CreateComboSound(1, mTotalCombo);
                         }
                     }
+                    */
                     
                     //========================================
                     
@@ -10103,6 +10142,7 @@ void GameScene::updateDwarfs(float delta)
 //                        CreateComboSound(1, mCombo_DwarfEnter);
 //                    }
                     
+                    /*
                     if(User::getInstance()->mNewMissionBuild){
                         //Do not count points when this mode???
                         //update the dwarf counter
@@ -10129,6 +10169,39 @@ void GameScene::updateDwarfs(float delta)
                     else{
                         createPoints((CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter, 0, dwarf->getPosition(),ccc3(0, 232, 225));
                     }
+                    */
+                    
+                    
+                    
+                    //--------------------------------
+                    //The dwarf points and other cool stuff
+                    //================================
+                    // Combo
+                    
+                    if(mTotalComboTimer>0){
+                        mTotalCombo+=1;
+                        CheckMissionByValue(MissionType_Combo,mTotalCombo);
+                    }
+                    
+                    mTotalComboTimer = 4.5f;
+                    
+                    if(mTotalCombo>1)
+                    {
+                        std::stringstream theComboAmount;
+                        theComboAmount << "x" << mTotalCombo;
+                        createTextFly(theComboAmount.str().c_str(), ccp(dwarf->getPosition().x+60,dwarf->getPosition().y), 2,mTotalCombo);
+                        CreateComboSound(1, mTotalCombo);
+                    }
+                    
+                    //--------------------------------
+                    // Points for cave enter
+                    
+                    createPoints((CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter, 0, dwarf->getPosition(),ccc3(0, 232, 225));
+                    mTotalPoints+=(CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter;
+                    
+                    CheckMissionByValue(MissionType_PointCount,mTotalPoints);
+                    
+                    //--------------------------------
                     
                     
                     //Fade in/out cave
@@ -10138,6 +10211,8 @@ void GameScene::updateDwarfs(float delta)
 //                        dwarfEnterDoor(false);
                     
                     dwarfEnterDoor(true,dwarf);
+                    mTotalBlueDwarfs+=1;
+                    CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
@@ -10197,12 +10272,17 @@ void GameScene::updateDwarfs(float delta)
                         valueTotal+=CAVE_SCORE*_dwarfPointMulty;
                         aLabelDebug->setString(toString(valueTotal).c_str());
                     }
+                    
                     //--------------------------------
+                    //The dwarf points and other cool stuff
+                    //================================
+                    // Combo
                     
-                    //========================================
-                    
-                    if(mTotalComboTimer>0)
+                    if(mTotalComboTimer>0){
                         mTotalCombo+=1;
+                        CheckMissionByValue(MissionType_Combo,mTotalCombo);
+                    }
+                    
                     mTotalComboTimer = 4.5f;
                     
                     if(mTotalCombo>1)
@@ -10213,7 +10293,17 @@ void GameScene::updateDwarfs(float delta)
                         CreateComboSound(1, mTotalCombo);
                     }
                     
-                    //========================================
+                    //--------------------------------
+                    // Points for cave enter
+                    
+                    createPoints((CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter, 0, dwarf->getPosition(),ccc3(0, 232, 225));
+                    mTotalPoints+=(CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter;
+                    
+                    CheckMissionByValue(MissionType_PointCount,mTotalPoints);
+                    
+                    //--------------------------------
+                    
+                    
                     
 //                    if(mComboTimer_DwarfEnter>0)
 //                        mCombo_DwarfEnter+=1;
@@ -10228,6 +10318,7 @@ void GameScene::updateDwarfs(float delta)
 //                        CreateComboSound(1,mCombo_DwarfEnter);
 //                    }
                     
+                    /*
                     if(User::getInstance()->mNewMissionBuild){
                         //Do not count points when this mode???
                         //update the dwarf counter
@@ -10255,8 +10346,11 @@ void GameScene::updateDwarfs(float delta)
                     else{
                         createPoints((CAVE_SCORE*_dwarfPointMulty)*mCombo_DwarfEnter, 0, dwarf->getPosition(),ccc3(0, 232, 225));
                     }
+                    */
                     
                     dwarfEnterDoor(false,dwarf);
+                    mTotalOrangeDwarfs+=1;
+                    CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
@@ -10606,8 +10700,11 @@ void GameScene::updateDwarfs(float delta)
                         
                         if(crystal->_color != CRYSTAL_EGG)
                         {
-                            if(mTotalComboTimer>0)
+                            if(mTotalComboTimer>0){
                                 mTotalCombo+=1;
+                                CheckMissionByValue(MissionType_Combo,mTotalCombo);
+                            }
+                            
                             mTotalComboTimer = 4.5f;
                             
                             if(mTotalCombo>1)
@@ -11236,6 +11333,8 @@ void GameScene::addScore(int score)
         CCLog("what 1!!");
     }
     
+    /*
+    
     if(User::getInstance()->mNewMissionBuild)
     {
         _stats.points += score;
@@ -11278,7 +11377,6 @@ void GameScene::addScore(int score)
     mTotalPointsInGame+=score;
     
     _pointsLabel->setString(toString(_stats.points).c_str());
-//	_scoreLabel->setString(toString(_stats.points).c_str());
     
     //Check achievments (do we need to check if it's completed?)
     //debug for now
@@ -11294,6 +11392,7 @@ void GameScene::addScore(int score)
     //Special stuff for mission
     if(score>0 && !mTutorialEnabled)
         User::getInstance()->getMissionManager().CheckSubMission(SUB_EARN_POINTS,score);
+    */
 }
 
 //The powerup fly
@@ -16011,6 +16110,106 @@ void GameScene::AddLoopAnimation(CCNode* sender)
     CCRepeatForever* aSkewRepeat = CCRepeatForever::create(aSeq1);
     aSkewRepeat->setTag(1111);
     sender->runAction(aSkewRepeat);
+}
+
+//The new mission stuff
+void GameScene::CheckMissionByValue(int theType,float theValue)
+{
+    if(theType == mCurrentMission.Task_type)
+    {
+        //We have a match !!! Check what is this !!!
+        if(theValue>_missionCurrentValue){
+            _missionCurrentValue = theValue;
+            //Update it and check stars
+            std::stringstream theResult;
+            //Special check for time mission and other magic if needed
+            if(theType == MissionType_Time){
+                theResult << _missionCurrentValue <<"/"<<_mission_star_points_3;//Convert it to time
+            }
+            else{
+                theResult << _missionCurrentValue <<"/"<<_mission_star_points_3;
+            }
+            
+            _pointsLabel->setString(theResult.str().c_str());
+            
+            //---------------------------------------------------------------
+            //Check the stars update
+            
+            if(_missionCurrentValue>=_mission_star_points_1){
+                _mission_star_1->setOpacity(255);
+            }
+            else{
+                _mission_star_1->setOpacity(80);
+            }
+            
+            if(_missionCurrentValue>=_mission_star_points_2){
+                _mission_star_2->setOpacity(255);
+            }
+            else{
+                _mission_star_2->setOpacity(80);
+            }
+            
+            if(_missionCurrentValue>=_mission_star_points_3){
+                _mission_star_3->setOpacity(255);
+            }
+            else{
+                _mission_star_3->setOpacity(80);
+            }
+            
+            //---------------------------------------------------------------
+            // The progress bars
+            
+            //Check the points for each bar
+            int aDummyPoints = _missionCurrentValue;
+            if(aDummyPoints>_mission_star_points_1){
+                aDummyPoints = _mission_star_points_1;
+            }
+            _mission_progress_bar_1->setTextureRect(CCRect(0, 0,
+                                                           _mission_progress_bar_1->getTexture()->getContentSize().width*((float)aDummyPoints / _mission_star_points_1),
+                                                           _mission_progress_bar_1->getTexture()->getContentSize().height));
+            
+            aDummyPoints = _missionCurrentValue-_mission_star_points_1;
+            if(aDummyPoints<0){
+                aDummyPoints = 0;
+            }
+            else if(aDummyPoints>_mission_star_points_2-_mission_star_points_1){
+                aDummyPoints = _mission_star_points_2-_mission_star_points_1;
+            }
+            
+            _mission_progress_bar_2->setTextureRect(CCRect(0, 0,
+                                                           _mission_progress_bar_2->getTexture()->getContentSize().width*
+                                                           ((float)aDummyPoints / (_mission_star_points_2-_mission_star_points_1)),
+                                                           _mission_progress_bar_2->getTexture()->getContentSize().height));
+            
+            aDummyPoints = _missionCurrentValue-_mission_star_points_2;
+            if(aDummyPoints<0){
+                aDummyPoints = 0;
+            }
+            else if(aDummyPoints>_mission_star_points_3-_mission_star_points_2){
+                aDummyPoints = _mission_star_points_3-_mission_star_points_2;
+            }
+            
+            _mission_progress_bar_3->setTextureRect(CCRect(0, 0,
+                                                           _mission_progress_bar_3->getTexture()->getContentSize().width*
+                                                           ((float)aDummyPoints / (_mission_star_points_3-_mission_star_points_2)),
+                                                           _mission_progress_bar_3->getTexture()->getContentSize().height));
+            
+            aDummyPoints = _missionCurrentValue-_mission_star_points_3;
+            if(aDummyPoints<0){
+                aDummyPoints = 0;
+            }
+            else if(aDummyPoints>(_mission_star_points_3+100)-_mission_star_points_3){
+                aDummyPoints = (_mission_star_points_3+100)-_mission_star_points_3;
+            }
+            
+            _mission_progress_bar_4->setTextureRect(CCRect(0, 0,
+                                                           _mission_progress_bar_4->getTexture()->getContentSize().width*
+                                                           ((float)aDummyPoints / ((_mission_star_points_3+100)-_mission_star_points_3)),
+                                                           _mission_progress_bar_4->getTexture()->getContentSize().height));
+            
+            //---------------------------------------------------------------
+        }
+    }
 }
 
 //void GameScene:: keyBackClicked(void) {

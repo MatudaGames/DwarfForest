@@ -103,6 +103,9 @@ public:
     
     float mNoDwarfEneterCave;
     
+    void CheckMissionByValue(int theType,float theValue);
+    int _missionCurrentValue;
+    
     int mTotalPointsNeeded;
     
     int mCombo_DwarfEnter;
@@ -389,8 +392,15 @@ public:
     void addDebugCrystalPoints(int amount);
     
     void CreateComboSound(int theType,int theLevel);
-    int mTotalCombo;
+    
     float mTotalComboTimer;
+    
+    //The new global counters
+    int mTotalCombo;
+    int mTotalPoints;
+    int mTotalBlueDwarfs;
+    int mTotalOrangeDwarfs;
+    
 
 	float getGameSpeed() const { return _gameSpeed; }
 
