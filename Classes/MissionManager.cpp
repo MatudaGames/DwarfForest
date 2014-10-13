@@ -204,10 +204,18 @@ void MissionManager::Donwloaded()
             }
             else{
                 theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
             }
             
             int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._pathStartIndex = aPatrolStartPoint;
+            
+            
             
             mission->Enemy_info.push_back(theTroll);
         }
@@ -377,6 +385,12 @@ MissionManager::MissionManager()
             }
             else{
                 theTroll._circle = aPatrolCircle;
+                //Get the new values
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
             }
             
             int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();

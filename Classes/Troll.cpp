@@ -945,6 +945,11 @@ void Troll::SetMissionStuff(MissionTroll theMission)
     setPosition(ccp(200,200));//Some def value for now !!!
     setAngle(0);
     
+    _moveValue = theMission._pathStartIndex;//Start to forward?
+    if(_moveValue == 0){
+        _moveValue = 1;//Start random
+    }
+    
     if(theMission._circle>0){
         
         //The params of circles
@@ -953,19 +958,39 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         int mRadius = 0;
         
         //Check on what circle should set him !!!
-        if(theMission._circle == 1){
-            precision = 0.25f;
-            cir = 2 * M_PI;
-            mRadius = 280;
-        }
+//        if(theMission._circle == 1){
+//            precision = 0.25f;
+//            cir = 2 * M_PI;
+//            mRadius = 280;
+//        }
+        
+        precision = theMission._circle_precision*0.01;
+        cir = 2 * M_PI;
+        mRadius = theMission._circle_radius;
+        
+        int theCircleX = theMission._circle_x;
+        int theCircleY = theMission._circle_y;
+        float theCircleWidth = theMission._circle_height*0.1;
         
         //Create the circle stuff
         for (float a = 0.1f; a < cir; a += precision)
         {
-            float x = _game->visibleSize.width/2 + mRadius * cos(a);
-            float y = _game->visibleSize.height/2 + mRadius/1.5f * sin(a);
+//            float x = _game->visibleSize.width/2 + mRadius * cos(a);
+//            float y = _game->visibleSize.height/2 + mRadius/1.5f * sin(a);
+            
+            float x = theCircleX + mRadius * cos(a);
+            float y = theCircleY + mRadius/theCircleWidth * sin(a);
+            
             _movePoints->addControlPoint(ccp(x,y-50));
+            
+            CCSprite* pointsBack = CCSprite::create("DebugDot.png");
+            pointsBack->setPosition(ccp(x,y-50));
+            pointsBack->setOpacity(120);
+            _game->addChild(pointsBack,1);
         }
+        
+        //Set it to the point?
+        setPosition(_movePoints->getControlPointAtIndex(theMission._pathStartIndex));
     }
     else{
         //Create control paths !!!
@@ -978,12 +1003,18 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             
             CCSprite* pointsBack = CCSprite::create("DebugDot.png");
             pointsBack->setPosition(ccp(x,y));
+            pointsBack->setOpacity(120);
             _game->addChild(pointsBack,1);
             
             CCLog("What:%i",a);
             _movePoints->addControlPoint(ccp(x,y));
             CCLog("_movePoints.size():%i",_movePoints->count());
         }
+        
+        //Set to the start point
+        setPosition(ccp(theMission._paths[theMission._pathStartIndex]->x,theMission._paths[theMission._pathStartIndex]->y));
+        
+        
         CCLog("end");
     }
     

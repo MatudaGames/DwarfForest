@@ -90,6 +90,14 @@ struct MissionTroll
     std::vector<cocos2d::CCPoint*> _paths;//What are the patrol points
     int32_t _circle;//on what circle to patrol
     int32_t _pathStartIndex;//At what point to start
+    int32_t _startDirection;//To what direction start path or circle
+    
+    int32_t _circle_x;
+    int32_t _circle_y;
+    int32_t _circle_radius;
+    int32_t _circle_precision;
+    
+    int32_t _circle_height;
 };
 
 struct MissionSet
