@@ -205,10 +205,23 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/FreeStuffPopup.o: \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h \
  jni/../../Classes/GameScene.h jni/../../Classes/Dwarf.h \
  jni/../../Classes/Troll.h jni/../../Classes/MissionManager.h \
- jni/../../Classes/Crystal.h jni/../../Classes/Spider.h \
- jni/../../Classes/Goblin.h jni/../../Classes/Hidra.h \
- jni/../../Classes/Diamond.h jni/../../Classes/GameStats.h \
- jni/../../Classes/DailyChallengesPopUp.h \
+ jni/../../Classes/Crystal.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/socket.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/socket.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/socket.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sockios.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/sockios.h \
+ /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/uio.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h \
+ /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
+ jni/../../Classes/Spider.h jni/../../Classes/Goblin.h \
+ jni/../../Classes/Hidra.h jni/../../Classes/Diamond.h \
+ jni/../../Classes/GameStats.h jni/../../Classes/DailyChallengesPopUp.h \
  jni/../../Classes/SpriteAnimation.h \
  jni/../../Classes/DailyChallengesScene.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime \
@@ -635,6 +648,32 @@ jni/../../Classes/Troll.h:
 jni/../../Classes/MissionManager.h:
 
 jni/../../Classes/Crystal.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/socket.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/socket.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/socket.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sockios.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/sockios.h:
+
+/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/uio.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h:
+
+/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
 
 jni/../../Classes/Spider.h:
 
