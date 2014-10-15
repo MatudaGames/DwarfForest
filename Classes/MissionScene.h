@@ -85,6 +85,10 @@ public:
     
     void reloadMissions(CCObject* sender);
     
+    void downloadExtra_1(CCObject* sender);
+    void downloadExtra_2(CCObject* sender);
+    void downloadExtra_3(CCObject* sender);
+    
     cocos2d::CCSprite* mMissionPad_1;
     cocos2d::CCSprite* mMissionPad_2;
     cocos2d::CCSprite* mMissionPad_3;

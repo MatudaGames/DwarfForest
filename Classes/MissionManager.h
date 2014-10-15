@@ -20,6 +20,10 @@
 //#include "../extensions/cocos-ext.h"
 //#include "../cocos2d-x/extensions/cocos-ext.h"
 
+#include "stdio.h"
+#include "stdlib.h"
+#include "curl/curl.h"
+
 
 //More to come !!!
 //Mission types & subtypes
@@ -219,6 +223,15 @@ public:
     
     bool DidCompleteMission();
     MissionSet GetCompletedMission();
+    
+    void GetExtraMissions_1();
+    void AddExtraDownloadedMissions_1();
+    
+    void GetExtraMissions_2();
+    void AddExtraDownloadedMissions_2();
+    
+    void GetExtraMissions_3();
+    void AddExtraDownloadedMissions_3();
     
 private:
     bool mAllFinished;

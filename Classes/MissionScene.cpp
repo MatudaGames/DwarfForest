@@ -111,15 +111,37 @@ bool MissionScene::init()
     
     //Add the back button !!!
     CCMenuItemImage* backButtonReload = CCMenuItemImage::create(
-                                                          "Interfeiss/back_btn0001.png",
-                                                          "Interfeiss/back_btn0002.png",
+                                                          "DebugStuff/load_mission_1.png",
+                                                          "DebugStuff/load_mission_1.png",
                                                           this,
                                                           menu_selector(MissionScene::reloadMissions));
     backButtonReload->setAnchorPoint(ccp(0,0));
     
-    CCMenu* backMenuReload = CCMenu::create(backButtonReload, NULL);
+    CCMenuItemImage* backButtonReload2 = CCMenuItemImage::create(
+                                                                "DebugStuff/load_mission_2.png",
+                                                                "DebugStuff/load_mission_2.png",
+                                                                this,
+                                                                menu_selector(MissionScene::downloadExtra_1));
+    backButtonReload2->setAnchorPoint(ccp(0,0));
+    
+    CCMenuItemImage* backButtonReload3 = CCMenuItemImage::create(
+                                                                 "DebugStuff/load_mission_3.png",
+                                                                 "DebugStuff/load_mission_3.png",
+                                                                 this,
+                                                                 menu_selector(MissionScene::downloadExtra_2));
+    backButtonReload3->setAnchorPoint(ccp(0,0));
+    
+    CCMenuItemImage* backButtonReload4 = CCMenuItemImage::create(
+                                                                 "DebugStuff/load_mission_4.png",
+                                                                 "DebugStuff/load_mission_4.png",
+                                                                 this,
+                                                                 menu_selector(MissionScene::downloadExtra_3));
+    backButtonReload4->setAnchorPoint(ccp(0,0));
+    
+    CCMenu* backMenuReload = CCMenu::create(backButtonReload,backButtonReload2,backButtonReload3,backButtonReload4, NULL);
     this->addChild(backMenuReload, 1);
-    backMenuReload->setPosition(-10, 300);
+    backMenuReload->alignItemsVertically();
+    backMenuReload->setPosition(20, 400);
     
     //--------------------------------------
     
@@ -482,6 +504,21 @@ bool MissionScene::init()
 void MissionScene::reloadMissions(CCObject* sender)
 {
     User::getInstance()->getMissionManager().ReDownloadStuff();
+}
+
+void MissionScene::downloadExtra_1(CCObject* sender)
+{
+    User::getInstance()->getMissionManager().GetExtraMissions_1();
+}
+
+void MissionScene::downloadExtra_2(CCObject* sender)
+{
+    User::getInstance()->getMissionManager().GetExtraMissions_2();
+}
+
+void MissionScene::downloadExtra_3(CCObject* sender)
+{
+    User::getInstance()->getMissionManager().GetExtraMissions_3();
 }
 
 void MissionScene::menuBackCallback(CCObject* sender)

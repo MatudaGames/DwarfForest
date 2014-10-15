@@ -29,9 +29,7 @@
 //#include <string>
 
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "curl/curl.h"
+
 
 //#pragma  comment(lib,"libcurl_imp.lib")
 
@@ -1605,4 +1603,482 @@ MissionSet MissionManager::GetCompletedMission()
 void MissionManager::UpdateSubMission(int theIndex,int theValue)
 {
     
+}
+
+//----------------------------------------------------------------------------------------
+//The extra 3 files !!!
+
+void MissionManager::GetExtraMissions_1()
+{
+    CURL *pCurl;
+    CURLcode nResCode;
+    
+    pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
+    if (pCurl != NULL)
+    {
+        std::string saveFileName;
+        saveFileName = "DF_MissionsExtra_1.plist";
+        saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+        
+        pFile = fopen(saveFileName.c_str(), "w+");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/avy1siu5hyotl2j/DF_Missions_E1.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fputs ("fopen example",pFile);
+            fclose(pFile);
+            AddExtraDownloadedMissions_1();
+        }
+    }
+}
+
+void MissionManager::AddExtraDownloadedMissions_1()
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_1.plist";
+    
+    cocos2d::CCDictionary* plistDictionary;
+    
+    plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    
+    MissionSet* mission=new MissionSet();
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    //Check if does not need to erase stuff from old missions
+    mAllMission.clear();
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._pathStartIndex = aPatrolStartPoint;
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 1 downloaded","Continue");
+}
+
+void MissionManager::GetExtraMissions_2()
+{
+    CURL *pCurl;
+    CURLcode nResCode;
+    
+    pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
+    if (pCurl != NULL)
+    {
+        std::string saveFileName;
+        saveFileName = "DF_MissionsExtra_2.plist";
+        saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+        
+        pFile = fopen(saveFileName.c_str(), "w+");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0w4zehdwa1m424i/DF_Missions_E2.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fputs ("fopen example",pFile);
+            fclose(pFile);
+            AddExtraDownloadedMissions_2();
+        }
+    }
+}
+
+void MissionManager::AddExtraDownloadedMissions_2()
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_2.plist";
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    MissionSet* mission=new MissionSet();
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    //Check if does not need to erase stuff from old missions
+    mAllMission.clear();
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._pathStartIndex = aPatrolStartPoint;
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 2 downloaded","Continue");
+}
+
+void MissionManager::GetExtraMissions_3()
+{
+    CURL *pCurl;
+    CURLcode nResCode;
+    
+    pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
+    if (pCurl != NULL)
+    {
+        std::string saveFileName;
+        saveFileName = "DF_MissionsExtra_3.plist";
+        saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+        
+        pFile = fopen(saveFileName.c_str(), "w+");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/n65wo794dltehb8/DF_Missions_E3.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fputs ("fopen example",pFile);
+            fclose(pFile);
+            AddExtraDownloadedMissions_3();
+        }
+    }
+}
+
+void MissionManager::AddExtraDownloadedMissions_3()
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_3.plist";
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    MissionSet* mission=new MissionSet();
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    //Check if does not need to erase stuff from old missions
+    mAllMission.clear();
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._pathStartIndex = aPatrolStartPoint;
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 3 downloaded","Continue");
 }
