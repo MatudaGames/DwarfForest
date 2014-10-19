@@ -83,16 +83,21 @@ bool CrystalIntro::init(GameScene* game, Crystal* crystal)
 //			break;
 //	}
     
-    if (_animation!=NULL)
-    {
-        //Add delay 3 sec
-        schedule(schedule_selector(CrystalIntro::CreateRealIntro), 3.0f, 0, 0.0f);
-    }
-    else
-    {
-        CreateRealIntro();
-    }
-	
+//    if (_animation!=NULL)
+//    {
+//        //Add delay 3 sec
+//        float aRandomSpawn = (rand()%3)+3;
+//        schedule(schedule_selector(CrystalIntro::CreateRealIntro),aRandomSpawn, 0, 0.0f);
+//    }
+//    else
+//    {
+//        CreateRealIntro();
+//    }
+    
+    float aRandomSpawn = ((rand()%200)*0.01)+2;
+    
+	schedule(schedule_selector(CrystalIntro::CreateRealIntro),aRandomSpawn, 0, 0.0f);
+    
 	return true;
 }
 

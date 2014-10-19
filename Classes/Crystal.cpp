@@ -19,10 +19,10 @@ const unsigned int MEDIUM_CRYSTAL_SCORE = 20;
 const unsigned int BIG_CRYSTAL_SCORE = 30;
 const unsigned int XXL_CRYSTAL_SCORE = 50;
 
-Crystal* Crystal::create(GameScene* gameScene)
+Crystal* Crystal::create(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
 {
 	Crystal *pRet = new Crystal();
-    if (pRet && pRet->init(gameScene))
+    if (pRet && pRet->init(gameScene,theCrystalID,theTimeOnMap))
     {
         pRet->autorelease();
         return pRet;
@@ -46,7 +46,7 @@ Crystal::~Crystal()
 	if (_animation) _animation->release();
 }
 
-bool Crystal::init(GameScene* gameScene)
+bool Crystal::init(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
 {
 	if (!CCNode::init())
 	{
@@ -56,6 +56,7 @@ bool Crystal::init(GameScene* gameScene)
 	_color = static_cast<CrystalColor>(rand() % CRYSTAL_COLOR_COUNT);
     
     //Use some generate formula split !!!
+    /*
     int aRandRes = rand()%10;
     
     //CHECK IF WANT TO SPAWN EGG !!!
@@ -83,6 +84,16 @@ bool Crystal::init(GameScene* gameScene)
         else
             _color = CRYSTAL_COLOR_YELLOW;
     }
+    */
+    
+    mStealer = NULL;
+    
+    if(theCrystalID == 0) _color = CRYSTAL_COLOR_GREEN;
+    else if(theCrystalID == 1) _color = CRYSTAL_COLOR_BLUE;
+    else if(theCrystalID == 2) _color = CRYSTAL_COLOR_RED;
+    else if(theCrystalID == 3) _color = CRYSTAL_COLOR_YELLOW;
+    
+    _OnMapTime = theTimeOnMap;
     
 	_gameScene = gameScene;
 	
@@ -218,15 +229,16 @@ void Crystal::updateCrystalTimer()
     }
     
     _secondsActive += 0.5f*_gameScene->getGameSpeed();
+    
 //    CCLog("mSecondsActive %i",mSecondsActive);
     //If below 1 sec skip this step as it's not important
-    if (_secondsActive>=10)
+    if (_secondsActive>=_OnMapTime)
     {
         unschedule(schedule_selector(Crystal::updateCrystalTimer));
         expireAnim();//Finish it
     }
     
-    if(_secondsActive>=6 && !mExitAnimSet)
+    if(_secondsActive>=(_OnMapTime-4) && !mExitAnimSet)
     {
         _crystalShadow->stopAllActions();
         

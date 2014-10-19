@@ -168,6 +168,8 @@ bool Dwarf::init(GameScene* game,int theType)
 //    addChild(mGhoustBG,0);
     
     //Add the sand bag
+    /*
+     
     if(User::getInstance()->mNewMissionBuild)
     {
         int aX_Bag = 0;
@@ -210,6 +212,9 @@ bool Dwarf::init(GameScene* game,int theType)
         mNewMissionTimeout = 3;
         
     }
+    */
+    
+    mNewMissionTimeout = 3;
 	
 	_movePoints = CCPointArray::create(0);
 	_movePoints->retain();
@@ -269,6 +274,8 @@ void Dwarf::onExit()
 
 void Dwarf::UpdateBagIcon()
 {
+    return;
+    
     //No icon here
     if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission || User::getInstance()->mSpecial_18_Mission
        || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission

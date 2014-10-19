@@ -964,6 +964,11 @@ void Troll::SetMissionStuff(MissionTroll theMission)
 //            mRadius = 280;
 //        }
         
+        _moveInCircle = true;
+        mMoveCurrentDir = theMission._startDirection;
+        if(mMoveCurrentDir>0)mMoveClock = false;
+        else mMoveClock = true;
+        
         precision = theMission._circle_precision*0.01;
         cir = 2 * M_PI;
         mRadius = theMission._circle_radius;
@@ -990,6 +995,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         }
         
         //Set it to the point?
+        mMoveIndex = theMission._pathStartIndex;
         setPosition(_movePoints->getControlPointAtIndex(theMission._pathStartIndex));
     }
     else{
@@ -1012,6 +1018,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         }
         
         //Set to the start point
+        mMoveIndex = theMission._pathStartIndex;
         setPosition(ccp(theMission._paths[theMission._pathStartIndex]->x,theMission._paths[theMission._pathStartIndex]->y));
         
         

@@ -140,7 +140,10 @@ public:
     void generateTrollForMission(MissionTroll theTrollInfo);
     void generateDwarfMission();
     
-    void UpdateDwarfSpawn();
+    void UpdateDwarfSpawn(float delta);
+    
+    float _CrystalSpawnRecheckTimer;
+    void UpdateCrystalSpawn(float delta);
     
     //------------------------------------------
     
@@ -197,7 +200,9 @@ public:
 	
 	Troll* generateTroll(bool theSkip=false);
 	
-	Crystal* generateCrystal(bool theNearDwarf);
+//	Crystal* generateCrystal(bool theNearDwarf);
+    Crystal* generateCrystal(bool theNearDwarf,int theCrystalID,int theTimeOnMap);
+    
     void generateCrystalSpecial(int theX,int theY);
     void generateDiamondSpecial(int theX,int theY);
 	void removeCrystal(Crystal* crystal);
@@ -401,6 +406,28 @@ public:
     int mTotalBlueDwarfs;
     int mTotalOrangeDwarfs;
     
+    //The Dwarf Spawn stuff
+    float _DSpawnCurrentTime;
+    float _DSpawnTimer;
+    int _DSpawnGameMinCurrent;
+    
+    std::vector<int> _dwarfSpawnArr;
+    
+    //The real values after changes
+    int _DSpawn_Real_Zone;
+    int _DSpawn_Real_Jump;
+    int _DSpawn_Real_Min;
+    int _DSpawn_Real_Max;
+    
+    void CreateSpawnLine();
+    
+    //The parametr time checkers
+    float _DSpawn_change_zone;
+    float _DSpawn_change_min;
+    float _DSpawn_change_max;
+    float _DSpawn_change_jump;
+    
+    int _CurrentSpawnCount;
 
 	float getGameSpeed() const { return _gameSpeed; }
 

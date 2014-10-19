@@ -28,16 +28,18 @@ enum CrystalColor
 class Crystal: public cocos2d::CCNode
 {
 public:
-	static Crystal* create(GameScene* gameScene);
+	static Crystal* create(GameScene* gameScene,int theCrystalID,int theTimeOnMap);
 	
 	Crystal();
 	virtual ~Crystal();
 	
-	virtual bool init(GameScene* gameScene);
+	virtual bool init(GameScene* gameScene,int theCrystalID,int theTimeOnMap);
 	
 	CrystalColor getColor() const;
     
     void onFinishedIntro();
+    
+    float _OnMapTime;
 	
 //	void expire(float delta);
     void expire();

@@ -150,6 +150,7 @@ void MissionManager::Donwloaded()
         
         //The mission id in row
         mission->ID = missionDict->valueForKey("ID")->floatValue();
+        CCLOG("Mission ID: %i",mission->ID);
         
         //Set the stars
         mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
@@ -210,10 +211,8 @@ void MissionManager::Donwloaded()
                 theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
             }
             
-            int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
-            theTroll._pathStartIndex = aPatrolStartPoint;
-            
-            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();;
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
             mission->Enemy_info.push_back(theTroll);
         }
@@ -229,8 +228,8 @@ void MissionManager::Donwloaded()
         
         mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
         
-        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
-        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+//        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+//        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
         
         //The cave info!!!
         cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
@@ -240,6 +239,48 @@ void MissionManager::Donwloaded()
         cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        //New stuff || Dwarf Spawn Control ||
+        
+        mission->DSpawn_jump = missionDict->valueForKey("DSpawn_jump")->intValue();
+        mission->DSpawn_change_jump_time = missionDict->valueForKey("DSpawn_change_jump_time")->intValue();
+        mission->DSpawn_change_jump_value = missionDict->valueForKey("DSpawn_change_jump_value")->intValue();
+        
+        mission->DSpawn_max = missionDict->valueForKey("DSpawn_max")->intValue();
+        mission->DSpawn_change_max_time = missionDict->valueForKey("DSpawn_change_max_time")->intValue();
+        mission->DSpawn_change_max_value = missionDict->valueForKey("DSpawn_change_max_value")->intValue();
+        
+        mission->DSpawn_min = missionDict->valueForKey("DSpawn_min")->intValue();
+        mission->DSpawn_change_min_time = missionDict->valueForKey("DSpawn_change_min_time")->intValue();
+        mission->DSpawn_change_min_value = missionDict->valueForKey("DSpawn_change_min_value")->intValue();
+        
+        mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
+        mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
+        mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        // Crystal spawn stuff
+        
+//        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+        if(crystalMinMaxSpawn.size()>=1){
+            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
+            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+        }
+        else{
+            mission->CrystalInterval_Min = 0;
+            mission->CrystalInterval_Max = 0;
+        }
+        
+        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
+        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        
+        mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
+        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
+        
+        //---------------------------------------------------------------------------------------------------
+        
         
         //Add to all missions parsed
         mAllMission.push_back(*mission);
@@ -254,6 +295,44 @@ void MissionManager::Donwloaded()
     //Create popup for wait !!!
     cocos2d::CCMessageBox("Mission file downloaded","Continue");
 }
+
+std::vector<int> static &split(const std::string &s, char delim, std::vector<int> &elems){
+    std::stringstream ss(s);
+    std::string item;
+    int resultInt;
+    
+    while (std::getline(ss, item, delim)) {
+        resultInt = atoi(item.c_str());
+        CCLOG("resultInt:%i",resultInt);
+        elems.push_back(resultInt);
+    }
+    return elems;
+}
+
+std::vector<int> MissionManager::SplitString(const std::string s,char delim){
+    std::vector<int> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
+
+
+//Some global stuff for spliting litering stuff around the world
+//std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+//    std::stringstream ss(s);
+//    std::string item;
+//    while (std::getline(ss, item, delim)) {
+//        elems.push_back(item);
+//    }
+//    return elems;
+//}
+
+
+//std::vector<std::string> split(const std::string &s, char delim) {
+//    std::vector<std::string> elems;
+//    split(s, delim, elems);
+//    return elems;
+//}
 
 MissionManager::MissionManager()
 {
@@ -393,6 +472,7 @@ MissionManager::MissionManager()
             
             int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._pathStartIndex = aPatrolStartPoint;
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
             
             /*
@@ -446,8 +526,8 @@ MissionManager::MissionManager()
         
         mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
         
-        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
-        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+//        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+//        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
         
         //The cave info!!!
         cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
@@ -1745,8 +1825,8 @@ void MissionManager::AddExtraDownloadedMissions_1()
         
         mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
         
-        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
-        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+//        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+//        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
         
         //The cave info!!!
         cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
@@ -1902,8 +1982,8 @@ void MissionManager::AddExtraDownloadedMissions_2()
         
         mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
         
-        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
-        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+//        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+//        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
         
         //The cave info!!!
         cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
@@ -2059,8 +2139,8 @@ void MissionManager::AddExtraDownloadedMissions_3()
         
         mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
         
-        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
-        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+//        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+//        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
         
         //The cave info!!!
         cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");

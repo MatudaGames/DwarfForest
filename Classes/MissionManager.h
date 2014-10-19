@@ -154,14 +154,43 @@ struct MissionSet
     
     int32_t StartDwarfCount;
     
-    int32_t DwarfCount_Max;
-    int32_t DwarfCount_Min;
+//    int32_t DwarfCount_Max;
+//    int32_t DwarfCount_Min;
     
     int32_t BlueCave_x;
     int32_t BlueCave_y;
     
     int32_t OrangeCave_x;
     int32_t OrangeCave_y;
+    
+    //Dwarf spawn
+    int32_t DSpawn_zone;//Whats the spawn zone control
+    int32_t DSpawn_min;//Whats the min spawn dwarfs in one time
+    int32_t DSpawn_max;//Whats the max spawn dwafrs in one time
+    int32_t DSpawn_jump;//Whats the max random jump in dwarf generate
+    
+    //The change to spawn contorl bases
+    int32_t DSpawn_change_zone_time;//After what time should change spawn zone
+    int32_t DSpawn_change_zone_value;//Whats the change value
+    
+    int32_t DSpawn_change_min_time;
+    int32_t DSpawn_change_min_value;
+    
+    int32_t DSpawn_change_max_time;
+    int32_t DSpawn_change_max_value;
+    
+    int32_t DSpawn_change_jump_time;
+    int32_t DSpawn_change_jump_value;
+    
+    //The crystal spawn stuff
+    int32_t CrystalInterval_Min;
+    int32_t CrystalInterval_Max;
+    float CrystalProbMultiplier;
+    float CrystalTimeOnMap;
+    
+    std::vector<int> CrystalNumProbs;
+    std::vector<int> CrystalColProbs;
+    
 };
 
 struct CompletedStuff
@@ -192,6 +221,10 @@ public:
     std::vector<CompletedStuff> mCompletedStuff;
     
     std::vector<int> mCompletedMissions;
+    
+    std::vector<int> SplitString(const std::string s,char delim);
+//    std::vector<std::string> split(const std::string &s, char delim);
+//    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
     
     GameScene* _gameScene;
     

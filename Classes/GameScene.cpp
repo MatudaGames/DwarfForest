@@ -675,6 +675,35 @@ void GameScene::CreateGameByMission()
     
     _missionCurrentValue = -1;//So that it does update at 1st
     
+    //Set the spawn stuff for start !!
+    _DSpawnCurrentTime = 0;//When to change the zone
+    
+    if(mCurrentMission.DSpawn_change_jump_time>0) _DSpawn_change_jump = mCurrentMission.DSpawn_change_jump_time;
+    else _DSpawn_change_jump = -1;//Do not check it
+    _DSpawn_Real_Jump = mCurrentMission.DSpawn_jump;
+    
+    if(mCurrentMission.DSpawn_change_max_time>0) _DSpawn_change_max = mCurrentMission.DSpawn_change_max_time;
+    else _DSpawn_change_max = -1;//Do not check it
+    _DSpawn_Real_Max = mCurrentMission.DSpawn_max;
+    
+    if(mCurrentMission.DSpawn_change_min_time>0) _DSpawn_change_min = mCurrentMission.DSpawn_change_min_time;
+    else _DSpawn_change_min = -1;//Do not check it
+    _DSpawn_Real_Min = mCurrentMission.DSpawn_min;
+    
+    if(mCurrentMission.DSpawn_change_zone_time>0) _DSpawn_change_zone = mCurrentMission.DSpawn_change_zone_time;
+    else _DSpawn_change_zone = -1;//Do not check it
+    _DSpawn_Real_Zone = mCurrentMission.DSpawn_zone;//TWhats the current zone length for spawn?
+    
+    _CurrentSpawnCount = mCurrentMission.DSpawn_min;//We dont know
+    
+    //+create the basic stuff
+    
+    _DSpawnGameMinCurrent = 0;
+    _DSpawnTimer = 1;
+    
+    _CrystalSpawnRecheckTimer = 0;//For now
+    
+    
     //=================================================================
     // The mess section ?!@$
     
@@ -905,6 +934,8 @@ void GameScene::CreateGameByMission()
     
     //Create the map by the map id
     CreateStartMap(mCurrentMission.MapType);
+    
+    CreatePossibleObjectSpawns();
     
     //Create the map?
     //Start with map layout and all the main stuff !!!
@@ -3890,7 +3921,7 @@ void GameScene::CreateDebugPanel()
 
 void GameScene::DebugCreateCrystal()
 {
-    generateCrystal(false);
+//    generateCrystal(false);
 }
 
 //The tornado stuff !!!
@@ -8013,12 +8044,235 @@ void GameScene::FromOptionsEnableMusic()
     mBackMusicVolume = 0;
 }
 
+//The magic where all parametrs are taken in action and made a spawn plan
+void GameScene::CreateSpawnLine()
+{
+    //Create the line spawn params
+    _dwarfSpawnArr.clear();
+    
+    //Get the max spawn steps
+    int aRealStepValue = _DSpawn_Real_Max-_DSpawn_Real_Min;
+    int aMinStepJump = _DSpawn_Real_Jump;
+    
+    //Create the spawn zones
+    int aCurrentPoint = _CurrentSpawnCount-1;//Take the last line spawn count
+    
+    //Min value for the same spawn value
+    int aMinStall = mCurrentMission.Dwarf_paths.size();
+    int aCurrentStallCount = 0;
+    bool aDidHitMax = false;
+    
+//    CCLog("mCurrentMission.min %i",mCurrentMission.DSpawn_min);
+//    CCLog("mCurrentMission.max %i",mCurrentMission.DSpawn_max);
+//    CCLog("mCurrentMission.jump %i",mCurrentMission.DSpawn_jump);
+    
+    int aDummyVal = 0;
+    for(int i=0;i<_DSpawn_Real_Zone;i++)
+    {
+        aDummyVal = rand()%2;//Up or down
+//        CCLog("aDummyVal %i",aDummyVal);
+        
+        if(aDummyVal==0){
+            if(aCurrentPoint==_DSpawn_Real_Min){
+                //Check if can have stall
+                aCurrentStallCount+=1;
+                if(aCurrentStallCount == aMinStall){
+                    //Can be the same?
+                    aCurrentStallCount = 0;//The value will be the same
+                }
+                else{
+                    //Move up or let it be the same if cant
+                    if(aCurrentPoint+_DSpawn_Real_Jump<_DSpawn_Real_Max) aCurrentPoint+=_DSpawn_Real_Jump;
+                }
+            }
+            else{
+                aCurrentPoint-=_DSpawn_Real_Jump;
+            }
+        }
+        else{
+            if(aCurrentPoint==_DSpawn_Real_Max){
+                aCurrentStallCount+=1;
+                if(aCurrentStallCount == aMinStall){
+                    //Can be the same?
+                    aCurrentStallCount = 0;//The value will be the same
+                }
+                else{
+                    //Move up or let it be the same if cant
+                    if(aCurrentPoint-_DSpawn_Real_Jump>_DSpawn_Real_Min) aCurrentPoint-=_DSpawn_Real_Jump;
+                }
+            }
+            else{
+                aCurrentPoint+=_DSpawn_Real_Jump;
+                if(aCurrentPoint>=_DSpawn_Real_Max) aDidHitMax = true;
+            }
+        }
+        
+        //now check if will get to the max
+        if(aDidHitMax==false)
+        {
+            //Check if does not need emergency
+            if(aCurrentPoint+_DSpawn_Real_Jump*(_DSpawn_Real_Zone-i)<_DSpawn_Real_Max){
+                //Force increase !!!
+                aCurrentPoint+=_DSpawn_Real_Jump;
+            }
+        }
+        
+        //Safe check
+        if(aCurrentPoint<_DSpawn_Real_Min)aCurrentPoint=_DSpawn_Real_Min;
+        else if(aCurrentPoint>_DSpawn_Real_Max)aCurrentPoint=_DSpawn_Real_Max;
+        
+        //Lets take for each second dwarf spawn
+        _dwarfSpawnArr.push_back(aCurrentPoint);
+    }
+    
+    /*
+    //Print all spawns for debug
+    CCLog("--------------------");
+    
+    for(int i=0;i<_dwarfSpawnArr.size();i++)
+    {
+        CCLog("Dwarf Min:%i",_dwarfSpawnArr[i]);
+    }
+    
+    CCLog("====================");
+    */
+    
+}
+
 //The magic !!! [for now]
-void GameScene::UpdateDwarfSpawn()
+void GameScene::UpdateDwarfSpawn(float delta)
 {
     //For now !!!
-    if(_dwarves->count()<mCurrentMission.DwarfCount_Min){
+//    if(_dwarves->count()<mCurrentMission.DwarfCount_Min){
+//        generateDwarfMission();
+//    }
+    
+    //----------------------------------------------------------------------------
+    //Check if does not need to change any parametr by time and value !!!
+    
+    if(_DSpawn_change_zone!=-1){
+        //Check if time did not pass the req margin
+        _DSpawn_change_zone-=delta*_gameSpeed;
+        CCLog("_DSpawn_change_zone: %f",_DSpawn_change_zone);
+        if(_DSpawn_change_zone<=0){
+            //Time for changes
+            _DSpawn_change_zone = mCurrentMission.DSpawn_change_zone_time;//Reset to next time change if needed
+            _DSpawn_Real_Zone += mCurrentMission.DSpawn_change_zone_value;
+            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+        }
+    }
+    
+    if(_DSpawn_change_jump!=-1){
+        _DSpawn_change_jump-=delta*_gameSpeed;
+        if(_DSpawn_change_jump<=0){
+            //Time for changes
+            _DSpawn_change_jump = mCurrentMission.DSpawn_change_jump_time;//Reset to next time change if needed
+            _DSpawn_Real_Jump += mCurrentMission.DSpawn_change_jump_value;
+//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+        }
+    }
+    
+    if(_DSpawn_change_max!=-1){
+        _DSpawn_change_max-=delta*_gameSpeed;
+        CCLog("_DSpawn_change_max: %f",_DSpawn_change_max);
+        if(_DSpawn_change_max<=0){
+            //Time for changes
+            _DSpawn_change_max = mCurrentMission.DSpawn_change_max_time;//Reset to next time change if needed
+            _DSpawn_Real_Max += mCurrentMission.DSpawn_change_max_value;
+//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+        }
+    }
+    
+    if(_DSpawn_change_min!=-1){
+        _DSpawn_change_min-=delta*_gameSpeed;
+        if(_DSpawn_change_min<=0){
+            //Time for changes
+            _DSpawn_change_min = mCurrentMission.DSpawn_change_min_time;//Reset to next time change if needed
+            _DSpawn_Real_Min += mCurrentMission.DSpawn_change_min_value;
+//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+        }
+    }
+    
+    //----------------------------------------------------------------------------
+    
+    
+    //Update the line of spawns
+    _DSpawnCurrentTime-=delta*_gameSpeed;
+    //Create the current zone wave
+    if(_DSpawnCurrentTime<=0){
+        //Time to create new line by mission parametrs
+        _DSpawnCurrentTime = _DSpawn_Real_Zone;
+        //By this zone make the spawns and other great stuff
+        CreateSpawnLine();
+    }
+    
+    //Get whats the min dwarfs in map now !!!
+    _DSpawnTimer-=delta*_gameSpeed;
+    if(_DSpawnTimer<=0){
+        //Get current spawn stuff
+        _DSpawnTimer = 1;//Set to 1sec
+        if(_dwarfSpawnArr.size()>0){
+            _DSpawnGameMinCurrent = _dwarfSpawnArr[0];
+            _CurrentSpawnCount = _DSpawnGameMinCurrent;
+            _dwarfSpawnArr.erase(_dwarfSpawnArr.begin());
+        }
+    }
+    
+    if(_dwarves->count()<_DSpawnGameMinCurrent){
         generateDwarfMission();
+    }
+    
+}
+
+void GameScene::UpdateCrystalSpawn(float delta)
+{
+    _CrystalSpawnRecheckTimer-=delta*_gameSpeed;
+    if(_CrystalSpawnRecheckTimer<=0)
+    {
+        //Lets get new timer value with min max value
+        int aSpaceForRandom = mCurrentMission.CrystalInterval_Max - mCurrentMission.CrystalInterval_Min;
+        if(aSpaceForRandom>0){
+            _CrystalSpawnRecheckTimer = (rand()%aSpaceForRandom)+mCurrentMission.CrystalInterval_Min;
+        }
+        else{
+            _CrystalSpawnRecheckTimer = rand()%mCurrentMission.CrystalInterval_Max+mCurrentMission.CrystalInterval_Min;
+        }
+        
+        //Lets check futher !!!
+        int aProbToSpawn = 100 - (_crystals->count() * mCurrentMission.CrystalProbMultiplier);
+        int aRandomResult = rand()%100;
+        if(aRandomResult<=aProbToSpawn){
+            //Spawn
+            //Lets check how much can we spawn
+            int aRandomMaxSpawn = rand()%100;
+            
+            //Get the value how much can we
+            int aSpawnCrystals = 0;
+            for(int i=0;i<mCurrentMission.CrystalNumProbs.size();i++)
+            {
+                if(aRandomMaxSpawn<=mCurrentMission.CrystalNumProbs[i]){
+                    aSpawnCrystals = i+1;
+                }
+            }
+            
+            //Now check what can we spawn for each crystal
+            int aRandomColorFin = 0;//What type of crystal should spawn
+            for(int a=0;a<aSpawnCrystals;a++)
+            {
+                int aRadomColor = rand()%100;
+                
+                for(int c=0;c<mCurrentMission.CrystalColProbs.size();c++)
+                {
+                    if(aRadomColor<=mCurrentMission.CrystalColProbs[c]){
+                        aRandomColorFin = c;
+                    }
+                }
+                
+                //The green?
+                generateCrystal(true,aRandomColorFin,mCurrentMission.CrystalTimeOnMap);
+            }
+        }
+        
     }
 }
 
@@ -8029,8 +8283,11 @@ void GameScene::update(float delta)
     //Clean page for this !!!
     updateTrolls(delta);
     updateDwarfs(delta);
+    updateIntroAnimations(delta);
     
-    UpdateDwarfSpawn();
+    //The spawn contorl
+    UpdateDwarfSpawn(delta);
+    UpdateCrystalSpawn(delta);
     
     //Update the combo timer
     if(mTotalComboTimer>0)
@@ -8461,12 +8718,14 @@ void GameScene::update(float delta)
 //		generateDwarf();
 //	}
     
+    
     if(User::getInstance()->mNewMissionBuild)
     {
         
     }
     else
     {
+        /*
         if(mSpecialCrystalSpawnTimer>0)
         {
             mSpecialCrystalSpawnTimer-=delta;
@@ -8494,6 +8753,7 @@ void GameScene::update(float delta)
                 }
             }
         }
+        */
         
         //---------------------------------------------------------------
         // A bit different generate formula
@@ -9156,8 +9416,10 @@ void GameScene::update(float delta)
                 }
                 //Create the troll long awaited
                 
+                /*
                 if(_gameTime>=EXTRA_CRYSTAL_SPAWN)
                     generateCrystal(false);
+                */
             }
         }
         
@@ -9624,6 +9886,7 @@ void GameScene::update(float delta)
         
         //=================================
         
+        /*
         _mission_crystal_spawn_timer-=delta;
         if(_mission_crystal_spawn_timer<=0)
         {
@@ -9631,6 +9894,7 @@ void GameScene::update(float delta)
             
             generateCrystal(false);
         }
+        */
         
         _mission_effect_spawn_timer-=delta;
         if(_mission_effect_spawn_timer<=0)
@@ -9797,6 +10061,7 @@ void GameScene::update(float delta)
             }
         }
         
+        /*
         _mission_crystal_spawn_timer-=delta;
         if(_mission_crystal_spawn_timer<=0)
         {
@@ -9804,6 +10069,7 @@ void GameScene::update(float delta)
             
             generateCrystal(false);
         }
+        */
         
         _mission_effect_spawn_timer-=delta;
         if(_mission_effect_spawn_timer<=0)
@@ -10654,6 +10920,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if (ccpDistanceSQ(dwarf->getPosition(), crystal->getPosition()) <= (aCollectDist * aCollectDist) * GLOBAL_SCALE)
 					{
+                        /*
                         //Check if this dwarf can add more to it !!!
                         if(User::getInstance()->mNewMissionBuild)
                         {
@@ -10675,6 +10942,7 @@ void GameScene::updateDwarfs(float delta)
                                 }
                             }
                         }
+                        */
                         
                         
                         RemoveEffectByChild(crystal);
@@ -13103,7 +13371,7 @@ Troll* GameScene::generateTroll(bool theSkip)
 
 
 
-Crystal* GameScene::generateCrystal(bool theNearDwarf)
+Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTimeOnMap)
 {
 	if (_crystals->count() < MAX_CRYSTALS)
 	{
@@ -13121,7 +13389,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf)
         //////////////////////////////////////////////////////////////////////
         //Create the possible spawn points,except last one
         
-        if(theNearDwarf)
+        if(theNearDwarf && _dwarves->count()>0)
         {
             //Check to what spawn point is dwarf near !!!
             float aNearestDistance = 99999999;
@@ -13243,7 +13511,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf)
         
         //////////////////////////////////////////////////////////////////////
 		
-		Crystal* crystal = Crystal::create(this);
+		Crystal* crystal = Crystal::create(this,theCrystalID,theTimeOnMap);
 //		crystal->setPosition(position);
         crystal->setPosition(aPosition);
 		
@@ -13321,11 +13589,13 @@ void GameScene::generateDiamondSpecial(int theX,int theY)
 
 void GameScene::generateCrystalSpecial(int theX,int theY)
 {
+    /*
     Crystal* crystal = Crystal::create(this);
     crystal->setPosition(theX, theY);
     this->addChild(crystal, getSpriteOrderZ(crystal->getPositionY()));
     _crystals->addObject(crystal);
     crystal->onFinishedIntro();
+    */
 }
 
 void GameScene::removeCrystal(Crystal* crystal)
