@@ -699,7 +699,7 @@ void GameScene::CreateGameByMission()
     //+create the basic stuff
     
     _DSpawnGameMinCurrent = 0;
-    _DSpawnTimer = 1;
+    _DSpawnTimer = mCurrentMission.DSpawn_zone_step;
     
     _CrystalSpawnRecheckTimer = 0;//For now
     
@@ -8067,6 +8067,8 @@ void GameScene::CreateSpawnLine()
 //    CCLog("mCurrentMission.jump %i",mCurrentMission.DSpawn_jump);
     
     int aDummyVal = 0;
+    int aJumpTimes = _DSpawn_Real_Zone/mCurrentMission.DSpawn_zone_step;
+    
     for(int i=0;i<_DSpawn_Real_Zone;i++)
     {
         aDummyVal = rand()%2;//Up or down
@@ -8113,6 +8115,7 @@ void GameScene::CreateSpawnLine()
             //Check if does not need emergency
             if(aCurrentPoint+_DSpawn_Real_Jump*(_DSpawn_Real_Zone-i)<_DSpawn_Real_Max){
                 //Force increase !!!
+                CCLOG("Did force spawn");
                 aCurrentPoint+=_DSpawn_Real_Jump;
             }
         }
@@ -8136,6 +8139,18 @@ void GameScene::CreateSpawnLine()
     
     CCLog("====================");
     */
+    
+    //Debug - show current spawn line
+//    CCLayerColor* aLayer = CCLayerColor::create(ccc4(128,128,128,128),300,300);
+//    aLayer->setAnchorPoint(ccp(1,1));
+//    
+//    addChild(aLayer,1000);
+//    
+//    CCSprite* aSprite = CCSprite::create("");
+//    aSprite->draw();
+    
+//    aLayer->draw()->ccDrawLine(ccp(0,0),ccp(200,200));
+//    ccDrawLine(ccp(0,0),ccp(200,200));
     
 }
 
@@ -8210,7 +8225,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
     _DSpawnTimer-=delta*_gameSpeed;
     if(_DSpawnTimer<=0){
         //Get current spawn stuff
-        _DSpawnTimer = 1;//Set to 1sec
+        _DSpawnTimer = mCurrentMission.DSpawn_zone_step;//Set to 1sec
         if(_dwarfSpawnArr.size()>0){
             _DSpawnGameMinCurrent = _dwarfSpawnArr[0];
             _CurrentSpawnCount = _DSpawnGameMinCurrent;

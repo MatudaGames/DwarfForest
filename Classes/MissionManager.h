@@ -173,6 +173,8 @@ struct MissionSet
     int32_t DSpawn_change_zone_time;//After what time should change spawn zone
     int32_t DSpawn_change_zone_value;//Whats the change value
     
+    int32_t DSpawn_zone_step;//The step in zone change
+    
     int32_t DSpawn_change_min_time;
     int32_t DSpawn_change_min_value;
     

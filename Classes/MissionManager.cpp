@@ -259,6 +259,11 @@ void MissionManager::Donwloaded()
         mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
         mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
         
+        mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
+        if(mission->DSpawn_zone_step == 0){
+            mission->DSpawn_zone_step = 1;//Set to 1sec
+        }
+        
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
