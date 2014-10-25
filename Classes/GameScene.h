@@ -138,7 +138,7 @@ public:
     void ShowTheHUD();
     
     void generateTrollForMission(MissionTroll theTrollInfo);
-    void generateDwarfMission();
+    void generateDwarfMission(bool theInstant);
     
     void UpdateDwarfSpawn(float delta);
     
@@ -400,11 +400,24 @@ public:
     
     float mTotalComboTimer;
     
+    void ResetValues();
+    
     //The new global counters
     int mTotalCombo;
     int mTotalPoints;
     int mTotalBlueDwarfs;
     int mTotalOrangeDwarfs;
+    
+    int mTotalGreen_Crystals;
+    int mTotalBlue_Crystals;
+    int mTotalRed_Crystals;
+    int mTotalYellow_Crystals;
+    
+    int mTotalMushroom;
+    int mTotalTimeInGame;
+    int mTotalEscapesFromTroll;
+    
+    int mLastSpawnID;
     
     //The Dwarf Spawn stuff
     float _DSpawnCurrentTime;

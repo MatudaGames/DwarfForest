@@ -102,6 +102,8 @@ struct MissionTroll
     int32_t _circle_precision;
     
     int32_t _circle_height;
+    
+    float _speed;
 };
 
 struct MissionSet
@@ -189,6 +191,14 @@ struct MissionSet
     int32_t CrystalInterval_Max;
     float CrystalProbMultiplier;
     float CrystalTimeOnMap;
+    
+    float DwarfSpeed_Fat;
+    float DwarfSpeed_Tall;
+    
+    int32_t DwarfSpawnOneCave;
+    
+    int32_t DSpawn_formula_type;
+    
     
     std::vector<int> CrystalNumProbs;
     std::vector<int> CrystalColProbs;

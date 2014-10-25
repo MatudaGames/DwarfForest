@@ -141,6 +141,8 @@ void MissionManager::Donwloaded()
     cocos2d::CCDictElement* pElement_dummy_sub = NULL;
     cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
     
+    float aDummyVar = 0;
+    
     cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
     {
         cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
@@ -211,7 +213,17 @@ void MissionManager::Donwloaded()
                 theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
             }
             
-            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();;
+            //Troll speed
+            aDummyVar = enemySubDict->valueForKey("Speed")->floatValue();
+            if(aDummyVar>0){
+                theTroll._speed = aDummyVar;
+                CCLOG("Troll speed %i",aDummyVar);
+            }
+            else{
+                theTroll._speed = 30.0;
+            }
+            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
             mission->Enemy_info.push_back(theTroll);
@@ -286,6 +298,35 @@ void MissionManager::Donwloaded()
         
         //---------------------------------------------------------------------------------------------------
         
+        //Dwarf Speed on map
+        mission->DwarfSpeed_Fat = 40.0;
+        mission->DwarfSpeed_Tall = 40.0;
+        
+        float aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Fat")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Fat = aDwarfSpeedDummy;
+        }
+        
+        aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Tall")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Tall = aDwarfSpeedDummy;
+        }
+        
+        //------------------
+        
+        //How much possibility to spawn dwarf from one cave
+        mission->DwarfSpawnOneCave = 100;//100% allow for now
+        int aSpawnOnceValue = missionDict->valueForKey("DwarfSpawnOneCave")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DwarfSpawnOneCave = aSpawnOnceValue;
+        }
+        
+        //The formula type
+        mission->DSpawn_formula_type = 0;//Min to map
+        aSpawnOnceValue = missionDict->valueForKey("DSpawn_formula_type")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DSpawn_formula_type = aSpawnOnceValue;
+        }
         
         //Add to all missions parsed
         mAllMission.push_back(*mission);

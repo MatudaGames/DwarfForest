@@ -2337,6 +2337,16 @@ void MissionScene::onEnter()
 {
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, true);
     CCLayer::onEnter();
+    
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//    if(!SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying())
+//        SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/main_music.ogg", true);
+//#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    if(!CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying())
+//        CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/main_music.mp3", true);
+//#endif
+    
+
 }
 
 void MissionScene::NewMissionCompleted()

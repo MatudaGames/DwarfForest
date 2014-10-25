@@ -115,6 +115,12 @@ void DwarfIntro::update(float delta)
 	}
 	
 	_introLight->setOpacity(255.0f * maxOpacity * (1.0f - 2.0f * fabsf(timeInPhase - 0.5f)));
+    
+    //Check if in map only 1 dwarf left - then instant spawn !!!
+    if(_game->_dwarves->count()<=1){
+        unschedule(schedule_selector(DwarfIntro::onFinshed));
+        onFinshed();
+    }
 }
 
 Dwarf* DwarfIntro::getDwarf() const

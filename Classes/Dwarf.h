@@ -113,6 +113,10 @@ public:
     float _angle;
     
     bool _disabled;
+    
+    float _speed;
+    
+    float _defaultSpeed;
 	
 private:
 	bool addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint);
@@ -148,7 +152,7 @@ private:
 	bool _touchEnded;
 	
 	
-	float _speed;
+	
 	
 	bool _alarmTroll;
     bool _alarmDwarf;

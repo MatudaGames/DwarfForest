@@ -65,8 +65,8 @@
 USING_NS_CC;
 using namespace CocosDenshion;
 
-const float GAME_SPEED_NORMAL = 1.5f;// default 1.5
-const float GAME_SPEED_FAST = 2.2f;// default 2.2
+const float GAME_SPEED_NORMAL = 1.0f;// default 1.5
+const float GAME_SPEED_FAST = 2.0f;// default 2.2
 
 const float CAVE_DISTANCE = 50.0f;
 const float CAVE_DISTANCE_TALL = 60.0f;
@@ -108,8 +108,16 @@ const unsigned int BOOSTER_4_PRICE = 5;
 #define MissionType_PointCount 0
 #define MissionType_DwarfCount 1
 #define MissionType_Combo 2
-#define MissionType_Time 3
 
+#define MissionType_Time 3
+#define MissionType_Mushroom 4
+#define MissionType_TrollEscape 5
+
+//The special stuff collect
+#define MissionType_Crystal_Red 100
+#define MissionType_Crystal_Blue 101
+#define MissionType_Crystal_Yellow 102
+#define MissionType_Crystal_Green 103
 
 
 #define kBoosters 1000
@@ -638,13 +646,15 @@ void GameScene::CreateMap()
     //Check how much dwarfs should instantly come in!!!
     for(int i = 0;i<mCurrentMission.StartDwarfCount;i++){
         //just generate all possible dwarfs !!!
-        generateDwarfMission();
+        generateDwarfMission(false);
     }
 }
 
 //The new stuff where all is clean and understandable
 void GameScene::CreateGameByMission()
 {
+    ResetValues();
+    
     setTag(11);//The game tag !!! ???
     
     //=================================================================
@@ -8069,54 +8079,66 @@ void GameScene::CreateSpawnLine()
     int aDummyVal = 0;
     int aJumpTimes = _DSpawn_Real_Zone/mCurrentMission.DSpawn_zone_step;
     
-    for(int i=0;i<_DSpawn_Real_Zone;i++)
+    bool aAlowOtherValue = true;
+    
+    for(int i=0;i<aJumpTimes;i++)
     {
+//        CCLOG("-------------  i = %i --------",i);
+        
         aDummyVal = rand()%2;//Up or down
 //        CCLog("aDummyVal %i",aDummyVal);
-        
-        if(aDummyVal==0){
-            if(aCurrentPoint==_DSpawn_Real_Min){
-                //Check if can have stall
-                aCurrentStallCount+=1;
-                if(aCurrentStallCount == aMinStall){
-                    //Can be the same?
-                    aCurrentStallCount = 0;//The value will be the same
-                }
-                else{
-                    //Move up or let it be the same if cant
-                    if(aCurrentPoint+_DSpawn_Real_Jump<_DSpawn_Real_Max) aCurrentPoint+=_DSpawn_Real_Jump;
-                }
-            }
-            else{
-                aCurrentPoint-=_DSpawn_Real_Jump;
-            }
-        }
-        else{
-            if(aCurrentPoint==_DSpawn_Real_Max){
-                aCurrentStallCount+=1;
-                if(aCurrentStallCount == aMinStall){
-                    //Can be the same?
-                    aCurrentStallCount = 0;//The value will be the same
-                }
-                else{
-                    //Move up or let it be the same if cant
-                    if(aCurrentPoint-_DSpawn_Real_Jump>_DSpawn_Real_Min) aCurrentPoint-=_DSpawn_Real_Jump;
-                }
-            }
-            else{
-                aCurrentPoint+=_DSpawn_Real_Jump;
-                if(aCurrentPoint>=_DSpawn_Real_Max) aDidHitMax = true;
-            }
-        }
         
         //now check if will get to the max
         if(aDidHitMax==false)
         {
-            //Check if does not need emergency
-            if(aCurrentPoint+_DSpawn_Real_Jump*(_DSpawn_Real_Zone-i)<_DSpawn_Real_Max){
-                //Force increase !!!
-                CCLOG("Did force spawn");
+            if(aCurrentPoint + (_DSpawn_Real_Jump*((aJumpTimes-i)-1)) < _DSpawn_Real_Max){
+//                CCLOG("Did force spawn");
                 aCurrentPoint+=_DSpawn_Real_Jump;
+                aAlowOtherValue = false;
+                
+                if(aCurrentPoint>=_DSpawn_Real_Max) {aDidHitMax = true;}
+            }
+        }
+        else if(aAlowOtherValue!=true){
+            aAlowOtherValue = true;
+        }
+        
+        if(aAlowOtherValue)
+        {
+            if(aDummyVal==0){
+                if(aCurrentPoint==_DSpawn_Real_Min){
+                    //Check if can have stall
+                    aCurrentStallCount+=1;
+                    if(aCurrentStallCount == aMinStall){
+                        //Can be the same?
+                        aCurrentStallCount = 0;//The value will be the same
+                    }
+                    else{
+                        //Move up or let it be the same if cant
+                        if(aCurrentPoint+_DSpawn_Real_Jump<_DSpawn_Real_Max) aCurrentPoint+=_DSpawn_Real_Jump;
+                    }
+                }
+                else{
+                    aCurrentPoint-=_DSpawn_Real_Jump;
+                }
+            }
+            else{
+                if(aCurrentPoint==_DSpawn_Real_Max){
+                    aCurrentStallCount+=1;
+                    if(aCurrentStallCount == aMinStall){
+                        //Can be the same?
+                        aCurrentStallCount = 0;//The value will be the same
+                    }
+                    else{
+                        //Move up or let it be the same if cant
+                        if(aCurrentPoint-_DSpawn_Real_Jump>_DSpawn_Real_Min) aCurrentPoint-=_DSpawn_Real_Jump;
+                    }
+                }
+                else{
+                    aCurrentPoint=aCurrentPoint;
+                    aCurrentPoint+=_DSpawn_Real_Jump;
+                    if(aCurrentPoint>=_DSpawn_Real_Max) aDidHitMax = true;
+                }
             }
         }
         
@@ -8128,7 +8150,7 @@ void GameScene::CreateSpawnLine()
         _dwarfSpawnArr.push_back(aCurrentPoint);
     }
     
-    /*
+    
     //Print all spawns for debug
     CCLog("--------------------");
     
@@ -8138,7 +8160,9 @@ void GameScene::CreateSpawnLine()
     }
     
     CCLog("====================");
-    */
+    
+    _DSpawnTimer = -1;//Force take this
+    
     
     //Debug - show current spawn line
 //    CCLayerColor* aLayer = CCLayerColor::create(ccc4(128,128,128,128),300,300);
@@ -8168,7 +8192,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
     if(_DSpawn_change_zone!=-1){
         //Check if time did not pass the req margin
         _DSpawn_change_zone-=delta*_gameSpeed;
-        CCLog("_DSpawn_change_zone: %f",_DSpawn_change_zone);
+//        CCLog("_DSpawn_change_zone: %f",_DSpawn_change_zone);
         if(_DSpawn_change_zone<=0){
             //Time for changes
             _DSpawn_change_zone = mCurrentMission.DSpawn_change_zone_time;//Reset to next time change if needed
@@ -8189,11 +8213,12 @@ void GameScene::UpdateDwarfSpawn(float delta)
     
     if(_DSpawn_change_max!=-1){
         _DSpawn_change_max-=delta*_gameSpeed;
-        CCLog("_DSpawn_change_max: %f",_DSpawn_change_max);
+//        CCLog("_DSpawn_change_max: %f",_DSpawn_change_max);
         if(_DSpawn_change_max<=0){
             //Time for changes
             _DSpawn_change_max = mCurrentMission.DSpawn_change_max_time;//Reset to next time change if needed
             _DSpawn_Real_Max += mCurrentMission.DSpawn_change_max_value;
+//            CCLog("_DSpawn_Real_Max: %i",_DSpawn_Real_Max);
 //            _DSpawnCurrentTime = 0;//Force to change the spawn zone
         }
     }
@@ -8213,6 +8238,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
     
     //Update the line of spawns
     _DSpawnCurrentTime-=delta*_gameSpeed;
+//    CCLOG("_DSpawnCurrentTime: %f",_DSpawnCurrentTime);
     //Create the current zone wave
     if(_DSpawnCurrentTime<=0){
         //Time to create new line by mission parametrs
@@ -8228,15 +8254,36 @@ void GameScene::UpdateDwarfSpawn(float delta)
         _DSpawnTimer = mCurrentMission.DSpawn_zone_step;//Set to 1sec
         if(_dwarfSpawnArr.size()>0){
             _DSpawnGameMinCurrent = _dwarfSpawnArr[0];
+            
+            if(mCurrentMission.DSpawn_formula_type == 1){
+                //Check what are the diff
+                _DSpawnGameMinCurrent = _DSpawnGameMinCurrent-_dwarves->count();
+                if(_DSpawnGameMinCurrent<=0){
+                    _DSpawnGameMinCurrent = 0;
+                }
+            }
+            
             _CurrentSpawnCount = _DSpawnGameMinCurrent;
             _dwarfSpawnArr.erase(_dwarfSpawnArr.begin());
+//            CCLOG("Current min dwarfs:%i",_DSpawnGameMinCurrent);
         }
     }
     
-    if(_dwarves->count()<_DSpawnGameMinCurrent){
-        generateDwarfMission();
+    if(mCurrentMission.DSpawn_formula_type == 0){
+        if(_dwarves->count()<_DSpawnGameMinCurrent){
+            generateDwarfMission(false);
+        }
+    }
+    else if(mCurrentMission.DSpawn_formula_type == 2 || mCurrentMission.DSpawn_formula_type == 1){
+        if(_DSpawnGameMinCurrent>0){
+             generateDwarfMission(false);
+        }
     }
     
+    //Safe check
+    if(_dwarves->count() == 0){
+        generateDwarfMission(true);
+    }
 }
 
 void GameScene::UpdateCrystalSpawn(float delta)
@@ -8312,6 +8359,14 @@ void GameScene::update(float delta)
         {
             mTotalComboTimer = 0;
             mTotalCombo = 1;
+        }
+    }
+    
+    if(mCurrentMission.Task_type){
+        //Update by seconds
+        if(mTotalTimeInGame != roundf(_gameTime)){
+            mTotalTimeInGame = roundf(_gameTime);
+            CheckMissionByValue(MissionType_Time,mTotalTimeInGame);
         }
     }
     
@@ -11009,6 +11064,28 @@ void GameScene::updateDwarfs(float delta)
                             User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_CRYSTALS_SAME_DWARF,dwarf->mCollectedCrystals);
                         }
                         
+                        //Crystal check for missions
+                        if(mCurrentMission.Task_type == MissionType_Crystal_Blue && crystal->_color == CRYSTAL_COLOR_BLUE){
+                            mTotalBlue_Crystals+=1;
+                            CheckMissionByValue(MissionType_Crystal_Blue,mTotalBlue_Crystals);
+                        }
+                        else if(mCurrentMission.Task_type == MissionType_Crystal_Green && crystal->_color == CRYSTAL_COLOR_GREEN){
+                            mTotalGreen_Crystals+=1;
+                            CheckMissionByValue(MissionType_Crystal_Green,mTotalGreen_Crystals);
+                        }
+                        else if(mCurrentMission.Task_type == MissionType_Crystal_Red && crystal->_color == CRYSTAL_COLOR_RED){
+                            mTotalRed_Crystals+=1;
+                            CheckMissionByValue(MissionType_Crystal_Red,mTotalRed_Crystals);
+                        }
+                        else if(mCurrentMission.Task_type == MissionType_Crystal_Yellow && crystal->_color == CRYSTAL_COLOR_YELLOW){
+                            mTotalYellow_Crystals+=1;
+                            CheckMissionByValue(MissionType_Crystal_Yellow,mTotalYellow_Crystals);
+                        }
+                        
+                        
+                        
+                        
+                        
                         //Slow down it after 2 collected crystals!!!
                         int aExtraForSimpleCrystal = 1;
                         
@@ -11329,6 +11406,9 @@ void GameScene::updateDwarfs(float delta)
                     playInGameSound("crystal_pick_up");
                     
                     User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
+                    
+                    mTotalMushroom+=1;
+                    CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
                 }
             }
             
@@ -12686,7 +12766,7 @@ Goblin* GameScene::generateGoblin(int theX,int theY,float theRadius)
 //    _introAnimations->addObject(introAnimation);
 }
 
-void GameScene::generateDwarfMission()
+void GameScene::generateDwarfMission(bool theInstant)
 {
     //Why do we have 2 values of this?
     _mission_dwarfs_spawned+=1;
@@ -12733,11 +12813,25 @@ void GameScene::generateDwarfMission()
     if (_possibleGeneratePoints.size() > 0)
     {
         _lastSpawnPoint = _possibleGeneratePoints[rand() % _possibleGeneratePoints.size()];
+        
+        if(mLastSpawnID == _lastSpawnPoint){
+            //Check if will allow
+            int aWillAllow = rand()%100;
+            if(aWillAllow>=mCurrentMission.DwarfSpawnOneCave){
+                return;
+            }
+        }
         _lastSpawnPoints.push_back(_lastSpawnPoint);
     }
     else{
         return;//Can't spawn dwarf on dwarf
     }
+    
+    if(mCurrentMission.DSpawn_formula_type == 2 || mCurrentMission.DSpawn_formula_type == 1){
+        _DSpawnGameMinCurrent-=1;
+    }
+    
+    mLastSpawnID = _lastSpawnPoint;
     
     //Should remove on dwarf exit !!!
 //    if (_lastSpawnPoints.size()>3)
@@ -12747,6 +12841,16 @@ void GameScene::generateDwarfMission()
 //    }
     
     Dwarf* dwarf = Dwarf::create(this,theType);
+    
+    if(theType == DWARF_TYPE_FAT){
+        dwarf->_speed = mCurrentMission.DwarfSpeed_Fat;
+        dwarf->_defaultSpeed = mCurrentMission.DwarfSpeed_Fat;
+    }
+    else{
+        dwarf->_speed = mCurrentMission.DwarfSpeed_Tall;
+        dwarf->_defaultSpeed = mCurrentMission.DwarfSpeed_Tall;
+    }
+    
     
     //Will remove where next dwarf can spawn !!!
     dwarf->_SpawnID = _lastSpawnPoint;
@@ -12765,7 +12869,18 @@ void GameScene::generateDwarfMission()
     dwarf->_disabled = false;
 //    dwarf->setVisible(false);
     
+    if(theInstant){
+        return;
+    }
     
+    //The spawn
+    dwarf->setVisible(false);
+    
+    IntroAnimation* introAnimation = DwarfIntro::create(this, dwarf);
+    introAnimation->setPosition(dwarf->getPosition());
+    
+    this->addChild(introAnimation, getSpriteOrderZ(introAnimation->getPositionY()));
+    _introAnimations->addObject(introAnimation);
 }
 
 Dwarf* GameScene::generateDwarf(int theType,int theSpawnPoint)
@@ -15420,6 +15535,9 @@ void GameScene::stopInGameSound(const char* theName,bool theForce)
 void GameScene::onEnterTransitionDidFinish()
 {
     CreateMachines();
+    
+    if(!CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying())
+        CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_GriegLoop.mp3", true);
 }
 
 //The map change effects !!!
@@ -16495,6 +16613,22 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
             //---------------------------------------------------------------
         }
     }
+}
+
+void GameScene::ResetValues()
+{
+    mTotalMushroom = 0;
+    
+    mTotalGreen_Crystals = 0;
+    mTotalBlue_Crystals = 0;
+    mTotalRed_Crystals = 0;
+    mTotalYellow_Crystals = 0;
+    
+    mTotalMushroom = 0;
+    mTotalTimeInGame = 0;
+    mTotalEscapesFromTroll = 0;
+    
+    mLastSpawnID = -1;
 }
 
 //void GameScene:: keyBackClicked(void) {

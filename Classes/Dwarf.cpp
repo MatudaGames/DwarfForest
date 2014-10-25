@@ -141,7 +141,7 @@ bool Dwarf::init(GameScene* game,int theType)
 		_downAnimation = SpriteAnimation::create("Characters/tall_dwarf/tall_dwarf_down.plist");
 		_downAnimation->retain();
         
-        _speed = DWARF_SPEED_TALL;
+//        _speed = DWARF_SPEED_TALL;
 	}
 	else if (_type == DWARF_TYPE_FAT)
 	{
@@ -160,7 +160,7 @@ bool Dwarf::init(GameScene* game,int theType)
 		_downAnimation = SpriteAnimation::create("Characters/fat_dwarf/fat_dwarf_down.plist");
 		_downAnimation->retain();
         
-        _speed = DWARF_SPEED_FAT;
+//        _speed = DWARF_SPEED_FAT;
 	}
     
     //Add the ghoust backround
@@ -481,9 +481,9 @@ void Dwarf::update(float delta)
 	else
 	{
         if (_type==DWARF_TYPE_FAT)
-            _speed = (DWARF_SPEED_FAT * _game->getGameSpeed());//*mCrystalSlowDown;
+            _speed = (_defaultSpeed * _game->getGameSpeed());//*mCrystalSlowDown;
         else
-            _speed = (DWARF_SPEED_TALL * _game->getGameSpeed());//*mCrystalSlowDown;
+            _speed = (_defaultSpeed * _game->getGameSpeed());//*mCrystalSlowDown;
         
         if(User::getInstance()->mDynamicTrolls)
         {

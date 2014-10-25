@@ -158,7 +158,7 @@ bool Troll::init(GameScene* game)
     _removeSmoke->retain();
 	
 	_angle = 6.0f * M_PI / 8.0f;
-	_speed = TROLL_SPEED;
+//	_speed = TROLL_SPEED;
     
     //For debug
     if (GLOBAL_SCALE!=1.0f)
@@ -949,6 +949,8 @@ void Troll::SetMissionStuff(MissionTroll theMission)
     if(_moveValue == 0){
         _moveValue = 1;//Start random
     }
+    
+    _speed = theMission._speed;
     
     if(theMission._circle>0){
         
