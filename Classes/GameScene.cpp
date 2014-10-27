@@ -8112,6 +8112,7 @@ void GameScene::CreateSpawnLine()
                     if(aCurrentStallCount == aMinStall){
                         //Can be the same?
                         aCurrentStallCount = 0;//The value will be the same
+                        if(aCurrentPoint-_DSpawn_Real_Jump>_DSpawn_Real_Min) aCurrentPoint-=_DSpawn_Real_Jump;
                     }
                     else{
                         //Move up or let it be the same if cant
@@ -8128,6 +8129,7 @@ void GameScene::CreateSpawnLine()
                     if(aCurrentStallCount == aMinStall){
                         //Can be the same?
                         aCurrentStallCount = 0;//The value will be the same
+                        if(aCurrentPoint+_DSpawn_Real_Jump<_DSpawn_Real_Max) aCurrentPoint+=_DSpawn_Real_Jump;
                     }
                     else{
                         //Move up or let it be the same if cant
@@ -8261,6 +8263,18 @@ void GameScene::UpdateDwarfSpawn(float delta)
                 if(_DSpawnGameMinCurrent<=0){
                     _DSpawnGameMinCurrent = 0;
                 }
+                else{
+                    _dwarfSpawnArrTimers.clear();
+                    
+                    float aPossibleSpawnTImes = mCurrentMission.DSpawn_zone_step/_DSpawnGameMinCurrent;//The min random time
+                    float aRandomTIme = 0;
+                    for(int t = 0;t<_DSpawnGameMinCurrent;t++)
+                    {
+                        aRandomTIme = (rand() % int(aPossibleSpawnTImes*100))/100+(t*aPossibleSpawnTImes);
+//                        CCLOG("Random time for spawn: %f",aRandomTIme);
+                        _dwarfSpawnArrTimers.push_back(aRandomTIme);
+                    }
+                }
             }
             
             _CurrentSpawnCount = _DSpawnGameMinCurrent;
@@ -8274,7 +8288,24 @@ void GameScene::UpdateDwarfSpawn(float delta)
             generateDwarfMission(false);
         }
     }
-    else if(mCurrentMission.DSpawn_formula_type == 2 || mCurrentMission.DSpawn_formula_type == 1){
+    else if(mCurrentMission.DSpawn_formula_type == 1){
+        //Create some random steps for spawn !!!
+        if(_SubDwarfSpawn>0){
+            _SubDwarfSpawn-=delta*_gameSpeed;
+        }
+        else{
+            if(_dwarfSpawnArrTimers.size()>0){
+                _SubDwarfSpawn = _dwarfSpawnArrTimers[0];
+                _dwarfSpawnArrTimers.erase(_dwarfSpawnArrTimers.begin());
+                generateDwarfMission(false);
+            }
+            else if(_LeftNotSpawnDwatfs>0){
+                _LeftNotSpawnDwatfs-=1;
+                generateDwarfMission(false);
+            }
+        }
+    }
+    else if(mCurrentMission.DSpawn_formula_type == 2){
         if(_DSpawnGameMinCurrent>0){
              generateDwarfMission(false);
         }
@@ -8284,6 +8315,26 @@ void GameScene::UpdateDwarfSpawn(float delta)
     if(_dwarves->count() == 0){
         generateDwarfMission(true);
     }
+}
+
+void GameScene::UpdateTrapsSpawn(float delta)
+{
+    //This is the master troll brain :D
+    if(_MasterTroll_TimeToAct>0){
+        _MasterTroll_TimeToAct-=delta*_gameSpeed;
+    }
+    else{
+        //Do some magic now !!!
+        _MasterTroll_TimeToAct = (rand()%20)+20;
+        
+        //What will he do?
+        generateEffect();
+        
+        //2 other stuff
+//        StartDwarfFreeze();
+//        BulletDwarf();
+    }
+    
 }
 
 void GameScene::UpdateCrystalSpawn(float delta)
@@ -8350,6 +8401,7 @@ void GameScene::update(float delta)
     //The spawn contorl
     UpdateDwarfSpawn(delta);
     UpdateCrystalSpawn(delta);
+    UpdateTrapsSpawn(delta);
     
     //Update the combo timer
     if(mTotalComboTimer>0)
@@ -12818,12 +12870,14 @@ void GameScene::generateDwarfMission(bool theInstant)
             //Check if will allow
             int aWillAllow = rand()%100;
             if(aWillAllow>=mCurrentMission.DwarfSpawnOneCave){
+                _LeftNotSpawnDwatfs+=1;
                 return;
             }
         }
         _lastSpawnPoints.push_back(_lastSpawnPoint);
     }
     else{
+        _LeftNotSpawnDwatfs+=1;
         return;//Can't spawn dwarf on dwarf
     }
     
@@ -14143,7 +14197,8 @@ void GameScene::generateEffect()
 		IntroAnimation* introAnimation = EffectIntro::create(this, effect);
 		introAnimation->setPosition(effect->getPosition());
         
-        int aCaveIndex = getSpriteOrderZ(_cave->getPositionY())+1;
+        int aCaveIndex = 0;
+//        int aCaveIndex = getSpriteOrderZ(_cave->getPositionY())+1;
 		
 		this->addChild(introAnimation,aCaveIndex);
 		_introAnimations->addObject(introAnimation);
@@ -16629,6 +16684,11 @@ void GameScene::ResetValues()
     mTotalEscapesFromTroll = 0;
     
     mLastSpawnID = -1;
+    
+    _SubDwarfSpawn = 0;
+    _LeftNotSpawnDwatfs = 0;
+    
+    _MasterTroll_TimeToAct = (rand()%20)+20;
 }
 
 //void GameScene:: keyBackClicked(void) {

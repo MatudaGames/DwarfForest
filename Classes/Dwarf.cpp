@@ -485,6 +485,7 @@ void Dwarf::update(float delta)
         else
             _speed = (_defaultSpeed * _game->getGameSpeed());//*mCrystalSlowDown;
         
+        /*
         if(User::getInstance()->mDynamicTrolls)
         {
             //Dont do anything only debug speed take in action
@@ -512,6 +513,7 @@ void Dwarf::update(float delta)
                 _speed*=2.2;
             }
         }
+        */
 		
 		if (_movePoints->count() > 0)
 		{

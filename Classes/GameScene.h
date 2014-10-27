@@ -141,9 +141,18 @@ public:
     void generateDwarfMission(bool theInstant);
     
     void UpdateDwarfSpawn(float delta);
+    void UpdateTrapsSpawn(float delta);
     
     float _CrystalSpawnRecheckTimer;
     void UpdateCrystalSpawn(float delta);
+    
+    std::vector<float> _dwarfSpawnArrTimers;
+    float _SubDwarfSpawn;
+    int _LeftNotSpawnDwatfs;
+    
+    float _MasterTroll_TimeToAct;
+    float _MasterTroll_LastAction;
+    
     
     //------------------------------------------
     

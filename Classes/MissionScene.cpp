@@ -537,6 +537,7 @@ void MissionScene::menuPlayCallback(CCObject* sender)
 {
     
 //    FlurryX::logEvent("Press Play Game");
+    CCLOG("mLastClickedMission:%i",mLastClickedMission);
     
     User::getInstance()->getMissionManager().mCurrentActiveMission = mLastClickedMission;
     
