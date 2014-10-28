@@ -1001,6 +1001,9 @@ void GameScene::CreateGameByMission()
     //Start the updater
     this->scheduleUpdate();
     
+    //Create the masters
+    CreateMasters();
+    
     //Check if need to show some stuff at start???
     
     //Check what is this mission and what need to do !!!
@@ -4714,8 +4717,47 @@ void GameScene::CreateMasterTrollEnter()
     mMasterTroll->runAction(aSeq);
 }
 
+// The new masters troll and dwarf spawn
+void GameScene::CreateMasters()
+{
+    _MasterTrollBase = CCSprite::create("mastertroll_placeholder.png");
+    _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
+    addChild(_MasterTrollBase);
+    
+    _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
+    _MasterDwarfBase->setPosition(ccp(visibleSize.width-100,visibleSize.height+200));//Fall from top !!!
+    addChild(_MasterDwarfBase);
+    
+//    playInGameSound("meteorite_hit_ground");
+    
+    //Create the fall animations
+    CCMoveTo* aFallOff = CCMoveTo::create(1.0f,ccp(64,360));
+    CCEaseExponentialIn* aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    CCDelayTime* aDelay = CCDelayTime::create(0.1f);
+    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterTrollBase->runAction(aSeq);
+    
+    
+    aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
+    aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    aDelay = CCDelayTime::create(0.6f);
+    aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterDwarfBase->runAction(aSeq);
+}
+
+void GameScene::OnMasterHitGround()
+{
+    _MasterTrollBase->setZOrder(getSpriteOrderZ(_MasterTrollBase->getPositionY()));
+    _MasterDwarfBase->setZOrder(getSpriteOrderZ(_MasterDwarfBase->getPositionY()));
+    
+    playInGameSound("meteorite_hit_ground");
+}
+
 void GameScene::CreateMachines()
 {
+    return;
     if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission || User::getInstance()->mSpecial_18_Mission
        || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission
        || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission)

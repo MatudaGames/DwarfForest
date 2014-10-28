@@ -349,6 +349,10 @@ public:
     void NewMissionCompleted();
     void OnExitWithNewMission();
     
+    //The new fellas
+    cocos2d::CCSprite* _MasterTrollBase;
+    cocos2d::CCSprite* _MasterDwarfBase;
+    
     cocos2d::CCSprite* mMasterTroll;
     SpriteAnimation* _MasterTroll_IdleAnimation;
 	SpriteAnimation* _MasterTroll_WinAnimation;
@@ -357,6 +361,9 @@ public:
     void SetMasterTrollAnimation(SpriteAnimation* animation);
     void OnMasterTrollFinishEnter();
     void CreateMasterTrollEnter();
+    
+    void CreateMasters();
+    void OnMasterHitGround();
     
     float _mission_dwarf_spawn_timer;
     float _mission_crystal_spawn_timer;

@@ -531,9 +531,9 @@ void Dwarf::update(float delta)
 			}
             
             //Moves quicker if has points where to walk
-            if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mSpecial_16_Mission && !User::getInstance()->mSpecial_17_Mission){
-                _speed*=1.5;
-            }
+//            if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mSpecial_16_Mission && !User::getInstance()->mSpecial_17_Mission){
+//                _speed*=1.5;
+//            }
 		}
 		
 		CCPoint newPosition = ccp(x + cosf(_angle) * delta * _speed,
