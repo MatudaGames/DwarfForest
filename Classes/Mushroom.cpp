@@ -13,10 +13,10 @@
 
 USING_NS_CC;
 
-Mushroom* Mushroom::create(GameScene* gameScene)
+Mushroom* Mushroom::create(GameScene* gameScene,int theTimeOnMap)
 {
 	Mushroom *pRet = new Mushroom();
-    if (pRet && pRet->init(gameScene))
+    if (pRet && pRet->init(gameScene,theTimeOnMap))
     {
         pRet->autorelease();
         return pRet;
@@ -38,7 +38,7 @@ Mushroom::~Mushroom()
 {
 }
 
-bool Mushroom::init(GameScene* gameScene)
+bool Mushroom::init(GameScene* gameScene,int theTimeOnMap)
 {
 	if (!CCNode::init())
 	{
@@ -81,7 +81,7 @@ bool Mushroom::init(GameScene* gameScene)
     _mushroomSpriteOff->runAction(aTotal);
     
     //10 sec to collect this bad boy
-    schedule(schedule_selector(Mushroom::createRemove), 0.0f, 0, 10.0f);
+    schedule(schedule_selector(Mushroom::createRemove), 0.0f, 0, theTimeOnMap);
     
     _needToRemove = false;
     
@@ -96,6 +96,7 @@ void Mushroom::createRemove()
 
 void Mushroom::onRemove()
 {
+    _gameScene->_mushrooms->removeObject(this);
     _gameScene->removeNode(this);
 }
 

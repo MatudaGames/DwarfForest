@@ -294,8 +294,11 @@ void MissionManager::Donwloaded()
         mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
         mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
         
+        
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
         mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
+        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        
         
         //---------------------------------------------------------------------------------------------------
         
@@ -1957,6 +1960,7 @@ void MissionManager::AddExtraDownloadedMissions_1()
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
         mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
+        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         
@@ -2204,6 +2208,7 @@ void MissionManager::AddExtraDownloadedMissions_2()
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
         mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
+        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         
@@ -2451,6 +2456,7 @@ void MissionManager::AddExtraDownloadedMissions_3()
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
         mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
+        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         

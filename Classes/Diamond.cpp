@@ -12,10 +12,10 @@
 
 USING_NS_CC;
 
-Diamond* Diamond::create(GameScene* gameScene)
+Diamond* Diamond::create(GameScene* gameScene,int theTimeOnMap)
 {
 	Diamond *pRet = new Diamond();
-    if (pRet && pRet->init(gameScene))
+    if (pRet && pRet->init(gameScene,theTimeOnMap))
     {
         pRet->autorelease();
         return pRet;
@@ -37,12 +37,14 @@ Diamond::~Diamond()
 {
 }
 
-bool Diamond::init(GameScene* gameScene)
+bool Diamond::init(GameScene* gameScene,int theTimeOnMap)
 {
 	if (!CCNode::init())
 	{
 		return false;
 	}
+    
+    mTimeOnMap = theTimeOnMap;
     
     _gameScene = gameScene;
     
@@ -119,7 +121,7 @@ void Diamond::updateDiamondTimer()
 
 void Diamond::onFinishedFlow()
 {
-    if (_diamondTimer>=10)
+    if (_diamondTimer>=mTimeOnMap)
     {
         //stop current actions
         _diamondSprite->stopAllActions();

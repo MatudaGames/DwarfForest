@@ -81,6 +81,8 @@ bool SpriteAnimation::init(const char* plist, bool repeat)
     {
         _action = CCAnimate::create(animation);
     }
+    
+    
 	_action->retain();
 	
 	setDisplayFrame((CCSpriteFrame *)animFrames->objectAtIndex(0));

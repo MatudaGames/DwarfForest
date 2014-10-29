@@ -202,6 +202,7 @@ struct MissionSet
     
     std::vector<int> CrystalNumProbs;
     std::vector<int> CrystalColProbs;
+    std::vector<int> CrystalTypeProbs;
     
 };
 

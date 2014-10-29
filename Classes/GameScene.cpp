@@ -206,6 +206,7 @@ GameScene::~GameScene()
 	if (_crystals) _crystals->release();
 	if (_effects) _effects->release();
 	if (_diamonds) _diamonds->release();
+    if (_mushrooms) _mushrooms->release();
 	if (_introAnimations) _introAnimations->release();
 	if (_caveMask) _caveMask->release();
 	if (_mask) _mask->release();
@@ -935,6 +936,9 @@ void GameScene::CreateGameByMission()
 	
 	_diamonds = CCArray::create();
 	_diamonds->retain();
+    
+    _mushrooms = CCArray::create();
+    _mushrooms->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -1687,6 +1691,9 @@ bool GameScene::init()
 	
 	_diamonds = CCArray::create();
 	_diamonds->retain();
+    
+    _mushrooms = CCArray::create();
+    _mushrooms->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -8107,34 +8114,27 @@ void GameScene::CreateSpawnLine()
     int aMinStepJump = _DSpawn_Real_Jump;
     
     //Create the spawn zones
-    int aCurrentPoint = _CurrentSpawnCount-1;//Take the last line spawn count
+    int aCurrentPoint = _CurrentSpawnCount-1;//Take the last line action point spawn count
     
     //Min value for the same spawn value
-    int aMinStall = mCurrentMission.Dwarf_paths.size();
+    int aMinStall = mCurrentMission.Dwarf_paths.size(); // How much dwarf enterances [DwarfSpawnPoints daudzums]
     int aCurrentStallCount = 0;
     bool aDidHitMax = false;
     
-//    CCLog("mCurrentMission.min %i",mCurrentMission.DSpawn_min);
-//    CCLog("mCurrentMission.max %i",mCurrentMission.DSpawn_max);
-//    CCLog("mCurrentMission.jump %i",mCurrentMission.DSpawn_jump);
-    
     int aDummyVal = 0;
-    int aJumpTimes = _DSpawn_Real_Zone/mCurrentMission.DSpawn_zone_step;
+    int aJumpTimes = _DSpawn_Real_Zone/mCurrentMission.DSpawn_zone_step;// In how much actions points will be zone
     
     bool aAlowOtherValue = true;
     
     for(int i=0;i<aJumpTimes;i++)
     {
-//        CCLOG("-------------  i = %i --------",i);
-        
         aDummyVal = rand()%2;//Up or down
-//        CCLog("aDummyVal %i",aDummyVal);
         
         //now check if will get to the max
         if(aDidHitMax==false)
         {
+            //This stuff check for safe if the max hit is not in danger !!! [takes in action zone possible steps and check if it's the last time to do some actions for max hit]
             if(aCurrentPoint + (_DSpawn_Real_Jump*((aJumpTimes-i)-1)) < _DSpawn_Real_Max){
-//                CCLOG("Did force spawn");
                 aCurrentPoint+=_DSpawn_Real_Jump;
                 aAlowOtherValue = false;
                 
@@ -8145,6 +8145,7 @@ void GameScene::CreateSpawnLine()
             aAlowOtherValue = true;
         }
         
+        //If all is ok and we don't need to force max hit
         if(aAlowOtherValue)
         {
             if(aDummyVal==0){
@@ -8154,6 +8155,7 @@ void GameScene::CreateSpawnLine()
                     if(aCurrentStallCount == aMinStall){
                         //Can be the same?
                         aCurrentStallCount = 0;//The value will be the same
+                        //Too much times the same value - lets change direction
                         if(aCurrentPoint-_DSpawn_Real_Jump>_DSpawn_Real_Min) aCurrentPoint-=_DSpawn_Real_Jump;
                     }
                     else{
@@ -8171,6 +8173,7 @@ void GameScene::CreateSpawnLine()
                     if(aCurrentStallCount == aMinStall){
                         //Can be the same?
                         aCurrentStallCount = 0;//The value will be the same
+                        //Too much times the same value - lets change direction
                         if(aCurrentPoint+_DSpawn_Real_Jump<_DSpawn_Real_Max) aCurrentPoint+=_DSpawn_Real_Jump;
                     }
                     else{
@@ -8186,7 +8189,7 @@ void GameScene::CreateSpawnLine()
             }
         }
         
-        //Safe check
+        //Safe check if value does not go over limits
         if(aCurrentPoint<_DSpawn_Real_Min)aCurrentPoint=_DSpawn_Real_Min;
         else if(aCurrentPoint>_DSpawn_Real_Max)aCurrentPoint=_DSpawn_Real_Max;
         
@@ -8251,7 +8254,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
             //Time for changes
             _DSpawn_change_jump = mCurrentMission.DSpawn_change_jump_time;//Reset to next time change if needed
             _DSpawn_Real_Jump += mCurrentMission.DSpawn_change_jump_value;
-//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+            _DSpawnCurrentTime = 0;//Force to change the spawn zone
         }
     }
     
@@ -8263,7 +8266,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
             _DSpawn_change_max = mCurrentMission.DSpawn_change_max_time;//Reset to next time change if needed
             _DSpawn_Real_Max += mCurrentMission.DSpawn_change_max_value;
 //            CCLog("_DSpawn_Real_Max: %i",_DSpawn_Real_Max);
-//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+            _DSpawnCurrentTime = 0;//Force to change the spawn zone
         }
     }
     
@@ -8273,7 +8276,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
             //Time for changes
             _DSpawn_change_min = mCurrentMission.DSpawn_change_min_time;//Reset to next time change if needed
             _DSpawn_Real_Min += mCurrentMission.DSpawn_change_min_value;
-//            _DSpawnCurrentTime = 0;//Force to change the spawn zone
+            _DSpawnCurrentTime = 0;//Force to change the spawn zone
         }
     }
     
@@ -8394,7 +8397,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
         }
         
         //Lets check futher !!!
-        int aProbToSpawn = 100 - (_crystals->count() * mCurrentMission.CrystalProbMultiplier);
+        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.CrystalProbMultiplier);
         int aRandomResult = rand()%100;
         if(aRandomResult<=aProbToSpawn){
             //Spawn
@@ -8410,21 +8413,73 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 }
             }
             
+            int aShroomNum = 0;
+            int aDiamondNum = 0;
+            int aCrystalNum = 0;
+            
+            int aWillSpawnShroom = rand()%100;
+            if(mCurrentMission.CrystalTypeProbs.size()>=1 && aWillSpawnShroom<=mCurrentMission.CrystalTypeProbs[1]) aShroomNum = 1;//1 allowed
+            
+            int aWillSpawnDiamond = rand()%100;
+            if(mCurrentMission.CrystalTypeProbs.size()>=2 && aWillSpawnDiamond<=mCurrentMission.CrystalTypeProbs[2]) aDiamondNum = 1;//1 allowed
+            
+            int aWillSpawnCrystals = rand()%100;
+            if(aWillSpawnCrystals<=mCurrentMission.CrystalTypeProbs[0]) aCrystalNum = 1;
+            
+            int aTotalSpawnCountMin = aShroomNum + aDiamondNum + aCrystalNum;
+            
+            if(aSpawnCrystals<3){
+                while(aTotalSpawnCountMin>aSpawnCrystals)
+                {
+                    //Loose something to do something
+                    if(aShroomNum>0){
+                        int aShroomWin = rand()%2;
+                        if(aShroomWin==0){
+                            aShroomNum = 0;
+                            aTotalSpawnCountMin-=1;
+                        }
+                    }
+                    else if(aDiamondNum>0){
+                        int aDiamondWin = rand()%2;
+                        if(aDiamondWin==0){
+                            aDiamondNum = 0;
+                            aTotalSpawnCountMin-=1;
+                        }
+                    }
+                    else{
+                        break;//No need go futher
+                    }
+                }
+            }
+            
+            
             //Now check what can we spawn for each crystal
             int aRandomColorFin = 0;//What type of crystal should spawn
             for(int a=0;a<aSpawnCrystals;a++)
             {
-                int aRadomColor = rand()%100;
-                
-                for(int c=0;c<mCurrentMission.CrystalColProbs.size();c++)
-                {
-                    if(aRadomColor<=mCurrentMission.CrystalColProbs[c]){
-                        aRandomColorFin = c;
-                    }
+                //If this is not crystal
+                if(aShroomNum>0){
+                    aShroomNum-=1;
+                    generateMushroom(mCurrentMission.CrystalTimeOnMap);
                 }
-                
-                //The green?
-                generateCrystal(true,aRandomColorFin,mCurrentMission.CrystalTimeOnMap);
+                else if(aDiamondNum>0){
+                    aDiamondNum-=1;
+                    generateDiamond(mCurrentMission.CrystalTimeOnMap);
+                }
+                else if(aCrystalNum>0){
+                    aCrystalNum-=1;
+                    //If this is crystal - then choose color
+                    int aRadomColor = rand()%100;
+                    
+                    for(int c=0;c<mCurrentMission.CrystalColProbs.size();c++)
+                    {
+                        if(aRadomColor<=mCurrentMission.CrystalColProbs[c]){
+                            aRandomColorFin = c;
+                        }
+                    }
+                    
+                    generateCrystal(true,aRandomColorFin,mCurrentMission.CrystalTimeOnMap);
+                }
             }
         }
         
@@ -9605,7 +9660,7 @@ void GameScene::update(float delta)
     if (_diamondTimer>=DIAMOND_SPAWN_TIME)
     {
         _diamondTimer = 0;//Start again
-        generateDiamond();
+//        generateDiamond();
     }
 	
 	// generate effect
@@ -9926,7 +9981,7 @@ void GameScene::update(float delta)
         if (_mushroomTimer<=0)
         {
             _mushroomTimer = MUSHROOM_WAIT;
-            generateMushroom();
+//            generateMushroom();
         }
     }
     
@@ -11461,16 +11516,7 @@ void GameScene::updateDwarfs(float delta)
 					
 					if (diamond->isVisible() &&
 						ccpDistanceSQ(dwarf->getPosition(), diamond->getPosition()) <= (DIAMOND_DISTANCE * DIAMOND_DISTANCE) * GLOBAL_SCALE)
-					{
-                        //--------------------------------
-//                        CCLabelTTF* aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(10004));
-//                        int valueTotal = atoi(aLabelDebug->getString());
-//                        valueTotal+=10;
-//                        aLabelDebug->setString(toString(valueTotal).c_str());
-                        
-                        //Show that collected it !!!
-//                        createPoints(10, 0, dwarf->getPosition(),ccc3(0, 232, 225));
-                        
+                    {
 						this->removeChild(diamond);
 						_diamonds->removeObjectAtIndex(diamondIndex);
                         
@@ -11488,6 +11534,26 @@ void GameScene::updateDwarfs(float delta)
             
             if (dwarf)
             {
+                for (int diamondIndex = _mushrooms->count() - 1; diamondIndex >= 0; --diamondIndex)
+                {
+                    Mushroom* diamond = static_cast<Mushroom*>(_mushrooms->objectAtIndex(diamondIndex));
+                    
+                    if (diamond->isVisible() &&
+                        ccpDistanceSQ(dwarf->getPosition(), diamond->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
+                    {
+                        this->removeChild(diamond);
+                        _mushrooms->removeObjectAtIndex(diamondIndex);
+                        
+                        playInGameSound("crystal_pick_up");
+                        
+                        User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
+                        
+                        mTotalMushroom+=1;
+                        CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
+                    }
+                }
+                
+                /*
                 Mushroom* mushroom = static_cast<Mushroom*>(getChildByTag(kMushroom));
                 
                 if (mushroom!=NULL &&
@@ -11504,6 +11570,7 @@ void GameScene::updateDwarfs(float delta)
                     mTotalMushroom+=1;
                     CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
                 }
+                */
             }
             
             if (dwarf && dwarf->getForceRemove())
@@ -13805,7 +13872,7 @@ void GameScene::RemoveEffectByChild(Crystal* theCrystal)
 
 void GameScene::generateDiamondSpecial(int theX,int theY)
 {
-    Diamond* diamond = Diamond::create(this);
+    Diamond* diamond = Diamond::create(this,10);
     diamond->setPosition(ccp(theX,theY));
     addChild(diamond, getSpriteOrderZ(diamond->getPositionY()));
     _diamonds->addObject(diamond);
@@ -13845,8 +13912,28 @@ void GameScene::removeDiamond(Diamond* diamond)
 	_diamonds->removeObject(diamond);
 }
 
-void GameScene::generateMushroom()
+void GameScene::generateMushroom(float theTime)
 {
+    Mushroom* mushroom = Mushroom::create(this,theTime);
+    
+    _mushroomSpawnPositions.clear();
+    for (int i = 0;i<8;i++)
+    {
+        if (i != _mushroomLastSpawnBlockID)
+            _mushroomSpawnPositions.push_back(i);
+    }
+    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
+    
+    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
+    
+    mushroom->setPosition(aPosition);
+    
+    addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
+    _mushrooms->addObject(mushroom);
+    
+    //---------------------------------------------------------------
+    //The old stuff
+    /*
 //    bool aCanBeActivated = true;
     int aCanActivateCount = 0;
     
@@ -13900,6 +13987,7 @@ void GameScene::generateMushroom()
     //////////////////////////////////////////////////////////////////////
     
     addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
+    */
 }
 
 void GameScene::generateEffectSpecial(int theX,int theY, int theType)
@@ -14886,13 +14974,13 @@ void GameScene::removeBatchNode(CCNode* sender)
 }
 
 
-void GameScene::generateDiamond()
+void GameScene::generateDiamond(float theTimeOnMap)
 {
-	if (_diamonds->count() < MAX_DIAMONDS)
+//	if (_diamonds->count() < MAX_DIAMONDS)
 	{
 //		CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 		
-		Diamond* diamond = Diamond::create(this);
+		Diamond* diamond = Diamond::create(this,theTimeOnMap);
 		
 //		CCPoint position = ccp(rand() % (int)visibleSize.width,
 //							   rand() % (int)visibleSize.height);

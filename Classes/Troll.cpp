@@ -979,8 +979,15 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         int theCircleY = theMission._circle_y;
         float theCircleWidth = theMission._circle_height*0.1;
         
+        float last_x = 0;
+        float last_y = 0;
+        
+        float angleSize = 2*M_PI/theMission._circle_precision;
+        
         //Create the circle stuff
-        for (float a = 0.1f; a < cir; a += precision)
+        bool aDidSetAngle = false;
+        
+        for (float a = 0.0f; a < cir; a += precision)
         {
 //            float x = _game->visibleSize.width/2 + mRadius * cos(a);
 //            float y = _game->visibleSize.height/2 + mRadius/1.5f * sin(a);
@@ -990,10 +997,40 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             
             _movePoints->addControlPoint(ccp(x,y-50));
             
-            CCSprite* pointsBack = CCSprite::create("DebugDot.png");
+            CCSprite* pointsBack = CCSprite::create("troll_line.png");
             pointsBack->setPosition(ccp(x,y-50));
-            pointsBack->setOpacity(120);
+//            pointsBack->setOpacity(120);
+            
+            //Rotate to the next point
+            
+            if(aDidSetAngle){
+                float angle = 360-(atan2(y - last_y, x - last_x) * 180 / M_PI) ;
+                pointsBack->setRotation(angle);
+            }
+            else{
+                aDidSetAngle = true;
+                pointsBack->setRotation(91);
+            }
+
+            
+            
+//            float angleRadians = atanf((float)last_y / (float)last_x);
+//            float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);
+//            float cocosAngle = -1 * angleDegrees;
+//            pointsBack->setRotation(cocosAngle);
+//            pointsBack->seta
+//            CCAffineTransformMakeIdentity(angleSize * i);
+            
+//            float aaaa = CC_RADIANS_TO_DEGREES(atan2f(last_y - y, last_x - x));
+//            float cocosAngle = -1 * aaaa;
+//            CCLOG("aaaa:%f",aaaa);
+//            pointsBack->setRotation(aaaa);
+//            setAngle(atan2f(point.y - y, point.x - x));
+            
             _game->addChild(pointsBack,1);
+            
+            last_x = x;
+            last_y = y;
         }
         
         //Set it to the point?
@@ -1009,7 +1046,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             float x = theMission._paths[a]->x;
             float y = theMission._paths[a]->y;
             
-            CCSprite* pointsBack = CCSprite::create("DebugDot.png");
+            CCSprite* pointsBack = CCSprite::create("troll_line.png");
             pointsBack->setPosition(ccp(x,y));
             pointsBack->setOpacity(120);
             _game->addChild(pointsBack,1);

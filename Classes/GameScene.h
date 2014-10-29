@@ -218,7 +218,7 @@ public:
     
     void removeDiamond(Diamond* diamond);
     
-    void generateMushroom();
+    void generateMushroom(float theTime);
     
     void CreateSpecialSpot();
 	
@@ -236,7 +236,7 @@ public:
     void CreateBlitz_Hidra(int theX,int theY,Hidra* theEnemy=NULL);
     void CreateBlitz_Spider(int theX,int theY,Spider* theEnemy=NULL);
 	
-	void generateDiamond();
+	void generateDiamond(float theTimeOnMap);
 	
 	bool getMask(int32_t posX, int32_t posY);
     
@@ -638,6 +638,13 @@ public:
     
     std::vector<int> _lastSpawnPoints;
     
+    cocos2d::CCArray* _bullets;
+    cocos2d::CCArray* _trolls;
+    cocos2d::CCArray* _crystals;
+    cocos2d::CCArray* _effects;
+    cocos2d::CCArray* _diamonds;
+    cocos2d::CCArray* _mushrooms;
+    
 private:
     
     //===========  Mission stuff  ===============
@@ -732,12 +739,6 @@ private:
     int mTutorialSubStep;
     
     void UpdateBullets(float delta);
-    
-	cocos2d::CCArray* _bullets;
-	cocos2d::CCArray* _trolls;
-	cocos2d::CCArray* _crystals;
-	cocos2d::CCArray* _effects;
-	cocos2d::CCArray* _diamonds;
     
     cocos2d::CCArray* _tornadoActive;
 	

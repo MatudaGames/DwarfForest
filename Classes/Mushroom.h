@@ -16,12 +16,12 @@ class Dwarf;
 class Mushroom: public cocos2d::CCNode
 {
 public:
-    static Mushroom* create(GameScene* gameScene);
+    static Mushroom* create(GameScene* gameScene,int theTimeOnMap);
     
 	Mushroom();
     virtual ~Mushroom();
     
-    virtual bool init(GameScene* gameScene);
+    virtual bool init(GameScene* gameScene,int theTimeOnMap);
     
     void onFinishedShowUp();
     void onFinishedTrans();

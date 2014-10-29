@@ -16,12 +16,12 @@ class Diamond: public cocos2d::CCNode
 {
 public:
 //	CREATE_FUNC(Diamond);
-    static Diamond* create(GameScene* gameScene);
+    static Diamond* create(GameScene* gameScene,int theTimeOnMap);
 	
 	Diamond();
     virtual ~Diamond();
 	
-	virtual bool init(GameScene* gameScene);
+	virtual bool init(GameScene* gameScene,int theTimeOnMap);
     
     void updateDiamondTimer();
 	
@@ -30,6 +30,8 @@ public:
     void onFinishedFlow();
     
     void expire();
+    
+    int mTimeOnMap;
 	
 private:
     GameScene* _gameScene;
