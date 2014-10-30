@@ -550,6 +550,8 @@ void Dwarf::update(float delta)
             {
                 //Continue
                 setPosition(newPosition);
+                
+                
             }
             else
             {
@@ -1412,6 +1414,8 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 			//snapped to cave
             if (_type == DWARF_TYPE_TALL)
             {
+                _game->OnCaveOrangeOpen();
+                
 //                CCLOG("DWARF_TYPE_TALL distance:%f",ccpDistanceSQ(cavePosition, position));
                 
 //                if (ccpDistanceSQ(cavePosition, position) <= 40 * 40)

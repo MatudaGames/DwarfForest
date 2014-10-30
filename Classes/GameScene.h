@@ -19,6 +19,7 @@
 #include "Diamond.h"
 #include "GameStats.h"
 #include "DailyChallengesPopUp.h"
+#include "AdvancedAnimation.h"
 
 #include "MissionManager.h"
 
@@ -645,6 +646,15 @@ public:
     cocos2d::CCArray* _diamonds;
     cocos2d::CCArray* _mushrooms;
     
+    void OnCaveBlueOpen();
+    void OnCaveBlueClouse();
+    
+    void OnCaveOrangeOpen();
+    void OnCaveOrangeClouse();
+    
+    AdvancedAnimation* _caveFat;
+    AdvancedAnimation* _caveTall;
+    
 private:
     
     //===========  Mission stuff  ===============
@@ -749,9 +759,9 @@ private:
 	cocos2d::CCImage* _caveMask;
 //    cocos2d::CCSprite* _caveMask;
     
-    cocos2d::CCSprite* _caveFat;
+//    cocos2d::CCSprite* _caveFat;
 	cocos2d::CCImage* _caveMaskFat;
-    cocos2d::CCSprite* _caveTall;
+//    cocos2d::CCSprite* _caveTall;
 	cocos2d::CCImage* _caveMaskTall;
     
 	cocos2d::CCImage* _mask;

@@ -90,6 +90,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/Hidra.cpp \
                    ../../Classes/HidraIntro.cpp \
                    ../../Classes/Spider.cpp \
+                   ../../Classes/AdvancedAnimation.cpp \
                    ../../Classes/HelloWorldScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

@@ -36,6 +36,7 @@
 #include "LevelEndScene.h"
 #include "TutorialScene.h"
 #include "CCShake.h"
+#include "AdvancedAnimation.h"
 
 #include "HidraIntro.h"
 
@@ -69,7 +70,7 @@ const float GAME_SPEED_NORMAL = 1.0f;// default 1.5
 const float GAME_SPEED_FAST = 2.0f;// default 2.2
 
 const float CAVE_DISTANCE = 50.0f;
-const float CAVE_DISTANCE_TALL = 60.0f;
+const float CAVE_DISTANCE_TALL = 50.0f;
 
 const float TROLL_DISTANCE = 30.0f;
 const float CRYSTAL_DISTANCE = 50.0f;//30
@@ -534,6 +535,30 @@ void GameScene::CreatePossibleRandomDwarfSpawns(int theMapID)
     }
 }
 
+void GameScene::OnCaveBlueOpen()
+{
+    _caveFat->mClouseAnim = false;
+    _caveFat->mOpenAnim = true;
+}
+
+void GameScene::OnCaveBlueClouse()
+{
+    _caveFat->mClouseAnim = true;
+    _caveFat->mOpenAnim = false;
+}
+
+void GameScene::OnCaveOrangeOpen()
+{
+    _caveTall->mClouseAnim = false;
+    _caveTall->mOpenAnim = true;
+}
+
+void GameScene::OnCaveOrangeClouse()
+{
+    _caveTall->mClouseAnim = true;
+    _caveTall->mOpenAnim = false;
+}
+
 
 //================================================================
 
@@ -587,7 +612,60 @@ void GameScene::CreateMap()
     
     //now do the other nice stuff
     
+    //Create test cave !!!
+    
+    /*
+    CCMenuItemImage* caveOpenItem = CCMenuItemImage::create(
+                                                         "Interfeiss/in_game/pause.png",
+                                                         "Interfeiss/in_game/pause_pressed.png",
+                                                         this,
+                                                         menu_selector(GameScene::OnCaveOpen));
+    caveOpenItem->setAnchorPoint(ccp(1,0));
+    
+    CCMenuItemImage* caveClouseItem = CCMenuItemImage::create(
+                                                            "Interfeiss/in_game/pause.png",
+                                                            "Interfeiss/in_game/pause_pressed.png",
+                                                            this,
+                                                            menu_selector(GameScene::OnCaveClouse));
+    caveClouseItem->setAnchorPoint(ccp(1,0));
+    
+    
+    CCMenu* pauseMenu = CCMenu::create(caveOpenItem,caveClouseItem, NULL);
+    pauseMenu->alignItemsVertically();
+    this->addChild(pauseMenu, kHUD_Z_Order-1);
+    pauseMenu->setPosition(visibleSize.width/2, 50);
+    pauseMenu->setTag(900020);
+    
+    
+    _caveNewBlue = AdvancedAnimation::create("cave/luuka_orange.plist");
+    _caveNewBlue->setPosition(ccp(200,200));
+    _caveNewBlue->setTag(9100);
+    addChild(_caveNewBlue,100);
+    */
+    
+    // The new animated caves
+    _caveTall = AdvancedAnimation::create("cave/luuka_orange.plist");
+    _caveTall->setPosition(ccp(mCurrentMission.OrangeCave_x,mCurrentMission.OrangeCave_y));
+    if(mCurrentMission.OrangeCave_x==0 && mCurrentMission.OrangeCave_y==0){
+        _SpawnOrangeDwarf = false;
+    }
+    else{
+        addChild(_caveTall,0);
+    }
+    
+    _caveFat = AdvancedAnimation::create("cave/luuka_blue.plist");
+    _caveFat->setPosition(ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+    if(mCurrentMission.BlueCave_x==0 && mCurrentMission.BlueCave_y==0){
+        _SpawnBlueDwarf = false;
+    }
+    else{
+        addChild(_caveFat,0);
+    }
+    
+    //---------------------------------------
+    
     // The tall orange dwarf !!!
+    /*
     _caveTall = CCSprite::create("cave/trapdoor-orange.png");
     _caveTall->setPosition(ccp(mCurrentMission.OrangeCave_x,mCurrentMission.OrangeCave_y));
     if(mCurrentMission.OrangeCave_x==0 && mCurrentMission.OrangeCave_y==0){
@@ -605,6 +683,7 @@ void GameScene::CreateMap()
     else{
         addChild(_caveFat,0);
     }
+    */
     
     //Where dwarfs should enter to finish the game !!!
     _cavePoints.insert(std::pair<DwarfType, CCPoint>(DWARF_TYPE_TALL, ccp(_caveTall->getPositionX(), _caveTall->getPositionY())));
@@ -1968,6 +2047,7 @@ bool GameScene::init()
 	addChild(_cave,getSpriteOrderZ(_cave->getPositionY()));// mTotalStepsZ-floorf(_cave->getPositionY()/42));
     
     //The split caves
+    /*
     if(mNewSplitCaves)
     {
         // The tall orange dwarf !!!
@@ -1997,6 +2077,7 @@ bool GameScene::init()
         _caveFat->setScale(0.85);
         addChild(_caveFat,getSpriteOrderZ(_caveTall->getPositionY()));
     }
+    */
     
     //The split stuff
 //	_cavePoints.insert(std::pair<DwarfType, CCPoint>(DWARF_TYPE_TALL, ccp(_caveTall->getContentSize().width/2, _caveTall->getContentSize().height/2)));
@@ -8400,58 +8481,77 @@ void GameScene::UpdateCrystalSpawn(float delta)
         int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.CrystalProbMultiplier);
         int aRandomResult = rand()%100;
         if(aRandomResult<=aProbToSpawn){
-            //Spawn
-            //Lets check how much can we spawn
-            int aRandomMaxSpawn = rand()%100;
             
-            //Get the value how much can we
-            int aSpawnCrystals = 0;
+            //---------------------------------------------------------------
+            // Rotate all that values
+            
+            int aRotatedValue = 0;
+            std::vector<int> aRotatedValues;
             for(int i=0;i<mCurrentMission.CrystalNumProbs.size();i++)
             {
-                if(aRandomMaxSpawn<=mCurrentMission.CrystalNumProbs[i]){
+                aRotatedValue += mCurrentMission.CrystalNumProbs[i];
+                aRotatedValues.push_back(aRotatedValue);
+            }
+            
+            // Now try to get some stuff
+            int aRandomMaxSpawn = rand()%101; //Gives us 0..100
+            int aSpawnCrystals = 0;// How much crystal will we spawn
+            
+            for(int i=0;i<aRotatedValues.size();i++)
+            {
+                if (aRandomMaxSpawn < aRotatedValues[i]) {
                     aSpawnCrystals = i+1;
+                    break;
                 }
             }
             
-            int aShroomNum = 0;
+            // Rotate all other stuff
+            std::vector<int> aRotatedColProbValues;
+            aRotatedValue = 0;// Use the old stuff
+            for(int i=0;i<mCurrentMission.CrystalColProbs.size();i++)
+            {
+                aRotatedValue += mCurrentMission.CrystalColProbs[i];
+                aRotatedColProbValues.push_back(aRotatedValue);
+            }
+            
+            // The new item spawn check
+            std::vector<int> aRotatedItemValues;
+            aRotatedValue = 0;// Use the old stuff
+            for(int i=0;i<mCurrentMission.CrystalTypeProbs.size();i++)
+            {
+                aRotatedValue += mCurrentMission.CrystalTypeProbs[i];
+                aRotatedItemValues.push_back(aRotatedValue);
+            }
+            
+            // Do the spawn item stuff
+            int aShroomNum = 0; // How much need of each stuff to spawn
             int aDiamondNum = 0;
             int aCrystalNum = 0;
             
-            int aWillSpawnShroom = rand()%100;
-            if(mCurrentMission.CrystalTypeProbs.size()>=1 && aWillSpawnShroom<=mCurrentMission.CrystalTypeProbs[1]) aShroomNum = 1;//1 allowed
-            
-            int aWillSpawnDiamond = rand()%100;
-            if(mCurrentMission.CrystalTypeProbs.size()>=2 && aWillSpawnDiamond<=mCurrentMission.CrystalTypeProbs[2]) aDiamondNum = 1;//1 allowed
-            
-            int aWillSpawnCrystals = rand()%100;
-            if(aWillSpawnCrystals<=mCurrentMission.CrystalTypeProbs[0]) aCrystalNum = 1;
-            
-            int aTotalSpawnCountMin = aShroomNum + aDiamondNum + aCrystalNum;
-            
-            if(aSpawnCrystals<3){
-                while(aTotalSpawnCountMin>aSpawnCrystals)
+            for(int i=0;i<aSpawnCrystals;i++)
+            {
+                int aWhatToSpawn = rand()%101;
+                
+                for(int r=0;r<aRotatedItemValues.size();r++)
                 {
-                    //Loose something to do something
-                    if(aShroomNum>0){
-                        int aShroomWin = rand()%2;
-                        if(aShroomWin==0){
-                            aShroomNum = 0;
-                            aTotalSpawnCountMin-=1;
+                    if(aWhatToSpawn<aRotatedItemValues[r])
+                    {
+                        //What to spawn
+                        if(r == 0) {
+                            aCrystalNum+=1;// Just spawn the diamond
                         }
-                    }
-                    else if(aDiamondNum>0){
-                        int aDiamondWin = rand()%2;
-                        if(aDiamondWin==0){
-                            aDiamondNum = 0;
-                            aTotalSpawnCountMin-=1;
+                        else if(r == 1) {
+                            if(aShroomNum<1) aShroomNum+=1; // Spawn shroom
+                            else aCrystalNum+=1;// Spawn crystal
                         }
-                    }
-                    else{
-                        break;//No need go futher
+                        else if(r == 2) {
+                            if(aDiamondNum<1) aDiamondNum+=1; // Spawn diamond
+                            else aCrystalNum+=1;// Spawn crystal
+                        }
+                        break;
                     }
                 }
             }
-            
             
             //Now check what can we spawn for each crystal
             int aRandomColorFin = 0;//What type of crystal should spawn
@@ -8467,20 +8567,28 @@ void GameScene::UpdateCrystalSpawn(float delta)
                     generateDiamond(mCurrentMission.CrystalTimeOnMap);
                 }
                 else if(aCrystalNum>0){
-                    aCrystalNum-=1;
-                    //If this is crystal - then choose color
-                    int aRadomColor = rand()%100;
+                    aCrystalNum-=1;// Think that this is not needed - but let it be :D
                     
-                    for(int c=0;c<mCurrentMission.CrystalColProbs.size();c++)
+                    // Crystal choose color
+                    int aRadomColor = rand()%101;
+                    aRandomColorFin = 0;//Green by default
+                    
+                    // Get the crystal color
+                    for(int c=0;c<aRotatedColProbValues.size();c++)
                     {
-                        if(aRadomColor<=mCurrentMission.CrystalColProbs[c]){
+                        if(aRadomColor<aRotatedColProbValues[c]){
                             aRandomColorFin = c;
+                            break;
                         }
                     }
                     
                     generateCrystal(true,aRandomColorFin,mCurrentMission.CrystalTimeOnMap);
                 }
             }
+            
+            
+            
+            //---------------------------------------------------------------
         }
         
     }
@@ -8499,6 +8607,14 @@ void GameScene::update(float delta)
     UpdateDwarfSpawn(delta);
     UpdateCrystalSpawn(delta);
     UpdateTrapsSpawn(delta);
+    
+    //Update new caves animation ??
+    if(_SpawnBlueDwarf){
+        _caveFat->update(delta);
+    }
+    if(_SpawnOrangeDwarf){
+        _caveTall->update(delta);
+    }
     
     //Update the combo timer
     if(mTotalComboTimer>0)
@@ -10452,6 +10568,9 @@ void GameScene::generatePlantCrystal()
 void GameScene::updateDwarfs(float delta)
 {
 	// update dwarves
+    bool isConnectedToCave_Fat = false;
+    bool isConnectedToCave_Tall = false;
+    
 	for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
 	{
 		Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
@@ -10575,10 +10694,27 @@ void GameScene::updateDwarfs(float delta)
 			//check if cave is reached
             if (dwarf && dwarf->getType() == DWARF_TYPE_FAT)
             {
+                //Open cave if did not open !!!
+                if (ccpDistanceSQ(dwarf->getPosition(), cavePosition) <= 8600 &&
+                    dwarf->getIsConnectedToCave())
+                {
+                    isConnectedToCave_Fat = true;
+                    
+                    if(_caveFat->mOpenAnim!=true){
+                        _caveFat->mClouseAnim = false;
+                        _caveFat->mOpenAnim = true;
+                    }
+                }
+                
                 //Can enter only when connected to cave (maybe need to check if last point for enter?)
                 if (ccpDistanceSQ(dwarf->getPosition(), cavePosition) <= (CAVE_DISTANCE * CAVE_DISTANCE) * GLOBAL_SCALE &&
 					dwarf->getIsConnectedToCave())
                 {
+                    if(_caveFat->mClouseAnim!=true){
+                        _caveFat->mClouseAnim = true;
+                        _caveFat->mOpenAnim = false;
+                    }
+                    
                     //--------------------------------
                     if(mDebugInfoVisible)
                     {
@@ -10746,9 +10882,25 @@ void GameScene::updateDwarfs(float delta)
             }
             else if (dwarf && dwarf->getType() == DWARF_TYPE_TALL)
             {
+                if (ccpDistanceSQ(dwarf->getPosition(), cavePosition) <= 8600 &&
+                    dwarf->getIsConnectedToCave())
+                {
+                    isConnectedToCave_Tall = true;
+                    
+                    if(_caveTall->mOpenAnim!=true){
+                        _caveTall->mClouseAnim = false;
+                        _caveTall->mOpenAnim = true;
+                    }
+                }
+                
                 if (ccpDistanceSQ(dwarf->getPosition(), cavePosition) <= (CAVE_DISTANCE_TALL * CAVE_DISTANCE_TALL)*GLOBAL_SCALE &&
 					dwarf->getIsConnectedToCave())
                 {
+                    if(_caveTall->mClouseAnim!=true){
+                        _caveTall->mOpenAnim = false;
+                        _caveTall->mClouseAnim = true;
+                    }
+                    
                     //--------------------------------
                     if(mDebugInfoVisible)
                     {
@@ -11592,6 +11744,19 @@ void GameScene::updateDwarfs(float delta)
             }
         }
 	}
+    
+    if(isConnectedToCave_Tall == false){
+        if(_caveTall->mClouseAnim!=true){
+            _caveTall->mOpenAnim = false;
+            _caveTall->mClouseAnim = true;
+        }
+    }
+    if(isConnectedToCave_Fat == false){
+        if(_caveFat->mClouseAnim!=true){
+            _caveFat->mOpenAnim = false;
+            _caveFat->mClouseAnim = true;
+        }
+    }
     
     if(_dwarves->count()<2 && _crystals->count()<2 && mCanSpawnExtraCrystal)
     {
