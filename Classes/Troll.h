@@ -12,6 +12,9 @@
 #include "MissionManager.h"
 #include "Dwarf.h"
 
+#define TROLL_SELECT_INDICATOR 100
+#define TROLL_WTF_INDICATOR 101
+
 class GameScene;
 class SpriteAnimation;
 class Effect;
@@ -109,6 +112,10 @@ public:
     cocos2d::CCPointArray* _movePoints;
     bool _moveInCircle;
     int _moveValue;
+    
+    // New power stuff
+    float mFreezedTime;
+    
 	
 private:
 	GameScene* _game;

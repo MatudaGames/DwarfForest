@@ -23,6 +23,8 @@
 
 #include "MissionManager.h"
 
+#include "InGamePowers.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -36,6 +38,8 @@ class IntroAnimation;
 class Troll;
 class Crystal;
 class Effect;
+
+class InGamePowers;
 
 struct GeneratePoint
 {
@@ -111,6 +115,9 @@ public:
     
     int mCombo_DwarfEnter;
     float mComboTimer_DwarfEnter;
+    
+//    InGamePowers* mPowerMenu;
+    InGamePowers* mPowerMenu;
     
     cocos2d::CCPointArray* _movePointsWind;
     
@@ -655,6 +662,8 @@ public:
     AdvancedAnimation* _caveFat;
     AdvancedAnimation* _caveTall;
     
+    float _boostGhostTimer;
+    
 private:
     
     //===========  Mission stuff  ===============
@@ -908,7 +917,7 @@ private:
     
     float _dwarfPointMulty;
     
-    float _boostGhostTimer;
+    
     float _boostCrystalsTimer;
     float _boostShieldTimer;//Not in use now
     

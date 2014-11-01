@@ -1378,6 +1378,20 @@ void GameScene::CreateGameStartHUD()
     mMaxBarPoints = _mission_star_points_3;
     
     UpdateMissionStars();
+    
+    // The new powerUp bar
+//    mPowerMenu = *InGamePowers::create();
+//    mPowerMenu.setPosition(ccp(visibleSize.width/2,500));
+//    addChild(&mPowerMenu,kHUD_Z_Order+1);
+    
+    mPowerMenu = InGamePowers::create();
+    mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
+    mPowerMenu->mGameScene = this;
+    addChild(mPowerMenu,kHUD_Z_Order+1);
+    
+//    InGamePowers* saveLayer = InGamePowers::create();
+//    saveLayer->setAnchorPoint(ccp(0,0));
+//    addChild(saveLayer,kHUD_Z_Order);
 }
 
 bool GameScene::init()
@@ -11140,22 +11154,35 @@ void GameScene::updateDwarfs(float delta)
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE && !mTutorialEnabled)
                         {
-                            troll->setVictory();
+                            // New stuff - check if troll is not frozen
+                            if(troll->mFreezedTime>0){
+                                // Just bang dwarf like other dwarf
+                                
+                                dwarf->_disabled = true;
+                                dwarf->createCrash();
+                                dwarf->doDwarfBang(dwarf->_angle);
+                                dwarf->setTag(999);
+                            }
+                            else{
+                                // GameOver
+                                troll->setVictory();
+                                
+                                //Use this for now !!!
+                                stopInGameSound("Footsteps");
+                                stopInGameSound("troll_walk");
+                                
+                                stopInGameSound("dwarf_web_stuck",true);
+                                
+                                dwarf->createTrollCrash();
+                                
+                                //------------------------
+                                
+                                troll->setTag(999);
+                                dwarf->setTag(999);
+                                
+                                menuSaveMeCallBack(dwarf,NULL,troll);
+                            }
                             
-                            //Use this for now !!!
-                            stopInGameSound("Footsteps");
-                            stopInGameSound("troll_walk");
-                            
-                            stopInGameSound("dwarf_web_stuck",true);
-                            
-                            dwarf->createTrollCrash();
-                            
-                            //------------------------
-                            
-                            troll->setTag(999);
-                            dwarf->setTag(999);
-                            
-                            menuSaveMeCallBack(dwarf,NULL,troll);
                             
                             /*
                             if(User::getInstance()->mDynamicTrolls && (User::getInstance()->mSpecial_19_Mission
@@ -16985,6 +17012,10 @@ void GameScene::ResetValues()
     
     _MasterTroll_TimeToAct = (rand()%20)+20;
 }
+
+
+// The new stuff for user perks - maybe it can choose them in mission start and then use them !!!
+
 
 //void GameScene:: keyBackClicked(void) {
 //    CCDirector::sharedDirector()->end();

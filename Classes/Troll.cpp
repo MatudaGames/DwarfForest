@@ -27,6 +27,8 @@ const float PICK_RADIUS = 50.0f;
 
 const uint32_t TOUCHABLE_ZONE = 100;
 
+
+
 Troll* Troll::create(GameScene* game)
 {
     Troll *pRet = new Troll();
@@ -74,6 +76,9 @@ bool Troll::init(GameScene* game)
 	{
 		return false;
 	}
+    
+    
+    mFreezedTime = 0;
     
     mStartCatchDwarf = 0.0;
     
@@ -260,6 +265,31 @@ void Troll::update(float delta)
     if (_game->getSpriteOrderZ(getPositionY())!=getZOrder()){
         _game->reorderChild(this,_game->getSpriteOrderZ(getPositionY()));
     }
+    
+    // New checks if did not happen to our hereo
+    
+    // Can't move and do stuff - dwarfs only hit back
+    if(mFreezedTime>0){
+        
+        if(_animation->numberOfRunningActions()>0){
+            _animation->pauseSchedulerAndActions();
+        }
+        
+        // Runs timer while ice melts down
+        mFreezedTime -= delta;
+        
+        if(mFreezedTime<1){
+            //We are unfreezing
+            mFreezedTime = 0;
+            _animation->resumeSchedulerAndActions();
+            
+            //Remove freeze FX
+            _animation->setColor(ccc3(255,255,255));
+        }
+        
+        return;
+    }
+    
     
     //Walk by the movepoints
     float x = getPositionX();
@@ -737,6 +767,7 @@ void Troll::SetDrawLine(int theLine)
 
 bool Troll::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 {
+    /*
     if(User::getInstance()->mSpecial_16_Mission==false && User::getInstance()->mSpecial_17_Mission==false
        && User::getInstance()->mSpecial_18_Mission==false && User::getInstance()->mSpecial_19_Mission==false
        && User::getInstance()->mSpecial_20_Mission==false && User::getInstance()->mSpecial_21_Mission==false
@@ -745,6 +776,13 @@ bool Troll::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
     }
     
     if(_canMove == false){
+        _touched = false;
+        return false;
+    }
+    */
+    
+    //Check if want to do anything with him
+    if(getChildByTag(TROLL_SELECT_INDICATOR)==NULL){
         _touched = false;
         return false;
     }
@@ -767,14 +805,18 @@ void Troll::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 void Troll::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 {
     if(_touched){
+        
         //Check if can blitz it !!!
-        if(_game->CanZipTroll()){
-            _canMove = false;
-            _game->CreateBlitz(getPositionX(),getPositionY()-80,this);
-            if(User::getInstance()->mDynamicTrolls){
-                _game->_SpawnSpecialTrolls = 30;//Get it back after a while !!!
-            }
-        }
+        _game->mPowerMenu->OnPlayerClickTroll(this);// Do the damage to him
+        
+        
+//        if(_game->CanZipTroll()){
+//            _canMove = false;
+//            _game->CreateBlitz(getPositionX(),getPositionY()-80,this);
+//            if(User::getInstance()->mDynamicTrolls){
+//                _game->_SpawnSpecialTrolls = 30;//Get it back after a while !!!
+//            }
+//        }
     }
     _touched = false;
 }
