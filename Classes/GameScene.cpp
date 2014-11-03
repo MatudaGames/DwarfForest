@@ -600,6 +600,8 @@ void GameScene::CreateMap()
         else if(_dwarfSpawnData[i] == 7){_genearetPoints.push_back((GeneratePoint){262,0,1.65});}
     }
     
+    //Create map by what points did not need
+    
 //    _genearetPoints.push_back((GeneratePoint){266,719,4.7}); // 2
 //    _genearetPoints.push_back((GeneratePoint){730,719,4.7}); // 3
 //    _genearetPoints.push_back((GeneratePoint){959,476,M_PI}); // 4
@@ -15935,17 +15937,20 @@ void GameScene::CreateStartMap(int theTypeID)
     
     //By type we will change all the trees and stuff to needed !!!
     std::stringstream theMapBase;
+    std::stringstream theMpaPatchBase;
     switch (theTypeID) {
         case kMap_Summer:
             theMapBase << "gadalaiki/summer/map_summer.png";
-            
+            theMpaPatchBase << "gadalaiki/summer/";
             break;
         case kMap_Autumn:
             theMapBase << "gadalaiki/autumn/map_autumn.png";
+            theMpaPatchBase << "gadalaiki/autumn/";
             StartRain(false);
             break;
         case kMap_Winter:
             theMapBase << "gadalaiki/winter/map_winter.png";
+            theMpaPatchBase << "gadalaiki/winter/";
             
             mSnowActive = true;
             p = CCParticleSystemQuad::create("Particles/SnowEasy.plist");
@@ -15956,6 +15961,7 @@ void GameScene::CreateStartMap(int theTypeID)
             break;
         case kMap_Spring:
             theMapBase << "gadalaiki/spring/map_spring.png";
+            theMpaPatchBase << "gadalaiki/spring/";
             StartTornado(false);
             break;
             
@@ -15972,6 +15978,147 @@ void GameScene::CreateStartMap(int theTypeID)
     if(mNewMapRandomEnabled){
         return;//For now !!!
     }
+    
+    //Create the spawn points
+    
+    bool aCloused_1 = true;
+    bool aCloused_2 = true;
+    bool aCloused_3 = true;
+    bool aCloused_4 = true;
+    bool aCloused_5 = true;
+    bool aCloused_6 = true;
+    bool aCloused_7 = true;
+    bool aCloused_8 = true;
+    
+    //We will have forced stuff
+    
+    for(int i=0;i<mCurrentMission.Dwarf_paths.size();i++)
+    {
+        if(mCurrentMission.Dwarf_paths[i] == 0){ aCloused_1 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 1){ aCloused_2 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 2){ aCloused_3 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 3){ aCloused_4 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 4){ aCloused_5 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 5){ aCloused_6 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 6){ aCloused_7 = false; }
+        else if(mCurrentMission.Dwarf_paths[i] == 7){ aCloused_8 = false; }
+    }
+    
+    
+    CCSprite* aMapPatch;
+    std::stringstream thePartFinal;
+    
+    // Now do the magic
+    if(aCloused_1){
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        //Spawn on map the cloused block
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_side2.png";
+//        thePartFinal<<theMpaPatchBase<<"zaale_shuve_side2.png";
+        CCLog("thePartFinal %s",thePartFinal.str().c_str());
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setAnchorPoint(ccp(0,0));
+        aMapPatch->setPosition(ccp(0,54));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_2){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_side1.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setAnchorPoint(ccp(0,0));
+        aMapPatch->setPosition(ccp(0,350));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_3){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_top.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setAnchorPoint(ccp(1,1));
+        aMapPatch->setPosition(ccp(430,visibleSize.height));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_4){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_top.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setFlipX(true);
+        aMapPatch->setAnchorPoint(ccp(0,1));
+        aMapPatch->setPosition(ccp(540,visibleSize.height));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_5){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_side1.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setFlipX(true);
+        aMapPatch->setAnchorPoint(ccp(1,0));
+        aMapPatch->setPosition(ccp(visibleSize.width,350));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_6){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_side2.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setFlipX(true);
+        aMapPatch->setAnchorPoint(ccp(1,0));
+        aMapPatch->setPosition(ccp(visibleSize.width,54));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_7){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_bottom.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setFlipX(true);
+        aMapPatch->setAnchorPoint(ccp(0,0));
+        aMapPatch->setPosition(ccp(530,0));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+    
+    if(aCloused_8){
+        //Spawn on map the cloused block
+        thePartFinal.clear();
+        thePartFinal.str(std::string());
+        thePartFinal<<theMpaPatchBase.str()<<"zaale_shuve_bottom.png";
+        
+        aMapPatch = CCSprite::create(thePartFinal.str().c_str());
+        aMapPatch->setAnchorPoint(ccp(0,0));
+        aMapPatch->setPosition(ccp(120,0));
+        
+        mMapBase->addChild(aMapPatch);
+    }
+
     
     //The tree array !!!
 //    CCSprite* aTree1 = CCSprite::create("gadalaiki/summer/summer_resnkoks.png");
@@ -16034,9 +16181,424 @@ void GameScene::CreateStartMap(int theTypeID)
     }
     
     
+    //New stuff !!! New layout !!!
+    
+    //----------------------------------------------------------------------------
+    CCSprite *sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+    sprTest->setTag(10400);
+    
+    sprTest->setFlipX(true);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(60,660));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+    sprTest->setTag(10300);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(40,620));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+    sprTest->setTag(10100);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(-30,590));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    // The enterance #2 trees
+    //----------------------------------------------------------------------------
+    
+    if(aCloused_2)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+        sprTest->setTag(10101);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(-40,490));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+        
+        //----------------------------------------------------------------------------
+        sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+        sprTest->setTag(10200);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(-40,440));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    // The enterance #3 trees
+    //----------------------------------------------------------------------------
+    
+    if(aCloused_3)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+        sprTest->setTag(10301);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(190,674));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+        //----------------------------------------------------------------------------
+        
+        sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+        sprTest->setTag(10401);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(270,685));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+    sprTest->setTag(10201);
+    
+    sprTest->setFlipX(true);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(360,690));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    // The enterance #4 trees
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+    sprTest->setTag(10302);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(520,686));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
+    
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+    sprTest->setTag(10402);
+    
+    sprTest->setFlipX(false);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(430,675));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    // The enterance #4 trees
+    //----------------------------------------------------------------------------
+    
+    if(aCloused_4)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+        sprTest->setTag(10202);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(640,670));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+    sprTest->setTag(10102);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    if(aCloused_4){
+        sprTest->setPosition(ccp(750,664));
+    }
+    else{
+       sprTest->setPosition(ccp(770,664));
+    }
+    
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+    sprTest->setTag(10403);
+    
+    sprTest->setFlipX(false);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(875,640));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+    sprTest->setTag(10303);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(834,620));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+    sprTest->setTag(10103);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(885,540));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    
+    if(aCloused_5)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+        sprTest->setTag(10203);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(915,445));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    // enterance 6
+    
+    if(aCloused_6)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+        sprTest->setTag(10204);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(915,90));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+    sprTest->setTag(10104);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(870,-10));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+    sprTest->setTag(10404);
+    
+    sprTest->setFlipX(false);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(780,-25));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    // enterance 7
+    
+    if(aCloused_7)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+        sprTest->setTag(10304);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(700,0));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+    sprTest->setTag(10305);
+    
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(460,0));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    
+    if(aCloused_7)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+        sprTest->setTag(10405);
+        
+        sprTest->setFlipX(true);
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(540,-32));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+        
+        //----------------------------------------------------------------------------
+        sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+        sprTest->setTag(10105);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(620,-50));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+
+    
+    
+    if(aCloused_8)
+    {
+        sprTest = CCSprite::createWithSpriteFrameName(summer_egle.str().c_str());
+        sprTest->setTag(10106);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(290,-45));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+        
+        //----------------------------------------------------------------------------
+        sprTest = CCSprite::createWithSpriteFrameName(summer_krums.str().c_str());
+        sprTest->setTag(10305);
+        
+        sprTest->setSkewX(aSkewVector.front());
+        aSkewVector.erase(aSkewVector.begin());
+        
+        sprTest->setPosition(ccp(165,0));
+        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+        _batchNode->addChild(sprTest,0);
+    }
+    
+    //----------------------------------------------------------------------------
+    
+    sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+    sprTest->setTag(10406);
+    
+    sprTest->setFlipX(false);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(50,-7));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------
+    sprTest = CCSprite::createWithSpriteFrameName(summer_garkoks.str().c_str());
+    sprTest->setTag(10204);
+    
+    sprTest->setFlipX(true);
+    sprTest->setSkewX(aSkewVector.front());
+    aSkewVector.erase(aSkewVector.begin());
+    
+    sprTest->setPosition(ccp(0,40));
+    sprTest->setAnchorPoint(ccp(0.0f,0.1f));
+    _batchNode->addChild(sprTest,0);
+    
+    //----------------------------------------------------------------------------------------
+    //Change batch node objects !!!
+    
+    CCSkewTo* aSkew1 = NULL;
+    CCSkewTo* aSkew2 = NULL;
+    
+    int aRanomdValue = 0;
+    
+    for(int x=1;x<5;x++)
+    {
+        //For the all objects
+        for(int i =0;i<20;i++)
+        {
+            CCSprite* aDummy1 = (CCSprite*)_batchNode->getChildByTag(10000+i+(x*100));
+            if(aDummy1==NULL)
+                continue;
+            
+            //To what side to skew !!!
+            aRanomdValue = rand()%2;
+            if(aRanomdValue>0)
+            {
+                aSkew1 = CCSkewTo::create(2.0f,-3.0f,0.0f);
+                aSkew2 = CCSkewTo::create(2.0f, 3.0f, 0.0f);
+            }
+            else
+            {
+                aSkew1 = CCSkewTo::create(2.0f, 3.0f, 0.0f);
+                aSkew2 = CCSkewTo::create(2.0f,-3.0f,0.0f);
+            }
+            
+            CCEaseSineInOut* aSkewEase1 = CCEaseSineInOut::create(aSkew1);
+            CCEaseSineInOut* aSkewEase2 = CCEaseSineInOut::create(aSkew2);
+            
+            CCSequence* aSeq1 = CCSequence::create(aSkewEase1,aSkewEase2,NULL);
+            CCRepeatForever* aSkewRepeat = CCRepeatForever::create(aSeq1);
+            aSkewRepeat->setTag(1111);
+            aDummy1->runAction(aSkewRepeat);
+        }
+    }
+    
+    return;
+    
+    
     //Augseja salina !!!
     //Aukseja salina
-    CCSprite *sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());
+//    CCSprite *sprTest = CCSprite::createWithSpriteFrameName(summer_resnkoks.str().c_str());  // Sis ir nonemts - atlikt atpakal
     sprTest->setTag(10400);
     //----------------
     sprTest->setSkewX(aSkewVector.front());
@@ -16568,39 +17130,10 @@ void GameScene::CreateStartMap(int theTypeID)
     _batchNode->addChild(sprTest,5);
     
     
-//    for(int i = 0;i < 10;++i)
-//    {
-//        CCSprite *sprTest = CCSprite::createWithSpriteFrameName("summer_resnkoks.png");
-////        CCSprite* sprTest = CCSprite::createWithTexture(batchNode->getTexture());
-//        sprTest->setPosition(ccp(i*40,200));
-//        sprTest->setTag(10100+i);
-//        _batchNode->addChild(sprTest,1);
-//        
-////        summer_kruums
-////        addChild(sprTest);
-//        
-//        sprTest = CCSprite::createWithSpriteFrameName("summer_garkoks.png");
-//        sprTest->setTag(10200+i);
-//        sprTest->setPosition(ccp(i*40,150));
-//        sprTest->setAnchorPoint(ccp(0.0f,0.1f));
-//        
-//        CCSkewTo* aSkew1 = CCSkewTo::create(2.0f, 3.0f, 0.0f);
-//        CCEaseSineInOut* aSkewEase1 = CCEaseSineInOut::create(aSkew1);
-//        CCSkewTo* aSkew2 = CCSkewTo::create(2.0f, -3.0f, 0.0f);
-//        CCEaseSineInOut* aSkewEase2 = CCEaseSineInOut::create(aSkew2);
-//        
-//        CCSequence* aSeq1 = CCSequence::create(aSkewEase1,aSkewEase2,NULL);
-//        CCRepeatForever* aSkewRepeat = CCRepeatForever::create(aSeq1);
-//        aSkewRepeat->setTag(1111);
-//        sprTest->runAction(aSkewRepeat);
-//        
-//        
-////        sprTest->setSkewX(10.0f);
-//        
-//        _batchNode->addChild(sprTest,2);
-//    }
-    
+    //----------------------------------------------------------------------------------------
     //Change batch node objects !!!
+    
+    /*
     CCSkewTo* aSkew1 = NULL;
     CCSkewTo* aSkew2 = NULL;
     
@@ -16637,6 +17170,7 @@ void GameScene::CreateStartMap(int theTypeID)
             aDummy1->runAction(aSkewRepeat);
         }
     }
+    */
 }
 
 void GameScene::ChangeMap(int theTypeID)
