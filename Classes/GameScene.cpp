@@ -1046,9 +1046,9 @@ void GameScene::CreateGameByMission()
     CheckMissionByValue(mCurrentMission.Task_type,0);
     
     //For now - use the old map mask stuff
-    _mask = new CCImage();
-    _mask->initWithImageFile("kartes_maska.png");
-    _mask->retain();
+//    _mask = new CCImage();
+//    _mask->initWithImageFile("kartes_maska.png");
+//    _mask->retain();
     
     //-------------------------------------------------------
     //The clear cool values - that we know what they do !!!
@@ -2009,14 +2009,14 @@ bool GameScene::init()
         _trollSensor->retain();
     }
 	
-	_mask = new CCImage();
-//    _mask->initWithImageFile("mask_new_15_12_2013.png");
-    if(mNewMapRandomEnabled){
-        _mask->initWithImageFile("cave_mask_custom.png");
-    }
-    else{
-        _mask->initWithImageFile("kartes_maska.png");
-    }
+//	_mask = new CCImage();
+////    _mask->initWithImageFile("mask_new_15_12_2013.png");
+//    if(mNewMapRandomEnabled){
+//        _mask->initWithImageFile("cave_mask_custom.png");
+//    }
+//    else{
+//        _mask->initWithImageFile("kartes_maska.png");
+//    }
     
 //	_mask->initWithImageFile("kartes_maska.png");
 //    _mask->initWithImageFile("kartes_maska_Split.png");
@@ -15340,6 +15340,26 @@ bool GameScene::isInTrollSensor(Dwarf* theDwarf,Troll* theTroll)
 
 bool GameScene::getMask(int32_t posX, int32_t posY)
 {
+    // Check if is not outside map
+    if(posX>=0 && posX<=visibleSize.width && posY>=0 && posY<=visibleSize.height)
+    {
+        // Invert Y axis
+        posY = visibleSize.height - posY - 1;
+        
+        // Do the magic
+        uint *pixel = (unsigned int*)_mask->getData();
+        pixel = pixel + (posY * _mask->getWidth()) + posX;
+        GLubyte green = (*pixel >> 8) & 0xff;
+        
+        // We found map object
+        if(green>=128) {
+            return true;
+        }
+    }
+    
+    return false;
+    
+    //----------------------------
 	bool result = true;
     
     posY = designResolutionSize.height - posY - 1; //invert Y axis
@@ -15924,9 +15944,9 @@ void GameScene::CreateStartMap(int theTypeID)
 {
     CCLog("theMapType: %i",theTypeID);
     //For each level own mask
-    _objectMask = new CCImage();
-    _objectMask->initWithImageFile("MapSpawnObjectMask.png");
-    _objectMask->retain();
+//    _objectMask = new CCImage();
+//    _objectMask->initWithImageFile("MapSpawnObjectMask.png");
+//    _objectMask->retain();
     
     mCurrentMapID = theTypeID;
     
@@ -16008,6 +16028,17 @@ void GameScene::CreateStartMap(int theTypeID)
     CCSprite* aMapPatch;
     std::stringstream thePartFinal;
     
+    // Init the base collision map
+    CCRenderTexture* aTextureBase = CCRenderTexture::create(visibleSize.width, visibleSize.height, kCCTexture2DPixelFormat_RGBA8888);
+    CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BaseMapCollision.png");
+    aDummyCollision->setAnchorPoint(ccp(0,0));
+    
+    // Draw the first layer
+    aTextureBase->begin();
+    aDummyCollision->visit();
+    aTextureBase->end();
+    
+    
     // Now do the magic
     if(aCloused_1){
         thePartFinal.clear();
@@ -16022,6 +16053,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(0,54));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_1.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_2){
@@ -16035,6 +16074,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(0,350));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_2.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_3){
@@ -16048,6 +16095,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(430,visibleSize.height));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_3.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_4){
@@ -16062,6 +16117,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(540,visibleSize.height));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_4.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_5){
@@ -16076,6 +16139,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(visibleSize.width,350));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_5.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_6){
@@ -16090,6 +16161,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(visibleSize.width,54));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_6.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_7){
@@ -16104,6 +16183,14 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(530,0));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_7.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
     
     if(aCloused_8){
@@ -16117,8 +16204,174 @@ void GameScene::CreateStartMap(int theTypeID)
         aMapPatch->setPosition(ccp(120,0));
         
         mMapBase->addChild(aMapPatch);
+        
+        // Add to the collision map
+        CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BMC_Enter_8.png");
+        aDummyCollision->setAnchorPoint(ccp(0,0));
+        
+        aTextureBase->begin();
+        aDummyCollision->visit();
+        aTextureBase->end();
     }
-
+    
+    // The clean stuff - final collision map
+    _mask = new CCImage();
+    _mask = aTextureBase->newCCImage();
+    _mask->retain();
+    
+    // By the enterances create correct collision map
+    _objectMask = new CCImage();
+    _objectMask->initWithImageFile("MapSpawnObjectMask.png");
+    _objectMask->retain();
+    
+    
+    // Debug - to see the collision map
+//    CCTexture2D* texture = new CCTexture2D();
+//    texture->initWithImage(_mask);
+//    CCSprite* atest2 = CCSprite::createWithTexture(texture);
+//    atest2->setFlipY(false);
+//    atest2->setAnchorPoint(ccp(0,0));
+//    atest2->setOpacity(126);
+//    addChild(atest2);
+    
+    
+    /*
+    _objectMask->ini
+    
+    
+     
+    CCTexture2D* aText = CCTexture2D::create();
+    
+    
+    auto renderTexture = RenderTexture::create(width, height, format);
+    renderTexture->begin();
+    sprite->visit();
+    renderTexture->end();
+    */
+    
+    /*
+    CCSprite* aTest1 = CCSprite::create("gadalaiki/BaseMapCollision.png");
+    aTest1->setAnchorPoint(ccp(0,0));
+    
+//    CCRenderTexture* aTextureBase = CCRenderTexture::create(visibleSize.width,visibleSize.height);
+    CCRenderTexture* aTextureBase = CCRenderTexture::create(visibleSize.width, visibleSize.height, kCCTexture2DPixelFormat_RGBA8888);
+    aTextureBase->begin();
+    aTest1->visit();
+    aTextureBase->end();
+    
+    CCLog("Visible size w:%f | h:%f",visibleSize.width,visibleSize.height);
+    
+//    aTest1->release();
+    aTest1->cleanup();
+    
+    //Create next part !!!
+    aTest1 = CCSprite::create("gadalaiki/BMC_Enter_1.png");
+    aTest1->setAnchorPoint(ccp(0,0));
+    
+//    aTest1->setPosition(ccp(visibleSize.width/2,visibleSize.height/2));
+    
+    aTextureBase->begin();
+    aTest1->visit();
+    aTextureBase->end();
+    
+    aTest1->cleanup();
+    
+//    aTextureBase->setAnchorPoint(ccp(1,1));
+    aTextureBase->setPosition(ccp(visibleSize.width/2,visibleSize.height/2));
+//    addChild(aTextureBase,10000);
+    
+    // Create the final stuff !!!
+    _objectMask = aTextureBase->newCCImage();
+    _objectMask->retain();
+    
+    CCLog("height: %i",_objectMask->getHeight());
+    CCLog("width: %i",_objectMask->getWidth());
+    
+    unsigned char* data = _objectMask->getData();
+    
+//    CCRenderTexture* atest2= CCRenderTexture::
+    
+    
+    //--------------------------------------------------
+    
+    unsigned char*            tempData = _objectMask->getData();
+    unsigned int*             inPixel32  = NULL;
+    unsigned char*            inPixel8 = NULL;
+    unsigned short*           outPixel16 = NULL;
+    
+    inPixel32 = (unsigned int*)_objectMask->getData();
+    tempData = new unsigned char[_objectMask->getWidth() * _objectMask->getHeight() * 3];
+    unsigned char *outPixel8 = tempData;
+    
+    unsigned int length = _objectMask->getWidth() * _objectMask->getHeight();
+    
+//    for(unsigned int i = 0; i < length; ++i, ++inPixel32)
+//    {
+//        *outPixel8++ = (*inPixel32 >> 0) & 0xFF; // R
+//        *outPixel8++ = (*inPixel32 >> 8) & 0xFF; // G
+//        *outPixel8++ = (*inPixel32 >> 16) & 0xFF; // B
+//        
+//        CCLog("- R:%i G:%i B:%i",outPixel8[0],outPixel8[1],outPixel8[2]);
+//        
+//    }
+    
+    //Now try to get pixel by x y
+    
+    ccColor4B c = {0, 0, 0, 0};
+    
+    uint *pixel = (unsigned int*)_objectMask->getData();
+    pixel = pixel + (188 * _objectMask->getWidth()) + 40;
+    //pixel = pixel + (y * width_) + x;
+//    c.r = *pixel & 0xff;
+//    c.g = (*pixel >> 8) & 0xff;
+//    c.b = (*pixel >> 16) & 0xff;
+//    c.a = (*pixel >> 24) & 0xff;
+    
+    GLubyte aaaa = (*pixel >> 8) & 0xff;
+    
+//    CCLog("- R:%i G:%i B:%i",c.r,c.g,c.b);
+    
+    if(aaaa>=128){
+        CCLog("Found green");
+    }
+    else{
+        CCLog("No green");
+    }
+    
+    
+//    CCTexture2D::initWithImage(CCImage* uiImage);
+//# CCSprite::initWithTexture(CCTexture2D* pTexture);
+    
+    CCTexture2D* texture = new CCTexture2D();
+    texture->initWithImage(_objectMask);
+    CCSprite* atest2 = CCSprite::createWithTexture(texture);
+    atest2->setFlipY(false);
+    atest2->setAnchorPoint(ccp(0,0));
+    addChild(atest2);
+    
+//    return;
+    
+    //--------------------------------------------------
+    
+    
+    //get alpha channel
+    bool result = false;
+//    result = (data[4 * (0 + 0 * _objectMask->getWidth()) + 3] != 0);
+    int index = 0 * _objectMask->getWidth() + 0;
+    result = data[index];
+    
+    int numPixels = _objectMask->getWidth() * _objectMask->getHeight();
+    ccColor4B* buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * numPixels );
+    
+    glReadPixels(600, 600, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    ccColor4B color = buffer[0];
+    
+    CCLog("COlor found at pixel: A%hhu, R:%i G:%i B:%i",color.a,color.r,color.b,color.g);
+    
+    CCLog("length: %i",_objectMask->getDataLen());
+    
+    CCLog("result %i",result);
+    */
     
     //The tree array !!!
 //    CCSprite* aTree1 = CCSprite::create("gadalaiki/summer/summer_resnkoks.png");
