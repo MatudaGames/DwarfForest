@@ -41,7 +41,18 @@ public:
     
     bool _touched;
     
+    float _testAngle;
+    
     bool mTutorfix;
+    
+    void UpdateRadar(float delta);
+    
+    cocos2d::CCSprite* mDebugPoint1;
+    cocos2d::CCSprite* mDebugPoint2;
+    cocos2d::CCSprite* mDebugPoint3;
+    
+    bool collideAtPoint(cocos2d::CCPoint point);
+    
     
     bool mTutorialTroll;
     bool mMoveByNodes;

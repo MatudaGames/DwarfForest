@@ -11150,8 +11150,17 @@ void GameScene::updateDwarfs(float delta)
                     if (troll->isVisible() && troll->getTouchable() && troll->getCanMove() && _boostNoEnemyTimer<=0)
                     {
                         //Check the warning distance
-                        if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition())<=powf(30, 3)*GLOBAL_SCALE)
+                        if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition())<=powf(30, 3)*GLOBAL_SCALE){
+                            if(troll->collideAtPoint(dwarf->getPosition())){
+                                //Game over dwarf
+//                                troll->mFreezedTime = 10;
+                                troll->CatchDwarf(dwarf);
+                                break;
+                            }
+                            
                             _foundWarning = true;
+                        }
+                        
                         
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE && !mTutorialEnabled)
@@ -16032,6 +16041,8 @@ void GameScene::CreateStartMap(int theTypeID)
     CCRenderTexture* aTextureBase = CCRenderTexture::create(visibleSize.width, visibleSize.height, kCCTexture2DPixelFormat_RGBA8888);
     CCSprite* aDummyCollision = CCSprite::create("gadalaiki/BaseMapCollision.png");
     aDummyCollision->setAnchorPoint(ccp(0,0));
+    
+    
     
     // Draw the first layer
     aTextureBase->begin();

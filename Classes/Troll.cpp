@@ -77,6 +77,7 @@ bool Troll::init(GameScene* game)
 		return false;
 	}
     
+    _testAngle = 0;
     
     mFreezedTime = 0;
     
@@ -116,30 +117,39 @@ bool Troll::init(GameScene* game)
 	_game = game;
 	_game->retain();
     
+    //--------------
     mCatchRadar = NULL;
-    if(User::getInstance()->mDynamicTrolls)
-    {
-        mCatchRadar = CCSprite::create("troll_sensor.png");
-        if(User::getInstance()->mNewSplitCaves)
-        {
-            mCatchRadar->setAnchorPoint(ccp(0.5,0.5));
-            mCatchRadar->setRotation(90);
-            mCatchRadar->setOpacity(64);
-        }
-        else
-        {
-            mCatchRadar->setAnchorPoint(ccp(0,0.5));
-            mCatchRadar->setOpacity(64);
-        }
-        addChild(mCatchRadar,0);
+    
+    mCatchRadar = CCSprite::create("troll_sensor.png");
+    mCatchRadar->setAnchorPoint(ccp(0,0.5));
+    mCatchRadar->setFlipX(true);
+    mCatchRadar->setOpacity(64);
+    addChild(mCatchRadar,0);
+    //---------------
+    
+    
+//    if(User::getInstance()->mDynamicTrolls)
+//    {
+//        mCatchRadar = CCSprite::create("troll_sensor.png");
+//        if(User::getInstance()->mNewSplitCaves)
+//        {
+//            mCatchRadar->setAnchorPoint(ccp(0.5,0.5));
+//            mCatchRadar->setRotation(90);
+//            mCatchRadar->setOpacity(64);
+//        }
+//        else
+//        {
+//            mCatchRadar->setAnchorPoint(ccp(0,0.5));
+//            mCatchRadar->setOpacity(64);
+//        }
+//        addChild(mCatchRadar,0);
         
-        mWarnIcon = CCSprite::create("troll_warn.png");
-        mWarnIcon->setAnchorPoint(ccp(0,0.5));
-        mWarnIcon->setPosition(ccp(0,40));
-        mWarnIcon->setVisible(false);
-        addChild(mWarnIcon,100);
-        
-    }
+    
+    mWarnIcon = CCSprite::create("troll_warn.png");
+    mWarnIcon->setAnchorPoint(ccp(0,0.5));
+    mWarnIcon->setPosition(ccp(0,40));
+    mWarnIcon->setVisible(false);
+    addChild(mWarnIcon,100);
 	
 	_leftUpAnimation = SpriteAnimation::create("Characters/troll/troll_diagonal_up.plist");
 	_leftUpAnimation->retain();
@@ -259,8 +269,133 @@ void Troll::removeEffect()
 //	}
 }
 
+void Troll::UpdateRadar(float delta)
+{
+    
+//    _testAngle+=delta*10;
+//    if(_testAngle>=360)_testAngle = 0;
+//    
+//    mDebugPoint1->setRotation(_testAngle);
+    
+    
+    
+    
+    mCatchRadar->setRotation(-_angle * 180.0 / M_PI);
+    
+    
+    
+//    CCLog("Angle: %f",_angle);
+    
+//    float x = getPositionX();
+//    float y = getPositionY();
+    
+//    CCPoint newPosition = ccp(x + cosf(_angle),
+//                              y + sinf(_angle));
+    
+//    CCPoint newPosition = ccp(100*cosf(_angle),
+//                              100*sinf(_angle));
+    
+//    p'x = cos(theta) * (px-ox) - sin(theta) * (py-oy) + ox
+//    p'y = sin(theta) * (px-ox) + cos(theta) * (py-oy) + oy
+    
+//    int aX = cos(_angle) * (mDebugPoint1->getPositionX()-100) - sin(_angle) * (mDebugPoint1->getPositionY()-100) + 100;
+//    int aY = sin(_angle) * (mDebugPoint1->getPositionX()-100) + cos(_angle) * (mDebugPoint1->getPositionY()-100) + 100;
+    
+//    float rotateBy = 90 * delta;
+//    CCLog("rotateBy: %f",rotateBy);
+//    
+//    CCPoint center = ccp(100,100);
+//    
+//    int angle = (rotateBy ) * (M_PI/180); // Convert to radians
+//    CCLog("angle %i",angle);
+    
+//    int rotatedX = cos(angle) * (mDebugPoint1->getPositionX() - center.x) - sin(angle) * (mDebugPoint1->getPositionY() - center.y) + center.x;
+//    int rotatedY = sin(angle) * (mDebugPoint1->getPositionX() - center.x) + cos(angle) * (mDebugPoint1->getPositionY() - center.y) + center.y;
+    
+//    CCPoint Pivot = ccp(0,0);
+    
+//    _Angle+=0.1;
+//    if(_Angle>360)_Angle = 0;
+//    CCLog("Angle:%f",_Angle);
+    
+    /*
+    // Looks that this works
+    
+    float Angle = _angle;
+    
+    float x = 100;
+    float y = 50;
+    
+    float s = sin(Angle);
+    float c = cos(Angle);
+    
+    x -= Pivot.x;
+    y -= Pivot.y;
+    
+    double nx = (x * c) - (y * s);
+    double ny = (x * s) + (y * c);
+    
+    x = nx + Pivot.x;
+    y = ny + Pivot.y;
+    
+    
+    mDebugPoint1->setPosition(ccp(x,y));
+    */
+    
+//    mDebugPoint1->setPosition(ccp());
+//    mDebugPoint1 = getPositionX()+100;
+}
+
+bool Troll::collideAtPoint(cocos2d::CCPoint point) {
+    
+    //if freezed or disabled - skip this
+    if(mFreezedTime>0 || mCatchingDwarf || mCatchRadar->isVisible()==false){
+        return false;
+    }
+    
+    bool bCollision = false;
+    
+    int searchWidth = 1;
+    int searchHeight = 1;
+    
+    unsigned int numPixels = searchWidth * searchHeight;
+    
+    CCSize size = CCDirector::sharedDirector()->getWinSize();
+    CCRenderTexture *rt = CCRenderTexture::create(size.width, size.height, kCCTexture2DPixelFormat_RGBA8888);
+    rt->beginWithClear(0, 0, 0, 0);
+    
+    rt->setTag(222);
+    
+    // Render both sprites: first one in RED and second one in GREEN
+    glColorMask(1, 0, 0, 1);
+    visit();
+    glColorMask(1, 1, 1, 1);
+    
+    // Get color values of intersection area
+    ccColor4B *buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * numPixels );
+    glReadPixels(point.x, point.y, searchWidth, searchHeight, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    
+    unsigned int step = 1;
+    for(unsigned int i=0; i<numPixels; i+=step) {
+        ccColor4B color = buffer[i];
+        //CCLog("Pixel color: %d, %d, %d", color.r, color.g, color.b);
+        if (color.r > 0) {
+            bCollision = true;
+//            CCLog("Colliding");
+            break;
+        }
+    }
+    
+    rt->end();
+    
+    return bCollision;
+    
+}
+
 void Troll::update(float delta)
 {
+    UpdateRadar(delta);
+    
     //Order the troll to sit cool in map
     if (_game->getSpriteOrderZ(getPositionY())!=getZOrder()){
         _game->reorderChild(this,_game->getSpriteOrderZ(getPositionY()));
@@ -296,11 +431,61 @@ void Troll::update(float delta)
     float y = getPositionY();
     
     //Do we want to catch some dwarf
+    
     if(mCatchingDwarf)
     {
-        //Catch that boy
+        if(mStartCatchDwarf>0.0f){
+            
+            if(mCatchRadar->isVisible()){
+                mCatchRadar->setVisible(false);
+            }
+            
+            mStartCatchDwarf-=delta;
+            
+            if(mWarnIcon->isVisible()==false){
+                mWarnIcon->setVisible(true);
+            }
+            return;//Troll waits and then attacks
+        }
+        
+        if(mWarnIcon->isVisible()==true){
+            mWarnIcon->setVisible(false);
+        }
+        
+        if(mDwarfToCatch == NULL){
+            mCatchingDwarf = false;
+            return;
+        }
+        
+        if(mCatchRadar->isVisible()){
+            mCatchRadar->setVisible(false);
+        }
+        
+        float x = getPositionX();
+        float y = getPositionY();
+        
+        //Totaly different logic here !!!
+        CCPoint point = mDwarfToCatch->getPosition();
+        
+        float theDistance = ccpDistanceSQ(point, getPosition());
+        
+        if (theDistance<20000){
+            setAngle(atan2f(point.y - y, point.x - x));
+            
+            CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed())*0.1,
+                                      y + sinf(_angle) * delta * (_speed * _game->getGameSpeed())*0.1);
+            
+            cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
+        }
+        else if(theDistance>=20000)
+        {
+            //He lost it
+            CancelDwarfCatch(mDwarfToCatch);
+        }
+        
         return;
     }
+    
     
     CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
     
@@ -712,9 +897,9 @@ void Troll::CancelDwarfCatch(Dwarf* theCancelDwarf)
             mCatchingDwarf = false;
             mDwarfToCatch = NULL;
             
-//            if(!mCatchRadar->isVisible()){
-//                mCatchRadar->setVisible(true);
-//            }
+            if(!mCatchRadar->isVisible()){
+                mCatchRadar->setVisible(true);
+            }
         }
     }
 }
@@ -780,6 +965,15 @@ bool Troll::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
         return false;
     }
     */
+    
+//    CCLog("touch");
+    
+    CCLog("Touched X:%f | Y:%f",touch->getLocation().x,touch->getLocation().y);
+//    CCLog("Touched X:%f | Y:%f",touch->getLocationInView().x,touch->getLocationInView().y);
+    
+    touch->getLocation();
+    
+    collideAtPoint(ccp(touch->getLocation().x,touch->getLocation().y));
     
     //Check if want to do anything with him
     if(getChildByTag(TROLL_SELECT_INDICATOR)==NULL){
@@ -864,6 +1058,7 @@ void Troll::setAngle(float value)
 	_angle = wrapTwoPI(value);
     
     
+    /*
     if(mCatchRadar){
         if(User::getInstance()->mNewSplitCaves)
         {
@@ -897,6 +1092,7 @@ void Troll::setAngle(float value)
             }
         }
     }
+    */
 	
 	if (_angle >= 15.0f * M_PI / 8.0f || _angle < M_PI / 8.0f)
 	{
