@@ -12,7 +12,7 @@
 #include "SpriteAnimation.h"
 
 USING_NS_CC;
-/////////////////////////////////////////
+
 Web* Web::create(GameScene* gameScene)
 {
 	Web *pRet = new Web();
