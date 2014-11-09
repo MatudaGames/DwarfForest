@@ -79,6 +79,8 @@ bool Troll::init(GameScene* game)
     
     mRadarSet = false;
     
+    mCatchRadarAngle = 0;
+    
     coneSwingAmp = 80; // kāda būs konusa svārstību amplitūda grādos
     coneSwingSpeed = 1; // cik ātri svārstīsies konuss
     loopPosition = 0;
@@ -130,6 +132,7 @@ bool Troll::init(GameScene* game)
 	_game->retain();
     
     //--------------
+    /*
     mCatchRadar = NULL;
     
     mCatchRadar = CCSprite::create("troll_sensor.png");
@@ -137,6 +140,7 @@ bool Troll::init(GameScene* game)
     mCatchRadar->setFlipX(true);
     mCatchRadar->setOpacity(0);
     addChild(mCatchRadar,0);
+    */
     //---------------
     
     
@@ -209,8 +213,8 @@ bool Troll::init(GameScene* game)
     _moveInCircle = false;
     
     // The radar stuff
-    dnode = CCDrawNode::create();
-    this->addChild( dnode );
+    mCatchRadar = CCDrawNode::create();
+    this->addChild( mCatchRadar );//dnode
     
     // Draw the conus from settings
     /*
@@ -248,7 +252,7 @@ void Troll::setRadar(int theRadius,int theWidth)
     std::vector<CCPoint> points;
     points.push_back(ccp(0,0));
     
-    dnode->clear();
+    mCatchRadar->clear();
     
     // ----------------------------
     coneWidth = theWidth;
@@ -261,9 +265,9 @@ void Troll::setRadar(int theRadius,int theWidth)
     
     points.push_back(ccp(0,0));
     
-    dnode->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
-    dnode->setRotation(30);
+    mCatchRadar->setRotation(30);
 }
 
 void Troll::setAnimationVisibility(bool theValue)
@@ -339,7 +343,17 @@ void Troll::removeEffect()
 void Troll::UpdateRadar(float delta)
 {
     // Will add later smooth rotate to angle :)
-    dnode->setRotation((-_angle * 180.0 / M_PI)+coneWidth/2);
+    
+    int aCurrentAngle = (-_angle * 180.0 / M_PI)+coneWidth/2;
+    if(mCatchRadarAngle != aCurrentAngle)
+    {
+        mCatchRadarAngle = aCurrentAngle;
+        CCRotateTo* aRotate = CCRotateTo::create(0.5f, mCatchRadarAngle);
+        mCatchRadar->stopAllActions();
+        mCatchRadar->runAction(aRotate);
+//        mCatchRadar->setRotation((-_angle * 180.0 / M_PI)+coneWidth/2);
+    }
+    
     
     
 //    _testAngle+=delta*10;
@@ -443,9 +457,9 @@ void Troll::UpdateRadar(float delta)
 bool Troll::collideAtPoint(cocos2d::CCPoint point) {
     
     // No need to go futher - no radar on troll
-    if(mRadarSet == false) return  false;
+    if(mRadarSet == false) return false;
     
-    coneAngleOffset = -fmod(dnode->getRotation(), 360);
+    coneAngleOffset = -fmod(mCatchRadar->getRotation(), 360);
     coneAngle = coneWidth + coneAngleOffset;
     
     // Viesturs troll radar
@@ -455,7 +469,7 @@ bool Troll::collideAtPoint(cocos2d::CCPoint point) {
     int distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
     int angle = atan2(dy, dx) * (180 / M_PI);
     
-    if(angle>0 && fmod(dnode->getRotation(), 360)>=coneWidth){
+    if(angle>0 && fmod(mCatchRadar->getRotation(), 360)>=coneWidth){
         angle-=360;
     }
     
@@ -509,6 +523,7 @@ void Troll::update(float delta)
     if(mCatchingDwarf)
     {
         if(mStartCatchDwarf>0.0f){
+//            CCLog("mStartCatchDwarf:%f",mStartCatchDwarf);
             
             if(mCatchRadar->isVisible()){
                 mCatchRadar->setVisible(false);
@@ -541,17 +556,23 @@ void Troll::update(float delta)
         //Totaly different logic here !!!
         CCPoint point = mDwarfToCatch->getPosition();
         
-        float theDistance = ccpDistanceSQ(point, getPosition());
+//        float theDistance = ccpDistanceSQ(point, getPosition());
         
-        if (theDistance<20000){
+        float theDistance2 = sqrtf((getPositionX()-point.x)*(getPositionX()-point.x) + (getPositionY()-point.y)*(getPositionY()-point.y));
+        
+//        CCLog("The Distance:%f",theDistance);
+//        CCLog("theDistance2:%f",theDistance2);
+//        CCLog("coneRadius:%d",coneRadius);
+        
+        if (theDistance2<coneRadius){
             setAngle(atan2f(point.y - y, point.x - x));
             
-            CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed())*0.1,
-                                      y + sinf(_angle) * delta * (_speed * _game->getGameSpeed())*0.1);
+            CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
+                                      y + sinf(_angle) * delta * (_speed * _game->getGameSpeed()));
             
             cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
         }
-        else if(theDistance>=20000)
+        else
         {
             //He lost it
             CancelDwarfCatch(mDwarfToCatch);
@@ -959,7 +980,8 @@ void Troll::update_old(float delta)
 void Troll::CatchDwarf(Dwarf* theDwarf)
 {
     //set 0.5sec wtf ???
-    mStartCatchDwarf = 0.5f;
+//    CCLog("mStartCatchDwarf set to 1.0f");
+    mStartCatchDwarf = 1.0f;
     mDwarfToCatch = theDwarf;
     mCatchingDwarf = true;
 }

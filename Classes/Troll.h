@@ -46,7 +46,8 @@ public:
     
     void setRadar(int theRadius,int theWidth);
     
-    cocos2d::CCDrawNode* dnode;
+//    cocos2d::CCDrawNode* dnode;
+    cocos2d::CCDrawNode* mCatchRadar;
     cocos2d::CCProgressTo* pnode;
     
     int coneSwingAmp; // kāda būs konusa svārstību amplitūda grādos
@@ -60,6 +61,8 @@ public:
     bool mTutorfix;
     
     bool mRadarSet;     // Will troll use radar
+    
+    int mCatchRadarAngle;
     
     void UpdateRadar(float delta);
     
@@ -132,7 +135,7 @@ public:
     bool mCatchingDwarf;
     float mStartCatchDwarf;
     Dwarf* mDwarfToCatch;
-    cocos2d::CCSprite* mCatchRadar;
+//    cocos2d::CCSprite* mCatchRadar;
     cocos2d::CCSprite* mWarnIcon;
     float mTrollStartY;
     
