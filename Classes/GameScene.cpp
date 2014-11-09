@@ -8362,6 +8362,12 @@ void GameScene::UpdateDwarfSpawn(float delta)
             //Time for changes
             _DSpawn_change_max = mCurrentMission.DSpawn_change_max_time;//Reset to next time change if needed
             _DSpawn_Real_Max += mCurrentMission.DSpawn_change_max_value;
+            
+            //Check if did not hit the max !!!
+            if(mCurrentMission.DSpawn_max_limit != 0 && _DSpawn_Real_Max>mCurrentMission.DSpawn_max_limit){
+                _DSpawn_Real_Max = mCurrentMission.DSpawn_max_limit;
+            }
+            
 //            CCLog("_DSpawn_Real_Max: %i",_DSpawn_Real_Max);
             _DSpawnCurrentTime = 0;//Force to change the spawn zone
         }

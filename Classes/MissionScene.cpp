@@ -952,7 +952,7 @@ void MissionScene::CreateMissions()
                                                   this,
                                                   menu_selector(MissionScene::OnClickedMission));
             aButtonReal->setTag(5000+aMissionID);
-            aButtonReal->setOpacity(0);
+            aButtonReal->setOpacity(128);
             aButtonReal->setPosition(aMoveRealX,aMoveY);
             aButtonReal->cocos2d::CCMenuItem::setEnabled(false);
             aButtons3->addObject(aButtonReal);

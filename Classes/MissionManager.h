@@ -101,6 +101,9 @@ struct MissionTroll
     int32_t _circle_radius;
     int32_t _circle_precision;
     
+    int32_t _radar_radius;
+    int32_t _radar_width;
+    
     int32_t _circle_height;
     
     float _speed;
@@ -174,6 +177,8 @@ struct MissionSet
     //The change to spawn contorl bases
     int32_t DSpawn_change_zone_time;//After what time should change spawn zone
     int32_t DSpawn_change_zone_value;//Whats the change value
+    
+    int32_t DSpawn_max_limit;//Limit at what max stops to increase
     
     int32_t DSpawn_zone_step;//The step in zone change
     

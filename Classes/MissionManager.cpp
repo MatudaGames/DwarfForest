@@ -227,6 +227,23 @@ void MissionManager::Donwloaded()
             theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            //------------------------------------------------------------------------------------------
+            
             mission->Enemy_info.push_back(theTroll);
         }
         
@@ -271,6 +288,14 @@ void MissionManager::Donwloaded()
         mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
         mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
         mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        // The limit of max dwarfs !!!
+        mission->DSpawn_max_limit = 0;
+        aDummyVar = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        if(aDummyVar>0){
+            mission->DSpawn_max_limit = aDummyVar;
+        }
+        
         
         mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
         if(mission->DSpawn_zone_step == 0){
@@ -523,6 +548,7 @@ MissionManager::MissionManager()
             int aPatrolStartPoint = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._pathStartIndex = aPatrolStartPoint;
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
             
             
             /*
@@ -1891,6 +1917,23 @@ void MissionManager::AddExtraDownloadedMissions_1()
             theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            //------------------------------------------------------------------------------------------
+            
             mission->Enemy_info.push_back(theTroll);
         }
         
@@ -2139,6 +2182,23 @@ void MissionManager::AddExtraDownloadedMissions_2()
             theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            //------------------------------------------------------------------------------------------
+            
             mission->Enemy_info.push_back(theTroll);
         }
         
@@ -2386,6 +2446,23 @@ void MissionManager::AddExtraDownloadedMissions_3()
             
             theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            //------------------------------------------------------------------------------------------
             
             mission->Enemy_info.push_back(theTroll);
         }

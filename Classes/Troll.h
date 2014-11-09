@@ -39,11 +39,27 @@ public:
 	virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
 	virtual void ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
     
+    int coneRadius; // konusa garums pikseļos
+    int coneWidth; // konusa platums grādos
+    int coneAngleOffset;
+    int coneAngle;
+    
+    void setRadar(int theRadius,int theWidth);
+    
+    cocos2d::CCDrawNode* dnode;
+    cocos2d::CCProgressTo* pnode;
+    
+    int coneSwingAmp; // kāda būs konusa svārstību amplitūda grādos
+    int coneSwingSpeed; // cik ātri svārstīsies konuss
+    int loopPosition;
+    
     bool _touched;
     
     float _testAngle;
     
     bool mTutorfix;
+    
+    bool mRadarSet;     // Will troll use radar
     
     void UpdateRadar(float delta);
     

@@ -77,6 +77,18 @@ bool Troll::init(GameScene* game)
 		return false;
 	}
     
+    mRadarSet = false;
+    
+    coneSwingAmp = 80; // kāda būs konusa svārstību amplitūda grādos
+    coneSwingSpeed = 1; // cik ātri svārstīsies konuss
+    loopPosition = 0;
+    
+    coneWidth = 60; // konusa platums grādos
+    
+    coneRadius = 100; // konusa garums pikseļos
+    coneAngleOffset = 0;
+    coneAngle = 0;
+    
     _testAngle = 0;
     
     mFreezedTime = 0;
@@ -123,7 +135,7 @@ bool Troll::init(GameScene* game)
     mCatchRadar = CCSprite::create("troll_sensor.png");
     mCatchRadar->setAnchorPoint(ccp(0,0.5));
     mCatchRadar->setFlipX(true);
-    mCatchRadar->setOpacity(64);
+    mCatchRadar->setOpacity(0);
     addChild(mCatchRadar,0);
     //---------------
     
@@ -195,8 +207,63 @@ bool Troll::init(GameScene* game)
     _movePoints->retain();
     
     _moveInCircle = false;
+    
+    // The radar stuff
+    dnode = CCDrawNode::create();
+    this->addChild( dnode );
+    
+    // Draw the conus from settings
+    /*
+    std::vector<CCPoint> points;
+    points.push_back(ccp(0,0));
+    
+    for (float ii = 0; ii < coneWidth; ii += 0.1)
+    {
+        points.push_back(ccp(0 + coneRadius * cos(ii * (M_PI / 180)), 0 + coneRadius * sin(ii * (M_PI / 180))));
+    }
+    
+    points.push_back(ccp(0,0));
+    
+    dnode->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    */
+    
+//    CCRotateBy* aRotate1= CCRotateBy::create(1.0,10);
+//    CCRepeatForever* rep = CCRepeatForever::create(aRotate1);
+//    dnode->runAction(rep);
+    
+    
 	
 	return true;
+}
+
+void Troll::setRadar(int theRadius,int theWidth)
+{
+    // No radar for this troll
+    if(theRadius == 0 || theWidth == 0) return;
+    
+    // Yes we will use radar
+    mRadarSet = true;
+    
+    // Draw the conus from settings
+    std::vector<CCPoint> points;
+    points.push_back(ccp(0,0));
+    
+    dnode->clear();
+    
+    // ----------------------------
+    coneWidth = theWidth;
+    coneRadius = theRadius;
+    
+    for (float ii = 0; ii < coneWidth; ii += 0.1)
+    {
+        points.push_back(ccp(0 + coneRadius * cos(ii * (M_PI / 180)), 0 + coneRadius * sin(ii * (M_PI / 180))));
+    }
+    
+    points.push_back(ccp(0,0));
+    
+    dnode->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    
+    dnode->setRotation(30);
 }
 
 void Troll::setAnimationVisibility(bool theValue)
@@ -271,6 +338,9 @@ void Troll::removeEffect()
 
 void Troll::UpdateRadar(float delta)
 {
+    // Will add later smooth rotate to angle :)
+    dnode->setRotation((-_angle * 180.0 / M_PI)+coneWidth/2);
+    
     
 //    _testAngle+=delta*10;
 //    if(_testAngle>=360)_testAngle = 0;
@@ -278,9 +348,33 @@ void Troll::UpdateRadar(float delta)
 //    mDebugPoint1->setRotation(_testAngle);
     
     
+//    coneAngleOffset = ((coneSwingAmp / 2) * sin(0.01 * loopPosition * coneSwingSpeed * M_PI)) - coneWidth / 2;
     
+//    coneAngleOffset = ((1 / 2) * sin(0.01 * 1 * 1 * M_PI)) - coneWidth / 2;
+//    coneAngle = coneWidth + coneAngleOffset;
     
-    mCatchRadar->setRotation(-_angle * 180.0 / M_PI);
+    // Draw the cone !!!
+    
+    /*
+    ctx.beginPath();
+    ctx.arc(trollPosX, trollPosY, coneRadius, offset * (Math.PI / 180), coneAngle * (Math.PI / 180), false);
+    ctx.moveTo(trollPosX + Math.cos(coneAngle * (Math.PI / 180)) * coneRadius, trollPosY + Math.sin(coneAngle * (Math.PI / 180)) * coneRadius);
+    ctx.lineTo(trollPosX, trollPosY);
+    ctx.lineTo(trollPosX + Math.cos(offset * (Math.PI / 180)) * coneRadius, trollPosY + Math.sin(offset * (Math.PI / 180)) * coneRadius);
+    ctx.fillStyle = 'pink';
+    ctx.fill();
+    */
+    
+//    ccDrawInit();
+//    ccDrawCircle(getPosition(), coneRadius, coneAngleOffset * (M_PI/180), 5, true);
+//    ccdr
+    
+    //------------------
+    
+//    loopPosition += 1;
+//    if (loopPosition >= 200) loopPosition = 0;
+    
+//    mCatchRadar->setRotation(-_angle * 180.0 / M_PI);
     
     
     
@@ -348,53 +442,33 @@ void Troll::UpdateRadar(float delta)
 
 bool Troll::collideAtPoint(cocos2d::CCPoint point) {
     
-    //if freezed or disabled - skip this
-    if(mFreezedTime>0 || mCatchingDwarf || mCatchRadar->isVisible()==false){
-        return false;
+    // No need to go futher - no radar on troll
+    if(mRadarSet == false) return  false;
+    
+    coneAngleOffset = -fmod(dnode->getRotation(), 360);
+    coneAngle = coneWidth + coneAngleOffset;
+    
+    // Viesturs troll radar
+    int dx = point.x - getPositionX();
+    int dy = point.y - getPositionY();
+    
+    int distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
+    int angle = atan2(dy, dx) * (180 / M_PI);
+    
+    if(angle>0 && fmod(dnode->getRotation(), 360)>=coneWidth){
+        angle-=360;
     }
     
-    bool bCollision = false;
+    bool result = false;
     
-    int searchWidth = 1;
-    int searchHeight = 1;
+    if(distanceFromTroll <= coneRadius && (angle >= coneAngleOffset && angle <= coneAngle)) result = true;
     
-    unsigned int numPixels = searchWidth * searchHeight;
-    
-    CCSize size = CCDirector::sharedDirector()->getWinSize();
-    CCRenderTexture *rt = CCRenderTexture::create(size.width, size.height, kCCTexture2DPixelFormat_RGBA8888);
-    rt->beginWithClear(0, 0, 0, 0);
-    
-    rt->setTag(222);
-    
-    // Render both sprites: first one in RED and second one in GREEN
-    glColorMask(1, 0, 0, 1);
-    visit();
-    glColorMask(1, 1, 1, 1);
-    
-    // Get color values of intersection area
-    ccColor4B *buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * numPixels );
-    glReadPixels(point.x, point.y, searchWidth, searchHeight, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    
-    unsigned int step = 1;
-    for(unsigned int i=0; i<numPixels; i+=step) {
-        ccColor4B color = buffer[i];
-        //CCLog("Pixel color: %d, %d, %d", color.r, color.g, color.b);
-        if (color.r > 0) {
-            bCollision = true;
-//            CCLog("Colliding");
-            break;
-        }
-    }
-    
-    rt->end();
-    
-    return bCollision;
-    
+    return result;
 }
 
 void Troll::update(float delta)
 {
-    UpdateRadar(delta);
+    if(mRadarSet) UpdateRadar(delta);
     
     //Order the troll to sit cool in map
     if (_game->getSpriteOrderZ(getPositionY())!=getZOrder()){
@@ -973,7 +1047,7 @@ bool Troll::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
     
     touch->getLocation();
     
-    collideAtPoint(ccp(touch->getLocation().x,touch->getLocation().y));
+//    collideAtPoint(ccp(touch->getLocation().x,touch->getLocation().y));
     
     //Check if want to do anything with him
     if(getChildByTag(TROLL_SELECT_INDICATOR)==NULL){
@@ -1187,6 +1261,10 @@ void Troll::SetMissionStuff(MissionTroll theMission)
     if(_moveValue == 0){
         _moveValue = 1;//Start random
     }
+    
+    // Do wee need radar?
+    setRadar(theMission._radar_radius,theMission._radar_width);
+//    setRadar(100,60);
     
     _speed = theMission._speed;
     
