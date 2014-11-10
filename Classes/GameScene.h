@@ -149,7 +149,7 @@ public:
     void generateDwarfMission(bool theInstant);
     
     void UpdateDwarfSpawn(float delta);
-    void UpdateTrapsSpawn(float delta);
+//    void UpdateTrapsSpawn(float delta);
     
     float _CrystalSpawnRecheckTimer;
     void UpdateCrystalSpawn(float delta);
@@ -158,8 +158,8 @@ public:
     float _SubDwarfSpawn;
     int _LeftNotSpawnDwatfs;
     
-    float _MasterTroll_TimeToAct;
-    float _MasterTroll_LastAction;
+//    float _MasterTroll_TimeToAct;
+    float mMasterTrollLastActionID;
     
     
     //------------------------------------------
@@ -366,9 +366,18 @@ public:
 	SpriteAnimation* _MasterTroll_WinAnimation;
     SpriteAnimation* _MasterTroll_animation;
     
-    void SetMasterTrollAnimation(SpriteAnimation* animation);
-    void OnMasterTrollFinishEnter();
-    void CreateMasterTrollEnter();
+//    void SetMasterTrollAnimation(SpriteAnimation* animation);
+    void SetMasterTrollAnimation(const char* theAnimation);
+    void UpdateMasterTroll(float delta);
+    
+    //Some params for master troll
+    float mMasterTrollActionTimer; // When should do some damage
+    
+//    void OnMasterTrollFinishEnter();
+//    void CreateMasterTrollEnter();
+    
+    
+    void MasterAction_Confusion(cocos2d::CCObject *sender);
     
     void CreateMasters();
     void OnMasterHitGround();

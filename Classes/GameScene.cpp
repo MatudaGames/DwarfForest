@@ -2616,7 +2616,7 @@ void GameScene::StartSpecialMission()
        || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission
        || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission){
         //Some special stuff here !!!
-        CreateMasterTrollEnter();
+//        CreateMasterTrollEnter();
         
         
     }
@@ -4527,6 +4527,7 @@ void GameScene::OnMachineEnemies(cocos2d::CCObject *sender)
     }
 }
 
+/*
 void GameScene::CreateTrollIndicator(int theType)
 {
     if(mMasterTroll->getChildByTag(12345)!=NULL){
@@ -4568,7 +4569,9 @@ void GameScene::CreateTrollIndicator(int theType)
     
     mMasterTroll->addChild(aBaseForIcon);
 }
+*/
 
+/*
 void GameScene::SetMasterTrollAction(int theType)
 {
     SetMasterTrollAnimation(_MasterTroll_WinAnimation);
@@ -4628,145 +4631,9 @@ void GameScene::SetMasterTrollAction(int theType)
     //Call idle after some time !!!
     SetMasterTrollIdleAfterTime(3.0f);
 }
+*/
 
-void GameScene::BulletDwarf()
-{
-    mMasterTroll_Bullets-=1;
-    
-    Dwarf* dwarf;
-    cocos2d::CCArray* _dwarvesToAttack = CCArray::create();
-	_dwarvesToAttack->retain();
-    
-    //Remove all dwarfs
-    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
-	{
-        dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
-		
-		if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
-        {
-            //This can be choosen to attack !!!
-            _dwarvesToAttack->addObject(dwarf);
-        }
-    }
-    
-    if(_dwarvesToAttack->count() == 0){
-        return;//No luck
-    }
-    
-    //Now choose !!!
-    int aRanodmDwarf = rand()%_dwarvesToAttack->count();
-//    CCLOG("Bullet aRanodmDwarf 1: %f",aRanodmDwarf);
-    dwarf = static_cast<Dwarf*>(_dwarvesToAttack->objectAtIndex(aRanodmDwarf));
-    
-    dwarf->mBulletActive = true;
-    
-    TrollBullet* aBullet = TrollBullet::create(this);
-    aBullet->setPosition(mMasterTroll->getPositionX(),mMasterTroll->getPositionY());
-    aBullet->_dwarf = dwarf;
-    
-    this->addChild(aBullet, 1000);
-    _bullets->addObject(aBullet);
-    
-//    CCLOG("Bullet amount 1: %f",_bullets->count());
-    
-    //clear the arr !!!
-    _dwarvesToAttack->release();
-}
-
-void GameScene::UpdateBullets(float delta)
-{
-//    CCLOG("Bullet amount 2: %f",_bullets->count());
-    
-    // update trolls
-	for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
-	{
-		TrollBullet* troll = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
-		
-        if(!troll->_isDisabled)
-        {
-            troll->update(delta);
-            
-//            if (getSpriteOrderZ(troll->getPositionY())!=troll->getZOrder())
-//                reorderChild(troll, getSpriteOrderZ(troll->getPositionY()));
-        }
-        else
-        {
-            //Create some particles and sound !!!
-            CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
-            p->setPosition(troll->getPositionX(), troll->getPositionY());
-            p->setAutoRemoveOnFinish(true);
-            addChild(p,1000);
-            
-            //Remove it !!!
-            this->removeChild(troll);
-            _bullets->removeObjectAtIndex(trollIndex);
-            CCLOG("Removed Bullet");
-            troll = NULL;
-        }
-        
-        //Check if does not hit other dwarf !!!
-        if(troll)
-        {
-            for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
-            {
-                Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
-                
-                //**********************************
-                //Simple z-sorting =D
-                
-                if (dwarf)
-                {
-                    if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition()) <= 1000)
-                    {
-                        //gameover for other dwarf !!!
-                        troll->_isDisabled = true;
-                        dwarf->_knockOutTime = 3;
-                        dwarf->_knockOut = true;
-                        dwarf->createCrash();
-                    }
-                }
-            }
-        }
-	}
-}
-
-void GameScene::StartDwarfFreeze()
-{
-    //Choose any dwarf !!!
-    int aRanodmDwarf = rand()%_dwarves->count();
-    
-    //need to check what dwarf can bee frozen !!! - todo !!!
-    Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(aRanodmDwarf));
-    
-    //Craete the freeze target stuff
-    dwarf->_TargetIcon->setVisible(true);
-    
-    CCDelayTime* aDelay = CCDelayTime::create(1.0f);
-    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::FreezeDwarfTotal));
-    CCSequence* aTrollSeq = CCSequence::create(aDelay,aFunc1,NULL);
-    
-    dwarf->runAction(aTrollSeq);
-}
-
-void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
-{
-    Dwarf* dwarf = static_cast<Dwarf*>(sender);
-    dwarf->_TargetIcon->setVisible(false);
-    
-    //Freeze
-    Effect* effect = NULL;
-    effect = IceBarrage::create(this);
-    effect->setPosition(ccp(dwarf->getPositionX(),dwarf->getPositionY()));
-//    this->addChild(effect,0);
-//    _effects->addObject(effect);
-    
-    effect->touch(dwarf,NULL);
-    effect->setVisible(true);
-    
-//    dwarf->setEffect(effect);
-    dwarf->pauseAnimation();
-}
-
+/*
 void GameScene::SetMasterTrollIdleAfterTime(float theTime)
 {
     CCDelayTime* aDelay = CCDelayTime::create(theTime);
@@ -4784,8 +4651,10 @@ void GameScene::SetMasterTrollAnimIdle()
         mMasterTroll->removeChildByTag(12345);
     }
 }
+*/
 
 //void Troll::setAnimation(SpriteAnimation* animation)
+/*
 void GameScene::SetMasterTrollAnimation(SpriteAnimation* animation)
 {
 	if (_MasterTroll_animation != animation)
@@ -4804,7 +4673,9 @@ void GameScene::SetMasterTrollAnimation(SpriteAnimation* animation)
 		}
 	}
 }
+*/
 
+/*
 void GameScene::OnMasterTrollFinishEnter()
 {
     
@@ -4820,6 +4691,7 @@ void GameScene::CreateMasterTrollEnter()
     CCSequence* aSeq = CCSequence::create(aWalkTo,aFunc1,NULL);
     mMasterTroll->runAction(aSeq);
 }
+*/
 
 // The new masters troll and dwarf spawn
 void GameScene::CreateMasters()
@@ -4878,7 +4750,7 @@ void GameScene::CreateMachines()
         _MasterTroll_WinAnimation->retain();
         _MasterTroll_WinAnimation->setFlipX(true);
         
-        SetMasterTrollAnimation(_MasterTroll_IdleAnimation);
+//        SetMasterTrollAnimation(_MasterTroll_IdleAnimation);
         
         //Craete some small animation move !!!
         mMasterTroll->setPosition(ccp(-100,_screenSize.height/2));
@@ -8467,6 +8339,7 @@ void GameScene::UpdateDwarfSpawn(float delta)
     }
 }
 
+/*
 void GameScene::UpdateTrapsSpawn(float delta)
 {
     //This is the master troll brain :D
@@ -8486,6 +8359,7 @@ void GameScene::UpdateTrapsSpawn(float delta)
     }
     
 }
+*/
 
 void GameScene::UpdateCrystalSpawn(float delta)
 {
@@ -8630,7 +8504,7 @@ void GameScene::update(float delta)
     //The spawn contorl
     UpdateDwarfSpawn(delta);
     UpdateCrystalSpawn(delta);
-    UpdateTrapsSpawn(delta);
+//    UpdateTrapsSpawn(delta);
     
     //Update new caves animation ??
     if(_SpawnBlueDwarf){
@@ -8658,6 +8532,9 @@ void GameScene::update(float delta)
             CheckMissionByValue(MissionType_Time,mTotalTimeInGame);
         }
     }
+    
+    // The master troll update cycle
+    UpdateMasterTroll(delta);
     
     return;
     
@@ -17804,6 +17681,240 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
     }
 }
 
+//---------------------------------------------------------------
+// The new master troll stuff goes here !!
+
+void GameScene::SetMasterTrollAnimation(const char* theAnimation)
+{
+    if(strcmp(theAnimation,"idle") == 0)
+    {
+        //Do the idle stuff
+        
+    }
+    else if(strcmp(theAnimation,"HitGround") == 0)
+    {
+        // Just jump up and down
+        CCMoveTo* aJump = CCMoveTo::create(0.25f,ccp(64,420));
+        CCMoveTo* aJumpBack = CCMoveTo::create(0.25f,ccp(64,360));
+        CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+        CCSequence* aJumps = CCSequence::create(aJump,aJumpBack,aFunc1,NULL);
+        
+        _MasterTrollBase->runAction(aJumps);
+    }
+}
+
+#define MASTER_ACTION_CONFUSE 2
+#define MASTER_ACTION_SPAWN_TRAP 0
+
+void GameScene::SetMasterTrollAction(int theType)
+{
+    mMasterTrollLastActionID = theType;
+    
+    // All the actions that master can do !!!
+    if(theType == MASTER_ACTION_CONFUSE)
+    {
+        // Play the hit ground animation
+        SetMasterTrollAnimation("HitGround");
+        // Set the action after some delay on animation
+        CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+        CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Confusion));
+        CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
+        
+        _MasterTrollBase->runAction(aSeq);
+    }
+    else if(theType == MASTER_ACTION_SPAWN_TRAP)
+    {
+        // Play the hit ground animation
+        SetMasterTrollAnimation("idle");
+        // Set the action after some delay on animation
+        CCDelayTime* aDelay = CCDelayTime::create(1.0f);
+        CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::generateEffect));
+        CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
+        
+        _MasterTrollBase->runAction(aSeq);
+    }
+}
+
+void GameScene::UpdateMasterTroll(float delta)
+{
+    if(mMasterTrollActionTimer>0){
+        mMasterTrollActionTimer-=delta;
+    }
+    else{
+        //Do some damage Master
+        mMasterTrollActionTimer = 60;// For now !!!
+        
+        // Chouse what action will do ?
+        
+        //RANDOM WHAT TO CHOOSE - FOR NOW QUICK ALL
+        if(mMasterTrollLastActionID == -1 || mMasterTrollLastActionID == MASTER_ACTION_SPAWN_TRAP){
+            SetMasterTrollAction(MASTER_ACTION_CONFUSE);
+        }
+        else{
+            SetMasterTrollAction(MASTER_ACTION_SPAWN_TRAP);
+        }
+    }
+    
+}
+
+
+
+//---------------------------------------------------------------
+// The master troll powers
+
+void GameScene::MasterAction_Confusion(cocos2d::CCObject *sender)
+{
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        //**********************************
+        if (dwarf)
+        {
+            dwarf->_knockOutTime = 1;
+            dwarf->_knockOut = true;
+            dwarf->createCrash();
+            dwarf->removeMovePoints();
+        }
+    }
+}
+
+void GameScene::BulletDwarf()
+{
+    mMasterTroll_Bullets-=1;
+    
+    Dwarf* dwarf;
+    cocos2d::CCArray* _dwarvesToAttack = CCArray::create();
+    _dwarvesToAttack->retain();
+    
+    //Remove all dwarfs
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
+        {
+            //This can be choosen to attack !!!
+            _dwarvesToAttack->addObject(dwarf);
+        }
+    }
+    
+    if(_dwarvesToAttack->count() == 0){
+        return;//No luck
+    }
+    
+    //Now choose !!!
+    int aRanodmDwarf = rand()%_dwarvesToAttack->count();
+    //    CCLOG("Bullet aRanodmDwarf 1: %f",aRanodmDwarf);
+    dwarf = static_cast<Dwarf*>(_dwarvesToAttack->objectAtIndex(aRanodmDwarf));
+    
+    dwarf->mBulletActive = true;
+    
+    TrollBullet* aBullet = TrollBullet::create(this);
+    aBullet->setPosition(mMasterTroll->getPositionX(),mMasterTroll->getPositionY());
+    aBullet->_dwarf = dwarf;
+    
+    this->addChild(aBullet, 1000);
+    _bullets->addObject(aBullet);
+    
+    //    CCLOG("Bullet amount 1: %f",_bullets->count());
+    
+    //clear the arr !!!
+    _dwarvesToAttack->release();
+}
+
+void GameScene::UpdateBullets(float delta)
+{
+    //    CCLOG("Bullet amount 2: %f",_bullets->count());
+    
+    // update trolls
+    for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        TrollBullet* troll = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
+        
+        if(!troll->_isDisabled)
+        {
+            troll->update(delta);
+            
+            //            if (getSpriteOrderZ(troll->getPositionY())!=troll->getZOrder())
+            //                reorderChild(troll, getSpriteOrderZ(troll->getPositionY()));
+        }
+        else
+        {
+            //Create some particles and sound !!!
+            CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+            p->setPosition(troll->getPositionX(), troll->getPositionY());
+            p->setAutoRemoveOnFinish(true);
+            addChild(p,1000);
+            
+            //Remove it !!!
+            this->removeChild(troll);
+            _bullets->removeObjectAtIndex(trollIndex);
+            CCLOG("Removed Bullet");
+            troll = NULL;
+        }
+        
+        //Check if does not hit other dwarf !!!
+        if(troll)
+        {
+            for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+            {
+                Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+                
+                //**********************************
+                //Simple z-sorting =D
+                
+                if (dwarf)
+                {
+                    if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition()) <= 1000)
+                    {
+                        //gameover for other dwarf !!!
+                        troll->_isDisabled = true;
+                        dwarf->_knockOutTime = 3;
+                        dwarf->_knockOut = true;
+                        dwarf->createCrash();
+                    }
+                }
+            }
+        }
+    }
+}
+
+void GameScene::StartDwarfFreeze()
+{
+    //Choose any dwarf !!!
+    int aRanodmDwarf = rand()%_dwarves->count();
+    
+    //need to check what dwarf can bee frozen !!! - todo !!!
+    Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(aRanodmDwarf));
+    
+    //Craete the freeze target stuff
+    dwarf->_TargetIcon->setVisible(true);
+    
+    CCDelayTime* aDelay = CCDelayTime::create(1.0f);
+    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::FreezeDwarfTotal));
+    CCSequence* aTrollSeq = CCSequence::create(aDelay,aFunc1,NULL);
+    
+    dwarf->runAction(aTrollSeq);
+}
+
+void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
+{
+    Dwarf* dwarf = static_cast<Dwarf*>(sender);
+    dwarf->_TargetIcon->setVisible(false);
+    
+    //Freeze
+    Effect* effect = NULL;
+    effect = IceBarrage::create(this);
+    effect->setPosition(ccp(dwarf->getPositionX(),dwarf->getPositionY()));
+    
+    effect->touch(dwarf,NULL);
+    effect->setVisible(true);
+    
+    dwarf->pauseAnimation();
+}
+
+//---------------------------------------------------------------
 void GameScene::ResetValues()
 {
     mTotalMushroom = 0;
@@ -17822,7 +17933,8 @@ void GameScene::ResetValues()
     _SubDwarfSpawn = 0;
     _LeftNotSpawnDwatfs = 0;
     
-    _MasterTroll_TimeToAct = (rand()%20)+20;
+    mMasterTrollActionTimer = 60;// for now
+    mMasterTrollLastActionID = -1;
 }
 
 

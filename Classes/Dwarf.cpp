@@ -1238,6 +1238,8 @@ void Dwarf::setAnimationVisibility(bool theValue)
 
 void Dwarf::createCrash()
 {
+    
+    
     //Create kaboom !!!
     CCSprite *aCrash = CCSprite::create("effects/dwarf_crash_boom.png");
     aCrash->setOpacity(0);

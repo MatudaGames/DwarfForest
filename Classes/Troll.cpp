@@ -343,6 +343,9 @@ void Troll::removeEffect()
 void Troll::UpdateRadar(float delta)
 {
     // Will add later smooth rotate to angle :)
+    if(!mCatchRadar->isVisible()){
+        mCatchRadar->setVisible(true);
+    }
     
     int aCurrentAngle = (-_angle * 180.0 / M_PI)+coneWidth/2;
     if(mCatchRadarAngle != aCurrentAngle)
@@ -482,8 +485,6 @@ bool Troll::collideAtPoint(cocos2d::CCPoint point) {
 
 void Troll::update(float delta)
 {
-    if(mRadarSet) UpdateRadar(delta);
-    
     //Order the troll to sit cool in map
     if (_game->getSpriteOrderZ(getPositionY())!=getZOrder()){
         _game->reorderChild(this,_game->getSpriteOrderZ(getPositionY()));
@@ -619,6 +620,8 @@ void Troll::update(float delta)
                               y + sinf(_angle) * delta * (_speed * _game->getGameSpeed()));
     
     cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
+    
+    if(mRadarSet) UpdateRadar(delta);
 }
 
 void Troll::update_old(float delta)
