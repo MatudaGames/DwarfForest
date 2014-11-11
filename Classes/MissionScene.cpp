@@ -138,7 +138,14 @@ bool MissionScene::init()
                                                                  menu_selector(MissionScene::downloadExtra_3));
     backButtonReload4->setAnchorPoint(ccp(0,0));
     
-    CCMenu* backMenuReload = CCMenu::create(backButtonReload,backButtonReload2,backButtonReload3,backButtonReload4, NULL);
+    CCMenuItemImage* backButtonReload5 = CCMenuItemImage::create(
+                                                                 "DebugStuff/load_mission_TEST.png",
+                                                                 "DebugStuff/load_mission_TEST.png",
+                                                                 this,
+                                                                 menu_selector(MissionScene::downloadExtra_4));
+    backButtonReload5->setAnchorPoint(ccp(0,0));
+    
+    CCMenu* backMenuReload = CCMenu::create(backButtonReload,backButtonReload2,backButtonReload3,backButtonReload4,backButtonReload5, NULL);
     this->addChild(backMenuReload, 1);
     backMenuReload->alignItemsVertically();
     backMenuReload->setPosition(20, 400);
@@ -521,6 +528,11 @@ void MissionScene::downloadExtra_3(CCObject* sender)
     User::getInstance()->getMissionManager().GetExtraMissions_3();
 }
 
+void MissionScene::downloadExtra_4(CCObject* sender)
+{
+    User::getInstance()->getMissionManager().OnDownloadSpecialMissions();
+}
+
 void MissionScene::menuBackCallback(CCObject* sender)
 {
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("Tap_Back").c_str());
@@ -857,7 +869,7 @@ void MissionScene::CreateMissions()
     int aMissionID = 1;
     
     CCArray* aButtons3 = CCArray::create();
-    aButtons3->retain();
+//    aButtons3->retain();
     CCMenuItemImage* aButtonReal;
     CCMenu* lowBar;
     
@@ -1073,6 +1085,7 @@ void MissionScene::CreateMissions()
                 aMoveY = 100;
             
         }
+        
         
         lowBar = CCMenu::createWithArray(aButtons3);
         lowBar->setTag(90);

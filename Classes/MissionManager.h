@@ -248,6 +248,9 @@ public:
     
     void downloadPackage();
     
+    void OnDownloadSpecialMissions();
+    void OnDownloadedSpecial();
+    
     MissionSet GetActiveMission();
     std::string GetSubMissionText(int theMissionID,int theSubMissionID,bool thePause,bool theDone);
     
