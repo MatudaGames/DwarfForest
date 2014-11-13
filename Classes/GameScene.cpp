@@ -212,6 +212,8 @@ GameScene::~GameScene()
 	if (_caveMask) _caveMask->release();
 	if (_mask) _mask->release();
     if(_flyObjects)_flyObjects->release();
+    
+    if(_otherEnemy) _otherEnemy->release();
 }
 
 /*
@@ -730,6 +732,29 @@ void GameScene::CreateMap()
         //just generate all possible dwarfs !!!
         generateDwarfMission(false);
     }
+    
+    // Check for other test or other enemy stuff !!!
+    if(mCurrentMission.SpawnBee >= 1)
+    {
+        // Lets create the bee
+        Enemy_Bee* Bee = Enemy_Bee::create(this);
+        
+        Bee->_startX = mCurrentMission.Enemy_Bee_StartX;
+        Bee->_startY = mCurrentMission.Enemy_Bee_StartY;
+        Bee->_finishX = mCurrentMission.Enemy_Bee_FinishX;
+        Bee->_finishY = mCurrentMission.Enemy_Bee_FinishY;
+        
+        Bee->_speed = mCurrentMission.Enemy_Bee_Speed;
+        Bee->bullet_speed = mCurrentMission.Enemy_Bee_Bullet_Speed;
+        
+        Bee->setPosition(ccp(mCurrentMission.Enemy_Bee_StartX,mCurrentMission.Enemy_Bee_StartY));
+        
+        //Create the lines and other stuff
+        Bee->CreateFromMissionParams();
+        
+        this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+        _otherEnemy->addObject(Bee);
+    }
 }
 
 //The new stuff where all is clean and understandable
@@ -999,6 +1024,9 @@ void GameScene::CreateGameByMission()
     
     _spiders = CCArray::create();
     _spiders->retain();
+    
+    _otherEnemy = CCArray::create();
+    _otherEnemy->retain();
     
     _flyObjects = CCArray::create();
     _flyObjects->retain();
@@ -1768,6 +1796,9 @@ bool GameScene::init()
     
     _spiders = CCArray::create();
     _spiders->retain();
+    
+    _otherEnemy = CCArray::create();
+    _otherEnemy->retain();
     
     _flyObjects = CCArray::create();
     _flyObjects->retain();
@@ -8492,6 +8523,22 @@ void GameScene::UpdateCrystalSpawn(float delta)
     }
 }
 
+void GameScene::UpdateTestStuff(float delta)
+{
+    for(int otherIndex = _otherEnemy->count()-1;otherIndex>=0;--otherIndex)
+    {
+        Enemy_Bee* bee = static_cast<Enemy_Bee*>(_otherEnemy->objectAtIndex(otherIndex));
+        
+        // Order the z order
+        if (getSpriteOrderZ(bee->getPositionY())!=bee->getZOrder())
+        {
+            reorderChild(bee,getSpriteOrderZ(bee->getPositionY()));
+        }
+        
+        bee->update(delta);
+    }
+}
+
 void GameScene::update(float delta)
 {
     _gameTime += delta * _gameSpeed;
@@ -8535,6 +8582,9 @@ void GameScene::update(float delta)
     
     // The master troll update cycle
     UpdateMasterTroll(delta);
+    
+    // The test enemies and other stuff
+    UpdateTestStuff(delta);
     
     return;
     
@@ -10936,6 +10986,34 @@ void GameScene::updateDwarfs(float delta)
 			
 			if (dwarf && _boostShieldTimer<=0)//If has shield then nothing can scare our dwarf =D
 			{
+                // Check bees
+                //Check gobs
+                for(int beeIndex = _otherEnemy->count()-1;beeIndex>=0;--beeIndex)
+                {
+                    Enemy_Bee* gob = static_cast<Enemy_Bee*>(_otherEnemy->objectAtIndex(beeIndex));
+                    if(gob->isVisible())
+                    {
+                        //Check for crash now !!!
+                        if (ccpDistanceSQ(dwarf->getPosition(), gob->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
+                        {
+                            stopInGameSound("Footsteps");
+                            stopInGameSound("troll_walk");
+                            
+                            stopInGameSound("dwarf_web_stuck",true);
+                            //                            dwarf->createCrash();
+                            
+                            dwarf->setDisabled(true);
+                            dwarf->createCrash();
+                            dwarf->doDwarfBang(dwarf->_angle);
+                            dwarf->setTag(999);//Will skip his pause !!!
+                            
+                            //                            dwarf->createTrollCrash();
+//                            gob->HitGoblin(false);
+                            lose();
+                        }
+                    }
+                }
+                
                 //Check gobs
                 for(int gobIndex = _goblins->count()-1;gobIndex>=0;--gobIndex)
                 {

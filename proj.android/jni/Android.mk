@@ -91,6 +91,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/HidraIntro.cpp \
                    ../../Classes/Spider.cpp \
                    ../../Classes/AdvancedAnimation.cpp \
+                   ../../Classes/InGamePowers.cpp \
+                   ../../Classes/Enemy_Bee.cpp \
                    ../../Classes/HelloWorldScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

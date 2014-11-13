@@ -25,6 +25,8 @@
 
 #include "InGamePowers.h"
 
+#include "Enemy_Bee.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -361,6 +363,8 @@ public:
     cocos2d::CCSprite* _MasterTrollBase;
     cocos2d::CCSprite* _MasterDwarfBase;
     
+    void UpdateTestStuff(float delta);
+    
     cocos2d::CCSprite* mMasterTroll;
     SpriteAnimation* _MasterTroll_IdleAnimation;
 	SpriteAnimation* _MasterTroll_WinAnimation;
@@ -620,6 +624,8 @@ public:
     cocos2d::CCArray* _goblins;
     cocos2d::CCArray* _hidras;
     cocos2d::CCArray* _spiders;
+    
+    cocos2d::CCArray* _otherEnemy;
     
     bool _gamePause;
     

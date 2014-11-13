@@ -209,6 +209,19 @@ struct MissionSet
     std::vector<int> CrystalColProbs;
     std::vector<int> CrystalTypeProbs;
     
+    // The test stuff
+    float SpawnBee;
+    int32_t Enemy_Bee_StartX;
+    int32_t Enemy_Bee_StartY;
+    
+    int32_t Enemy_Bee_FinishX;
+    int32_t Enemy_Bee_FinishY;
+    
+    int32_t Enemy_Bee_Speed;
+    int32_t Enemy_Bee_Bullet_Speed;
+    
+    
+    
 };
 
 struct CompletedStuff

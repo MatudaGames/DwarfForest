@@ -2818,6 +2818,30 @@ void MissionManager::OnDownloadedSpecial()
         
         //---------------------------------------------------------------------------------------------------
         
+        // TEST STUFF
+        // The bee stuff
+        
+        aDummyVar = missionDict->valueForKey("Enable_Bee")->floatValue();
+        if(aDummyVar>=1){
+            // Yes please enable it
+            mission->SpawnBee = missionDict->valueForKey("Enable_Bee")->floatValue();
+            
+            // Set some bee parametrs
+            std::vector<int> BeeStartPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Start")->getCString(),',');
+            
+            mission->Enemy_Bee_StartX = BeeStartPoint[0];
+            mission->Enemy_Bee_StartY = BeeStartPoint[1];
+            
+            std::vector<int> BeeFinishPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Finish")->getCString(),',');
+            
+            mission->Enemy_Bee_FinishX = BeeFinishPoint[0];
+            mission->Enemy_Bee_FinishY = BeeFinishPoint[1];
+            
+            mission->Enemy_Bee_Speed = missionDict->valueForKey("Enemy_Bee_Speed")->floatValue();
+            mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
+        }
+        
+        
         //Dwarf Speed on map
         mission->DwarfSpeed_Fat = 40.0;
         mission->DwarfSpeed_Tall = 40.0;
