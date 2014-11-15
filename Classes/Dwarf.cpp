@@ -420,6 +420,11 @@ void Dwarf::update(float delta)
                 _knockOut = false;
                 _knockOutTime = 0;
                 mBulletActive = false;
+                
+                // Remove the bullet indicator???
+                if(getChildByTag(MT_BULLET_ID) != NULL){
+                    removeChildByTag(MT_BULLET_ID,true);
+                }
             }
         }
         return;
@@ -523,7 +528,7 @@ void Dwarf::update(float delta)
 			{
 				_movePoints->removeControlPointAtIndex(0);
 				
-				if (_line->getChildrenCount()) _line->removeChildAtIndex(0, false);
+				if (_line->getChildrenCount()>0) _line->removeChildAtIndex(0, false);
 			}
 			else
 			{

@@ -6033,6 +6033,10 @@ void GameScene::onSaveFromPause()
         }
     }
     
+    if(_saveTroll != NULL){
+        _saveTroll->_canMove = true;
+    }
+    
     /*
     gameSpeed = 0.5f;
     gameSlowTimer = 10.0f;
@@ -8537,6 +8541,8 @@ void GameScene::UpdateTestStuff(float delta)
         
         bee->update(delta);
     }
+    
+    UpdateBullets(delta);
 }
 
 void GameScene::update(float delta)
@@ -15333,9 +15339,12 @@ bool GameScene::getMask(int32_t posX, int32_t posY)
         if(green>=128) {
             return true;
         }
+        else{
+            return false;
+        }
     }
     
-    return false;
+    return true;
     
     //----------------------------
 	bool result = true;
@@ -17783,6 +17792,7 @@ void GameScene::SetMasterTrollAnimation(const char* theAnimation)
 
 #define MASTER_ACTION_CONFUSE 2
 #define MASTER_ACTION_SPAWN_TRAP 0
+#define MASTER_ACTION_BULLET 1
 
 void GameScene::SetMasterTrollAction(int theType)
 {
@@ -17811,6 +17821,67 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
+    else if(theType == MASTER_ACTION_BULLET)
+    {
+        // Play the hit ground animation
+        SetMasterTrollAnimation("HitGround");
+        // Set the action after some delay on animation
+        CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+        CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Bullet));
+        CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
+        
+        _MasterTrollBase->runAction(aSeq);
+    }
+}
+
+void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
+{
+    // Chouuuuuse one random dwarf + check if is not near !!!
+    Dwarf* dwarf;
+    cocos2d::CCArray* _dwarvesToAttack = CCArray::create();
+    _dwarvesToAttack->retain();
+    
+    // Collect all far dwarfs !!!
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
+        {
+            float dwarfDistance = sqrtf((_MasterTrollBase->getPositionX()-dwarf->getPositionX())*(_MasterTrollBase->getPositionX()-dwarf->getPositionX()) +
+                                     (_MasterTrollBase->getPositionY()-dwarf->getPositionY())*(_MasterTrollBase->getPositionY()-dwarf->getPositionY()));
+            if(dwarfDistance>300)
+            {
+                //This can be choosen to attack !!!
+                _dwarvesToAttack->addObject(dwarf);
+            }
+        }
+    }
+    
+    if(_dwarvesToAttack->count() == 0){
+        return;//No luck
+    }
+    
+    //Now choose !!!
+    int aRanodmDwarf = rand()%_dwarvesToAttack->count();
+    dwarf = static_cast<Dwarf*>(_dwarvesToAttack->objectAtIndex(aRanodmDwarf));
+    
+    dwarf->mBulletActive = true;
+    CCSprite* theIndicator = CCSprite::create("beta/target.png");
+    theIndicator->setPosition(ccp(dwarf->getContentSize().width/2,dwarf->getContentSize().height+theIndicator->getContentSize().height));
+    dwarf->addChild(theIndicator,100,MT_BULLET_ID);
+    
+    TrollBullet* aBullet = TrollBullet::create(this);
+    aBullet->setPosition(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
+    aBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+    aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+    aBullet->_dwarf = dwarf;
+    
+    this->addChild(aBullet, 1000);
+    _bullets->addObject(aBullet);
+    
+    //clear the arr !!!
+    _dwarvesToAttack->release();
 }
 
 void GameScene::UpdateMasterTroll(float delta)
@@ -17824,12 +17895,20 @@ void GameScene::UpdateMasterTroll(float delta)
         
         // Chouse what action will do ?
         
-        //RANDOM WHAT TO CHOOSE - FOR NOW QUICK ALL
-        if(mMasterTrollLastActionID == -1 || mMasterTrollLastActionID == MASTER_ACTION_SPAWN_TRAP){
-            SetMasterTrollAction(MASTER_ACTION_CONFUSE);
+        // Special stuff
+        if(mCurrentMission.Forced_Bullets>=1)
+        {
+            SetMasterTrollAction(MASTER_ACTION_BULLET);
+            mMasterTrollActionTimer = 10;// For now !!!
         }
         else{
-            SetMasterTrollAction(MASTER_ACTION_SPAWN_TRAP);
+            //RANDOM WHAT TO CHOOSE - FOR NOW QUICK ALL
+            if(mMasterTrollLastActionID == -1 || mMasterTrollLastActionID == MASTER_ACTION_SPAWN_TRAP){
+                SetMasterTrollAction(MASTER_ACTION_CONFUSE);
+            }
+            else{
+                SetMasterTrollAction(MASTER_ACTION_SPAWN_TRAP);
+            }
         }
     }
     
@@ -17925,6 +18004,10 @@ void GameScene::UpdateBullets(float delta)
             p->setAutoRemoveOnFinish(true);
             addChild(p,1000);
             
+            if(troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
+                troll->_dwarf->removeChildByTag(MT_BULLET_ID);
+            }
+            
             //Remove it !!!
             this->removeChild(troll);
             _bullets->removeObjectAtIndex(trollIndex);
@@ -17946,6 +18029,10 @@ void GameScene::UpdateBullets(float delta)
                 {
                     if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition()) <= 1000)
                     {
+                        if(troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
+                            troll->_dwarf->removeChildByTag(MT_BULLET_ID);
+                        }
+                        
                         //gameover for other dwarf !!!
                         troll->_isDisabled = true;
                         dwarf->_knockOutTime = 3;
@@ -18013,6 +18100,10 @@ void GameScene::ResetValues()
     
     mMasterTrollActionTimer = 60;// for now
     mMasterTrollLastActionID = -1;
+    
+    if(mCurrentMission.Forced_Bullets >= 1){
+        mMasterTrollActionTimer = 10;
+    }
 }
 
 

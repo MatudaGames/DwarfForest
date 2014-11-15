@@ -42,7 +42,9 @@ public:
     Dwarf* _dwarf;
     
     float _angle;
-    float _speed;
+    float _speed; //Current speed
+    
+    float _speedMax; //Ends with fast
     
     float GetAngle();
     void setAngle(float value);

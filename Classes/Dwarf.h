@@ -14,6 +14,8 @@ class GameScene;
 class Effect;
 class SpriteAnimation;
 
+#define MT_BULLET_ID 344
+
 enum DwarfType
 {
 	DWARF_TYPE_TALL,

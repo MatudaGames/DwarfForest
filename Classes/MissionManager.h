@@ -220,6 +220,10 @@ struct MissionSet
     int32_t Enemy_Bee_Speed;
     int32_t Enemy_Bee_Bullet_Speed;
     
+    int32_t Forced_Bullets;
+    int32_t MT_Bullet_Speed_Max;
+    int32_t MT_Bullet_Speed_Min;
+    
     
     
 };

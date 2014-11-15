@@ -2841,6 +2841,17 @@ void MissionManager::OnDownloadedSpecial()
             mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
         }
         
+        aDummyVar = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+        if(aDummyVar>=1){
+            // We will spawn bullets
+            mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+            
+            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+            
+            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
         
         //Dwarf Speed on map
         mission->DwarfSpeed_Fat = 40.0;

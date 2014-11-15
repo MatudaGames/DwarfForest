@@ -62,7 +62,7 @@ bool TrollBullet::init(GameScene* game)
 	}
     
     //Create the sprite and add some particles :)
-    _sprite = CCSprite::create("DebugDot.png");
+    _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite);
 	
 	_game = game;
@@ -95,6 +95,11 @@ void TrollBullet::update(float delta)
     
     float x = getPositionX();
     float y = getPositionY();
+    
+    // Update the speed - from slow to faster !!!
+    if(_speed<_speedMax){
+        _speed+=delta;
+    }
     
     if(_dwarf != NULL && _dwarf->getParent()!=NULL){
         //Check if it is not null

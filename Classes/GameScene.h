@@ -380,6 +380,7 @@ public:
 //    void OnMasterTrollFinishEnter();
 //    void CreateMasterTrollEnter();
     
+    void MasterAction_Bullet(cocos2d::CCObject *sender);
     
     void MasterAction_Confusion(cocos2d::CCObject *sender);
     
