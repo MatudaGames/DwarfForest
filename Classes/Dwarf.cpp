@@ -109,6 +109,9 @@ bool Dwarf::init(GameScene* game,int theType)
     
     _alarmDwarf = false;
     _alarmTroll = false;
+    
+    _PoisonTime = 0;
+    _PoisonSlowValue = 0;
 	
 	_game = game;
 	game->retain();
@@ -327,6 +330,63 @@ void Dwarf::UpdateBagIcon()
     }
 }
 
+void Dwarf::ClearOldTraps()
+{
+    if(getTag()==999)
+    {
+        mCollectedCrystals = 0;
+        mCrystalPoints = 0;
+        
+        mNewMissionTimeout = 5;
+        
+        _disabled = false;
+        _knockOut = false;
+        
+        //Remove the alarm or crash
+        if (_animation->getChildByTag(111))
+        {
+            _animation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _animation->resume();
+        }
+        
+        //Check all the rest too !!!
+        if(_leftAnimation->getChildByTag(111)){
+            _leftAnimation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _leftAnimation->resume();
+        }
+        if(_leftDownAnimation->getChildByTag(111)){
+            _leftDownAnimation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _leftDownAnimation->resume();
+        }
+        if(_leftUpAnimation->getChildByTag(111)){
+            _leftUpAnimation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _leftUpAnimation->resume();
+        }
+        if(_upAnimation->getChildByTag(111)){
+            _upAnimation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _upAnimation->resume();
+        }
+        if(_downAnimation->getChildByTag(111)){
+            _downAnimation->removeChild(_crashAnimation,true);
+            _crashAnimation->removeFromParent();
+            _downAnimation->resume();
+        }
+        
+        //The alarm
+        if (getChildByTag(222) && _alarmAnimation->isVisible())
+        {
+            _canPlayAlarm = false;
+            _alarmWasSet = false;
+            _alarmAnimation->setVisible(false);
+        }
+    }
+}
+
 void Dwarf::update(float delta)
 {
     if (_disabled)
@@ -489,6 +549,17 @@ void Dwarf::update(float delta)
             _speed = (_defaultSpeed * _game->getGameSpeed());//*mCrystalSlowDown;
         else
             _speed = (_defaultSpeed * _game->getGameSpeed());//*mCrystalSlowDown;
+        
+        if(_PoisonTime>0){
+            _PoisonTime-=delta;
+            if(_PoisonTime<=0){
+                _PoisonTime = 0;
+                //Remove the poison fx
+                
+            }
+            
+            _speed *= _PoisonSlowValue;
+        }
         
         /*
         if(User::getInstance()->mDynamicTrolls)
@@ -732,7 +803,7 @@ void Dwarf::update(float delta)
     //==========================================
     //Some booster code part
     
-    if (_game->getGhostTimer() > 0 || _game->getShieldTimer() > 0)
+    if (_game->getGhostTimer() > 0 || _game->getShieldTimer() > 0 || _PoisonTime>0)
     {
         //Set alpha for now 50%
         if(_animation && _animation->getOpacity()!=220)
@@ -2292,4 +2363,24 @@ void Dwarf::removeWeb(float delta)
 void Dwarf::setDisabled(bool value)
 {
 	_disabled = value;
+}
+
+// Actions that can be set to the dwarf
+void Dwarf::setAction(int theType)
+{
+    if(theType == MASTER_ACTION_BULLET_POISON)
+    {
+        _PoisonTime = 5.0f;
+        _PoisonSlowValue = 0.5f;
+    }
+    else if(theType == MASTER_ACTION_BULLET)
+    {
+        _knockOutTime = 3;
+        _knockOut = true;
+        createCrash();
+    }
+    else if(theType == MASTER_ACTION_BULLET_ICE)
+    {
+        _game->FreezeDwarfTotal(this);
+    }
 }

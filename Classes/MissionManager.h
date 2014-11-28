@@ -192,10 +192,10 @@ struct MissionSet
     int32_t DSpawn_change_jump_value;
     
     //The crystal spawn stuff
-    int32_t CrystalInterval_Min;
-    int32_t CrystalInterval_Max;
-    float CrystalProbMultiplier;
-    float CrystalTimeOnMap;
+    int32_t ItemInterval_Min;
+    int32_t ItemInterval_Max;
+    float ItemProbMultiplier;
+    float ItemTimeOnMap;
     
     float DwarfSpeed_Fat;
     float DwarfSpeed_Tall;
@@ -205,9 +205,9 @@ struct MissionSet
     int32_t DSpawn_formula_type;
     
     
-    std::vector<int> CrystalNumProbs;
+    std::vector<int> ItemNumProbs;
     std::vector<int> CrystalColProbs;
-    std::vector<int> CrystalTypeProbs;
+    std::vector<int> ItemTypeProbs;
     
     // The test stuff
     float SpawnBee;
@@ -224,7 +224,8 @@ struct MissionSet
     int32_t MT_Bullet_Speed_Max;
     int32_t MT_Bullet_Speed_Min;
     
-    
+    std::vector<int> MT_Bullet_Types;//What bullets can fire Master Troll
+    bool MT_Bullet_Instant;
     
 };
 

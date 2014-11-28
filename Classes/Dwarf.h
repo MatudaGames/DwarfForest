@@ -55,6 +55,12 @@ public:
     
     cocos2d::CCSprite *_TargetIcon;
     
+    void setAction(int theType);
+    float _PoisonTime;
+    float _PoisonSlowValue;
+    
+    void ClearOldTraps();
+    
     bool mBulletActive;
     
     void UpdateBagIcon();

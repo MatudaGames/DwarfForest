@@ -25,10 +25,10 @@ const float PICK_RADIUS = 50.0f;
 
 const uint32_t TOUCHABLE_ZONE = 100;
 
-TrollBullet* TrollBullet::create(GameScene* game)
+TrollBullet* TrollBullet::create(GameScene* game,int theType)
 {
     TrollBullet *pRet = new TrollBullet();
-    if (pRet && pRet->init(game))
+    if (pRet && pRet->init(game,theType))
     {
         pRet->autorelease();
         return pRet;
@@ -54,16 +54,40 @@ TrollBullet::~TrollBullet()
     }
 }
 
-bool TrollBullet::init(GameScene* game)
+bool TrollBullet::init(GameScene* game,int theType)
 {
 	if (!CCNode::init())
 	{
 		return false;
 	}
     
+    _speedAddValue = 1;
+    
+    _type = theType;
+    
     //Create the sprite and add some particles :)
     _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite);
+    
+    if(theType == MASTER_ACTION_BULLET_ICE)
+    {
+        _sprite->setColor(ccc3(0, 255, 0));
+        
+        ccBlendFunc* someBlend = new ccBlendFunc();
+        someBlend->src = GL_ONE;//OGLES.GL_ONE;
+        someBlend->dst = GL_ONE;//OGLES.GL_ONE;
+        _sprite->setBlendFunc(*someBlend);// .BlendFunc = someBlend;
+    }
+    else if(theType == MASTER_ACTION_BULLET_POISON)
+    {
+        _sprite->setColor(ccc3(0, 0, 255));
+        
+        ccBlendFunc* someBlend = new ccBlendFunc();
+        someBlend->src = GL_ONE;//OGLES.GL_ONE;
+        someBlend->dst = GL_ONE;//OGLES.GL_ONE;
+        _sprite->setBlendFunc(*someBlend);// .BlendFunc = someBlend;
+    }
+    
 	
 	_game = game;
 	_game->retain();
@@ -79,12 +103,40 @@ bool TrollBullet::init(GameScene* game)
     
     //Add the particle
     
+    // Change by the FX/Type correct
+//    _type
+    
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
     p->setPosition(getPositionX(), getPositionY());
     p->setAutoRemoveOnFinish(true);
     addChild(p,-1);
 	
 	return true;
+}
+
+void TrollBullet::OnDoAction(Dwarf* theForced)
+{
+    _isDisabled = true;
+    _canMove = false;
+    
+    // Check if this dwarf has no other kaboom on it !!!
+    theForced->ClearOldTraps();
+    
+    if(_type == MASTER_ACTION_BULLET)
+    {
+        theForced->_knockOutTime = 3;
+        theForced->_knockOut = true;
+        theForced->createCrash();
+    }
+    else if(_type == MASTER_ACTION_BULLET_ICE)
+    {
+        _game->FreezeDwarfTotal(theForced);
+    }
+    else if(_type == MASTER_ACTION_BULLET_POISON)
+    {
+        // This would be better if all would go to one place - not like now :D
+        theForced->setAction(_type);
+    }
 }
 
 void TrollBullet::update(float delta)
@@ -98,7 +150,7 @@ void TrollBullet::update(float delta)
     
     // Update the speed - from slow to faster !!!
     if(_speed<_speedMax){
-        _speed+=delta;
+        _speed+=delta*_speedAddValue;
     }
     
     if(_dwarf != NULL && _dwarf->getParent()!=NULL){
@@ -110,9 +162,10 @@ void TrollBullet::update(float delta)
         if (ccpDistanceSQ(point, getPosition()) <= 1000)
         {
             //GameOver dwarf
-            _dwarf->_knockOutTime = 3;
-            _dwarf->_knockOut = true;
-            _dwarf->createCrash();
+            OnDoAction(_dwarf);
+//            _dwarf->_knockOutTime = 3;
+//            _dwarf->_knockOut = true;
+//            _dwarf->createCrash();
             
             //Create some particles and sound !!!
             CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");

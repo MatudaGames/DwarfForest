@@ -126,6 +126,9 @@ void InGamePowers::OnPlayerClickTroll(Troll* theTroll)
     if(mFreezeActive){
         mFreezeActive = false;
         
+        mGameScene->_mission_AP_Freezer+=1;
+        mGameScene->CheckMissionByValue(MissionType_AP_Freezer,mGameScene->_mission_AP_Freezer);
+        
         // Do some freeze FX - Like Master Dwarf fires his ball or stike
         CCSprite* aFlyBall = CCSprite::create("DebugDot.png");
         int aSpawnX = mGameScene->_MasterDwarfBase->getPositionX();
@@ -212,6 +215,9 @@ void InGamePowers::OnGhoustDwarfs()
 {
     // Make all dwarfs tansparent
     mGameScene->_boostGhostTimer = 10;//Just enable it
+    
+    mGameScene->_mission_AP_GhostDwarfs+=1;
+    mGameScene->CheckMissionByValue(MissionType_AP_GhostDwarfs,mGameScene->_mission_AP_GhostDwarfs);
 }
 
 void InGamePowers::OnResetAllVars()

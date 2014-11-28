@@ -106,19 +106,7 @@ const unsigned int BOOSTER_2_PRICE = 5;
 const unsigned int BOOSTER_3_PRICE = 5;
 const unsigned int BOOSTER_4_PRICE = 5;
 
-#define MissionType_PointCount 0
-#define MissionType_DwarfCount 1
-#define MissionType_Combo 2
 
-#define MissionType_Time 3
-#define MissionType_Mushroom 4
-#define MissionType_TrollEscape 5
-
-//The special stuff collect
-#define MissionType_Crystal_Red 100
-#define MissionType_Crystal_Blue 101
-#define MissionType_Crystal_Yellow 102
-#define MissionType_Crystal_Green 103
 
 
 #define kBoosters 1000
@@ -825,6 +813,10 @@ void GameScene::CreateGameByMission()
     // The mess section ?!@$
     
     mNewMapRandomEnabled = false;
+    
+    _mission_escaped_trolls = 0;
+    _mission_AP_Freezer = 0;
+    _mission_AP_GhostDwarfs = 0;
     
     _DwarfsCollectedObject = 0;
     _DwarfsEnteredCave = 0;
@@ -7230,12 +7222,16 @@ void GameScene::RemoveSmallTutorial()
     
     mCurrentSmallTutorial = -1;
     
-    _tutorialButtons->setVisible(false);
+//    if(_tutorialButtons != NULL){
+//        _tutorialButtons->setVisible(false);
+//    }
 }
 
 void GameScene::ShowTutorialButton()
 {
-    _tutorialButtons->setVisible(true);
+//    if(_tutorialButtons != NULL){
+//        _tutorialButtons->setVisible(true);
+//    }
 }
 
 void GameScene::OnTutorialStepCompleted(int theStep)
@@ -8402,34 +8398,33 @@ void GameScene::UpdateCrystalSpawn(float delta)
     if(_CrystalSpawnRecheckTimer<=0)
     {
         //Lets get new timer value with min max value
-        int aSpaceForRandom = mCurrentMission.CrystalInterval_Max - mCurrentMission.CrystalInterval_Min;
+        int aSpaceForRandom = mCurrentMission.ItemInterval_Max - mCurrentMission.ItemInterval_Min;
         if(aSpaceForRandom>0){
-            _CrystalSpawnRecheckTimer = (rand()%aSpaceForRandom)+mCurrentMission.CrystalInterval_Min;
+            _CrystalSpawnRecheckTimer = (rand()%aSpaceForRandom)+mCurrentMission.ItemInterval_Min;
         }
         else{
-            _CrystalSpawnRecheckTimer = rand()%mCurrentMission.CrystalInterval_Max+mCurrentMission.CrystalInterval_Min;
+            _CrystalSpawnRecheckTimer = rand()%mCurrentMission.ItemInterval_Max+mCurrentMission.ItemInterval_Min;
         }
         
         //Lets check futher !!!
-        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.CrystalProbMultiplier);
+        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.ItemProbMultiplier);
         int aRandomResult = rand()%100;
         if(aRandomResult<=aProbToSpawn){
             
             //---------------------------------------------------------------
             // Rotate all that values
             
-            int aRotatedValue = 0;
+            int aRotatedValue;
             std::vector<int> aRotatedValues;
-            for(int i=0;i<mCurrentMission.CrystalNumProbs.size();i++)
+            for(int i=0;i<mCurrentMission.ItemNumProbs.size();i++)
             {
-                aRotatedValue += mCurrentMission.CrystalNumProbs[i];
+                aRotatedValue += mCurrentMission.ItemNumProbs[i];
                 aRotatedValues.push_back(aRotatedValue);
             }
             
             // Now try to get some stuff
-            int aRandomMaxSpawn = rand()%101; //Gives us 0..100
+            int aRandomMaxSpawn = rand()%100; //Gives us 0..99
             int aSpawnCrystals = 0;// How much crystal will we spawn
-            
             for(int i=0;i<aRotatedValues.size();i++)
             {
                 if (aRandomMaxSpawn < aRotatedValues[i]) {
@@ -8450,9 +8445,9 @@ void GameScene::UpdateCrystalSpawn(float delta)
             // The new item spawn check
             std::vector<int> aRotatedItemValues;
             aRotatedValue = 0;// Use the old stuff
-            for(int i=0;i<mCurrentMission.CrystalTypeProbs.size();i++)
+            for(int i=0;i<mCurrentMission.ItemTypeProbs.size();i++)
             {
-                aRotatedValue += mCurrentMission.CrystalTypeProbs[i];
+                aRotatedValue += mCurrentMission.ItemTypeProbs[i];
                 aRotatedItemValues.push_back(aRotatedValue);
             }
             
@@ -8463,7 +8458,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
             
             for(int i=0;i<aSpawnCrystals;i++)
             {
-                int aWhatToSpawn = rand()%101;
+                int aWhatToSpawn = rand()%100;
                 
                 for(int r=0;r<aRotatedItemValues.size();r++)
                 {
@@ -8474,11 +8469,11 @@ void GameScene::UpdateCrystalSpawn(float delta)
                             aCrystalNum+=1;// Just spawn the diamond
                         }
                         else if(r == 1) {
-                            if(aShroomNum<1) aShroomNum+=1; // Spawn shroom
+                            if(aDiamondNum<1) aDiamondNum+=1; // Spawn diamond
                             else aCrystalNum+=1;// Spawn crystal
                         }
                         else if(r == 2) {
-                            if(aDiamondNum<1) aDiamondNum+=1; // Spawn diamond
+                            if(aShroomNum<1) aShroomNum+=1; // Spawn shroom
                             else aCrystalNum+=1;// Spawn crystal
                         }
                         break;
@@ -8493,17 +8488,17 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 //If this is not crystal
                 if(aShroomNum>0){
                     aShroomNum-=1;
-                    generateMushroom(mCurrentMission.CrystalTimeOnMap);
+                    generateMushroom(mCurrentMission.ItemTimeOnMap);
                 }
                 else if(aDiamondNum>0){
                     aDiamondNum-=1;
-                    generateDiamond(mCurrentMission.CrystalTimeOnMap);
+                    generateDiamond(mCurrentMission.ItemTimeOnMap);
                 }
                 else if(aCrystalNum>0){
                     aCrystalNum-=1;// Think that this is not needed - but let it be :D
                     
                     // Crystal choose color
-                    int aRadomColor = rand()%101;
+                    int aRadomColor = rand()%100;
                     aRandomColorFin = 0;//Green by default
                     
                     // Get the crystal color
@@ -8515,7 +8510,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
                         }
                     }
                     
-                    generateCrystal(true,aRandomColorFin,mCurrentMission.CrystalTimeOnMap);
+                    generateCrystal(true,aRandomColorFin,mCurrentMission.ItemTimeOnMap);
                 }
             }
             
@@ -8523,7 +8518,6 @@ void GameScene::UpdateCrystalSpawn(float delta)
             
             //---------------------------------------------------------------
         }
-        
     }
 }
 
@@ -13860,7 +13854,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
         //////////////////////////////////////////////////////////////////////
         //Create the possible spawn points,except last one
         
-        if(theNearDwarf && _dwarves->count()>0)
+        if(theNearDwarf && _dwarves!=NULL && _dwarves->count()>0)
         {
             //Check to what spawn point is dwarf near !!!
             float aNearestDistance = 99999999;
@@ -13872,7 +13866,9 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
                 if(mSpeciaCrystallDwarfID>_dwarves->count())
                     mSpeciaCrystallDwarfID = 0;
                 
-                if(_dwarves->objectAtIndex(mSpeciaCrystallDwarfID)!=NULL)
+                CCLog("Dwarf array size: %i",_dwarves->count());
+                
+                if(_dwarves!=NULL && _dwarves->objectAtIndex(mSpeciaCrystallDwarfID)!=NULL)
                 {
                     Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(mSpeciaCrystallDwarfID));
                     
@@ -13888,7 +13884,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
                     }
                 }
             }
-            else
+            else if(_dwarves!=NULL)
             {
                 for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                 {
@@ -14334,8 +14330,10 @@ void GameScene::generateEffect()
         if(mRainActive)
         {
             //Only rain can be here
+            /*
             if(User::getInstance()->_tutorial_small_8==0)
                 aSpecialPositionCheck = true;
+            */
             
             effect = Rain::create(this);
         }
@@ -14392,8 +14390,11 @@ void GameScene::generateEffect()
         }
         else
         {
+            /*
             if(User::getInstance()->_tutorial_small_9==0)
                 aSpecialPositionCheck = true;
+            */
+            
             
             if(mSnowActive)
             {
@@ -17790,10 +17791,6 @@ void GameScene::SetMasterTrollAnimation(const char* theAnimation)
     }
 }
 
-#define MASTER_ACTION_CONFUSE 2
-#define MASTER_ACTION_SPAWN_TRAP 0
-#define MASTER_ACTION_BULLET 1
-
 void GameScene::SetMasterTrollAction(int theType)
 {
     mMasterTrollLastActionID = theType;
@@ -17821,8 +17818,10 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
-    else if(theType == MASTER_ACTION_BULLET)
+    else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON)
     {
+        mCurrentBulletType = theType;
+        
         // Play the hit ground animation
         SetMasterTrollAnimation("HitGround");
         // Set the action after some delay on animation
@@ -17866,15 +17865,26 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     int aRanodmDwarf = rand()%_dwarvesToAttack->count();
     dwarf = static_cast<Dwarf*>(_dwarvesToAttack->objectAtIndex(aRanodmDwarf));
     
+    //Check if this is instant or fly bullet
+    if(_mInstantBulletAction)
+    {
+        // Check what should we do to the dwarf !!!
+        
+        dwarf->setAction(mCurrentBulletType);
+        
+        return;
+    }
+    
     dwarf->mBulletActive = true;
     CCSprite* theIndicator = CCSprite::create("beta/target.png");
     theIndicator->setPosition(ccp(dwarf->getContentSize().width/2,dwarf->getContentSize().height+theIndicator->getContentSize().height));
     dwarf->addChild(theIndicator,100,MT_BULLET_ID);
     
-    TrollBullet* aBullet = TrollBullet::create(this);
+    TrollBullet* aBullet = TrollBullet::create(this,mCurrentBulletType);
     aBullet->setPosition(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
     aBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
     aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+    aBullet->_speedAddValue = (aBullet->_speedMax-aBullet->_speed)*0.1;
     aBullet->_dwarf = dwarf;
     
     this->addChild(aBullet, 1000);
@@ -17898,7 +17908,11 @@ void GameScene::UpdateMasterTroll(float delta)
         // Special stuff
         if(mCurrentMission.Forced_Bullets>=1)
         {
-            SetMasterTrollAction(MASTER_ACTION_BULLET);
+            //Check what bullets can we fire !!!
+            int aRandomID = rand() % mCurrentMission.MT_Bullet_Types.size();
+            int aBulletID = mCurrentMission.MT_Bullet_Types[aRandomID];
+            
+            SetMasterTrollAction(aBulletID);
             mMasterTrollActionTimer = 10;// For now !!!
         }
         else{
@@ -17967,7 +17981,7 @@ void GameScene::BulletDwarf()
     
     dwarf->mBulletActive = true;
     
-    TrollBullet* aBullet = TrollBullet::create(this);
+    TrollBullet* aBullet = TrollBullet::create(this,1);
     aBullet->setPosition(mMasterTroll->getPositionX(),mMasterTroll->getPositionY());
     aBullet->_dwarf = dwarf;
     
@@ -18004,7 +18018,7 @@ void GameScene::UpdateBullets(float delta)
             p->setAutoRemoveOnFinish(true);
             addChild(p,1000);
             
-            if(troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
+            if(troll->_dwarf != NULL && troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
                 troll->_dwarf->removeChildByTag(MT_BULLET_ID);
             }
             
@@ -18033,11 +18047,13 @@ void GameScene::UpdateBullets(float delta)
                             troll->_dwarf->removeChildByTag(MT_BULLET_ID);
                         }
                         
+                        troll->OnDoAction(dwarf);
+                        
                         //gameover for other dwarf !!!
-                        troll->_isDisabled = true;
-                        dwarf->_knockOutTime = 3;
-                        dwarf->_knockOut = true;
-                        dwarf->createCrash();
+//                        troll->_isDisabled = true;
+//                        dwarf->_knockOutTime = 3;
+//                        dwarf->_knockOut = true;
+//                        dwarf->createCrash();
                     }
                 }
             }
@@ -18082,6 +18098,8 @@ void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
 //---------------------------------------------------------------
 void GameScene::ResetValues()
 {
+    mSpeciaCrystallDwarfID = 0;
+    
     mTotalMushroom = 0;
     
     mTotalGreen_Crystals = 0;
@@ -18104,6 +18122,15 @@ void GameScene::ResetValues()
     if(mCurrentMission.Forced_Bullets >= 1){
         mMasterTrollActionTimer = 10;
     }
+    
+    // If mission has the flag or switch - please change it :0
+    _mInstantBulletAction = false;
+    
+    if(mCurrentMission.MT_Bullet_Instant){
+        _mInstantBulletAction = true;
+    }
+    
+    mCurrentBulletType = 1;// Standrart bullet
 }
 
 

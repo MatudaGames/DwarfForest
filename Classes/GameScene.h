@@ -36,6 +36,31 @@
 
 #include "TimedSpriteAnimation.h"
 
+#define MASTER_ACTION_CONFUSE 2
+#define MASTER_ACTION_SPAWN_TRAP 0
+#define MASTER_ACTION_BULLET 11
+#define MASTER_ACTION_BULLET_ICE 12
+#define MASTER_ACTION_BULLET_POISON 13
+
+// Mission types
+#define MissionType_PointCount 0
+#define MissionType_DwarfCount 1
+#define MissionType_Combo 2
+
+#define MissionType_Time 3
+#define MissionType_Mushroom 4
+#define MissionType_TrollEscape 5
+
+// Activate power up
+#define MissionType_AP_Freezer 200
+#define MissionType_AP_GhostDwarfs 201
+
+//The special stuff collect
+#define MissionType_Crystal_Red 100
+#define MissionType_Crystal_Blue 101
+#define MissionType_Crystal_Yellow 102
+#define MissionType_Crystal_Green 103
+
 class IntroAnimation;
 class Troll;
 class Crystal;
@@ -107,6 +132,13 @@ public:
     void StartDwarfFreeze();
     void BulletDwarf();
     int mMasterTroll_Bullets;
+    
+    int _mission_escaped_trolls;
+    int _mission_AP_Freezer;
+    int _mission_AP_GhostDwarfs;
+    
+    bool _mInstantBulletAction; // Will this be a instant bullet
+    int mCurrentBulletType;// What type of bullet will fly now
     
     float mNoDwarfEneterCave;
     

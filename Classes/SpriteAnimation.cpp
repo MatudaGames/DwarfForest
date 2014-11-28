@@ -75,7 +75,8 @@ bool SpriteAnimation::init(const char* plist, bool repeat)
     
     if (repeat)
     {
-        _action = CCRepeatForever::create(CCAnimate::create(animation)->reverse());
+//        _action = CCRepeatForever::create(CCAnimate::create(animation)->reverse());
+        _action = CCRepeatForever::create(CCAnimate::create(animation));
         _action_reverse = CCRepeatForever::create(CCAnimate::create(animation));
     }
     else

@@ -305,24 +305,24 @@ void MissionManager::Donwloaded()
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
-//        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
-        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+//        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
         if(crystalMinMaxSpawn.size()>=1){
-            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
-            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
         }
         else{
-            mission->CrystalInterval_Min = 1;
-            mission->CrystalInterval_Max = 1;
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
         }
         
-        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
-        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
         
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
-        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
-        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
         
         //---------------------------------------------------------------------------------------------------
@@ -1987,23 +1987,23 @@ void MissionManager::AddExtraDownloadedMissions_1()
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
-        //        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
-        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
         if(crystalMinMaxSpawn.size()>=1){
-            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
-            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
         }
         else{
-            mission->CrystalInterval_Min = 1;
-            mission->CrystalInterval_Max = 1;
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
         }
         
-        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
-        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
-        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
-        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         
@@ -2252,23 +2252,23 @@ void MissionManager::AddExtraDownloadedMissions_2()
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
-        //        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
-        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
         if(crystalMinMaxSpawn.size()>=1){
-            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
-            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
         }
         else{
-            mission->CrystalInterval_Min = 1;
-            mission->CrystalInterval_Max = 1;
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
         }
         
-        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
-        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
-        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
-        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         
@@ -2517,23 +2517,23 @@ void MissionManager::AddExtraDownloadedMissions_3()
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
-        //        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
-        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
         if(crystalMinMaxSpawn.size()>=1){
-            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
-            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
         }
         else{
-            mission->CrystalInterval_Min = 1;
-            mission->CrystalInterval_Max = 1;
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
         }
         
-        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
-        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
-        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
-        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         
@@ -2796,24 +2796,24 @@ void MissionManager::OnDownloadedSpecial()
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
-        //        const char* test = missionDict->valueForKey("CrystalInterval")->getCString();
-        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("CrystalInterval")->getCString(),',');
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
         if(crystalMinMaxSpawn.size()>=1){
-            mission->CrystalInterval_Min = crystalMinMaxSpawn[0];
-            mission->CrystalInterval_Max = crystalMinMaxSpawn[1];
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
         }
         else{
-            mission->CrystalInterval_Min = 1;
-            mission->CrystalInterval_Max = 1;
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
         }
         
-        mission->CrystalProbMultiplier = missionDict->valueForKey("CrystalProbMultiplier")->intValue();
-        mission->CrystalTimeOnMap = missionDict->valueForKey("CrystalTimeOnMap")->intValue();
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
         
         
         mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
-        mission->CrystalNumProbs = SplitString(missionDict->valueForKey("CrystalNumProbs")->getCString(),',');
-        mission->CrystalTypeProbs = SplitString(missionDict->valueForKey("CrystalTypeProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
         
         //---------------------------------------------------------------------------------------------------
@@ -2851,6 +2851,22 @@ void MissionManager::OnDownloadedSpecial()
             mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
             mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
         }
+        
+        // New bullets and etc stuff
+        std::vector<int> BulletTypes = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');
+        if(BulletTypes.capacity()>0)
+        {
+            //We have some bullets
+            mission->MT_Bullet_Types = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Bullet_Instatn")->floatValue();
+        mission->MT_Bullet_Instant = false;
+        if(aDummyVar >= 1)
+        {
+            mission->MT_Bullet_Instant = true;
+        }
+        
         
         
         //Dwarf Speed on map

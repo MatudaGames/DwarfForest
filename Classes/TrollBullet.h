@@ -16,12 +16,12 @@ class GameScene;
 class TrollBullet: public cocos2d::CCNode, public cocos2d::CCTargetedTouchDelegate
 {
 public:
-	static TrollBullet* create(GameScene* game);
+	static TrollBullet* create(GameScene* game,int theType);
 	
 	TrollBullet();
 	virtual ~TrollBullet();
 	
-	virtual bool init(GameScene* game);
+	virtual bool init(GameScene* game,int theType);
 	
 	virtual void update(float delta);
     
@@ -37,6 +37,8 @@ public:
     bool _touchable;
     bool _isDisabled;
     
+    void OnDoAction(Dwarf* theForced); // When want to do some bullet action
+    
     cocos2d::CCSprite* _sprite;
     
     Dwarf* _dwarf;
@@ -44,7 +46,10 @@ public:
     float _angle;
     float _speed; //Current speed
     
+    float _type;// Ice,Poison or kaboom
+    
     float _speedMax; //Ends with fast
+    float _speedAddValue;
     
     float GetAngle();
     void setAngle(float value);

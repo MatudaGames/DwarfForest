@@ -214,6 +214,7 @@ bool Troll::init(GameScene* game)
     
     // The radar stuff
     mCatchRadar = CCDrawNode::create();
+    mCatchRadar->setVisible(false);
     this->addChild( mCatchRadar );//dnode
     
     // Draw the conus from settings
@@ -267,7 +268,7 @@ void Troll::setRadar(int theRadius,int theWidth)
     
     mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
-    mCatchRadar->setRotation(30);
+    mCatchRadar->setRotation(0);
 }
 
 void Troll::setAnimationVisibility(bool theValue)
@@ -347,15 +348,79 @@ void Troll::UpdateRadar(float delta)
         mCatchRadar->setVisible(true);
     }
     
+    /*
+    float aRotation = mCatchRadar->getRotation()-((-_angle * 180.0 / M_PI)+coneWidth/2)*0.1;
+    float aRota2 = (-_angle * 180.0 / M_PI)+coneWidth/2;
+//    CCLog("aRota2 %f",aRota2);
+//    CCLog("aRotation %f",aRotation);
+    
+    float aCurrentRadar = mCatchRadar->getRotation();
+    CCLog("aCurrentRadar %f",aCurrentRadar);
+    float aNeedRadar = (-_angle * 180.0 / M_PI)+coneWidth/2;
+    CCLog("aNeedRadar %f",aNeedRadar);
+    
+    float aChange = aCurrentRadar + aNeedRadar;
+    CCLog("aChange %f",aChange);
+    
+    float aFinalValue = 0;//mCatchRadar->getRotation() + aChange;
+    
+    if(aNeedRadar<=0){
+        aFinalValue = mCatchRadar->getRotation()+delta*abs(aChange);
+    }
+    else{
+        aFinalValue = mCatchRadar->getRotation()-delta*abs(aChange);
+    }
+    
+    CCLog("aFinalValue %f",aFinalValue);
+     
+      mCatchRadar->setRotation(aFinalValue);
+    */
+    
+    
+    
+   
+    
+    
+//    mCatchRadar->setRotation((-_angle * 180.0 / M_PI)+coneWidth/2);
+    
+    
     int aCurrentAngle = (-_angle * 180.0 / M_PI)+coneWidth/2;
     if(mCatchRadarAngle != aCurrentAngle)
     {
+        int aChange = abs(aCurrentAngle-mCatchRadarAngle);
+        
+//        CCLog("aChange:%i",aChange);
+        
         mCatchRadarAngle = aCurrentAngle;
-        CCRotateTo* aRotate = CCRotateTo::create(0.5f, mCatchRadarAngle);
-        mCatchRadar->stopAllActions();
+        
+//        CCRotateTo* aRotate;
+//        if(_changedAnimation){
+//            _changedAnimation = false;
+//            aRotate = CCRotateTo::create(0.1f, mCatchRadarAngle);
+//        }
+//        else{
+//            aRotate = CCRotateTo::create(0.3f, mCatchRadarAngle);
+//        }
+        
+        //Check how big is the change
+        float aSpeedToRotate = 20 - abs(aChange);
+        if(aSpeedToRotate<=0)aSpeedToRotate = 0.2;
+        else aSpeedToRotate *= 0.025f;
+        
+        //The limit
+        if(aSpeedToRotate<0.1){
+            aSpeedToRotate = 0.2f;
+        }
+        
+//        CCLog("Rotate speed %f",aSpeedToRotate);
+        
+        CCRotateTo* aRotate = CCRotateTo::create(aSpeedToRotate, mCatchRadarAngle);
+        
+//        mCatchRadar->stopAllActions();
         mCatchRadar->runAction(aRotate);
 //        mCatchRadar->setRotation((-_angle * 180.0 / M_PI)+coneWidth/2);
     }
+    
     
     
     
@@ -993,6 +1058,11 @@ void Troll::CancelDwarfCatch(Dwarf* theCancelDwarf)
 {
     if(mCatchingDwarf){
         if(mDwarfToCatch == theCancelDwarf){
+            
+            //Check if did not complete some mission with escape from trolls
+            _game->_mission_escaped_trolls+=1;
+            _game->CheckMissionByValue(MissionType_TrollEscape, _game->_mission_escaped_trolls);
+            
             mCatchingDwarf = false;
             mDwarfToCatch = NULL;
             
@@ -1267,6 +1337,9 @@ void Troll::setAnimation(SpriteAnimation* animation)
 		{
 			addChild(_animation);
 		}
+        
+        // Forced radar update
+        _changedAnimation = true;
 	}
 }
 
