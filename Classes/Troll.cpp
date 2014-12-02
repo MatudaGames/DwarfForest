@@ -81,6 +81,8 @@ bool Troll::init(GameScene* game)
     
     mCatchRadarAngle = 0;
     
+    mEnemyID = -1;
+    
     coneSwingAmp = 80; // kāda būs konusa svārstību amplitūda grādos
     coneSwingSpeed = 1; // cik ātri svārstīsies konuss
     loopPosition = 0;
@@ -579,6 +581,19 @@ void Troll::update(float delta)
         return;
     }
     
+    if(_timeOnMap>0){
+        // Remove from map when can !!!
+        _timeOnMap-=delta;
+        if(_timeOnMap<=0){
+            // Game over for this bee
+            CCLog("Remove troll from map");
+//            _game->_trolls->removeObject(this);
+//            _game->removeNode(this);
+            _forceRemove = true;
+            
+            return;
+        }
+    }
     
     //Walk by the movepoints
     float x = getPositionX();
@@ -1360,9 +1375,17 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         _moveValue = 1;//Start random
     }
     
+    // This one will expier on map
+    _timeOnMap = -1;// Stays on map for ever
+    
+    if(theMission._timeOnMap>0){
+        _timeOnMap = theMission._timeOnMap;
+    }
+    
+    mEnemyID = theMission._indexID;
+    
     // Do wee need radar?
     setRadar(theMission._radar_radius,theMission._radar_width);
-//    setRadar(100,60);
     
     _speed = theMission._speed;
     
@@ -1372,13 +1395,6 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         float precision = 0;
         float cir = 0;
         int mRadius = 0;
-        
-        //Check on what circle should set him !!!
-//        if(theMission._circle == 1){
-//            precision = 0.25f;
-//            cir = 2 * M_PI;
-//            mRadius = 280;
-//        }
         
         _moveInCircle = true;
         mMoveCurrentDir = theMission._startDirection;
@@ -1403,9 +1419,6 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         
         for (float a = 0.0f; a < cir; a += precision)
         {
-//            float x = _game->visibleSize.width/2 + mRadius * cos(a);
-//            float y = _game->visibleSize.height/2 + mRadius/1.5f * sin(a);
-            
             float x = theCircleX + mRadius * cos(a);
             float y = theCircleY + mRadius/theCircleWidth * sin(a);
             
@@ -1425,21 +1438,6 @@ void Troll::SetMissionStuff(MissionTroll theMission)
                 aDidSetAngle = true;
                 pointsBack->setRotation(91);
             }
-
-            
-            
-//            float angleRadians = atanf((float)last_y / (float)last_x);
-//            float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);
-//            float cocosAngle = -1 * angleDegrees;
-//            pointsBack->setRotation(cocosAngle);
-//            pointsBack->seta
-//            CCAffineTransformMakeIdentity(angleSize * i);
-            
-//            float aaaa = CC_RADIANS_TO_DEGREES(atan2f(last_y - y, last_x - x));
-//            float cocosAngle = -1 * aaaa;
-//            CCLOG("aaaa:%f",aaaa);
-//            pointsBack->setRotation(aaaa);
-//            setAngle(atan2f(point.y - y, point.x - x));
             
             _game->addChild(pointsBack,1);
             

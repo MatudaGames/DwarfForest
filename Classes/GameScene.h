@@ -38,6 +38,7 @@
 
 #define MASTER_ACTION_CONFUSE 2
 #define MASTER_ACTION_SPAWN_TRAP 0
+#define MASTER_ACTION_TROLL 3
 #define MASTER_ACTION_BULLET 11
 #define MASTER_ACTION_BULLET_ICE 12
 #define MASTER_ACTION_BULLET_POISON 13
@@ -60,6 +61,15 @@
 #define MissionType_Crystal_Blue 101
 #define MissionType_Crystal_Yellow 102
 #define MissionType_Crystal_Green 103
+
+
+// The MT event ids
+#define MT_EVENT_DWARF 0
+#define MT_EVENT_BULLET 1
+#define MT_EVENT_TRAP 2
+#define MT_EVENT_TROLL 3
+#define MT_EVENT_MASS 4
+
 
 class IntroAnimation;
 class Troll;
@@ -179,6 +189,7 @@ public:
     void CreateMissionStart();
     void ShowTheHUD();
     
+    void generateEnemyForMission(MissionTroll theEnemy);
     void generateTrollForMission(MissionTroll theTrollInfo);
     void generateDwarfMission(bool theInstant);
     
@@ -412,6 +423,10 @@ public:
 //    void OnMasterTrollFinishEnter();
 //    void CreateMasterTrollEnter();
     
+    bool CanSpawnMasteTrollExtraEnemy();
+    
+    void MasterAction_Enemy(cocos2d::CCObject *sender);
+    
     void MasterAction_Bullet(cocos2d::CCObject *sender);
     
     void MasterAction_Confusion(cocos2d::CCObject *sender);
@@ -642,6 +657,31 @@ public:
     
 #endif
     */
+    
+    
+    
+    // The new MT spawn stuff
+    
+    
+    // Debug stuff
+    cocos2d::CCLabelTTF* _MT_Label_Timer;
+    cocos2d::CCLabelTTF* _MT_Label_Procent;
+    cocos2d::CCLabelTTF* _MT_Label_Value;
+    cocos2d::CCLabelTTF* _MT_Label_CurrentValue;
+    cocos2d::CCLabelTTF* _MT_Label_ValueTimer;
+    cocos2d::CCLabelTTF* _MT_Label_Action;
+    
+    
+    int GetPointsForEvent(int theEvent);
+    int GetCurrentMT_Value();
+    
+    float mMT_LastBulletTimer;
+    int mMT_LastBulletCount;
+    
+    float mMT_SpawnTimer;
+    float mMT_ValueTimer; // When the value number will increase
+    int mMT_ValueAdd;
+    int mMT_SpawnValue; // Whats the min stuff
     
     bool mMusic1_On;
     bool mMusic2_On;

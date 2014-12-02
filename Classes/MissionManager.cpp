@@ -2635,10 +2635,13 @@ void MissionManager::OnDownloadedSpecial()
     cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
     
     float aDummyVar = 0;
+    bool aSpawnDifferentEnemy = false;
     
     cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
     {
         cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        aSpawnDifferentEnemy = false;
         
         //Create new mission and set all the parametrs there !!!
         mission = new MissionSet();
@@ -2662,6 +2665,18 @@ void MissionManager::OnDownloadedSpecial()
         
         //How many caves do we allow to spawn
         mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        // Check what type of enemy is this?
+        aDummyVar = missionDict->valueForKey("Enemy_Max_On_Map")->floatValue();
+        
+        if(aDummyVar>=1){
+            aSpawnDifferentEnemy = true;// New stuff
+            mission->MaxEnemy_OnMap = aDummyVar; // Whats the max enemy on map count?
+        }
+        
+        mission->DifferentEnemySpawn = aSpawnDifferentEnemy;
+        
+        int aRealSpawnIndex = 0;
         
         //Get all the enemy paths and powas
         cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
@@ -2715,6 +2730,10 @@ void MissionManager::OnDownloadedSpecial()
                 theTroll._speed = 30.0;
             }
             
+            // Split the name for the index !!!
+            theTroll._indexID = aRealSpawnIndex;
+            aRealSpawnIndex += 1;
+            
             theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
             theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
             
@@ -2732,6 +2751,31 @@ void MissionManager::OnDownloadedSpecial()
             if(aDummyVar > 0){
                 theTroll._radar_radius = aDummyVar;
             }
+            
+            // New stuff
+            aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
+            theTroll._enemySpawnID = 0;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._enemySpawnID = aDummyVar;
+            }
+            
+            aDummyVar = enemySubDict->valueForKey("TimeOnMap")->floatValue();
+            theTroll._timeOnMap = -1;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._timeOnMap = aDummyVar;
+            }
+            
+            // Bee stuff
+            if(theTroll._enemySpawnID == 1){
+                theTroll._beeBulletSpeed = 1;
+                aDummyVar = enemySubDict->valueForKey("BulletSpeed")->floatValue();
+                if(aDummyVar>0){
+                    theTroll._beeBulletSpeed = aDummyVar;
+                }
+            }
+            
             
             //------------------------------------------------------------------------------------------
             
@@ -2846,8 +2890,15 @@ void MissionManager::OnDownloadedSpecial()
             // We will spawn bullets
             mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
             
-            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
-            
+//            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+//            
+//            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+//            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+        if(Bullet_Speeds.size()>0)
+        {
             mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
             mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
         }
@@ -2867,6 +2918,69 @@ void MissionManager::OnDownloadedSpecial()
             mission->MT_Bullet_Instant = true;
         }
         
+        // The new stuff
+        std::vector<int> MT_EventTypes = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        if(MT_EventTypes.size()>0)
+        {
+            // We have some traps to spawn
+            mission->MT_Event_Types = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_BULET")->floatValue();
+        mission->MT_Event_Percent_Bullet = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Bullet = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TRAP")->floatValue();
+        mission->MT_Event_Percent_Trap = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Trap = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TROLL")->floatValue();
+        mission->MT_Event_Percent_Troll = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Troll = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_MASS")->floatValue();
+        mission->MT_Event_Percent_Mass = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        // The timers for Master Troll
+        std::vector<int> MT_EventTimer = SplitString(missionDict->valueForKey("MT_EVENT_TIMER")->getCString(),'-');
+        mission->MT_Event_Timer_Min = 0;
+        mission->MT_Event_Timer_Max = 0;
+        
+        if(MT_EventTimer.size()>0){
+            
+            // The min
+            mission->MT_Event_Timer_Min = MT_EventTimer[0];
+            // The max
+            if(MT_EventTimer.size()>1){
+                mission->MT_Event_Timer_Max = MT_EventTimer[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_LIMIT")->floatValue();
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Start = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_ADD")->floatValue();
+        mission->MT_Event_Value_Add = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Add = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_TIMER")->floatValue();
+        mission->MT_Event_Value_Timer = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Timer = aDummyVar;
+        }
         
         
         //Dwarf Speed on map

@@ -709,10 +709,18 @@ void GameScene::CreateMap()
     }
     
     //Set the troll stuff
-    for(int i = 0;i<mCurrentMission.Enemy_info.size();i++)
+    if(mCurrentMission.DifferentEnemySpawn)
     {
-        MissionTroll theTroll = mCurrentMission.Enemy_info[i];
-        generateTrollForMission(theTroll);
+        // Dont do this - wait for master troll !!!
+        CCLog("We will create random enemy");
+    }
+    else
+    {
+        for(int i = 0;i<mCurrentMission.Enemy_info.size();i++)
+        {
+            MissionTroll theTroll = mCurrentMission.Enemy_info[i];
+            generateTrollForMission(theTroll);
+        }
     }
     
     //Check how much dwarfs should instantly come in!!!
@@ -11901,10 +11909,10 @@ void GameScene::updateTrolls(float delta)
 	{
 		Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
 		
-		if (troll->isVisible())
+		if (troll && troll->isVisible())
 		{
 			troll->update(delta);
-			
+            
 			CCPoint trollPosition = troll->getPosition();
             
             if (_boostNoEnemyTimer>0)
@@ -13793,6 +13801,55 @@ void GameScene::generateTrollForMission(MissionTroll theTrollInfo)
     _introAnimations->addObject(introAnimation);
 }
 
+void GameScene::generateEnemyForMission(MissionTroll theEnemy)
+{
+    // Check if this is troll or bee or some other creep
+    if(theEnemy._enemySpawnID == 0){
+        //This is troll
+        Troll* troll = Troll::create(this);
+        troll->setTag(879);
+        troll->SetMissionStuff(theEnemy);
+        
+        this->addChild(troll, getSpriteOrderZ(troll->getPositionY()));
+        _trolls->addObject(troll);
+        troll->setVisible(false);
+        
+        IntroAnimation* introAnimation = TrollIntro::create(this, troll);
+        introAnimation->setPosition(troll->getPosition());
+        
+        this->addChild(introAnimation, getSpriteOrderZ(introAnimation->getPositionY()));
+        _introAnimations->addObject(introAnimation);
+    }
+    else if(theEnemy._enemySpawnID == 1){
+        // Lets create the bee
+        Enemy_Bee* Bee = Enemy_Bee::create(this);
+        Bee->mEnemyID = theEnemy._indexID;
+        
+        // Take all the stuff from troll?
+        Bee->SetMissionStuff(theEnemy);
+        
+        /*
+        Bee->_startX = mCurrentMission.Enemy_Bee_StartX;
+        Bee->_startY = mCurrentMission.Enemy_Bee_StartY;
+        Bee->_finishX = mCurrentMission.Enemy_Bee_FinishX;
+        Bee->_finishY = mCurrentMission.Enemy_Bee_FinishY;
+        
+        Bee->_speed = mCurrentMission.Enemy_Bee_Speed;
+        Bee->bullet_speed = mCurrentMission.Enemy_Bee_Bullet_Speed;
+        
+        Bee->setPosition(ccp(mCurrentMission.Enemy_Bee_StartX,mCurrentMission.Enemy_Bee_StartY));
+        */
+        
+        // Bee has missing intro anim !!!
+        
+        //Create the lines and other stuff
+        Bee->CreateFromMissionParams();
+        
+        this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+        _otherEnemy->addObject(Bee);
+    }
+}
+
 Troll* GameScene::generateTroll(bool theSkip)
 {
     if(User::getInstance()->mSpecial_23_Mission){
@@ -13867,6 +13924,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
                     mSpeciaCrystallDwarfID = 0;
                 
                 CCLog("Dwarf array size: %i",_dwarves->count());
+                CCLog("Dwarf mSpeciaCrystallDwarfID: %i",mSpeciaCrystallDwarfID);
                 
                 if(_dwarves!=NULL && _dwarves->objectAtIndex(mSpeciaCrystallDwarfID)!=NULL)
                 {
@@ -17820,6 +17878,11 @@ void GameScene::SetMasterTrollAction(int theType)
     }
     else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON)
     {
+        if(mMT_LastBulletTimer==-1){
+            mMT_LastBulletTimer = 10;
+        }
+        mMT_LastBulletCount+=1;
+        
         mCurrentBulletType = theType;
         
         // Play the hit ground animation
@@ -17831,6 +17894,90 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
+    else if(theType == MASTER_ACTION_TROLL)
+    {
+        // Try to spawn a troll?
+        // Play the hit ground animation
+        SetMasterTrollAnimation("idle");
+        // Set the action after some delay on animation
+        CCDelayTime* aDelay = CCDelayTime::create(1.0f);
+        CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Enemy));
+        CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
+        
+        _MasterTrollBase->runAction(aSeq);
+    }
+}
+
+bool GameScene::CanSpawnMasteTrollExtraEnemy()
+{
+    int aCountNow = 0;
+    
+    aCountNow+=_trolls->count();
+    aCountNow+=_otherEnemy->count();
+    
+    // Check the limit
+    if(mCurrentMission.MaxEnemy_OnMap>0 && mCurrentMission.MaxEnemy_OnMap >= aCountNow){
+        return true;
+    }
+    
+    return false;
+}
+
+void GameScene::MasterAction_Enemy(cocos2d::CCObject *sender)
+{
+    // Check whats the limit ??? and choose some random guy
+    
+    // Get all the possible enemy spawns
+    std::vector<int> _possibleEnemys;
+    std::vector<int> _spawnedEnemys; // Whats on the map
+    
+    // Start with trolls
+    for(int otherIndex = _trolls->count()-1;otherIndex>=0;--otherIndex)
+    {
+        Troll* bee = static_cast<Troll*>(_trolls->objectAtIndex(otherIndex));
+        int theID = bee->mEnemyID;
+        _spawnedEnemys.push_back(theID);
+    }
+    
+    // Check the bees
+    for(int otherIndex = _otherEnemy->count()-1;otherIndex>=0;--otherIndex)
+    {
+        Enemy_Bee* bee = static_cast<Enemy_Bee*>(_otherEnemy->objectAtIndex(otherIndex));
+        int theID = bee->mEnemyID;
+        _spawnedEnemys.push_back(theID);
+    }
+    
+    // Now check what id's are not in the array
+    bool didFound = false;
+    for(int i = 0;i<mCurrentMission.Enemy_info.size();i++)
+    {
+//        if(std::find(_spawnedEnemys.begin(), _spawnedEnemys.end(), i)) // Somehow did not work :/
+        didFound = false;
+        
+        for(int x=0;x<_spawnedEnemys.size();x++)
+        {
+            if(_spawnedEnemys[x] == i){
+                didFound = true;
+                break;
+            }
+        }
+        
+        // Add the possible stuff here
+        if(didFound == false){
+            _possibleEnemys.push_back(i);
+        }
+    }
+    
+    
+    //What will be the ranom enemy !!!
+    int aRandomEnemy = rand()%_possibleEnemys.size();
+    CCLog("Random enemy %i",aRandomEnemy);
+    
+    
+    //Lets spawn it !!!
+    MissionTroll theTroll = mCurrentMission.Enemy_info[aRandomEnemy];
+//    generateTrollForMission(theTroll);
+    generateEnemyForMission(theTroll);
 }
 
 void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
@@ -17894,8 +18041,239 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     _dwarvesToAttack->release();
 }
 
+int GameScene::GetCurrentMT_Value()
+{
+    int aValue = 0;
+    
+    // Start with dwarfs
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        aValue += 10;
+    }
+    
+    // How many trolls do we have
+    for (int trollIndex = _trolls->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        aValue += 40;
+    }
+    
+    // Lets calculate traps on map
+    for (int trapIndex = _effects->count() - 1; trapIndex >= 0; --trapIndex)
+    {
+        aValue += 20;
+    }
+    
+    // The bullet stuff
+    aValue += mMT_LastBulletCount * 10;
+    
+    return aValue;
+}
+
+int GameScene::GetPointsForEvent(int theEvent)
+{
+    int aValue = 0;
+    
+    // The bullet
+    if(theEvent == MT_EVENT_BULLET){
+        aValue = 10;
+    }
+    else if(theEvent == MT_EVENT_TRAP){
+        aValue = 20;
+    }
+    else if(theEvent == MT_EVENT_TROLL){
+        aValue = 40;
+    }
+    
+    return aValue;
+}
+
 void GameScene::UpdateMasterTroll(float delta)
 {
+    if(mMT_SpawnTimer>0){
+        mMT_SpawnTimer-=delta;
+    }
+    else{
+        // We will have some action to do if can
+        if(mCurrentMission.MT_Event_Timer_Max>0){
+            int aRandomTime = rand()%(mCurrentMission.MT_Event_Timer_Max-mCurrentMission.MT_Event_Timer_Min);
+            mMT_SpawnTimer = mCurrentMission.MT_Event_Timer_Min+aRandomTime;
+        }
+        else{
+            mMT_SpawnTimer = mCurrentMission.MT_Event_Timer_Min;
+        }
+        
+//        mMT_SpawnTimer = 5;// The mission default stuff
+        
+        // Now calculate all the stuff and check if something is needed
+        int aCurrentValue = GetCurrentMT_Value();
+        
+        //Update timer
+        std::stringstream theMT_Tim21er;
+        theMT_Tim21er<<"MT_Current_Value: "<<aCurrentValue;
+        _MT_Label_CurrentValue->setString(theMT_Tim21er.str().c_str());
+        
+        std::stringstream theMT_Tim221er;
+        theMT_Tim221er<<"MT_MAX_Value: "<<mMT_SpawnValue;
+        _MT_Label_Value->setString(theMT_Tim221er.str().c_str());
+        
+        if(aCurrentValue < mMT_SpawnValue)
+        {
+            // We can add something new - but now we need to check what can we add more ???
+            int aRestForSpawn = mMT_SpawnValue-aCurrentValue;
+            
+            // The possible events
+            std::vector<int> _possibleEvents;
+            
+            for(int i=0;i<mCurrentMission.MT_Event_Types.size();i++)
+            {
+                int aCurrentID = mCurrentMission.MT_Event_Types[i];
+                int aPointGives = GetPointsForEvent(aCurrentID);
+                
+                if(aPointGives <= aRestForSpawn){
+                    //Check if this was not spawned last time !!!
+                    
+                    _possibleEvents.push_back(aCurrentID);
+                }
+            }
+            
+            // Now - what will we spawn from the possible stuff
+            int aRandomMaxSpawn = rand()%101; //Gives us 0..99
+            
+            std::stringstream theMT_Timer;
+            theMT_Timer<<"MT_Procent: "<<int(aRandomMaxSpawn);
+            _MT_Label_Procent->setString(theMT_Timer.str().c_str());
+            
+            //Start Index
+            int aStartIndex = rand()%_possibleEvents.size();
+            int aFinalMT_Action = -1;
+            
+            for(int i=0;i<_possibleEvents.size();i++)
+            {
+                if(_possibleEvents[aStartIndex] == MT_EVENT_BULLET)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Bullet) <= aRandomMaxSpawn){
+                        //Spawn the bullet
+                        aFinalMT_Action = MT_EVENT_BULLET;
+                        break;
+                    }
+                }
+                else if(_possibleEvents[aStartIndex] == MT_EVENT_TRAP)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Trap) <= aRandomMaxSpawn){
+                        //Spawn the trap
+                        aFinalMT_Action = MT_EVENT_TRAP;
+                        break;
+                    }
+                }
+                else if(_possibleEvents[aStartIndex] == MT_EVENT_TROLL)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Troll) <= aRandomMaxSpawn){
+                        //Spawn the troll
+                        // Safe check if can allow spawn enemy
+                        if(CanSpawnMasteTrollExtraEnemy()){
+                            aFinalMT_Action = MT_EVENT_TROLL;
+                            break;
+                        }
+                    }
+                }
+                else if(_possibleEvents[aStartIndex] == MT_EVENT_MASS)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Mass) <= aRandomMaxSpawn){
+                        //Spawn the trap
+                        aFinalMT_Action = MT_EVENT_MASS;
+                        break;
+                    }
+                }
+                
+                
+                // Do the magic
+                if(aStartIndex>_possibleEvents.size()){
+                    aStartIndex = 0;
+                }
+                else{
+                    aStartIndex += 1;
+                }
+            }
+            
+            // Check by priority what can be spawn
+            if(aFinalMT_Action == MT_EVENT_BULLET)
+            {
+                // Choose random bullet?
+                //Check what bullets can we fire !!!
+                int aRandomID = rand() % mCurrentMission.MT_Bullet_Types.size();
+                int aBulletID = mCurrentMission.MT_Bullet_Types[aRandomID];
+                
+                SetMasterTrollAction(aBulletID);
+            }
+            else if(aFinalMT_Action == MT_EVENT_TRAP)
+            {
+                SetMasterTrollAction(MASTER_ACTION_SPAWN_TRAP);
+            }
+            else if(aFinalMT_Action == MT_EVENT_TROLL)
+            {
+                // Pagaidām
+                SetMasterTrollAction(MASTER_ACTION_TROLL);
+            }
+            else if(aFinalMT_Action == MT_EVENT_MASS)
+            {
+                // Pagaidām
+                SetMasterTrollAction(MASTER_ACTION_CONFUSE);
+            }
+            
+            //Update timer
+            std::stringstream theMT_Time2r;
+            theMT_Time2r<<"MT_Last_Action: "<<int(aFinalMT_Action);
+            _MT_Label_Action->setString(theMT_Time2r.str().c_str());
+        }
+    }
+    
+    //
+    if(mMT_ValueTimer>0){
+        mMT_ValueTimer-=delta;
+        
+        //Update timer
+        std::stringstream theMT_Time4r;
+        theMT_Time4r<<"MT_Value_Timer: "<<int(mMT_ValueTimer);
+        _MT_Label_ValueTimer->setString(theMT_Time4r.str().c_str());
+    }
+    else{
+        mMT_ValueTimer = 60;// Take from mission how much to add
+        mMT_SpawnValue += mMT_ValueAdd;// Take from mission how much increase
+        
+        //Update timer
+        std::stringstream theMT_Ti4mer;
+        theMT_Ti4mer<<"MT_Value_MAX: "<<int(mMT_SpawnValue);
+        _MT_Label_Value->setString(theMT_Ti4mer.str().c_str());
+    }
+    
+    // Check the last bullets
+    if(mMT_LastBulletTimer>0){
+        mMT_LastBulletTimer-=delta;
+    }
+    else{
+        if(mMT_LastBulletCount>0){
+            mMT_LastBulletCount-=1;
+            if(mMT_LastBulletCount>0){
+                mMT_LastBulletTimer = 10;// Take from mission global parametr?
+            }
+        }
+    }
+    
+    //Update timer
+    std::stringstream theMT_Timer;
+    theMT_Timer<<"MT_SPWAN_Timer: "<<int(mMT_SpawnTimer);
+    _MT_Label_Timer->setString(theMT_Timer.str().c_str());
+    
+    
+    
+    return;
+    
+    
+    // The old
     if(mMasterTrollActionTimer>0){
         mMasterTrollActionTimer-=delta;
     }
@@ -18128,6 +18506,53 @@ void GameScene::ResetValues()
     
     if(mCurrentMission.MT_Bullet_Instant){
         _mInstantBulletAction = true;
+    }
+    
+    mMT_LastBulletTimer = 0;
+    mMT_LastBulletCount = 0;
+    
+    mMT_SpawnTimer = 0;
+    mMT_ValueTimer = 0; // When the value number will increase
+    mMT_SpawnValue = 0; // Whats the min stuff
+    
+    if(mCurrentMission.MT_Event_Value_Start>0)
+    {
+        mMT_SpawnValue = mCurrentMission.MT_Event_Value_Start;
+        
+        // The new stuff
+        _MT_Label_Timer = CCLabelTTF::create("MT Timer: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_Timer->setPosition(ccp(160,700));
+        addChild(_MT_Label_Timer,kHUD_Z_Order+1);
+        
+        _MT_Label_Procent = CCLabelTTF::create("MT Random %: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_Procent->setPosition(ccp(160,650));
+        addChild(_MT_Label_Procent,kHUD_Z_Order+1);
+        
+        _MT_Label_Value = CCLabelTTF::create("MT VALUE: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_Value->setPosition(ccp(160,600));
+        addChild(_MT_Label_Value,kHUD_Z_Order+1);
+        
+        _MT_Label_CurrentValue = CCLabelTTF::create("MT Current value: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_CurrentValue->setPosition(ccp(160,550));
+        addChild(_MT_Label_CurrentValue,kHUD_Z_Order+1);
+        
+        _MT_Label_ValueTimer = CCLabelTTF::create("MT value timer: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_ValueTimer->setPosition(ccp(160,500));
+        addChild(_MT_Label_ValueTimer,kHUD_Z_Order+1);
+        
+        _MT_Label_Action = CCLabelTTF::create("MT ACTION: 0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        _MT_Label_Action->setPosition(ccp(160,450));
+        addChild(_MT_Label_Action,kHUD_Z_Order+1);
+        
+    }
+    
+    if(mCurrentMission.MT_Event_Timer_Min>0){
+        mMT_SpawnTimer = mCurrentMission.MT_Event_Timer_Min;
+    }
+    
+    if(mCurrentMission.MT_Event_Value_Timer>0){
+        mMT_ValueAdd = mCurrentMission.MT_Event_Value_Add;
+        mMT_ValueTimer = mCurrentMission.MT_Event_Value_Timer;
     }
     
     mCurrentBulletType = 1;// Standrart bullet

@@ -57,6 +57,9 @@ public:
     bool _touched;
     bool _changedAnimation;
     
+    int mEnemyID;
+    float _timeOnMap;
+    
     float _testAngle;
     
     bool mTutorfix;

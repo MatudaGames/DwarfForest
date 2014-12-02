@@ -9,6 +9,7 @@
 #pragma once
 
 #include <cocos2d.h>
+#include "MissionManager.h"
 #include "Dwarf.h"
 
 class GameScene;
@@ -55,6 +56,27 @@ public:
     float _angle;
     float _speed;
     float bullet_speed;
+    
+    int mEnemyID;// Whats the enemy id from array
+    
+    bool mRadarSet;     // Will troll use radar
+    
+    cocos2d::CCPointArray* _movePoints;
+    bool _moveInCircle;
+    int _moveValue;
+    
+    bool mTutorialTroll;
+    bool mMoveByNodes;
+    int mMoveIndex;
+    bool mMoveClock;
+    int mMoveCurrentDir;
+    
+    void SetMissionStuff(MissionTroll theMission);
+    MissionTroll _missionInfo;
+    
+    float _timeOnMap;
+    
+    void setRadar(int theRadius,int theWidth);
     
     // Not needed for now
 //    virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);

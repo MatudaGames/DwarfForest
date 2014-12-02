@@ -106,6 +106,13 @@ struct MissionTroll
     
     int32_t _circle_height;
     
+    int32_t _timeOnMap;
+    int32_t _enemySpawnID;// What functional will this enemy do
+    int32_t _indexID;
+    
+    // Special bee stuff
+    int32_t _beeBulletSpeed;
+    
     float _speed;
 };
 
@@ -226,6 +233,24 @@ struct MissionSet
     
     std::vector<int> MT_Bullet_Types;//What bullets can fire Master Troll
     bool MT_Bullet_Instant;
+    
+    std::vector<int> MT_Event_Types;// What events can spawn MT
+    // The settings for events
+    int32_t MT_Event_Percent_Bullet; //What is the procent for this to spawn
+    int32_t MT_Event_Percent_Trap;
+    int32_t MT_Event_Percent_Troll;
+    int32_t MT_Event_Percent_Mass;
+    
+    int32_t MT_Event_Timer_Min;
+    int32_t MT_Event_Timer_Max;
+    int32_t MT_Event_Value_Timer;
+    int32_t MT_Event_Value_Add;
+    int32_t MT_Event_Value_Start;
+    
+    bool DifferentEnemySpawn;
+    int32_t MaxEnemy_OnMap;
+    
+    
     
 };
 
