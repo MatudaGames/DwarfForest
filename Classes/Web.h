@@ -30,12 +30,15 @@ public:
     void onComplete();
     void finishStuckAnim();
     void startStuckAnim();
+    void pauseGrow();
 	
 private:
 	GameScene *_game;
 	
+	cocos2d::CCActionInterval* _growDelay;
+	
 	SpriteAnimation* _animation;
-    
+    SpriteAnimation* _growAnimation;
     SpriteAnimation* _startAnimation;
     SpriteAnimation* _endAnimation;
 	

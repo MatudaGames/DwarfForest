@@ -29,7 +29,6 @@ esac
 done
 
 # paths
-NDK_ROOT="/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9" 
 
 if [ -z "${NDK_ROOT+aaa}" ];then
 echo "please define NDK_ROOT"

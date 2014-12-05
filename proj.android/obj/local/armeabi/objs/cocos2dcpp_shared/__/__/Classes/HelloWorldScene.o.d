@@ -1,653 +1,653 @@
 obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/HelloWorldScene.o: \
  jni/../../Classes/HelloWorldScene.cpp \
  jni/../../Classes/HelloWorldScene.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/cocos2d.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccConfig.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCAction.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDataVisitor.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccConfig.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCPlatformDefine.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/android/log.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/string \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/math.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInterval.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccMacros.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCCommon.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCStdC.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdlib.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/alloca.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/strings.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/memory.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCAffineTransform.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/ccCArray.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCGL.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/ccGLStateCache.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/CCGLProgram.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec2.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec3.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/assert.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat3.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/utility.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/quaternion.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/plane.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/aabb.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/ray2.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/script_support/CCScriptSupport.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCAccelerometerDelegate.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCCommon.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouch.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCSet.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/set \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/map \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/list \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCProtocols.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypes.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTexture2D.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypes.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCAction.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCAnimation.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDictionary.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/uthash.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/inttypes.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/functional \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/vector \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionCamera.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInterval.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionManager.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionEase.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionPageTurn3D.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInstant.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypeInfo.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionProgressTimer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionTiledGrid.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInstant.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionTween.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionCatmullRom.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCAtlasNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCAutoreleasePool.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCInteger.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCFloat.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDouble.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCBool.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCNS.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCZone.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/draw_nodes/CCDrawingPrimitives.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/draw_nodes/CCDrawNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/effects/CCGrabber.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCConfiguration.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/effects/CCGrid.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCCamera.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCDirector.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCEventType.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCProtocols.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccMacros.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/matrix.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../mat4.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../vec3.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDispatcher.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelTTF.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSprite.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTextureAtlas.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelBMFont.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteBatchNode.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/sstream \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/iostream \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCLayer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionPageTurn.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionProgress.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenu.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCClippingNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCMotionStreak.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCProgressTimer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCRenderTexture.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleBatchNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleExamples.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCDevice.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCFileUtils.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCImage.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCSAXParser.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCThread.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/platform.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCThread.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCApplication.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCApplicationProtocol.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCEGLView.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCEGLViewProtocol.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCGL.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCStdC.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/CCShaderCache.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/ccShaders.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCAnimationCache.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrameCache.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/ccUTF8.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCNotificationCenter.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCPointExtension.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCProfiling.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/user_default/CCUserDefault.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCVertex.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/tinyxml2/tinyxml2.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/climits \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdarg \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDispatcher.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCTextFieldTTF.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTextureCache.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTexturePVR.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchHandler.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCScheduler.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/uthash.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponent.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/socket.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/socket.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/socket.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sockios.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/sockios.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/uio.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/cocos2d.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccConfig.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCAction.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDataVisitor.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccConfig.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCPlatformDefine.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/android/log.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/string \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/math.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInterval.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccMacros.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCCommon.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCStdC.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdlib.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/alloca.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/strings.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/memory.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCAffineTransform.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/ccCArray.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCGL.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/ccGLStateCache.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/CCGLProgram.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec2.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec3.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/assert.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat3.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/utility.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/quaternion.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/plane.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/aabb.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/ray2.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/script_support/CCScriptSupport.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCAccelerometerDelegate.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCCommon.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouch.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCSet.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/set \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/map \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/list \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCProtocols.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypes.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTexture2D.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypes.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCAction.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCAnimation.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDictionary.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/uthash.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/inttypes.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/functional \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/vector \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionCamera.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInterval.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionManager.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionEase.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionPageTurn3D.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInstant.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypeInfo.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionProgressTimer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionTiledGrid.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInstant.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionTween.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionCatmullRom.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCAtlasNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCAutoreleasePool.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCInteger.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCFloat.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDouble.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCBool.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCNS.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCZone.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/draw_nodes/CCDrawingPrimitives.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/draw_nodes/CCDrawNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/effects/CCGrabber.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCConfiguration.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/effects/CCGrid.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCCamera.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCDirector.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCEventType.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCProtocols.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccMacros.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/matrix.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../mat4.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../vec3.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDispatcher.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelTTF.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSprite.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTextureAtlas.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelBMFont.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteBatchNode.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/sstream \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/iostream \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCLayer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionPageTurn.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionProgress.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenu.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCClippingNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCMotionStreak.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCProgressTimer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCRenderTexture.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleBatchNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleExamples.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCDevice.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCFileUtils.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCImage.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCSAXParser.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCThread.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/platform.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCThread.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCApplication.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCApplicationProtocol.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCEGLView.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCEGLViewProtocol.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCGL.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCStdC.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/CCShaderCache.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/ccShaders.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCAnimationCache.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrameCache.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/ccUTF8.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCNotificationCenter.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCPointExtension.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCProfiling.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/user_default/CCUserDefault.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCVertex.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/tinyxml2/tinyxml2.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/climits \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdarg \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDispatcher.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCTextFieldTTF.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTextureCache.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTexturePVR.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchHandler.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCScheduler.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/uthash.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/component/CCComponent.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/socket.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/socket.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/socket.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/sockios.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/sockios.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/uio.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h
 
 jni/../../Classes/HelloWorldScene.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/cocos2d.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/cocos2d.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccConfig.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccConfig.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCAction.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCAction.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDataVisitor.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDataVisitor.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccConfig.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccConfig.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformConfig.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCPlatformDefine.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCPlatformDefine.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/android/log.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/android/log.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/string:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/string:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/math.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/math.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInterval.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInterval.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccMacros.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccMacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCCommon.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCCommon.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCStdC.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCStdC.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdlib.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdlib.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/alloca.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/alloca.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/strings.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/strings.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/memory.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/memory.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCAffineTransform.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCAffineTransform.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/ccCArray.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/ccCArray.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCGL.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCGL.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2platform.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/KHR/khrplatform.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/GLES2/gl2ext.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/ccGLStateCache.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/ccGLStateCache.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/CCGLProgram.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/CCGLProgram.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec2.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec2.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec3.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/vec3.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/assert.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/assert.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat3.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat3.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/utility.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/utility.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/quaternion.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/quaternion.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/plane.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/plane.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/aabb.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/aabb.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/ray2.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/ray2.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/script_support/CCScriptSupport.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/script_support/CCScriptSupport.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCAccelerometerDelegate.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCAccelerometerDelegate.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCCommon.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCCommon.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouch.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouch.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCSet.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCSet.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/set:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/set:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/map:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/map:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/list:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/list:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCProtocols.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCProtocols.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypes.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypes.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTexture2D.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTexture2D.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypes.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypes.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCAction.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCAction.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCAnimation.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCAnimation.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDictionary.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDictionary.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/uthash.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/uthash.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/inttypes.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/inttypes.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/functional:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/functional:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrame.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/vector:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/vector:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionCamera.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionCamera.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInterval.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInterval.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionManager.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionManager.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionEase.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionEase.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionPageTurn3D.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionPageTurn3D.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInstant.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInstant.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccTypeInfo.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccTypeInfo.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/typeinfo:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionProgressTimer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionProgressTimer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionGrid3D.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionTiledGrid.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionTiledGrid.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionInstant.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionInstant.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionTween.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionTween.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/actions/CCActionCatmullRom.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/actions/CCActionCatmullRom.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCAtlasNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCAtlasNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/base_nodes/CCNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/base_nodes/CCNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCAutoreleasePool.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCAutoreleasePool.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCInteger.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCInteger.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCFloat.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCFloat.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCDouble.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCDouble.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCBool.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCBool.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCNS.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCNS.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCZone.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCZone.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/draw_nodes/CCDrawingPrimitives.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/draw_nodes/CCDrawingPrimitives.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/draw_nodes/CCDrawNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/draw_nodes/CCDrawNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/effects/CCGrabber.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/effects/CCGrabber.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCConfiguration.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCConfiguration.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCObject.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCObject.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCString.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCString.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/effects/CCGrid.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/effects/CCGrid.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCCamera.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCCamera.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/mat4.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCDirector.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCDirector.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCPlatformMacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCGeometry.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/cocoa/CCArray.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/cocoa/CCArray.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCEventType.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCEventType.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/CCProtocols.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/CCProtocols.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/include/ccMacros.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/include/ccMacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/kazmath.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/matrix.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/matrix.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../mat4.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../mat4.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../vec3.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/kazmath/include/kazmath/GL/../vec3.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDispatcher.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDispatcher.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/keypad_dispatcher/CCKeypadDelegate.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelAtlas.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelTTF.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelTTF.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSprite.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSprite.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTextureAtlas.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTextureAtlas.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/label_nodes/CCLabelBMFont.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/label_nodes/CCLabelBMFont.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteBatchNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteBatchNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/sstream:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/sstream:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/iostream:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/iostream:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCLayer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCLayer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCScene.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionPageTurn.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionPageTurn.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransition.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionProgress.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/layers_scenes_transitions_nodes/CCTransitionProgress.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenu.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenu.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/menu_nodes/CCMenuItem.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCClippingNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCClippingNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCMotionStreak.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCMotionStreak.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCProgressTimer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCProgressTimer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/misc_nodes/CCRenderTexture.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/misc_nodes/CCRenderTexture.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleBatchNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleBatchNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleExamples.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleExamples.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystem.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/particle_nodes/CCParticleSystemQuad.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCDevice.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCDevice.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCFileUtils.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCFileUtils.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCImage.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCImage.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCSAXParser.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCSAXParser.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCThread.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCThread.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/platform.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/platform.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCThread.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCThread.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCAccelerometer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCApplication.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCApplication.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCApplicationProtocol.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCApplicationProtocol.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCEGLView.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCEGLView.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/CCEGLViewProtocol.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/CCEGLViewProtocol.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCGL.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCGL.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/CCStdC.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/android/CCStdC.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/CCShaderCache.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/CCShaderCache.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/shaders/ccShaders.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/shaders/ccShaders.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCAnimationCache.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCAnimationCache.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrameCache.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/sprite_nodes/CCSpriteFrameCache.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/ccUTF8.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/ccUTF8.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCNotificationCenter.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCNotificationCenter.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCPointExtension.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCPointExtension.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCProfiling.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCProfiling.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/user_default/CCUserDefault.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/user_default/CCUserDefault.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/CCVertex.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/CCVertex.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/tinyxml2/tinyxml2.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/tinyxml2/tinyxml2.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/climits:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/climits:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdlib:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstring:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdarg:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdarg:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDispatcher.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDispatcher.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCIMEDelegate.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/text_input_node/CCTextFieldTTF.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/text_input_node/CCTextFieldTTF.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTextureCache.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTextureCache.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/textures/CCTexturePVR.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/textures/CCTexturePVR.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCParallaxNode.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXLayer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXObjectGroup.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXTiledMap.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTMXXMLParser.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/tilemap_parallax_nodes/CCTileMapAtlas.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDelegateProtocol.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchHandler.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchHandler.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/touch_dispatcher/CCTouchDispatcher.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/CCScheduler.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/CCScheduler.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/data_support/uthash.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/data_support/uthash.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponent.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/component/CCComponent.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/support/component/CCComponentContainer.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlver.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlbuild.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/socket.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/socket.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/socket.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/socket.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/socket.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/socket.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sockios.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/sockios.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/sockios.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/sockios.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/uio.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/uio.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curlrules.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:

@@ -1,173 +1,176 @@
 obj/local/armeabi/objs/cpufeatures/cpu-features.o: \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/android/cpufeatures/cpu-features.c \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/system_properties.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/cdefs.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/android/api-level.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/cpu-features.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/pthread.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/time.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/time.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdint.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/_types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/_types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/posix_types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/stddef.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/compiler.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/posix_types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/kernel.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/time.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/siginfo.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/signal.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/limits.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/limits.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/limits.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/internal_types.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/limits.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/syslimits.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/page.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/string.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/malloc.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/signal.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sched.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/android/cpufeatures/cpu-features.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdio.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdlib.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/alloca.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/strings.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/memory.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/fcntl.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/fcntl.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/fcntl.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/fcntl.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/unistd.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/select.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/sysconf.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/capability.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/pathconf.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/errno.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/errno.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/errno.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/errno.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/errno-base.h
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/android/cpufeatures/cpu-features.c \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/android/cpufeatures/cpu-features.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/cdefs.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/android/api-level.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdint.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/_types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/_types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/_wchar_limits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/dlfcn.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/errno.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/errno.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/errno.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/errno.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/errno-base.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/fcntl.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/posix_types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/stddef.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/compiler.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/posix_types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/kernel.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/fcntl.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/fcntl.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/fcntl.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/unistd.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/select.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/time.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/time.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/signal.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/limits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/limits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/limits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/internal_types.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/limits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/syslimits.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/page.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/string.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/malloc.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/signal.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/siginfo.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/sysconf.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/capability.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/pathconf.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/pthread.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/time.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sched.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdio.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdlib.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/alloca.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/strings.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/memory.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/system_properties.h
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/system_properties.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/android/cpufeatures/cpu-features.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/cdefs.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/cdefs.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/cdefs_elf.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/android/api-level.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/android/api-level.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/cpu-features.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdint.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/pthread.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/_types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/time.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/_types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/time.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/_wchar_limits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/dlfcn.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdint.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/errno.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/_types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/errno.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/_types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/errno.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/posix_types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/errno.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/stddef.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/errno-base.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/compiler.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/fcntl.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/posix_types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/posix_types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/stddef.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/kernel.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/compiler.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/posix_types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/time.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/siginfo.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/kernel.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/signal.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/sysmacros.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/limits.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/fcntl.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/limits.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/fcntl.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/limits.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/fcntl.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/internal_types.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/unistd.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/machine/limits.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/select.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/syslimits.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/time.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/page.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/time.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/string.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/signal.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/malloc.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/limits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/signal.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/limits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/limits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/internal_types.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sched.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/machine/limits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/android/cpufeatures/cpu-features.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/syslimits.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdio.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/page.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/stdlib.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/string.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/alloca.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/malloc.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/strings.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/signal.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/memory.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/signal.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/fcntl.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/sigcontext.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/fcntl.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm/siginfo.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/fcntl.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/asm-generic/siginfo.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/fcntl.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/sysconf.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/unistd.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/linux/capability.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/select.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/pathconf.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/sys/sysconf.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/pthread.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/capability.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/time.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/pathconf.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sched.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/errno.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdio.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/linux/errno.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/stdlib.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm/errno.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/alloca.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/errno.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/strings.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/asm-generic/errno-base.h:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/memory.h:
+
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/platforms/android-9/arch-arm/usr/include/sys/system_properties.h:

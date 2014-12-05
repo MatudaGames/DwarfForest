@@ -697,6 +697,25 @@ void Dwarf::update(float delta)
                         doDwarfBang(_angle);
                         otherDwarf->doDwarfBang(_angle+M_PI);
                         
+                        bool otherDwarfTaked = false;
+						for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)//To catch dwarfs, what bang.
+						{
+						Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+     					if(troll->mCatchingDwarf == false)
+   						{
+     					if(otherDwarfTaked == false)
+      					{
+         				otherDwarfTaked = true;
+         				troll->CatchDwarf(otherDwarf);
+      					}
+      					else
+      					{
+        				troll->CatchDwarf(this);
+         				break; 
+       					}
+   				   	   }
+				      }
+                        
                         if (otherDwarf->getChildByTag(222))
                         {
                             _canPlayAlarm = false;
@@ -1514,10 +1533,14 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     
                     if(aDidConnectCorrect)
                     {
-                        addMovePoint(cavePosition, position);
+                        if(_game->mBlockTallCave == true){
+                    	crashLine();
+                    	}else{
+                    	addMovePoint(cavePosition, position);
                         _touchEnded = true;
                         connectLine();
-                        vibrate();
+                        vibrate();	
+                    	}
                     }
                     else
                     {
@@ -1549,10 +1572,14 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     
                     if(aDidConnectCorrect)
                     {
-                        addMovePoint(cavePosition, position);
+                        if(_game->mBlockFatCave==true){
+                    	crashLine();
+                    	}else{
+                    	addMovePoint(cavePosition, position);
                         _touchEnded = true;
                         connectLine();
-                        vibrate();
+                        vibrate();	
+                    	}
                     }
                     else
                     {
@@ -1658,6 +1685,16 @@ void Dwarf::setAngle(float value)
     
     int aOffX = 0;
     int aOffY = 0;
+    
+    if (IsConnectedBlockTime==true && _game->mBlockFatCave==true){
+    removeMovePoints();
+    _isConnectedToCave = false;
+	}
+	
+	if (IsConnectedBlockTime==true && _game->mBlockTallCave ==true){
+    removeMovePoints();
+    _isConnectedToCave = false;
+	}
     
     if (_diognalMove)
     {

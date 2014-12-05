@@ -30,14 +30,15 @@ Web* Web::create(GameScene* gameScene)
 }
 
 Web::Web():
-	_animation(NULL),_startAnimation(NULL),_endAnimation(NULL)
+	_animation(NULL),_startAnimation(NULL),_endAnimation(NULL),_growAnimation(NULL)
 {
 }
 
 Web::~Web()
 {
     if (_animation) _animation->release();
-    if (_startAnimation) _startAnimation->release();
+    if (_growAnimation) _growAnimation->release();
+	if (_startAnimation) _startAnimation->release();
     if (_endAnimation) _endAnimation->release();
 }
 
@@ -52,8 +53,16 @@ bool Web::init(GameScene* gameScene)
 	
 	_effectType = EFFECT_TYPE_WEB;
 	
-	_sprite = CCSprite::create("meteorits/effect_area.png");
-	addChild(_sprite);
+	_growAnimation = SpriteAnimation::create("sticky_web/trap_sticky_grow.plist");
+    _growAnimation->retain();
+    _growAnimation->setTag(876);
+	addChild(_growAnimation);
+	    
+    _growDelay = CCDelayTime::create(3.9f);
+    _growDelay->retain();
+    CCCallFuncN* aFunc = CCCallFuncN::create(this, callfuncN_selector(Web::pauseGrow));
+    CCSequence* aSeqFun = CCSequence::create(_growDelay,aFunc,NULL);
+    runAction(aSeqFun);
     
     _startAnimation = SpriteAnimation::create("sticky_web/web_intro.plist");
     _startAnimation->retain();
@@ -129,6 +138,11 @@ void Web::finishStuckAnim()
     schedule(schedule_selector(Web::onComplete), 0.0f, 1, 0.5f);
 }
 
+void Web::pauseGrow()
+{
+	_growAnimation->pause();
+}
+
 void Web::onComplete()
 {
     unschedule(schedule_selector(Web::onComplete));
@@ -145,6 +159,17 @@ void Web::touch(Dwarf* dwarf,Troll* troll)
     
     _dwarfType = dwarf->getType();
     _dwarf = dwarf;
+    
+    for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)//To catch dwarfs, who is in trap.
+	{
+	Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+    if(troll->mCatchingDwarf == false)
+   	{
+   		troll->CatchDwarf(dwarf);
+    }else{
+    	break;
+    }
+   }
     
     //Play the intro
     addChild(_startAnimation);

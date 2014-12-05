@@ -1073,6 +1073,26 @@ void GameScene::CreateGameByMission()
     mTotalOrangeDwarfs = 0;
     CheckMissionByValue(mCurrentMission.Task_type,0);
     
+    CCSequence* caveBlockSeq = CCSequence::create(CCDelayTime::create(15.0)
+    										  , CCCallFunc::create(this, callfunc_selector(GameScene::CaveBlock))
+                                              , CCDelayTime::create(8.0)
+                                              , NULL
+                                              );
+    this->runAction(CCRepeatForever::create(caveBlockSeq));
+    
+    CCSequence* seqEffect = CCSequence::create(CCDelayTime::create((rand()%3)+13)
+                                              , CCCallFunc::create(this, callfunc_selector(GameScene::generateEffect))
+                                              , NULL
+                                              );
+    this->runAction(CCRepeatForever::create(seqEffect));
+    
+    CCSequence* iceBlitzSeq = CCSequence::create(CCDelayTime::create(30.0)
+    										  , CCCallFunc::create(this, callfunc_selector(GameScene::StartIceBlitz))
+                                             //, CCDelayTime::create(5.0)
+                                              , NULL
+                                             );
+    this->runAction(CCRepeatForever::create(iceBlitzSeq));
+    
     //For now - use the old map mask stuff
 //    _mask = new CCImage();
 //    _mask->initWithImageFile("kartes_maska.png");
@@ -13113,6 +13133,9 @@ void GameScene::generateDwarfMission(bool theInstant)
     _mission_dwarfs_spawned+=1;
     _DwarfsSpawned+=1;
     
+    mBlockFatCave = false;
+    mBlockTallCave = false;
+    
     //Check what type can we spawn !!!
     int theType = DWARF_TYPE_TALL;
     
@@ -13671,6 +13694,77 @@ Dwarf* GameScene::generateDwarf(int theType,int theSpawnPoint)
 	}
 	
 	return NULL;
+}
+
+void GameScene::CaveBlock(int theType){   
+	
+	theType = rand()%2;
+	
+	if(theType == 0)
+	{
+    if(mCurrentMission.BlueCave_x==0 && mCurrentMission.BlueCave_y==0){	
+    mBlockFatCave = false;
+    }
+    else{
+	CCMoveTo* aMove2;
+	CCDelayTime* aDelay2;
+	CCEaseBackIn* aEase2;
+	CCSequence* aSeq2;
+    CCSprite* bCaveBlock = CCSprite::create("key_small_b.png");
+    bCaveBlock->setPosition(ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+    aDelay2 = CCDelayTime::create(3.0f);
+            
+    aMove2 = CCMoveTo::create(2.2,ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+    aEase2 = CCEaseBackIn::create(aMove2);
+    bCaveBlock->runAction(aEase2);
+    aSeq2 = CCSequence::create(aDelay2,aEase2,bCaveBlock,NULL);
+    
+    addChild(bCaveBlock);
+    bCaveBlock->setTag(69);
+    mBlockFatCave = true;
+    
+    CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+    CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
+    CCSequence* aRemoveSeq = CCSequence::create(aRemoveDelay,aRemoveCall,NULL);
+    bCaveBlock->runAction(aRemoveSeq);
+	}
+    }else if(theType == 1)
+    {
+    	if(mCurrentMission.OrangeCave_x==0 && mCurrentMission.OrangeCave_y==0){
+    	}
+    	else{
+    		CCMoveTo* aMove2;
+			CCDelayTime* aDelay2;
+			CCEaseBackIn* aEase2;
+			CCSequence* aSeq2;
+			
+    		CCSprite* cCaveBlock = CCSprite::create("key_small_o.png");
+    		cCaveBlock->setPosition(ccp(mCurrentMission.OrangeCave_x,mCurrentMission.OrangeCave_y));
+            
+    		aMove2 = CCMoveTo::create(0.5,ccp(mCurrentMission.OrangeCave_x,mCurrentMission.OrangeCave_y));
+    		aEase2 = CCEaseBackIn::create(aMove2);
+    		cCaveBlock->runAction(aEase2);
+    	
+    		aSeq2 = CCSequence::create(aDelay2,aEase2,cCaveBlock,NULL);
+    
+    		addChild(cCaveBlock);
+    		cCaveBlock->setTag(68);
+    		mBlockTallCave = true;
+    
+    		CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+    		CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
+    		CCSequence* aRemoveSeq = CCSequence::create(aRemoveDelay,aRemoveCall,NULL);
+    		cCaveBlock->runAction(aRemoveSeq);
+    	}
+    } 
+}
+
+void GameScene::CaveBlockRemover(){
+
+	removeChildByTag(69);
+	mBlockFatCave = false;
+	removeChildByTag(68);
+	mBlockTallCave = false;
 }
 
 void GameScene::generateTrollMission(int theX,int theY,float theRadius,bool theCircle,
@@ -18471,6 +18565,34 @@ void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
     effect->setVisible(true);
     
     dwarf->pauseAnimation();
+}
+
+void GameScene::StartIceBlitz()
+{
+	SetMasterTrollAnimation("HitGround");
+	
+	CCDelayTime* aDelay = CCDelayTime::create(2.0f);
+    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::IceBlitz));
+    CCSequence* aFreezeSeq = CCSequence::create(aDelay,aFunc1,NULL);
+    
+    runAction(aFreezeSeq);
+}
+void GameScene::IceBlitz()
+{
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+    Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));//choise all dwarfs
+    
+    //Freeze
+    Effect* effect = NULL;
+    effect = IceBarrage::create(this);
+    effect->setPosition(ccp(dwarf->getPositionX(),dwarf->getPositionY()));
+    
+    effect->touch(dwarf,NULL);
+    effect->setVisible(true);
+    
+    dwarf->pauseAnimation();
+	}
 }
 
 //---------------------------------------------------------------
