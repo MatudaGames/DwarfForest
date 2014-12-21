@@ -48,6 +48,8 @@ public:
 	void removeEffect();
 	Effect* getEffect() const { return _effect; };
     
+    float mTimeInMap;// How long is this dwarf in map?
+    
     int mCollectedCrystalsMax;
     cocos2d::CCSprite *_BagIcon_1;
     cocos2d::CCSprite *_BagIcon_2;

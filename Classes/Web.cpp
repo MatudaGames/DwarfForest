@@ -146,6 +146,21 @@ void Web::touch(Dwarf* dwarf,Troll* troll)
     _dwarfType = dwarf->getType();
     _dwarf = dwarf;
     
+    // New Troll catch stuff
+    for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+        if(troll->mEnemySpawnID == 3)
+        {
+            if(troll->mCatchingDwarf == false)
+            {
+                troll->CatchDwarf(dwarf);
+            }else{
+                break;
+            }
+        }
+    }
+    
     //Play the intro
     addChild(_startAnimation);
     schedule(schedule_selector(Web::startStuckAnim), 0, 0, 0.6f);

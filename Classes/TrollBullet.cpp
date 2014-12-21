@@ -69,6 +69,12 @@ bool TrollBullet::init(GameScene* game,int theType)
     _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite);
     
+    
+//    CCParticleSystemQuad* p;
+//    "Particles/bullet_part_red.plist"
+    
+    std::stringstream aaaaa;
+    
     if(theType == MASTER_ACTION_BULLET_ICE)
     {
         _sprite->setColor(ccc3(0, 255, 0));
@@ -77,6 +83,9 @@ bool TrollBullet::init(GameScene* game,int theType)
         someBlend->src = GL_ONE;//OGLES.GL_ONE;
         someBlend->dst = GL_ONE;//OGLES.GL_ONE;
         _sprite->setBlendFunc(*someBlend);// .BlendFunc = someBlend;
+        
+//        p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
+        aaaaa<<"Particles/bullet_part.plist";
     }
     else if(theType == MASTER_ACTION_BULLET_POISON)
     {
@@ -86,7 +95,23 @@ bool TrollBullet::init(GameScene* game,int theType)
         someBlend->src = GL_ONE;//OGLES.GL_ONE;
         someBlend->dst = GL_ONE;//OGLES.GL_ONE;
         _sprite->setBlendFunc(*someBlend);// .BlendFunc = someBlend;
+        
+//        p = CCParticleSystemQuad::create("Particles/bullet_part_green.plist");
+        aaaaa<<"Particles/bullet_part_green.plist";
     }
+    else if(theType == MASTER_ACTION_BULLET)
+    {
+        _sprite->setColor(ccc3(255, 0, 0));
+        
+        ccBlendFunc* someBlend = new ccBlendFunc();
+        someBlend->src = GL_ONE;//OGLES.GL_ONE;
+        someBlend->dst = GL_ONE;//OGLES.GL_ONE;
+        _sprite->setBlendFunc(*someBlend);// .BlendFunc = someBlend;
+        
+//        p = CCParticleSystemQuad::create("Particles/bullet_part_red.plist");
+        aaaaa<<"Particles/bullet_part_red.plist";
+    }
+    
     
 	
 	_game = game;
@@ -106,7 +131,10 @@ bool TrollBullet::init(GameScene* game,int theType)
     // Change by the FX/Type correct
 //    _type
     
-    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
+    // Check what bullet is this !!!
+    CCLog("aaaaa: %s",aaaaa.str().c_str());
+//    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part_red.plist");
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create(aaaaa.str().c_str());
     p->setPosition(getPositionX(), getPositionY());
     p->setAutoRemoveOnFinish(true);
     addChild(p,-1);

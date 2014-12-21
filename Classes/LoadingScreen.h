@@ -45,6 +45,10 @@ public:
     void AddExtraDwarf();
     void RemoveDwarf();
     
+    
+    virtual void onEnter();
+    virtual void onExit();
+    
     /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     FMOD::System     *system;

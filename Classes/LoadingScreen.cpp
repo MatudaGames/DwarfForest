@@ -46,6 +46,7 @@ bool LoadingScreen::init()
 //    CCSprite* back = CCSprite::create("loading_screen.png");
     CCSprite* back = CCSprite::create("LoadingScreen.png");
     back->setAnchorPoint(ccp(0,0));
+    back->setTag(123);
     addChild(back, 0);
     
     //The loading bar !!!
@@ -398,6 +399,12 @@ void LoadingScreen::AllCompleted()
     
     return;
     */
+    
+    CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
+    CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
+    CCDirector::sharedDirector()->replaceScene(transition);
+    
+    /*
     if(User::getInstance()->mSpecialMissionBuild || User::getInstance()->mNewMissionBuild)
     {
         CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
@@ -410,6 +417,27 @@ void LoadingScreen::AllCompleted()
         CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
         CCDirector::sharedDirector()->replaceScene(transition);
     }
+    */
+}
+
+//123
+
+
+void LoadingScreen::onEnter()
+{
+//    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, true);
+    CCLayer::onEnter();
+}
+
+void LoadingScreen::onExit()
+{
+    // Try to clean up stuff?
+    
+//    getChildByTag(123)->release();
+    removeAllChildrenWithCleanup(true);
+    
+//    CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+    CCLayer::onExit();
 }
 
 /*
@@ -520,6 +548,7 @@ void LoadingScreen::onPreloadSounds()
     
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     //iOS wav for now ???
+    
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/button_click.wav");
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/button_speed_off.wav");
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/button_speed_on.wav");
@@ -548,12 +577,14 @@ void LoadingScreen::onPreloadSounds()
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/troll_intro.wav");
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/troll_walk.wav");
     SimpleAudioEngine::sharedEngine()->preloadEffect("Sound/troll_win.wav");
+    
 #endif
 }
 
 //This is only for testing right now - will be better in future
 void LoadingScreen::onPreloadImages()
 {
+    
 //    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("gadalaiki.plist");
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/summer/map_summer.png");
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/autumn/map_autumn.png");
@@ -686,4 +717,5 @@ void LoadingScreen::onPreloadImages()
         theDummy.str("");
         theDummy.clear();
     }
+    
 }

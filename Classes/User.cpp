@@ -33,6 +33,8 @@ User::User()
     
     mLooseTimes = 0;
     
+//    mCurrentMissionLevel = 0;//No progress
+    
     mDebugSpeed_dwarf = 1.0f;
     mDebugSpeed_troll = 1.2f;
     
@@ -51,6 +53,8 @@ User::User()
     mShowNewPart = false;
     
     FirstSessionDone = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("userFirstSession", 0);
+    
+    mCurrentMissionLevel = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("MISSION_LVL", 1);
     
     _timesPlayed = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("GamePlayedTimes", 0);
     
@@ -119,6 +123,23 @@ User::User()
     _tutorial = 1;//Always no tutorial
     
 //    CCLOG("Diamonds %i:",_diamonds);
+    
+    mSpecial_10_Mission = false;
+    mSpecial_11_Mission = false;
+    mSpecial_12_Mission = false;
+    mSpecial_13_Mission = false;
+    mSpecial_14_Mission = false;
+    
+    mSpecial_16_Mission = false;
+    mSpecial_17_Mission = false;
+    mSpecial_18_Mission = false;
+    
+    mSpecial_19_Mission = false;
+    mSpecial_20_Mission = false;
+    
+    mSpecial_21_Mission = false;
+    mSpecial_22_Mission = false;
+    mSpecial_23_Mission = false;
 }
 
 void User::ResetData()
@@ -130,6 +151,9 @@ void User::ResetData()
     //========================================================
     
     mDynamicTrolls = false;
+    
+    mCurrentMissionLevel = 1;
+    cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("MISSION_LVL",1);
     
     _debugButtonsState = 0;
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("debug_buttons_state", 0);

@@ -389,6 +389,8 @@ void Dwarf::ClearOldTraps()
 
 void Dwarf::update(float delta)
 {
+    mTimeInMap+=delta;
+    
     if (_disabled)
     {
         //Activate dwarf when active
@@ -696,6 +698,31 @@ void Dwarf::update(float delta)
                         
                         doDwarfBang(_angle);
                         otherDwarf->doDwarfBang(_angle+M_PI);
+                        
+                        //------------------------------------------------------------
+                        
+                        bool otherDwarfTaked = false;
+                        for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)//To catch dwarfs, what bang.
+                        {
+                            Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+                            
+                            // This one wants to catch
+                            if(troll->mCatchingDwarf == false && troll->mEnemySpawnID == 3)
+                            {
+                                if(otherDwarfTaked == false)
+                                {
+                                    otherDwarfTaked = true;
+                                    troll->CatchDwarf(otherDwarf);
+                                }
+                                else
+                                {
+                                    troll->CatchDwarf(this);
+                                    break; 
+                                }
+                            }
+                        }
+                        
+                        //------------------------------------------------------------
                         
                         if (otherDwarf->getChildByTag(222))
                         {

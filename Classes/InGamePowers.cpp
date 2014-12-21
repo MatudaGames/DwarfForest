@@ -38,24 +38,26 @@ bool InGamePowers::init()
     
     //Add the 3 buttons
     button_1 = CCMenuItemImage::create(
-                                                          "Charges_Machine.png",
-                                                          "Charges_Machine.png",
+                                                          "button_freez.png",
+                                                          "button_freez.png",
                                                           this,
                                                           menu_selector(InGamePowers::onButton_1));
     
     button_2 = CCMenuItemImage::create(
-                                                          "Charges_Machine.png",
-                                                          "Charges_Machine.png",
+                                                          "button_electro.png",
+                                                          "button_electro.png",
                                                           this,
                                                           menu_selector(InGamePowers::onButton_2));
     
+    /*
     button_3 = CCMenuItemImage::create(
                                                           "Charges_Machine.png",
                                                           "Charges_Machine.png",
                                                           this,
                                                           menu_selector(InGamePowers::onButton_3));
+    */
     
-    CCMenu* mainMenu = CCMenu::create(button_1, button_2, button_3, NULL);
+    CCMenu* mainMenu = CCMenu::create(button_1, button_2, NULL);
     mainMenu->alignItemsHorizontally();
     mainMenu->setPosition(ccp(0,0));
     addChild(mainMenu, 1);
@@ -72,30 +74,68 @@ void InGamePowers::onButton_1(CCObject* sender)
 {
     CCLOG("CLick 1 !!!");
     
-    OnGhoustDwarfs();
+//    OnGhoustDwarfs();
+    OnFreezeTroll();
 }
 
 void InGamePowers::onButton_2(CCObject* sender)
 {
     CCLOG("CLick 2 !!!");
     
-    OnFreezeTroll();
+//    OnFreezeTroll();
+    OnElectroTroll();
 }
 
 void InGamePowers::onButton_3(CCObject* sender)
 {
     CCLOG("CLick 3 !!!");
+    
+    mGameScene->mCurrentMission.MT_Bullet_Speed_Min = 150;
+    mGameScene->mCurrentMission.MT_Bullet_Speed_Max = 260;
+    
+    mGameScene->mCurrentBulletType = 11;
+    mGameScene->MasterAction_Bullet(NULL);
 }
 
 // The power upssss
 void InGamePowers::OnFreezeTroll()
 {
     // Activates the freeze troll stuff !!!
-    button_2->setEnabled(false);
-    button_2->setOpacity(128);
+    button_1->setEnabled(false);
+    button_1->setOpacity(128);
     
     // Activate master dwarf to freeze some troll
     mFreezeActive = true;
+    mElectroActive = false;
+    
+    // Show what trolls can be freezed
+    for (int effectIndex = mGameScene->_trolls->count() - 1; effectIndex >= 0; --effectIndex)
+    {
+        Troll* trollIn = static_cast<Troll*>(mGameScene->_trolls->objectAtIndex(effectIndex));
+        if (trollIn != NULL)
+        {
+            if(trollIn->getChildByTag(TROLL_SELECT_INDICATOR)!=NULL){
+                trollIn->removeChildByTag(TROLL_SELECT_INDICATOR);
+            }
+            
+            // Check if this troll can be troubled !!! If has no other carp on him
+            
+            //Create new target sprite
+            CCSprite* aSprite = CCSprite::create("Troll_Target.png");
+            aSprite->setTag(TROLL_SELECT_INDICATOR);
+            aSprite->setPosition(ccp(0,60));
+            trollIn->addChild(aSprite);
+        }
+    }
+}
+
+void InGamePowers::OnElectroTroll()
+{
+    button_2->setEnabled(false);
+    button_2->setOpacity(128);
+    
+    mElectroActive = true;
+    mFreezeActive = false;
     
     // Show what trolls can be freezed
     for (int effectIndex = mGameScene->_trolls->count() - 1; effectIndex >= 0; --effectIndex)
@@ -126,6 +166,10 @@ void InGamePowers::OnPlayerClickTroll(Troll* theTroll)
     if(mFreezeActive){
         mFreezeActive = false;
         
+        //Whats the cooldown for it?
+        button_1->setEnabled(true);
+        button_1->setOpacity(255);
+        
         mGameScene->_mission_AP_Freezer+=1;
         mGameScene->CheckMissionByValue(MissionType_AP_Freezer,mGameScene->_mission_AP_Freezer);
         
@@ -153,6 +197,19 @@ void InGamePowers::OnPlayerClickTroll(Troll* theTroll)
         
         //Run the action
         aFlyBall->runAction(aSeq1);
+    }
+    else if(mElectroActive){
+        mElectroActive = false;
+        
+        button_2->setEnabled(true);
+        button_2->setOpacity(255);
+        
+        // Maybe add some ??? above him !!!
+        CCSprite* aWtfMsg = CCSprite::create("troll_warn.png");
+        aWtfMsg->setTag(TROLL_WTF_INDICATOR);// What is
+        theTroll->addChild(aWtfMsg);
+        
+        mGameScene->CreateBlitz(theTroll->getPositionX(),theTroll->getPositionY()-80,theTroll);
     }
     
     // Remove the indicator ?

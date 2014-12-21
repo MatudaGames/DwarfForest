@@ -13,6 +13,7 @@
 #include "OptionsScene.h"
 #include "StatsScene.h"
 #include "MissionScene.h"
+#include "WorldMap.h"
 #include <cocos2d.h>
 
 USING_NS_CC;
@@ -39,7 +40,8 @@ StaticSceneManager::StaticSceneManager()
 //    scenes[STATS] = Stats::StatsScene::scene();
 //    scenes[STATS]->retain();
     
-    scenes[MISSIONS] = MissionScene::scene();
+//    scenes[MISSIONS] = MissionScene::scene();
+    scenes[MISSIONS] = WorldMap::scene();
     scenes[MISSIONS]->retain();
 }
 

@@ -129,6 +129,481 @@ void MissionManager::Donwloaded()
     std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_Missions2.plist";
     
     cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
+    mCurrentActiveMission = 0;
+    
+    mAllMission.clear();
+    
+    MissionSet* mission=new MissionSet();
+    //    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    float aDummyVar = 0;
+    bool aSpawnDifferentEnemy = false;
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        aSpawnDifferentEnemy = false;
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        CCLOG("Mission ID: %i",mission->ID);
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        // Check what type of enemy is this?
+        aDummyVar = missionDict->valueForKey("Enemy_Max_On_Map")->floatValue();
+        
+        if(aDummyVar>=1){
+            aSpawnDifferentEnemy = true;// New stuff
+            mission->MaxEnemy_OnMap = aDummyVar; // Whats the max enemy on map count?
+        }
+        
+        mission->DifferentEnemySpawn = aSpawnDifferentEnemy;
+        
+        int aRealSpawnIndex = 0;
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            //Troll speed
+            aDummyVar = enemySubDict->valueForKey("Speed")->floatValue();
+            if(aDummyVar>0){
+                theTroll._speed = aDummyVar;
+            }
+            else{
+                theTroll._speed = 30.0;
+            }
+            
+            // Split the name for the index !!!
+            theTroll._indexID = aRealSpawnIndex;
+            aRealSpawnIndex += 1;
+            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            // The radar wait time
+            aDummyVar = enemySubDict->valueForKey("Radar_WaitTime")->floatValue();
+            theTroll._radar_wait = -1; //use some default
+            if(aDummyVar > 0){
+                theTroll._radar_wait = aDummyVar;
+            }
+            
+            
+            // New stuff
+            aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
+            theTroll._enemySpawnID = 0;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._enemySpawnID = aDummyVar;
+            }
+            
+            aDummyVar = enemySubDict->valueForKey("TimeOnMap")->floatValue();
+            theTroll._timeOnMap = -1;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._timeOnMap = aDummyVar;
+            }
+            
+            // Bee stuff
+            if(theTroll._enemySpawnID == 1){
+                theTroll._beeBulletSpeed = 1;
+                aDummyVar = enemySubDict->valueForKey("BulletSpeed")->floatValue();
+                if(aDummyVar>0){
+                    theTroll._beeBulletSpeed = aDummyVar;
+                }
+            }
+            
+            
+            //------------------------------------------------------------------------------------------
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        //        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        //        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        //New stuff || Dwarf Spawn Control ||
+        
+        mission->DSpawn_jump = missionDict->valueForKey("DSpawn_jump")->intValue();
+        mission->DSpawn_change_jump_time = missionDict->valueForKey("DSpawn_change_jump_time")->intValue();
+        mission->DSpawn_change_jump_value = missionDict->valueForKey("DSpawn_change_jump_value")->intValue();
+        
+        mission->DSpawn_max = missionDict->valueForKey("DSpawn_max")->intValue();
+        mission->DSpawn_change_max_time = missionDict->valueForKey("DSpawn_change_max_time")->intValue();
+        mission->DSpawn_change_max_value = missionDict->valueForKey("DSpawn_change_max_value")->intValue();
+        
+        mission->DSpawn_min = missionDict->valueForKey("DSpawn_min")->intValue();
+        mission->DSpawn_change_min_time = missionDict->valueForKey("DSpawn_change_min_time")->intValue();
+        mission->DSpawn_change_min_value = missionDict->valueForKey("DSpawn_change_min_value")->intValue();
+        
+        mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
+        mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
+        mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        // The limit of max dwarfs !!!
+        mission->DSpawn_max_limit = 0;
+        aDummyVar = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        if(aDummyVar>0){
+            mission->DSpawn_max_limit = aDummyVar;
+        }
+        
+        
+        mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
+        if(mission->DSpawn_zone_step == 0){
+            mission->DSpawn_zone_step = 1;//Set to 1sec
+        }
+        
+        //--------------------------------------------------
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
+        mission->MT_Event_ForceSpawnEnemy_Time = -1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_ForceSpawnEnemy_Time = aDummyVar;
+        }
+        
+        std::vector<int> bulletMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_BULLET_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(bulletMinMaxSpawn.size()>0){
+            mission->MT_Event_Bullets_Min = bulletMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Bullets_Max = bulletMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_BULLET_PROCENT")->intValue();
+        mission->MT_Event_Bullets_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Bullets_Percent = aDummyVar;
+        }
+        
+        std::vector<int> trapsMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_TRAPS_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(trapsMinMaxSpawn.size()>0){
+            mission->MT_Event_Traps_Min = trapsMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Traps_Max = trapsMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_TRAPS_PROCENT")->intValue();
+        mission->MT_Event_Traps_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Traps_Percent = aDummyVar;
+        }
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_CONFUSION_TIME")->intValue();
+        mission->MT_Event_Confusion_Time = 1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Confusion_Time = aDummyVar;
+        }
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        // Crystal spawn stuff
+        
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
+        if(crystalMinMaxSpawn.size()>=1){
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
+        }
+        else{
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
+        }
+        
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
+        
+        
+        mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        
+        // TEST STUFF
+        // The bee stuff
+        
+        aDummyVar = missionDict->valueForKey("Enable_Bee")->floatValue();
+        if(aDummyVar>=1){
+            // Yes please enable it
+            mission->SpawnBee = missionDict->valueForKey("Enable_Bee")->floatValue();
+            
+            // Set some bee parametrs
+            std::vector<int> BeeStartPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Start")->getCString(),',');
+            
+            mission->Enemy_Bee_StartX = BeeStartPoint[0];
+            mission->Enemy_Bee_StartY = BeeStartPoint[1];
+            
+            std::vector<int> BeeFinishPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Finish")->getCString(),',');
+            
+            mission->Enemy_Bee_FinishX = BeeFinishPoint[0];
+            mission->Enemy_Bee_FinishY = BeeFinishPoint[1];
+            
+            mission->Enemy_Bee_Speed = missionDict->valueForKey("Enemy_Bee_Speed")->floatValue();
+            mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+        if(aDummyVar>=1){
+            // We will spawn bullets
+            mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+            
+            //            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+            //
+            //            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            //            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+        if(Bullet_Speeds.size()>0)
+        {
+            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        // New bullets and etc stuff
+        std::vector<int> BulletTypes = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');
+        if(BulletTypes.capacity()>0)
+        {
+            //We have some bullets
+            mission->MT_Bullet_Types = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Bullet_Instatn")->floatValue();
+        mission->MT_Bullet_Instant = false;
+        if(aDummyVar >= 1)
+        {
+            mission->MT_Bullet_Instant = true;
+        }
+        
+        // The new stuff
+        std::vector<int> MT_EventTypes = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        if(MT_EventTypes.size()>0)
+        {
+            // We have some traps to spawn
+            mission->MT_Event_Types = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_BULET")->floatValue();
+        mission->MT_Event_Percent_Bullet = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Bullet = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TRAP")->floatValue();
+        mission->MT_Event_Percent_Trap = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Trap = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TROLL")->floatValue();
+        mission->MT_Event_Percent_Troll = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Troll = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_MASS")->floatValue();
+        mission->MT_Event_Percent_Mass = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        // The timers for Master Troll
+        std::vector<int> MT_EventTimer = SplitString(missionDict->valueForKey("MT_EVENT_TIMER")->getCString(),'-');
+        mission->MT_Event_Timer_Min = 0;
+        mission->MT_Event_Timer_Max = 0;
+        
+        if(MT_EventTimer.size()>0){
+            
+            // The min
+            mission->MT_Event_Timer_Min = MT_EventTimer[0];
+            // The max
+            if(MT_EventTimer.size()>1){
+                mission->MT_Event_Timer_Max = MT_EventTimer[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_LIMIT")->floatValue();
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Start = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_ADD")->floatValue();
+        mission->MT_Event_Value_Add = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Add = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_TIMER")->floatValue();
+        mission->MT_Event_Value_Timer = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Timer = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_STOP")->floatValue();
+        mission->MT_Event_Value_Max = 0;// No limit
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Max = aDummyVar;
+        }
+        
+        
+        //Dwarf Speed on map
+        mission->DwarfSpeed_Fat = 40.0;
+        mission->DwarfSpeed_Tall = 40.0;
+        
+        float aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Fat")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Fat = aDwarfSpeedDummy;
+        }
+        
+        aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Tall")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Tall = aDwarfSpeedDummy;
+        }
+        
+        //------------------
+        
+        //How much possibility to spawn dwarf from one cave
+        mission->DwarfSpawnOneCave = 100;//100% allow for now
+        int aSpawnOnceValue = missionDict->valueForKey("DwarfSpawnOneCave")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DwarfSpawnOneCave = aSpawnOnceValue;
+        }
+        
+        //The formula type
+        mission->DSpawn_formula_type = 0;//Min to map
+        aSpawnOnceValue = missionDict->valueForKey("DSpawn_formula_type")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DSpawn_formula_type = aSpawnOnceValue;
+        }
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file downloaded","Continue");
+}
+/*
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_Missions2.plist";
+    
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
 //    CCLOG("CCDictionary %u",dict->count());
     
     mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
@@ -370,6 +845,7 @@ void MissionManager::Donwloaded()
     //Create popup for wait !!!
     cocos2d::CCMessageBox("Mission file downloaded","Continue");
 }
+*/
 
 std::vector<int> static &split(const std::string &s, char delim, std::vector<int> &elems){
     std::stringstream ss(s);
@@ -412,7 +888,8 @@ std::vector<int> MissionManager::SplitString(const std::string s,char delim){
 MissionManager::MissionManager()
 {
     ///Do the magic here !!!
-    
+    OnDownloadSpecialMissions();
+    return;
     
     CURL *pCurl;
     CURLcode nResCode;
@@ -1819,6 +2296,480 @@ void MissionManager::GetExtraMissions_1()
 void MissionManager::AddExtraDownloadedMissions_1()
 {
     std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_1.plist";
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
+    mCurrentActiveMission = 0;
+    
+    mAllMission.clear();
+    
+    MissionSet* mission=new MissionSet();
+    //    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    float aDummyVar = 0;
+    bool aSpawnDifferentEnemy = false;
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        aSpawnDifferentEnemy = false;
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        CCLOG("Mission ID: %i",mission->ID);
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        // Check what type of enemy is this?
+        aDummyVar = missionDict->valueForKey("Enemy_Max_On_Map")->floatValue();
+        
+        if(aDummyVar>=1){
+            aSpawnDifferentEnemy = true;// New stuff
+            mission->MaxEnemy_OnMap = aDummyVar; // Whats the max enemy on map count?
+        }
+        
+        mission->DifferentEnemySpawn = aSpawnDifferentEnemy;
+        
+        int aRealSpawnIndex = 0;
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            //Troll speed
+            aDummyVar = enemySubDict->valueForKey("Speed")->floatValue();
+            if(aDummyVar>0){
+                theTroll._speed = aDummyVar;
+            }
+            else{
+                theTroll._speed = 30.0;
+            }
+            
+            // Split the name for the index !!!
+            theTroll._indexID = aRealSpawnIndex;
+            aRealSpawnIndex += 1;
+            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            // The radar wait time
+            aDummyVar = enemySubDict->valueForKey("Radar_WaitTime")->floatValue();
+            theTroll._radar_wait = -1; //use some default
+            if(aDummyVar > 0){
+                theTroll._radar_wait = aDummyVar;
+            }
+            
+            
+            // New stuff
+            aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
+            theTroll._enemySpawnID = 0;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._enemySpawnID = aDummyVar;
+            }
+            
+            aDummyVar = enemySubDict->valueForKey("TimeOnMap")->floatValue();
+            theTroll._timeOnMap = -1;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._timeOnMap = aDummyVar;
+            }
+            
+            // Bee stuff
+            if(theTroll._enemySpawnID == 1){
+                theTroll._beeBulletSpeed = 1;
+                aDummyVar = enemySubDict->valueForKey("BulletSpeed")->floatValue();
+                if(aDummyVar>0){
+                    theTroll._beeBulletSpeed = aDummyVar;
+                }
+            }
+            
+            
+            //------------------------------------------------------------------------------------------
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        //        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        //        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        //New stuff || Dwarf Spawn Control ||
+        
+        mission->DSpawn_jump = missionDict->valueForKey("DSpawn_jump")->intValue();
+        mission->DSpawn_change_jump_time = missionDict->valueForKey("DSpawn_change_jump_time")->intValue();
+        mission->DSpawn_change_jump_value = missionDict->valueForKey("DSpawn_change_jump_value")->intValue();
+        
+        mission->DSpawn_max = missionDict->valueForKey("DSpawn_max")->intValue();
+        mission->DSpawn_change_max_time = missionDict->valueForKey("DSpawn_change_max_time")->intValue();
+        mission->DSpawn_change_max_value = missionDict->valueForKey("DSpawn_change_max_value")->intValue();
+        
+        mission->DSpawn_min = missionDict->valueForKey("DSpawn_min")->intValue();
+        mission->DSpawn_change_min_time = missionDict->valueForKey("DSpawn_change_min_time")->intValue();
+        mission->DSpawn_change_min_value = missionDict->valueForKey("DSpawn_change_min_value")->intValue();
+        
+        mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
+        mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
+        mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        // The limit of max dwarfs !!!
+        mission->DSpawn_max_limit = 0;
+        aDummyVar = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        if(aDummyVar>0){
+            mission->DSpawn_max_limit = aDummyVar;
+        }
+        
+        
+        mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
+        if(mission->DSpawn_zone_step == 0){
+            mission->DSpawn_zone_step = 1;//Set to 1sec
+        }
+        
+        //--------------------------------------------------
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
+        mission->MT_Event_ForceSpawnEnemy_Time = -1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_ForceSpawnEnemy_Time = aDummyVar;
+        }
+        
+        std::vector<int> bulletMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_BULLET_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(bulletMinMaxSpawn.size()>0){
+            mission->MT_Event_Bullets_Min = bulletMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Bullets_Max = bulletMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_BULLET_PROCENT")->intValue();
+        mission->MT_Event_Bullets_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Bullets_Percent = aDummyVar;
+        }
+        
+        std::vector<int> trapsMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_TRAPS_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(trapsMinMaxSpawn.size()>0){
+            mission->MT_Event_Traps_Min = trapsMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Traps_Max = trapsMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_TRAPS_PROCENT")->intValue();
+        mission->MT_Event_Traps_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Traps_Percent = aDummyVar;
+        }
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_CONFUSION_TIME")->intValue();
+        mission->MT_Event_Confusion_Time = 1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Confusion_Time = aDummyVar;
+        }
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        // Crystal spawn stuff
+        
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
+        if(crystalMinMaxSpawn.size()>=1){
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
+        }
+        else{
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
+        }
+        
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
+        
+        
+        mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        
+        // TEST STUFF
+        // The bee stuff
+        
+        aDummyVar = missionDict->valueForKey("Enable_Bee")->floatValue();
+        if(aDummyVar>=1){
+            // Yes please enable it
+            mission->SpawnBee = missionDict->valueForKey("Enable_Bee")->floatValue();
+            
+            // Set some bee parametrs
+            std::vector<int> BeeStartPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Start")->getCString(),',');
+            
+            mission->Enemy_Bee_StartX = BeeStartPoint[0];
+            mission->Enemy_Bee_StartY = BeeStartPoint[1];
+            
+            std::vector<int> BeeFinishPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Finish")->getCString(),',');
+            
+            mission->Enemy_Bee_FinishX = BeeFinishPoint[0];
+            mission->Enemy_Bee_FinishY = BeeFinishPoint[1];
+            
+            mission->Enemy_Bee_Speed = missionDict->valueForKey("Enemy_Bee_Speed")->floatValue();
+            mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+        if(aDummyVar>=1){
+            // We will spawn bullets
+            mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+            
+            //            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+            //
+            //            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            //            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+        if(Bullet_Speeds.size()>0)
+        {
+            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        // New bullets and etc stuff
+        std::vector<int> BulletTypes = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');
+        if(BulletTypes.capacity()>0)
+        {
+            //We have some bullets
+            mission->MT_Bullet_Types = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Bullet_Instatn")->floatValue();
+        mission->MT_Bullet_Instant = false;
+        if(aDummyVar >= 1)
+        {
+            mission->MT_Bullet_Instant = true;
+        }
+        
+        // The new stuff
+        std::vector<int> MT_EventTypes = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        if(MT_EventTypes.size()>0)
+        {
+            // We have some traps to spawn
+            mission->MT_Event_Types = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_BULET")->floatValue();
+        mission->MT_Event_Percent_Bullet = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Bullet = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TRAP")->floatValue();
+        mission->MT_Event_Percent_Trap = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Trap = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TROLL")->floatValue();
+        mission->MT_Event_Percent_Troll = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Troll = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_MASS")->floatValue();
+        mission->MT_Event_Percent_Mass = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        // The timers for Master Troll
+        std::vector<int> MT_EventTimer = SplitString(missionDict->valueForKey("MT_EVENT_TIMER")->getCString(),'-');
+        mission->MT_Event_Timer_Min = 0;
+        mission->MT_Event_Timer_Max = 0;
+        
+        if(MT_EventTimer.size()>0){
+            
+            // The min
+            mission->MT_Event_Timer_Min = MT_EventTimer[0];
+            // The max
+            if(MT_EventTimer.size()>1){
+                mission->MT_Event_Timer_Max = MT_EventTimer[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_LIMIT")->floatValue();
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Start = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_ADD")->floatValue();
+        mission->MT_Event_Value_Add = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Add = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_TIMER")->floatValue();
+        mission->MT_Event_Value_Timer = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Timer = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_STOP")->floatValue();
+        mission->MT_Event_Value_Max = 0;// No limit
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Max = aDummyVar;
+        }
+        
+        
+        //Dwarf Speed on map
+        mission->DwarfSpeed_Fat = 40.0;
+        mission->DwarfSpeed_Tall = 40.0;
+        
+        float aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Fat")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Fat = aDwarfSpeedDummy;
+        }
+        
+        aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Tall")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Tall = aDwarfSpeedDummy;
+        }
+        
+        //------------------
+        
+        //How much possibility to spawn dwarf from one cave
+        mission->DwarfSpawnOneCave = 100;//100% allow for now
+        int aSpawnOnceValue = missionDict->valueForKey("DwarfSpawnOneCave")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DwarfSpawnOneCave = aSpawnOnceValue;
+        }
+        
+        //The formula type
+        mission->DSpawn_formula_type = 0;//Min to map
+        aSpawnOnceValue = missionDict->valueForKey("DSpawn_formula_type")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DSpawn_formula_type = aSpawnOnceValue;
+        }
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 1 downloaded","Continue");
+}
+/*
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_1.plist";
     
     cocos2d::CCDictionary* plistDictionary;
     
@@ -2050,6 +3001,7 @@ void MissionManager::AddExtraDownloadedMissions_1()
     //Create popup for wait !!!
     cocos2d::CCMessageBox("Mission file Extra 1 downloaded","Continue");
 }
+*/
 
 void MissionManager::GetExtraMissions_2()
 {
@@ -2085,6 +3037,480 @@ void MissionManager::GetExtraMissions_2()
 }
 
 void MissionManager::AddExtraDownloadedMissions_2()
+{
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_2.plist";
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
+    mCurrentActiveMission = 0;
+    
+    mAllMission.clear();
+    
+    MissionSet* mission=new MissionSet();
+    //    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    float aDummyVar = 0;
+    bool aSpawnDifferentEnemy = false;
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        aSpawnDifferentEnemy = false;
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        CCLOG("Mission ID: %i",mission->ID);
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        // Check what type of enemy is this?
+        aDummyVar = missionDict->valueForKey("Enemy_Max_On_Map")->floatValue();
+        
+        if(aDummyVar>=1){
+            aSpawnDifferentEnemy = true;// New stuff
+            mission->MaxEnemy_OnMap = aDummyVar; // Whats the max enemy on map count?
+        }
+        
+        mission->DifferentEnemySpawn = aSpawnDifferentEnemy;
+        
+        int aRealSpawnIndex = 0;
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            //Troll speed
+            aDummyVar = enemySubDict->valueForKey("Speed")->floatValue();
+            if(aDummyVar>0){
+                theTroll._speed = aDummyVar;
+            }
+            else{
+                theTroll._speed = 30.0;
+            }
+            
+            // Split the name for the index !!!
+            theTroll._indexID = aRealSpawnIndex;
+            aRealSpawnIndex += 1;
+            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            // The radar wait time
+            aDummyVar = enemySubDict->valueForKey("Radar_WaitTime")->floatValue();
+            theTroll._radar_wait = -1; //use some default
+            if(aDummyVar > 0){
+                theTroll._radar_wait = aDummyVar;
+            }
+            
+            
+            // New stuff
+            aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
+            theTroll._enemySpawnID = 0;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._enemySpawnID = aDummyVar;
+            }
+            
+            aDummyVar = enemySubDict->valueForKey("TimeOnMap")->floatValue();
+            theTroll._timeOnMap = -1;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._timeOnMap = aDummyVar;
+            }
+            
+            // Bee stuff
+            if(theTroll._enemySpawnID == 1){
+                theTroll._beeBulletSpeed = 1;
+                aDummyVar = enemySubDict->valueForKey("BulletSpeed")->floatValue();
+                if(aDummyVar>0){
+                    theTroll._beeBulletSpeed = aDummyVar;
+                }
+            }
+            
+            
+            //------------------------------------------------------------------------------------------
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        //        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        //        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        //New stuff || Dwarf Spawn Control ||
+        
+        mission->DSpawn_jump = missionDict->valueForKey("DSpawn_jump")->intValue();
+        mission->DSpawn_change_jump_time = missionDict->valueForKey("DSpawn_change_jump_time")->intValue();
+        mission->DSpawn_change_jump_value = missionDict->valueForKey("DSpawn_change_jump_value")->intValue();
+        
+        mission->DSpawn_max = missionDict->valueForKey("DSpawn_max")->intValue();
+        mission->DSpawn_change_max_time = missionDict->valueForKey("DSpawn_change_max_time")->intValue();
+        mission->DSpawn_change_max_value = missionDict->valueForKey("DSpawn_change_max_value")->intValue();
+        
+        mission->DSpawn_min = missionDict->valueForKey("DSpawn_min")->intValue();
+        mission->DSpawn_change_min_time = missionDict->valueForKey("DSpawn_change_min_time")->intValue();
+        mission->DSpawn_change_min_value = missionDict->valueForKey("DSpawn_change_min_value")->intValue();
+        
+        mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
+        mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
+        mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        // The limit of max dwarfs !!!
+        mission->DSpawn_max_limit = 0;
+        aDummyVar = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        if(aDummyVar>0){
+            mission->DSpawn_max_limit = aDummyVar;
+        }
+        
+        
+        mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
+        if(mission->DSpawn_zone_step == 0){
+            mission->DSpawn_zone_step = 1;//Set to 1sec
+        }
+        
+        //--------------------------------------------------
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
+        mission->MT_Event_ForceSpawnEnemy_Time = -1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_ForceSpawnEnemy_Time = aDummyVar;
+        }
+        
+        std::vector<int> bulletMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_BULLET_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(bulletMinMaxSpawn.size()>0){
+            mission->MT_Event_Bullets_Min = bulletMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Bullets_Max = bulletMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_BULLET_PROCENT")->intValue();
+        mission->MT_Event_Bullets_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Bullets_Percent = aDummyVar;
+        }
+        
+        std::vector<int> trapsMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_TRAPS_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(trapsMinMaxSpawn.size()>0){
+            mission->MT_Event_Traps_Min = trapsMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Traps_Max = trapsMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_TRAPS_PROCENT")->intValue();
+        mission->MT_Event_Traps_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Traps_Percent = aDummyVar;
+        }
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_CONFUSION_TIME")->intValue();
+        mission->MT_Event_Confusion_Time = 1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Confusion_Time = aDummyVar;
+        }
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        // Crystal spawn stuff
+        
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
+        if(crystalMinMaxSpawn.size()>=1){
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
+        }
+        else{
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
+        }
+        
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
+        
+        
+        mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        
+        // TEST STUFF
+        // The bee stuff
+        
+        aDummyVar = missionDict->valueForKey("Enable_Bee")->floatValue();
+        if(aDummyVar>=1){
+            // Yes please enable it
+            mission->SpawnBee = missionDict->valueForKey("Enable_Bee")->floatValue();
+            
+            // Set some bee parametrs
+            std::vector<int> BeeStartPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Start")->getCString(),',');
+            
+            mission->Enemy_Bee_StartX = BeeStartPoint[0];
+            mission->Enemy_Bee_StartY = BeeStartPoint[1];
+            
+            std::vector<int> BeeFinishPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Finish")->getCString(),',');
+            
+            mission->Enemy_Bee_FinishX = BeeFinishPoint[0];
+            mission->Enemy_Bee_FinishY = BeeFinishPoint[1];
+            
+            mission->Enemy_Bee_Speed = missionDict->valueForKey("Enemy_Bee_Speed")->floatValue();
+            mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+        if(aDummyVar>=1){
+            // We will spawn bullets
+            mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+            
+            //            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+            //
+            //            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            //            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+        if(Bullet_Speeds.size()>0)
+        {
+            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        // New bullets and etc stuff
+        std::vector<int> BulletTypes = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');
+        if(BulletTypes.capacity()>0)
+        {
+            //We have some bullets
+            mission->MT_Bullet_Types = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Bullet_Instatn")->floatValue();
+        mission->MT_Bullet_Instant = false;
+        if(aDummyVar >= 1)
+        {
+            mission->MT_Bullet_Instant = true;
+        }
+        
+        // The new stuff
+        std::vector<int> MT_EventTypes = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        if(MT_EventTypes.size()>0)
+        {
+            // We have some traps to spawn
+            mission->MT_Event_Types = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_BULET")->floatValue();
+        mission->MT_Event_Percent_Bullet = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Bullet = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TRAP")->floatValue();
+        mission->MT_Event_Percent_Trap = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Trap = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TROLL")->floatValue();
+        mission->MT_Event_Percent_Troll = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Troll = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_MASS")->floatValue();
+        mission->MT_Event_Percent_Mass = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        // The timers for Master Troll
+        std::vector<int> MT_EventTimer = SplitString(missionDict->valueForKey("MT_EVENT_TIMER")->getCString(),'-');
+        mission->MT_Event_Timer_Min = 0;
+        mission->MT_Event_Timer_Max = 0;
+        
+        if(MT_EventTimer.size()>0){
+            
+            // The min
+            mission->MT_Event_Timer_Min = MT_EventTimer[0];
+            // The max
+            if(MT_EventTimer.size()>1){
+                mission->MT_Event_Timer_Max = MT_EventTimer[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_LIMIT")->floatValue();
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Start = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_ADD")->floatValue();
+        mission->MT_Event_Value_Add = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Add = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_TIMER")->floatValue();
+        mission->MT_Event_Value_Timer = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Timer = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_STOP")->floatValue();
+        mission->MT_Event_Value_Max = 0;// No limit
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Max = aDummyVar;
+        }
+        
+        
+        //Dwarf Speed on map
+        mission->DwarfSpeed_Fat = 40.0;
+        mission->DwarfSpeed_Tall = 40.0;
+        
+        float aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Fat")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Fat = aDwarfSpeedDummy;
+        }
+        
+        aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Tall")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Tall = aDwarfSpeedDummy;
+        }
+        
+        //------------------
+        
+        //How much possibility to spawn dwarf from one cave
+        mission->DwarfSpawnOneCave = 100;//100% allow for now
+        int aSpawnOnceValue = missionDict->valueForKey("DwarfSpawnOneCave")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DwarfSpawnOneCave = aSpawnOnceValue;
+        }
+        
+        //The formula type
+        mission->DSpawn_formula_type = 0;//Min to map
+        aSpawnOnceValue = missionDict->valueForKey("DSpawn_formula_type")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DSpawn_formula_type = aSpawnOnceValue;
+        }
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 2 downloaded","Continue");
+}
+/*
 {
     std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_2.plist";
     cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
@@ -2315,6 +3741,7 @@ void MissionManager::AddExtraDownloadedMissions_2()
     //Create popup for wait !!!
     cocos2d::CCMessageBox("Mission file Extra 2 downloaded","Continue");
 }
+*/
 
 void MissionManager::GetExtraMissions_3()
 {
@@ -2350,6 +3777,483 @@ void MissionManager::GetExtraMissions_3()
 }
 
 void MissionManager::AddExtraDownloadedMissions_3()
+{
+//    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsTest.plist";
+//    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_3.plist";
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    
+    mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
+    mCurrentActiveMission = 0;
+    
+    mAllMission.clear();
+    
+    MissionSet* mission=new MissionSet();
+    //    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement = NULL;
+    cocos2d::CCDictElement* pElement_dummy = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub = NULL;
+    cocos2d::CCDictElement* pElement_dummy_sub_point = NULL;
+    
+    float aDummyVar = 0;
+    bool aSpawnDifferentEnemy = false;
+    
+    cocos2d::CCDICT_FOREACH(plistDictionary, pElement)
+    {
+        cocos2d::CCDictionary* missionDict = (cocos2d::CCDictionary*)pElement->getObject();
+        
+        aSpawnDifferentEnemy = false;
+        
+        //Create new mission and set all the parametrs there !!!
+        mission = new MissionSet();
+        
+        //The mission id in row
+        mission->ID = missionDict->valueForKey("ID")->floatValue();
+        CCLOG("Mission ID: %i",mission->ID);
+        
+        //Set the stars
+        mission->Star_1 = missionDict->valueForKey("Star_1")->floatValue();
+        mission->Star_2 = missionDict->valueForKey("Star_2")->floatValue();
+        mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
+        
+        mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        //Get the task type
+        mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
+        
+        //Do we need to show story
+        mission->Story_show = missionDict->valueForKey("Story_Show")->floatValue();
+        
+        //How many caves do we allow to spawn
+        mission->Dwarf_spawn_points = missionDict->valueForKey("DSP")->floatValue();
+        
+        // Check what type of enemy is this?
+        aDummyVar = missionDict->valueForKey("Enemy_Max_On_Map")->floatValue();
+        
+        if(aDummyVar>=1){
+            aSpawnDifferentEnemy = true;// New stuff
+            mission->MaxEnemy_OnMap = aDummyVar; // Whats the max enemy on map count?
+        }
+        
+        mission->DifferentEnemySpawn = aSpawnDifferentEnemy;
+        
+        int aRealSpawnIndex = 0;
+        
+        //Get all the enemy paths and powas
+        cocos2d::CCDictionary* enemyDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Enemy_Paths");
+        cocos2d::CCDICT_FOREACH(enemyDict,pElement_dummy)
+        {
+            MissionTroll theTroll = *new MissionTroll();
+            theTroll._circle = -1;//No circle
+            theTroll._pathStartIndex = -1;
+            
+            std::string aPathValue = pElement_dummy->getStrKey();
+            
+            //Check what is this for a troll !!!
+            cocos2d::CCDictionary* enemySubDict = (cocos2d::CCDictionary*)enemyDict->objectForKey(aPathValue);
+            int aPatrolCircle = enemySubDict->valueForKey("PatrolCircle")->intValue();
+            if(aPatrolCircle==-1){
+                //We have points
+                cocos2d::CCDictionary* enemyPathPoint = (cocos2d::CCDictionary*)enemySubDict->objectForKey("PatrolPoints");
+                cocos2d::CCDICT_FOREACH(enemyPathPoint,pElement_dummy_sub_point)
+                {
+                    //Starts to read from back
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCString aPointValue = *enemyPathPoint->valueForKey(aPathValue);
+                    
+                    cocos2d::CCPoint ret = cocos2d::CCPointZero;
+                    char *token = std::strtok(const_cast<char*>(aPointValue.getCString()), ",");
+                    while (token != NULL) {
+                        if(ret.x == 0) ret.x = std::atoi(token);
+                        else ret.y = std::atoi(token);
+                        token = std::strtok(NULL, " ");
+                    }
+                    
+                    theTroll._paths.push_back(new cocos2d::CCPoint(ret.x, ret.y));
+                }
+            }
+            else{
+                theTroll._circle = aPatrolCircle;
+                
+                theTroll._circle_x = enemySubDict->valueForKey("PatrolCircle_CenterX")->intValue();
+                theTroll._circle_y = enemySubDict->valueForKey("PatrolCircle_CenterY")->intValue();
+                theTroll._circle_radius = enemySubDict->valueForKey("PatrolCircle_Radius")->intValue();
+                theTroll._circle_precision = enemySubDict->valueForKey("PatrolCircle_Precision")->intValue();
+                theTroll._circle_height = enemySubDict->valueForKey("PatrolCircle_Height")->intValue();
+            }
+            
+            //Troll speed
+            aDummyVar = enemySubDict->valueForKey("Speed")->floatValue();
+            if(aDummyVar>0){
+                theTroll._speed = aDummyVar;
+            }
+            else{
+                theTroll._speed = 30.0;
+            }
+            
+            // Split the name for the index !!!
+            theTroll._indexID = aRealSpawnIndex;
+            aRealSpawnIndex += 1;
+            
+            theTroll._pathStartIndex = enemySubDict->valueForKey("PatrolStartPoint")->intValue();
+            theTroll._startDirection = enemySubDict->valueForKey("PatrolStartDir")->intValue();
+            
+            //------------------------------------------------------------------------------------------
+            // Check if has any radar stuff
+            
+            theTroll._radar_radius = 0;
+            theTroll._radar_width = 0;
+            
+            aDummyVar = enemySubDict->valueForKey("Radar_Width")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_width = aDummyVar;
+            }
+            aDummyVar = enemySubDict->valueForKey("Radar_Radius")->floatValue();
+            if(aDummyVar > 0){
+                theTroll._radar_radius = aDummyVar;
+            }
+            
+            // The radar wait time
+            aDummyVar = enemySubDict->valueForKey("Radar_WaitTime")->floatValue();
+            theTroll._radar_wait = -1; //use some default
+            if(aDummyVar > 0){
+                theTroll._radar_wait = aDummyVar;
+            }
+            
+            
+            // New stuff
+            aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
+            theTroll._enemySpawnID = 0;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._enemySpawnID = aDummyVar;
+            }
+            
+            aDummyVar = enemySubDict->valueForKey("TimeOnMap")->floatValue();
+            theTroll._timeOnMap = -1;// What type of enemy is this
+            
+            if(aDummyVar > 0){
+                theTroll._timeOnMap = aDummyVar;
+            }
+            
+            // Bee stuff
+            if(theTroll._enemySpawnID == 1){
+                theTroll._beeBulletSpeed = 1;
+                aDummyVar = enemySubDict->valueForKey("BulletSpeed")->floatValue();
+                if(aDummyVar>0){
+                    theTroll._beeBulletSpeed = aDummyVar;
+                }
+            }
+            
+            
+            //------------------------------------------------------------------------------------------
+            
+            mission->Enemy_info.push_back(theTroll);
+        }
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* dwarfDict = (cocos2d::CCDictionary*)missionDict->objectForKey("DwarfSpawnPoints");
+        cocos2d::CCDICT_FOREACH(dwarfDict,pElement_dummy)
+        {
+            std::string aPathValue = pElement_dummy->getStrKey();
+            int aValue = dwarfDict->valueForKey(aPathValue)->intValue();
+            mission->Dwarf_paths.push_back(aValue);
+        }
+        
+        mission->StartDwarfCount = missionDict->valueForKey("StartDwarfCount")->floatValue();
+        
+        //        mission->DwarfCount_Min = missionDict->valueForKey("Map_DwarfCoun_Min")->floatValue();
+        //        mission->DwarfCount_Max = missionDict->valueForKey("Map_DwarfCoun_Max")->floatValue();
+        
+        //The cave info!!!
+        cocos2d::CCDictionary* caveBlueDict = (cocos2d::CCDictionary*)missionDict->objectForKey("BlueCave");
+        mission->BlueCave_x = caveBlueDict->valueForKey("position_x")->intValue();
+        mission->BlueCave_y = caveBlueDict->valueForKey("position_y")->intValue();
+        
+        cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
+        mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
+        mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        //---------------------------------------------------------------------------------------------------
+        //New stuff || Dwarf Spawn Control ||
+        
+        mission->DSpawn_jump = missionDict->valueForKey("DSpawn_jump")->intValue();
+        mission->DSpawn_change_jump_time = missionDict->valueForKey("DSpawn_change_jump_time")->intValue();
+        mission->DSpawn_change_jump_value = missionDict->valueForKey("DSpawn_change_jump_value")->intValue();
+        
+        mission->DSpawn_max = missionDict->valueForKey("DSpawn_max")->intValue();
+        mission->DSpawn_change_max_time = missionDict->valueForKey("DSpawn_change_max_time")->intValue();
+        mission->DSpawn_change_max_value = missionDict->valueForKey("DSpawn_change_max_value")->intValue();
+        
+        mission->DSpawn_min = missionDict->valueForKey("DSpawn_min")->intValue();
+        mission->DSpawn_change_min_time = missionDict->valueForKey("DSpawn_change_min_time")->intValue();
+        mission->DSpawn_change_min_value = missionDict->valueForKey("DSpawn_change_min_value")->intValue();
+        
+        mission->DSpawn_zone = missionDict->valueForKey("DSpawn_zone")->intValue();
+        mission->DSpawn_change_zone_time = missionDict->valueForKey("DSpawn_change_zone_time")->intValue();
+        mission->DSpawn_change_zone_value = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        
+        // The limit of max dwarfs !!!
+        mission->DSpawn_max_limit = 0;
+        aDummyVar = missionDict->valueForKey("DSpawn_change_zone_value")->intValue();
+        if(aDummyVar>0){
+            mission->DSpawn_max_limit = aDummyVar;
+        }
+        
+        
+        mission->DSpawn_zone_step = missionDict->valueForKey("DSpawn_zone_step")->intValue();
+        if(mission->DSpawn_zone_step == 0){
+            mission->DSpawn_zone_step = 1;//Set to 1sec
+        }
+        
+        //--------------------------------------------------
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
+        mission->MT_Event_ForceSpawnEnemy_Time = -1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_ForceSpawnEnemy_Time = aDummyVar;
+        }
+        
+        std::vector<int> bulletMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_BULLET_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(bulletMinMaxSpawn.size()>0){
+            mission->MT_Event_Bullets_Min = bulletMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Bullets_Max = bulletMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_BULLET_PROCENT")->intValue();
+        mission->MT_Event_Bullets_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Bullets_Percent = aDummyVar;
+        }
+        
+        std::vector<int> trapsMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_TRAPS_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(trapsMinMaxSpawn.size()>0){
+            mission->MT_Event_Traps_Min = trapsMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Traps_Max = trapsMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_TRAPS_PROCENT")->intValue();
+        mission->MT_Event_Traps_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Traps_Percent = aDummyVar;
+        }
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_CONFUSION_TIME")->intValue();
+        mission->MT_Event_Confusion_Time = 1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Confusion_Time = aDummyVar;
+        }
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        // Crystal spawn stuff
+        
+        //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
+        std::vector<int> crystalMinMaxSpawn = SplitString(missionDict->valueForKey("ItemInterval")->getCString(),',');
+        if(crystalMinMaxSpawn.size()>=1){
+            mission->ItemInterval_Min = crystalMinMaxSpawn[0];
+            mission->ItemInterval_Max = crystalMinMaxSpawn[1];
+        }
+        else{
+            mission->ItemInterval_Min = 1;
+            mission->ItemInterval_Max = 1;
+        }
+        
+        mission->ItemProbMultiplier = missionDict->valueForKey("ItemProbMultiplier")->intValue();
+        mission->ItemTimeOnMap = missionDict->valueForKey("ItemTimeOnMap")->intValue();
+        
+        
+        mission->CrystalColProbs = SplitString(missionDict->valueForKey("CrystalColProbs")->getCString(),',');
+        mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
+        mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
+        
+        
+        //---------------------------------------------------------------------------------------------------
+        
+        // TEST STUFF
+        // The bee stuff
+        
+        aDummyVar = missionDict->valueForKey("Enable_Bee")->floatValue();
+        if(aDummyVar>=1){
+            // Yes please enable it
+            mission->SpawnBee = missionDict->valueForKey("Enable_Bee")->floatValue();
+            
+            // Set some bee parametrs
+            std::vector<int> BeeStartPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Start")->getCString(),',');
+            
+            mission->Enemy_Bee_StartX = BeeStartPoint[0];
+            mission->Enemy_Bee_StartY = BeeStartPoint[1];
+            
+            std::vector<int> BeeFinishPoint = SplitString(missionDict->valueForKey("Enemy_Bee_Finish")->getCString(),',');
+            
+            mission->Enemy_Bee_FinishX = BeeFinishPoint[0];
+            mission->Enemy_Bee_FinishY = BeeFinishPoint[1];
+            
+            mission->Enemy_Bee_Speed = missionDict->valueForKey("Enemy_Bee_Speed")->floatValue();
+            mission->Enemy_Bee_Bullet_Speed = missionDict->valueForKey("Enemy_Bee_Bullet_Speed")->floatValue();
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+        if(aDummyVar>=1){
+            // We will spawn bullets
+            mission->Forced_Bullets = missionDict->valueForKey("MT_Force_Bullets")->floatValue();
+            
+            //            std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+            //
+            //            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            //            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
+        if(Bullet_Speeds.size()>0)
+        {
+            mission->MT_Bullet_Speed_Min = Bullet_Speeds[0];
+            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
+        }
+        
+        // New bullets and etc stuff
+        std::vector<int> BulletTypes = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');
+        if(BulletTypes.capacity()>0)
+        {
+            //We have some bullets
+            mission->MT_Bullet_Types = SplitString(missionDict->valueForKey("MT_Bullet_Types")->getCString(),',');;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_Bullet_Instatn")->floatValue();
+        mission->MT_Bullet_Instant = false;
+        if(aDummyVar >= 1)
+        {
+            mission->MT_Bullet_Instant = true;
+        }
+        
+        // The new stuff
+        std::vector<int> MT_EventTypes = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        if(MT_EventTypes.size()>0)
+        {
+            // We have some traps to spawn
+            mission->MT_Event_Types = SplitString(missionDict->valueForKey("MT_Event_Types")->getCString(),',');
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_BULET")->floatValue();
+        mission->MT_Event_Percent_Bullet = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Bullet = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TRAP")->floatValue();
+        mission->MT_Event_Percent_Trap = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Trap = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_TROLL")->floatValue();
+        mission->MT_Event_Percent_Troll = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Troll = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_MASS")->floatValue();
+        mission->MT_Event_Percent_Mass = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        // The timers for Master Troll
+        std::vector<int> MT_EventTimer = SplitString(missionDict->valueForKey("MT_EVENT_TIMER")->getCString(),'-');
+        mission->MT_Event_Timer_Min = 0;
+        mission->MT_Event_Timer_Max = 0;
+        
+        if(MT_EventTimer.size()>0){
+            
+            // The min
+            mission->MT_Event_Timer_Min = MT_EventTimer[0];
+            // The max
+            if(MT_EventTimer.size()>1){
+                mission->MT_Event_Timer_Max = MT_EventTimer[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_LIMIT")->floatValue();
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Start = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_ADD")->floatValue();
+        mission->MT_Event_Value_Add = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Add = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_TIMER")->floatValue();
+        mission->MT_Event_Value_Timer = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Timer = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_STOP")->floatValue();
+        mission->MT_Event_Value_Max = 0;// No limit
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Max = aDummyVar;
+        }
+        
+        
+        //Dwarf Speed on map
+        mission->DwarfSpeed_Fat = 40.0;
+        mission->DwarfSpeed_Tall = 40.0;
+        
+        float aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Fat")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Fat = aDwarfSpeedDummy;
+        }
+        
+        aDwarfSpeedDummy = missionDict->valueForKey("DwarfSpeed_Tall")->floatValue();
+        if(aDwarfSpeedDummy>0){
+            mission->DwarfSpeed_Tall = aDwarfSpeedDummy;
+        }
+        
+        //------------------
+        
+        //How much possibility to spawn dwarf from one cave
+        mission->DwarfSpawnOneCave = 100;//100% allow for now
+        int aSpawnOnceValue = missionDict->valueForKey("DwarfSpawnOneCave")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DwarfSpawnOneCave = aSpawnOnceValue;
+        }
+        
+        //The formula type
+        mission->DSpawn_formula_type = 0;//Min to map
+        aSpawnOnceValue = missionDict->valueForKey("DSpawn_formula_type")->intValue();
+        if(aSpawnOnceValue>0){
+            mission->DSpawn_formula_type = aSpawnOnceValue;
+        }
+        
+        //Add to all missions parsed
+        mAllMission.push_back(*mission);
+    }
+    
+    std::sort(mAllMission.begin(), mAllMission.end(),sortByID);
+    
+    mAllFinished = true;
+    
+    //Create popup for wait !!!
+    cocos2d::CCMessageBox("Mission file Extra 3 downloaded","Continue");
+}
+/*
 {
     std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsExtra_3.plist";
     cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
@@ -2580,6 +4484,7 @@ void MissionManager::AddExtraDownloadedMissions_3()
     //Create popup for wait !!!
     cocos2d::CCMessageBox("Mission file Extra 3 downloaded","Continue");
 }
+*/
 
 void MissionManager::OnDownloadSpecialMissions()
 {
@@ -2594,6 +4499,8 @@ void MissionManager::OnDownloadSpecialMissions()
         saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
         
         pFile = fopen(saveFileName.c_str(), "w+");
+//        https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=0
+//        https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1
         
         curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1");
         if(pFile != NULL)
@@ -2614,6 +4521,13 @@ void MissionManager::OnDownloadSpecialMissions()
         }
         
     }
+}
+
+// Load the global values?
+void MissionManager::OnLoadGloablValues()
+{
+    // Loads default values if not assigned?
+    // TODO
 }
 
 void MissionManager::OnDownloadedSpecial()
@@ -2752,6 +4666,14 @@ void MissionManager::OnDownloadedSpecial()
                 theTroll._radar_radius = aDummyVar;
             }
             
+            // The radar wait time
+            aDummyVar = enemySubDict->valueForKey("Radar_WaitTime")->floatValue();
+            theTroll._radar_wait = -1; //use some default
+            if(aDummyVar > 0){
+                theTroll._radar_wait = aDummyVar;
+            }
+            
+            
             // New stuff
             aDummyVar = enemySubDict->valueForKey("EnemyID")->floatValue();
             theTroll._enemySpawnID = 0;// What type of enemy is this
@@ -2836,6 +4758,59 @@ void MissionManager::OnDownloadedSpecial()
         if(mission->DSpawn_zone_step == 0){
             mission->DSpawn_zone_step = 1;//Set to 1sec
         }
+        
+        //--------------------------------------------------
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
+        mission->MT_Event_ForceSpawnEnemy_Time = -1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_ForceSpawnEnemy_Time = aDummyVar;
+        }
+        
+        std::vector<int> bulletMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_BULLET_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(bulletMinMaxSpawn.size()>0){
+            mission->MT_Event_Bullets_Min = bulletMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Bullets_Max = bulletMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_BULLET_PROCENT")->intValue();
+        mission->MT_Event_Bullets_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Bullets_Percent = aDummyVar;
+        }
+        
+        std::vector<int> trapsMinMaxSpawn = SplitString(missionDict->valueForKey("MT_EVENT_TRAPS_AMOUNT")->getCString(),'-');
+        mission->MT_Event_Bullets_Min = 1; // The default
+        
+        if(trapsMinMaxSpawn.size()>0){
+            mission->MT_Event_Traps_Min = trapsMinMaxSpawn[0];
+            if(bulletMinMaxSpawn.size()>1){
+                mission->MT_Event_Traps_Max = trapsMinMaxSpawn[1];
+            }
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_TRAPS_PROCENT")->intValue();
+        mission->MT_Event_Traps_Percent = 0;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Traps_Percent = aDummyVar;
+        }
+        
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_CONFUSION_TIME")->intValue();
+        mission->MT_Event_Confusion_Time = 1;
+        
+        if(aDummyVar>0){
+            mission->MT_Event_Confusion_Time = aDummyVar;
+        }
+        
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
@@ -2980,6 +4955,12 @@ void MissionManager::OnDownloadedSpecial()
         mission->MT_Event_Value_Timer = 0;
         if(aDummyVar>0){
             mission->MT_Event_Value_Timer = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_VALUE_STOP")->floatValue();
+        mission->MT_Event_Value_Max = 0;// No limit
+        if(aDummyVar>0){
+            mission->MT_Event_Value_Max = aDummyVar;
         }
         
         

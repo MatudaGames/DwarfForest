@@ -206,6 +206,9 @@ public:
     bool mDynamicTrolls;
     
     bool mNewMaps;
+    
+    // New struff for stats
+    int mCurrentMissionLevel;
 	
 private:
 	User();

@@ -14,6 +14,7 @@
 #include "Utils.h"
 #include "Wind.h"
 #include "User.h"
+#include <math.h>
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -77,6 +78,10 @@ bool Troll::init(GameScene* game)
 		return false;
 	}
     
+    _disabled = false;
+    
+    _pathSprites = NULL;
+    
     mRadarSet = false;
     
     mCatchRadarAngle = 0;
@@ -125,6 +130,9 @@ bool Troll::init(GameScene* game)
     mTutorfix = false;
     
     blitzHit = false;
+    
+    mGoblinFunctional = false;
+    mEvilTreeFunctional = false;
     
     _canMove = false;//wait a bit !!!s
     _isDisabled = false;
@@ -557,6 +565,10 @@ void Troll::update(float delta)
         _game->reorderChild(this,_game->getSpriteOrderZ(getPositionY()));
     }
     
+    if(_disabled){
+        return;
+    }
+    
     // New checks if did not happen to our hereo
     
     // Can't move and do stuff - dwarfs only hit back
@@ -575,7 +587,12 @@ void Troll::update(float delta)
             _animation->resumeSchedulerAndActions();
             
             //Remove freeze FX
-            _animation->setColor(ccc3(255,255,255));
+            if(mGoblinFunctional || mEvilTreeFunctional){
+                
+            }
+            else{
+                _animation->setColor(ccc3(255,255,255));
+            }
         }
         
         return;
@@ -589,7 +606,8 @@ void Troll::update(float delta)
             CCLog("Remove troll from map");
 //            _game->_trolls->removeObject(this);
 //            _game->removeNode(this);
-            _forceRemove = true;
+//            _forceRemove = true;
+            removeFromSave();
             
             return;
         }
@@ -604,7 +622,6 @@ void Troll::update(float delta)
     if(mCatchingDwarf)
     {
         if(mStartCatchDwarf>0.0f){
-//            CCLog("mStartCatchDwarf:%f",mStartCatchDwarf);
             
             if(mCatchRadar->isVisible()){
                 mCatchRadar->setVisible(false);
@@ -637,15 +654,9 @@ void Troll::update(float delta)
         //Totaly different logic here !!!
         CCPoint point = mDwarfToCatch->getPosition();
         
-//        float theDistance = ccpDistanceSQ(point, getPosition());
-        
-        float theDistance2 = sqrtf((getPositionX()-point.x)*(getPositionX()-point.x) + (getPositionY()-point.y)*(getPositionY()-point.y));
-        
-//        CCLog("The Distance:%f",theDistance);
-//        CCLog("theDistance2:%f",theDistance2);
-//        CCLog("coneRadius:%d",coneRadius);
-        
-        if (theDistance2<coneRadius){
+        //This ignores it
+        if(mEnemySpawnID == 3)
+        {
             setAngle(atan2f(point.y - y, point.x - x));
             
             CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
@@ -655,8 +666,21 @@ void Troll::update(float delta)
         }
         else
         {
-            //He lost it
-            CancelDwarfCatch(mDwarfToCatch);
+            float theDistance2 = sqrtf((getPositionX()-point.x)*(getPositionX()-point.x) + (getPositionY()-point.y)*(getPositionY()-point.y));
+            
+            if (theDistance2<coneRadius){
+                setAngle(atan2f(point.y - y, point.x - x));
+                
+                CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
+                                          y + sinf(_angle) * delta * (_speed * _game->getGameSpeed()));
+                
+                cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
+            }
+            else
+            {
+                //He lost it
+                CancelDwarfCatch(mDwarfToCatch);
+            }
         }
         
         return;
@@ -1064,7 +1088,13 @@ void Troll::CatchDwarf(Dwarf* theDwarf)
 {
     //set 0.5sec wtf ???
 //    CCLog("mStartCatchDwarf set to 1.0f");
-    mStartCatchDwarf = 1.0f;
+    if(mFromMission_CatchDwarfWait>0){
+        mStartCatchDwarf = mFromMission_CatchDwarfWait;
+    }
+    else{
+        mStartCatchDwarf = 1.0f;
+    }
+    
     mDwarfToCatch = theDwarf;
     mCatchingDwarf = true;
 }
@@ -1209,6 +1239,17 @@ void Troll::onEnter()
 void Troll::onExit()
 {
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+    
+    if(_pathSprites)
+    {
+        for(int i = 0;i<_pathSprites->count();i++)
+        {
+            _game->removeChild(static_cast<CCSprite*>(_pathSprites->objectAtIndex(i)));
+        }
+        
+        _pathSprites->release();
+        _pathSprites = NULL;
+    }
 	
 	CCNode::onExit();
 }
@@ -1216,6 +1257,7 @@ void Troll::onExit()
 
 void Troll::removeFromSave()
 {
+    _disabled = true;
     setAnimation(_removeSmoke);
     //Add timer to remove from game after 2sec
     CCActionInterval* aRemoveDelay = CCDelayTime::create(0.5f);
@@ -1356,6 +1398,26 @@ void Troll::setAnimation(SpriteAnimation* animation)
         // Forced radar update
         _changedAnimation = true;
 	}
+    
+    // The color set for goblin
+    if(mGoblinFunctional)
+    {
+        // Set some blue to all
+        ccColor3B currentColor = _animation->getColor();
+        
+        if(currentColor.r != 201 || currentColor.g != 0 || currentColor.b != 255){
+            _animation->setColor(ccc3(201, 0, 255));
+        }
+    }
+    else if(mEvilTreeFunctional)
+    {
+        // Set some blue to all
+        ccColor3B currentColor = _animation->getColor();
+        
+        if(currentColor.r != 255 || currentColor.g != 154 || currentColor.b != 0){
+            _animation->setColor(ccc3(255, 154, 0));
+        }
+    }
 }
 
 bool Troll::getTouchable()
@@ -1366,6 +1428,31 @@ bool Troll::getTouchable()
 // The new stuff
 void Troll::SetMissionStuff(MissionTroll theMission)
 {
+    mFromMission_CatchDwarfWait = 0;
+    
+    // Check if this is not some same stuff troll stuff
+    if(theMission._enemySpawnID == 2){
+        // Smaller blue troll
+        mGoblinFunctional = true;
+    }
+    else if(theMission._enemySpawnID == 3){
+        mEvilTreeFunctional = true;
+    }
+    
+    
+    mEnemySpawnID = 0;
+    if(theMission._enemySpawnID>0){
+        mEnemySpawnID = theMission._enemySpawnID;
+    }
+    
+    if(theMission._radar_wait>0){
+        mFromMission_CatchDwarfWait = theMission._radar_wait;
+    }
+    
+//    mGoblinFunctional = true;
+//    mEvilTreeFunctional = true;
+//    mEnemySpawnID = 3;
+    
     //Check if circle then use the circle stuff
     setPosition(ccp(200,200));//Some def value for now !!!
     setAngle(0);
@@ -1417,6 +1504,9 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         //Create the circle stuff
         bool aDidSetAngle = false;
         
+        _pathSprites = CCArray::create();
+        _pathSprites->retain();
+        
         for (float a = 0.0f; a < cir; a += precision)
         {
             float x = theCircleX + mRadius * cos(a);
@@ -1439,6 +1529,8 @@ void Troll::SetMissionStuff(MissionTroll theMission)
                 pointsBack->setRotation(91);
             }
             
+            _pathSprites->addObject(pointsBack);
+            
             _game->addChild(pointsBack,1);
             
             last_x = x;
@@ -1450,6 +1542,10 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         setPosition(_movePoints->getControlPointAtIndex(theMission._pathStartIndex));
     }
     else{
+        
+        _pathSprites = CCArray::create();
+        _pathSprites->retain();
+        
         //Create control paths !!!
         _moveValue = 1;//Start to forward?
         
@@ -1458,6 +1554,47 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             float x = theMission._paths[a]->x;
             float y = theMission._paths[a]->y;
             
+            //Lets do magic
+            if(a>0)
+            {
+                // Get the draw cords
+                int P1_y = y;
+                int P1_x = x;
+                
+                int P2_y = theMission._paths[a-1]->y;
+                int P2_x = theMission._paths[a-1]->x;
+                
+                float theDistance2 = sqrtf((x-theMission._paths[a-1]->x)*(x-theMission._paths[a-1]->x) +
+                                           (y-theMission._paths[a-1]->y)*(y-theMission._paths[a-1]->y));
+                // Get the angle between points?
+                float deltaY = P2_y - P1_y;
+                float deltaX = P2_x - P1_x;
+                
+                float angleInDegrees = atan2(deltaY, deltaX) * 180 / M_PI;
+                
+                //Lets check if this is true
+                int aRealFinalX = x + theDistance2*cos(angleInDegrees*(M_PI / 180));
+                int aRealFinalY = y + theDistance2*sin(angleInDegrees*(M_PI / 180));
+                
+                CCSprite* pointsBack;
+                int aTimesToDraw = theDistance2/20;
+                for(int i = 0;i<aTimesToDraw;i++)
+                {
+                    pointsBack = CCSprite::create("troll_line.png");
+                    
+                    aRealFinalX = x + (20*i)*cos(angleInDegrees*(M_PI / 180));
+                    aRealFinalY = y + (20*i)*sin(angleInDegrees*(M_PI / 180));
+                    
+                    pointsBack->setPosition(ccp(aRealFinalX,aRealFinalY));
+                    pointsBack->setRotation(angleInDegrees);
+                    pointsBack->setOpacity(120);
+                    _game->addChild(pointsBack,1);
+                    
+                    _pathSprites->addObject(pointsBack);
+                }
+            }
+            
+            /*
             CCSprite* pointsBack = CCSprite::create("troll_line.png");
             pointsBack->setPosition(ccp(x,y));
             pointsBack->setOpacity(120);
@@ -1466,6 +1603,11 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             CCLog("What:%i",a);
             _movePoints->addControlPoint(ccp(x,y));
             CCLog("_movePoints.size():%i",_movePoints->count());
+            
+            _pathSprites->addObject(pointsBack);
+            */
+            
+            _movePoints->addControlPoint(ccp(x,y));
         }
         
         //Set to the start point

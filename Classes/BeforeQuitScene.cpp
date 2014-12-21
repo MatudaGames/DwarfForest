@@ -63,7 +63,7 @@ void BeforeQuitScene::leaveCallback()
 {
     if (_endingGame)
     {
-        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MAIN_MENU);
+        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);
 //        CCTransitionScene* transition = CCTransitionSlideInL::create(0.5f, options);
         CCTransitionScene* transition = CCTransitionFade::create(0.5f,options,ccBLACK);
         CCDirector::sharedDirector()->replaceScene(transition);

@@ -429,6 +429,16 @@ public:
     
     void MasterAction_Bullet(cocos2d::CCObject *sender);
     
+    float mCallBackTime_BulletFire;
+    int mCurrentBUlletFiresLeft; // How many bullets left for fire off
+    void DoMultiBulletFire();
+    
+    float mCallBackTime_TrapSpawn;
+    int mCurrentTrapSpawnLeft; // How many traps left for fire off
+    void DoMultiTrapSpawn();
+    
+    bool IsObjectInMap(int theX,int theY);
+    
     void MasterAction_Confusion(cocos2d::CCObject *sender);
     
     void CreateMasters();
@@ -437,6 +447,9 @@ public:
     float _mission_dwarf_spawn_timer;
     float _mission_crystal_spawn_timer;
     float _mission_effect_spawn_timer;
+    
+    float MasterTroll_CheckForEnemy_Timer;
+    bool MasterTroll_ForceEnemySpawn;
     
     //----------------------------------------------
     //The new map changer
@@ -664,6 +677,7 @@ public:
     
     
     // Debug stuff
+    bool debugLabelsCreated;
     cocos2d::CCLabelTTF* _MT_Label_Timer;
     cocos2d::CCLabelTTF* _MT_Label_Procent;
     cocos2d::CCLabelTTF* _MT_Label_Value;
@@ -674,6 +688,7 @@ public:
     
     int GetPointsForEvent(int theEvent);
     int GetCurrentMT_Value();
+    bool DoWeHaveEnemyOnMap();
     
     float mMT_LastBulletTimer;
     int mMT_LastBulletCount;
@@ -682,6 +697,7 @@ public:
     float mMT_ValueTimer; // When the value number will increase
     int mMT_ValueAdd;
     int mMT_SpawnValue; // Whats the min stuff
+    int mMT_ValueLimit; // Whats the sky limit
     
     bool mMusic1_On;
     bool mMusic2_On;

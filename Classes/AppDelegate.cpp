@@ -17,6 +17,7 @@
 #include "MissionScene.h"
 #include "PauseScene.h"
 #include "LoadingScreen.h"
+#include "WorldMap.h"
 
 USING_NS_CC;
 using namespace std;
@@ -56,13 +57,29 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
     
     //Test resources
-    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
+//    CCSprite* MainCave = CCSprite::create("Interfeiss/main_menu/new/cave_big.png");
     
     //Sprite sheets !!!
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("gadalaiki.plist");
     
+    
     CCScene* aLoading = LoadingScreen::scene();
     pDirector->runWithScene(aLoading);
+    
+    
+    // Quick map make
+    // create a scene. it's an autorelease object
+    
+    
+//    CCScene *pScene = WorldMap::scene();
+    // run
+//    pDirector->runWithScene(pScene);
+    
+//    WorldMap().scene;
+//    CCScene *pScene = WorldMap::scene();
+//    pDirector->runWithScene(pScene);
+    
+//    CCDirector::sharedDirector()->replaceScene(WorldMap);
     
     if(User::getInstance()->FirstSessionDone<2)
     {

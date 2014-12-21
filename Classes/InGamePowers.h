@@ -40,10 +40,13 @@ public:
     
     // The powers
     bool mFreezeActive;
+    bool mElectroActive;
     
     Troll* mCurrentActiveTroll;
     
     void OnFreezeTroll();
+    void OnElectroTroll();
+    
     void OnRemoveTrollIndicators();
     void OnFreezeBallHit(CCNode* sender);
     void OnPlayerClickTroll(Troll* theTroll);

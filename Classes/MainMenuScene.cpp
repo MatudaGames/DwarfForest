@@ -24,6 +24,8 @@
 #include "LevelEndScene.h"
 #include "OptionsScene.h"
 
+#include "WorldMap.h"
+
 #include <iostream>
 
 //#include "FlurryX.h"
@@ -1379,7 +1381,7 @@ void MainMenuScene::menuMoreGamesCallback(CCObject* sender)
     AnalyticX::flurryLogEvent("Menu Open: Missions");
     
     //Open mission screen !!!
-    CCScene* missions = MissionScene::scene();
+    CCScene* missions = WorldMap::scene();
     CCTransitionFade* transition = CCTransitionFade::create(0.25f,missions,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
 //    CCTransitionCrossFade* transition = CCTransitionCrossFade::create(0.4f, missions);
 	CCDirector::sharedDirector()->replaceScene(transition);

@@ -46,6 +46,9 @@ public:
     
     void setRadar(int theRadius,int theWidth);
     
+    bool mGoblinFunctional;
+    bool mEvilTreeFunctional;
+    
 //    cocos2d::CCDrawNode* dnode;
     cocos2d::CCDrawNode* mCatchRadar;
     cocos2d::CCProgressTo* pnode;
@@ -59,6 +62,7 @@ public:
     
     int mEnemyID;
     float _timeOnMap;
+    int mEnemySpawnID;
     
     float _testAngle;
     
@@ -67,6 +71,8 @@ public:
     bool mRadarSet;     // Will troll use radar
     
     int mCatchRadarAngle;
+    
+    cocos2d::CCArray* _pathSprites;
     
     void UpdateRadar(float delta);
     
@@ -138,6 +144,9 @@ public:
     void CancelDwarfCatch(Dwarf* theCancelDwarf);
     bool mCatchingDwarf;
     float mStartCatchDwarf;
+    
+    float mFromMission_CatchDwarfWait;
+    
     Dwarf* mDwarfToCatch;
 //    cocos2d::CCSprite* mCatchRadar;
     cocos2d::CCSprite* mWarnIcon;
@@ -149,7 +158,9 @@ public:
     
     // New power stuff
     float mFreezedTime;
+    bool _forceRemove;
     
+    bool _disabled;
 	
 private:
 	GameScene* _game;
@@ -167,5 +178,5 @@ private:
 	bool _touchable;
 	
     bool _isDisabled;
-    bool _forceRemove;
+    
 };

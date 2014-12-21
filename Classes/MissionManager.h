@@ -103,6 +103,7 @@ struct MissionTroll
     
     int32_t _radar_radius;
     int32_t _radar_width;
+    int32_t _radar_wait;
     
     int32_t _circle_height;
     
@@ -244,13 +245,24 @@ struct MissionSet
     int32_t MT_Event_Timer_Min;
     int32_t MT_Event_Timer_Max;
     int32_t MT_Event_Value_Timer;
+    int32_t MT_Event_Value_Max;
     int32_t MT_Event_Value_Add;
     int32_t MT_Event_Value_Start;
     
     bool DifferentEnemySpawn;
     int32_t MaxEnemy_OnMap;
     
+    int32_t MT_Event_Bullets_Max;
+    int32_t MT_Event_Bullets_Min;
+    int32_t MT_Event_Bullets_Percent;
     
+    int32_t MT_Event_Traps_Max;
+    int32_t MT_Event_Traps_Min;
+    int32_t MT_Event_Traps_Percent;
+    
+    int32_t MT_Event_Confusion_Time;
+    
+    int32_t MT_Event_ForceSpawnEnemy_Time;
     
 };
 
@@ -288,6 +300,8 @@ public:
 //    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems);
     
     GameScene* _gameScene;
+    
+    void OnLoadGloablValues();
     
     void downloadPackage();
     
