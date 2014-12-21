@@ -1,50 +1,50 @@
 obj/local/armeabi/objs/box2d_static/Collision/b2TimeOfImpact.o: \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/Collision/b2TimeOfImpact.cpp \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2Collision.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2Math.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2Settings.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cfloat \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstddef \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/limits \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/climits \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2Distance.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2TimeOfImpact.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2CircleShape.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2Shape.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2BlockAllocator.h \
- /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2PolygonShape.h \
- /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/Collision/b2TimeOfImpact.cpp \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2Collision.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2Math.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2Settings.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cfloat \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstddef \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/limits \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/climits \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2Distance.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2TimeOfImpact.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2CircleShape.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2Shape.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2BlockAllocator.h \
+ /cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2PolygonShape.h \
+ /cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2Collision.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2Collision.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2Math.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2Math.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2Settings.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2Settings.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cassert:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cfloat:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cfloat:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstddef:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstddef:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/limits:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/limits:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/climits:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/climits:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2Distance.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2Distance.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/b2TimeOfImpact.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/b2TimeOfImpact.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2CircleShape.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2CircleShape.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2Shape.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2Shape.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Common/b2BlockAllocator.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Common/b2BlockAllocator.h:
 
-/Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2PolygonShape.h:
+/cygdrive/c/Android/cocos2d-x-2.2.5/cocos2d-x-2.2.5/projects/NewNe2w/proj.android/../../../external/Box2D/../Box2D/Collision/Shapes/b2PolygonShape.h:
 
-/Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio:
+/cygdrive/c/Android/android-ndk32-r10-windows-x86_64/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/cstdio:

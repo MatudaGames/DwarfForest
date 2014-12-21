@@ -140,6 +140,8 @@ public:
     
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();
+    void IceBlitz();
+    void StartIceBlitz();
     void BulletDwarf();
     int mMasterTroll_Bullets;
     
@@ -188,6 +190,9 @@ public:
     void CreateGameStartHUD();
     void CreateMissionStart();
     void ShowTheHUD();
+    
+    void CaveBlock(int theType);
+    void CaveBlockRemover();
     
     void generateEnemyForMission(MissionTroll theEnemy);
     void generateTrollForMission(MissionTroll theTrollInfo);
@@ -562,6 +567,8 @@ public:
     
     bool mSplitCavesMode;
     
+    bool mBlockFatCave;
+    bool mBlockTallCave;
     bool mTutorialEnabled;
     int mTutorialStep;
     float mTutorialTimer;

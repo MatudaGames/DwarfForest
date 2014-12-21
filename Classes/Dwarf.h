@@ -104,6 +104,8 @@ public:
 	
 	bool getIsConnectedToCave() const { return _isConnectedToCave; }
 	
+	bool IsConnectedBlockTime;
+	
 	SpriteAnimation* getAlarmAnimation() const { return _alarmAnimation; }
     
     int mCollectedCrystals;

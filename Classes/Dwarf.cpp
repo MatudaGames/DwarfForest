@@ -1541,10 +1541,14 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     
                     if(aDidConnectCorrect)
                     {
-                        addMovePoint(cavePosition, position);
+                        if(_game->mBlockTallCave == true){
+                    	crashLine();
+                    	}else{
+                    	addMovePoint(cavePosition, position);
                         _touchEnded = true;
                         connectLine();
-                        vibrate();
+                        vibrate();	
+                    	}
                     }
                     else
                     {
@@ -1576,10 +1580,14 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     
                     if(aDidConnectCorrect)
                     {
-                        addMovePoint(cavePosition, position);
+                        if(_game->mBlockFatCave==true){
+                    	crashLine();
+                    	}else{
+                    	addMovePoint(cavePosition, position);
                         _touchEnded = true;
                         connectLine();
-                        vibrate();
+                        vibrate();	
+                    	}
                     }
                     else
                     {
@@ -1685,6 +1693,16 @@ void Dwarf::setAngle(float value)
     
     int aOffX = 0;
     int aOffY = 0;
+    
+    if (IsConnectedBlockTime==true && _game->mBlockFatCave==true){
+    removeMovePoints();
+    _isConnectedToCave = false;
+	}
+	
+	if (IsConnectedBlockTime==true && _game->mBlockTallCave ==true){
+    removeMovePoints();
+    _isConnectedToCave = false;
+	}
     
     if (_diognalMove)
     {
