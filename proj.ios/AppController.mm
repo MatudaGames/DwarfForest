@@ -4,6 +4,8 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
+#import <HockeySDK/HockeySDK.h>
+
 @implementation AppController
 
 #pragma mark -
@@ -27,6 +29,8 @@ static AppDelegate s_sharedApplication;
                                       sharegroup: nil
                                    multiSampling: NO
                                  numberOfSamples: 0];
+    
+    [__glView setMultipleTouchEnabled:YES];
 
     // Use RootViewController manage EAGLView 
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
@@ -50,6 +54,10 @@ static AppDelegate s_sharedApplication;
     [[UIApplication sharedApplication] setStatusBarHidden:true];
     
     cocos2d::CCApplication::sharedApplication()->run();
+    
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"fdf74220c60838542510502e978b9496"];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
 
     return YES;
 }

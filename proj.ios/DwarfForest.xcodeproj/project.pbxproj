@@ -247,6 +247,17 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752F54391A02D248007A817F /* AdvancedAnimation.cpp */; };
+		754A47891A152F4900F48C5C /* Enemy_Bee.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754A47871A152F4900F48C5C /* Enemy_Bee.cpp */; };
+		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
+		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
+		755DD4FA1A439C8C005E1E0B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */; };
+		758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */; };
+		758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E951A42080C00CECB9F /* CoreText.framework */; };
+		758E3E981A42081E00CECB9F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E971A42081E00CECB9F /* MobileCoreServices.framework */; };
+		758E3E9A1A42083100CECB9F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E991A42083100CECB9F /* QuickLook.framework */; };
+		75B12F881A3F8F3C00E8101A /* WorldMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B12F861A3F8F3C00E8101A /* WorldMap.cpp */; };
+		75B12F8B1A3F951700E8101A /* PanZoomLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B12F891A3F951700E8101A /* PanZoomLayer.cpp */; };
 		75BCB0AC19E9236F000C7C65 /* BeforeQuitScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB0A219E9236F000C7C65 /* BeforeQuitScene.cpp */; };
 		75BCB0AD19E9236F000C7C65 /* CCShake.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB0A419E9236F000C7C65 /* CCShake.cpp */; };
 		75BCB0AE19E9236F000C7C65 /* ChallengesScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB0A619E9236F000C7C65 /* ChallengesScene.cpp */; };
@@ -334,6 +345,7 @@
 		75BCB1A719E9275B000C7C65 /* AnalyticX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB1A519E9275B000C7C65 /* AnalyticX.mm */; };
 		75BCB1AA19E9277E000C7C65 /* AnalyticXStringUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB1A819E9277E000C7C65 /* AnalyticXStringUtil.mm */; };
 		75BCCD8319E93B60000C7C65 /* new_resources in Resources */ = {isa = PBXBuildFile; fileRef = 75BCCD8219E93B60000C7C65 /* new_resources */; };
+		75F8721D1A05055900FCB37E /* InGamePowers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75F8721B1A05055900FCB37E /* InGamePowers.cpp */; };
 		7855E0E1153FEF240059DD9A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7855E0DF153FEF240059DD9A /* Default.png */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
@@ -869,6 +881,21 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		37C62C0718E156AE00D16FC4 /* ExtensionExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionExport.h; sourceTree = "<group>"; };
+		752F54391A02D248007A817F /* AdvancedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedAnimation.cpp; sourceTree = "<group>"; };
+		752F543A1A02D248007A817F /* AdvancedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAnimation.h; sourceTree = "<group>"; };
+		754A47871A152F4900F48C5C /* Enemy_Bee.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Bee.cpp; sourceTree = "<group>"; };
+		754A47881A152F4900F48C5C /* Enemy_Bee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy_Bee.h; sourceTree = "<group>"; };
+		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
+		755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
+		755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
+		758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		758E3E951A42080C00CECB9F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		758E3E971A42081E00CECB9F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		758E3E991A42083100CECB9F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		75B12F861A3F8F3C00E8101A /* WorldMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WorldMap.cpp; sourceTree = "<group>"; };
+		75B12F871A3F8F3C00E8101A /* WorldMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorldMap.h; sourceTree = "<group>"; };
+		75B12F891A3F951700E8101A /* PanZoomLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanZoomLayer.cpp; sourceTree = "<group>"; };
+		75B12F8A1A3F951700E8101A /* PanZoomLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanZoomLayer.h; sourceTree = "<group>"; };
 		75BCB0A119E9236F000C7C65 /* AppMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppMacros.h; sourceTree = "<group>"; };
 		75BCB0A219E9236F000C7C65 /* BeforeQuitScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeforeQuitScene.cpp; sourceTree = "<group>"; };
 		75BCB0A319E9236F000C7C65 /* BeforeQuitScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeforeQuitScene.h; sourceTree = "<group>"; };
@@ -1041,6 +1068,8 @@
 		75BCB1A819E9277E000C7C65 /* AnalyticXStringUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticXStringUtil.mm; sourceTree = SOURCE_ROOT; };
 		75BCB1A919E9277E000C7C65 /* AnalyticXStringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnalyticXStringUtil.h; sourceTree = SOURCE_ROOT; };
 		75BCCD8219E93B60000C7C65 /* new_resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = new_resources; sourceTree = "<group>"; };
+		75F8721B1A05055900FCB37E /* InGamePowers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InGamePowers.cpp; sourceTree = "<group>"; };
+		75F8721C1A05055900FCB37E /* InGamePowers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InGamePowers.h; sourceTree = "<group>"; };
 		7855E0DF153FEF240059DD9A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -1063,22 +1092,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75BCB1A319E926B6000C7C65 /* libFlurry_4.4.0.a in Frameworks */,
-				75BCB1A119E9265B000C7C65 /* Security.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				75BCB19F19E92650000C7C65 /* SystemConfiguration.framework in Frameworks */,
+				75BCB1A119E9265B000C7C65 /* Security.framework in Frameworks */,
+				758E3E9A1A42083100CECB9F /* QuickLook.framework in Frameworks */,
+				BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */,
+				758E3E981A42081E00CECB9F /* MobileCoreServices.framework in Frameworks */,
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */,
+				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
+				758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */,
+				75BCB1A319E926B6000C7C65 /* libFlurry_4.4.0.a in Frameworks */,
 				15A3DA6A1682F886002FB0C5 /* libcocos2dx.a in Frameworks */,
 				1ACB3244164770DE00914215 /* libcurl.a in Frameworks */,
-				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
-				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
-				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */,
 				BF1712461292920000B8313A /* libxml2.dylib in Frameworks */,
 				BF1712471292920000B8313A /* libz.dylib in Frameworks */,
-				BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
 				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
 				1AB8703C175E0A92005D39BF /* libwebsockets.a in Frameworks */,
+				755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1583,6 +1617,8 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				75B12F891A3F951700E8101A /* PanZoomLayer.cpp */,
+				75B12F8A1A3F951700E8101A /* PanZoomLayer.h */,
 				1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */,
 				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
 				75BCB0A119E9236F000C7C65 /* AppMacros.h */,
@@ -1610,6 +1646,8 @@
 				75BCB0BC19E92383000C7C65 /* Diamond.h */,
 				75BCB0BD19E92383000C7C65 /* DiamondIntro.cpp */,
 				75BCB0BE19E92383000C7C65 /* DiamondIntro.h */,
+				754A47871A152F4900F48C5C /* Enemy_Bee.cpp */,
+				754A47881A152F4900F48C5C /* Enemy_Bee.h */,
 				75BCB0BF19E92383000C7C65 /* Dwarf.cpp */,
 				75BCB0C019E92383000C7C65 /* Dwarf.h */,
 				75BCB0C119E92383000C7C65 /* DwarfIntro.cpp */,
@@ -1624,6 +1662,8 @@
 				75BCB0CA19E92383000C7C65 /* FreeDiamondsScene.h */,
 				75BCB0CB19E92383000C7C65 /* FreeStuffPopup.cpp */,
 				75BCB0CC19E92383000C7C65 /* FreeStuffPopup.h */,
+				75F8721B1A05055900FCB37E /* InGamePowers.cpp */,
+				75F8721C1A05055900FCB37E /* InGamePowers.h */,
 				75BCB0CD19E92383000C7C65 /* GameScene.cpp */,
 				75BCB0CE19E92383000C7C65 /* GameScene.h */,
 				75BCB0CF19E92383000C7C65 /* GameStats.cpp */,
@@ -1706,6 +1746,8 @@
 				75BCB13819E9238D000C7C65 /* Spider.h */,
 				75BCB13919E9238D000C7C65 /* SpriteAnimation.cpp */,
 				75BCB13A19E9238D000C7C65 /* SpriteAnimation.h */,
+				752F54391A02D248007A817F /* AdvancedAnimation.cpp */,
+				752F543A1A02D248007A817F /* AdvancedAnimation.h */,
 				75BCB13B19E9238D000C7C65 /* StaticSceneManager.cpp */,
 				75BCB13C19E9238D000C7C65 /* StaticSceneManager.h */,
 				75BCB13D19E9238D000C7C65 /* StatsBox.cpp */,
@@ -1750,6 +1792,8 @@
 				75BCB16419E9238D000C7C65 /* WeeklyCompletePopUp.h */,
 				75BCB16519E9238D000C7C65 /* Wind.cpp */,
 				75BCB16619E9238D000C7C65 /* Wind.h */,
+				75B12F861A3F8F3C00E8101A /* WorldMap.cpp */,
+				75B12F871A3F8F3C00E8101A /* WorldMap.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -2343,6 +2387,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				755DD4F31A439C8C005E1E0B /* HockeySDK.embeddedframework */,
+				758E3E991A42083100CECB9F /* QuickLook.framework */,
+				758E3E971A42081E00CECB9F /* MobileCoreServices.framework */,
+				758E3E951A42080C00CECB9F /* CoreText.framework */,
+				758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */,
 				75BCB1A219E926B6000C7C65 /* libFlurry_4.4.0.a */,
 				75BCB1A019E9265B000C7C65 /* Security.framework */,
 				75BCB19E19E92650000C7C65 /* SystemConfiguration.framework */,
@@ -2359,6 +2408,24 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		755DD4F31A439C8C005E1E0B /* HockeySDK.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				755DD4F41A439C8C005E1E0B /* HockeySDK.framework */,
+				755DD4F51A439C8C005E1E0B /* Resources */,
+			);
+			path = HockeySDK.embeddedframework;
+			sourceTree = "<group>";
+		};
+		755DD4F51A439C8C005E1E0B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */,
+				755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
@@ -2458,7 +2525,9 @@
 				D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */,
 				D446FD6E16102124000ADA7B /* Default@2x.png in Resources */,
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,
+				755DD4FA1A439C8C005E1E0B /* HockeySDKResources.bundle in Resources */,
 				1AFAF8BC16D35E4900DB1158 /* CloseNormal.png in Resources */,
+				755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */,
 				1AFAF8BD16D35E4900DB1158 /* CloseSelected.png in Resources */,
 				1AFAF8BE16D35E4900DB1158 /* HelloWorld.png in Resources */,
 			);
@@ -2618,6 +2687,7 @@
 				15A3DA321682F826002FB0C5 /* CCBFileLoader.cpp in Sources */,
 				15A3DA331682F826002FB0C5 /* CCBKeyframe.cpp in Sources */,
 				75BCB0F119E92383000C7C65 /* DebugScene.cpp in Sources */,
+				754A47891A152F4900F48C5C /* Enemy_Bee.cpp in Sources */,
 				15C0B56F196D412F007F909D /* UILayout.cpp in Sources */,
 				15C0B566196D412F007F909D /* CCTransformHelp.cpp in Sources */,
 				15C0B58A196D412F007F909D /* LabelBMFontReader.cpp in Sources */,
@@ -2632,11 +2702,14 @@
 				15A3DA381682F826002FB0C5 /* CCControlButtonLoader.cpp in Sources */,
 				75BCB17B19E9238E000C7C65 /* RateGamePopup.cpp in Sources */,
 				75BCB16719E9238E000C7C65 /* LoadingLayer.cpp in Sources */,
+				75F8721D1A05055900FCB37E /* InGamePowers.cpp in Sources */,
 				15A3DA391682F826002FB0C5 /* CCControlLoader.cpp in Sources */,
 				75BCB17319E9238E000C7C65 /* PauseScene.cpp in Sources */,
 				15A3DA3A1682F826002FB0C5 /* CCData.cpp in Sources */,
+				75B12F8B1A3F951700E8101A /* PanZoomLayer.cpp in Sources */,
 				15A3DA3B1682F826002FB0C5 /* CCLabelBMFontLoader.cpp in Sources */,
 				75BCB16C19E9238E000C7C65 /* Machine_Ghost.cpp in Sources */,
+				752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */,
 				15C0B556196D412F007F909D /* CCArmatureAnimation.cpp in Sources */,
 				75BCB0F819E92383000C7C65 /* ExperienceBar.cpp in Sources */,
 				15C0B568196D412F007F909D /* CCUtilMath.cpp in Sources */,
@@ -2680,6 +2753,7 @@
 				15C0B55E196D412F007F909D /* CCDisplayFactory.cpp in Sources */,
 				15A3DA4D1682F826002FB0C5 /* CCControlPotentiometer.cpp in Sources */,
 				75BCB18E19E9238E000C7C65 /* UserStats.cpp in Sources */,
+				75B12F881A3F8F3C00E8101A /* WorldMap.cpp in Sources */,
 				15A3DA4E1682F826002FB0C5 /* CCControlSaturationBrightnessPicker.cpp in Sources */,
 				15A3DA4F1682F826002FB0C5 /* CCControlSlider.cpp in Sources */,
 				75BCB18119E9238E000C7C65 /* StatsScene.cpp in Sources */,
@@ -2802,9 +2876,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/HockeySDK.embeddedframework",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2840,8 +2919,8 @@
 				);
 				OTHER_CFLAGS = "-O2";
 				PRODUCT_NAME = DwarfForest;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "4379c7bd-adb0-4a69-8659-04e78578db69";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4379c7bd-adb0-4a69-8659-04e78578db69";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -2853,9 +2932,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/HockeySDK.embeddedframework",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2888,8 +2972,8 @@
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
 				);
 				PRODUCT_NAME = DwarfForest;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "4379c7bd-adb0-4a69-8659-04e78578db69";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4379c7bd-adb0-4a69-8659-04e78578db69";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";

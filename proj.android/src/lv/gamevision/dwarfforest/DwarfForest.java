@@ -67,6 +67,9 @@ import com.sromku.simple.fb.entities.Feed;
 import com.sromku.simple.fb.entities.Photo;
 import com.sromku.simple.fb.entities.Profile;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 //import com.testflightapp.lib.TestFlight;
 
 public class DwarfForest extends BaseGameActivity
@@ -90,6 +93,8 @@ public class DwarfForest extends BaseGameActivity
 //		FlurryAgent.onStartSession(this, "3VKQNCDJQW6Q9YHVYVKH");
 		
 		AnalyticXBridge.sessionContext = this.getApplicationContext();
+		
+		checkForUpdates();
 	}
 	
 	////////////////////////////////////////////////////////////
@@ -261,7 +266,18 @@ public class DwarfForest extends BaseGameActivity
     {
         super.onResume();
         mSimpleFacebook = SimpleFacebook.getInstance(this);
+        checkForCrashes();
+        checkForUpdates();
     }
+    
+    private void checkForCrashes() {
+        CrashManager.register(this, "3ba775b8457246ab4a98b6d3187f24de");
+      }
+
+      private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this, "3ba775b8457246ab4a98b6d3187f24de");
+      }
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
