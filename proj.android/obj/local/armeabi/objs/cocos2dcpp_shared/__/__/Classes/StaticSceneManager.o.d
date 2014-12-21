@@ -243,7 +243,7 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/StaticSceneManager.o: \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/easy.h \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/multi.h \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
- jni/../../Classes/MissionScene.h
+ jni/../../Classes/MissionScene.h jni/../../Classes/WorldMap.h
 
 jni/../../Classes/StaticSceneManager.h:
 
@@ -746,3 +746,5 @@ jni/../../Classes/MissionManager.h:
 /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h:
 
 jni/../../Classes/MissionScene.h:
+
+jni/../../Classes/WorldMap.h:

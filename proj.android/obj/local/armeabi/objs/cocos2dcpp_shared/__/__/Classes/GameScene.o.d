@@ -227,7 +227,8 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/GameScene.o: \
  jni/../../Classes/SpriteAnimation.h \
  jni/../../Classes/DailyChallengesScene.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime \
- jni/../../Classes/TimedSpriteAnimation.h \
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h \
  jni/../../Classes/MainMenuScene.h jni/../../Classes/PauseScene.h \
  jni/../../Classes/SaveMeScene.h jni/../../Classes/AppMacros.h \
  jni/../../Classes/Effect.h jni/../../Classes/IceBarrage.h \
@@ -243,9 +244,10 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/GameScene.o: \
  jni/../../Classes/ExperienceBar.h jni/../../Classes/HighScore.h \
  jni/../../Classes/LevelEndMenu.h jni/../../Classes/LevelEndMissions.h \
  jni/../../Classes/TutorialScene.h jni/../../Classes/CCShake.h \
- jni/../../Classes/HidraIntro.h jni/../../Classes/MissionScene.h \
- jni/../../Classes/PlantCrystal.h jni/../../Classes/PlantFuzzBall.h \
- jni/../../Classes/PlantIceFlower.h jni/../../Classes/PlantSunFlower.h \
+ jni/../../Classes/WorldMap.h jni/../../Classes/HidraIntro.h \
+ jni/../../Classes/MissionScene.h jni/../../Classes/PlantCrystal.h \
+ jni/../../Classes/PlantFuzzBall.h jni/../../Classes/PlantIceFlower.h \
+ jni/../../Classes/PlantSunFlower.h \
  jni/../../Classes/StaticSceneManager.h jni/../../Classes/JniCalls.h \
  jni/../../Classes/Machine_Stamp.h jni/../../Classes/Machine_Ghost.h \
  jni/../../Classes/Machine_Enemies.h \
@@ -719,6 +721,12 @@ jni/../../Classes/DailyChallengesScene.h:
 
 /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime:
 
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
+
 jni/../../Classes/TimedSpriteAnimation.h:
 
 jni/../../Classes/MainMenuScene.h:
@@ -778,6 +786,8 @@ jni/../../Classes/LevelEndMissions.h:
 jni/../../Classes/TutorialScene.h:
 
 jni/../../Classes/CCShake.h:
+
+jni/../../Classes/WorldMap.h:
 
 jni/../../Classes/HidraIntro.h:
 

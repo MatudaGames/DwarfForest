@@ -231,7 +231,8 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/StoreOfferPopup.o: \
  jni/../../Classes/DailyChallengesPopUp.h \
  jni/../../Classes/SpriteAnimation.h \
  jni/../../Classes/DailyChallengesScene.h \
- jni/../../Classes/TimedSpriteAnimation.h
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h
 
 jni/../../Classes/StoreOfferPopup.h:
 
@@ -708,5 +709,11 @@ jni/../../Classes/DailyChallengesPopUp.h:
 jni/../../Classes/SpriteAnimation.h:
 
 jni/../../Classes/DailyChallengesScene.h:
+
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
 
 jni/../../Classes/TimedSpriteAnimation.h:

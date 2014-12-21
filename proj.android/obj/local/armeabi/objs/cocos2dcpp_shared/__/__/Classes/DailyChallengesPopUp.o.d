@@ -225,7 +225,9 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/DailyChallengesPopUp.o: \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/third_party/android/prebuilt/libcurl/include/curl/curl.h \
  jni/../../Classes/Spider.h jni/../../Classes/Goblin.h \
  jni/../../Classes/Hidra.h jni/../../Classes/Diamond.h \
- jni/../../Classes/TimedSpriteAnimation.h jni/../../Classes/Utils.h \
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h \
+ jni/../../Classes/Utils.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/cmath \
  jni/../../Classes/User.h jni/../../Classes/DailyChallenges.h \
  jni/../../Classes/WeeklyChallenges.h jni/../../Classes/UserStats.h \
@@ -691,6 +693,12 @@ jni/../../Classes/Goblin.h:
 jni/../../Classes/Hidra.h:
 
 jni/../../Classes/Diamond.h:
+
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
 
 jni/../../Classes/TimedSpriteAnimation.h:
 

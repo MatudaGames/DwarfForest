@@ -228,7 +228,8 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/LevelEndScene.o: \
  jni/../../Classes/Goblin.h jni/../../Classes/Hidra.h \
  jni/../../Classes/Diamond.h jni/../../Classes/DailyChallengesPopUp.h \
  jni/../../Classes/DailyChallengesScene.h \
- jni/../../Classes/TimedSpriteAnimation.h \
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h \
  jni/../../Classes/DailyDaysCompletePopup.h jni/../../Classes/User.h \
  jni/../../Classes/DailyChallenges.h jni/../../Classes/UserStats.h \
  jni/../../Classes/Utils.h \
@@ -710,6 +711,12 @@ jni/../../Classes/Diamond.h:
 jni/../../Classes/DailyChallengesPopUp.h:
 
 jni/../../Classes/DailyChallengesScene.h:
+
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
 
 jni/../../Classes/TimedSpriteAnimation.h:
 

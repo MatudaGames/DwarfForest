@@ -234,7 +234,8 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/MainMenuScene.o: \
  jni/../../Classes/SpriteAnimation.h \
  jni/../../Classes/DailyChallengesScene.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime \
- jni/../../Classes/TimedSpriteAnimation.h \
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h \
  jni/../../Classes/TutorialScene.h jni/../../Classes/AppMacros.h \
  jni/../../Classes/FreeDiamondsScene.h jni/../../Classes/StoreScene.h \
  jni/../../Classes/StoreBox.h jni/../../Classes/Utils.h \
@@ -248,10 +249,10 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/MainMenuScene.o: \
  jni/../../Classes/LevelEndScene.h jni/../../Classes/ExperienceBar.h \
  jni/../../Classes/HighScore.h jni/../../Classes/LevelEndMenu.h \
  jni/../../Classes/LevelEndMissions.h jni/../../Classes/OptionsScene.h \
- jni/../../Classes/AnalyticX.h jni/../../Classes/UpgradeScene.h \
- jni/../../Classes/MissionScene.h jni/../../Classes/Machine_Stamp.h \
- jni/../../Classes/Machine_Ghost.h jni/../../Classes/Machine_Enemies.h \
- jni/../../Classes/ChallengesScene.h \
+ jni/../../Classes/WorldMap.h jni/../../Classes/AnalyticX.h \
+ jni/../../Classes/UpgradeScene.h jni/../../Classes/MissionScene.h \
+ jni/../../Classes/Machine_Stamp.h jni/../../Classes/Machine_Ghost.h \
+ jni/../../Classes/Machine_Enemies.h jni/../../Classes/ChallengesScene.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/platforms/android-9/arch-arm/usr/include/jni.h \
  /Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/proj.android/../../../cocos2dx/platform/android/jni/JniHelper.h
 
@@ -733,6 +734,12 @@ jni/../../Classes/DailyChallengesScene.h:
 
 /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime:
 
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
+
 jni/../../Classes/TimedSpriteAnimation.h:
 
 jni/../../Classes/TutorialScene.h:
@@ -784,6 +791,8 @@ jni/../../Classes/LevelEndMenu.h:
 jni/../../Classes/LevelEndMissions.h:
 
 jni/../../Classes/OptionsScene.h:
+
+jni/../../Classes/WorldMap.h:
 
 jni/../../Classes/AnalyticX.h:
 

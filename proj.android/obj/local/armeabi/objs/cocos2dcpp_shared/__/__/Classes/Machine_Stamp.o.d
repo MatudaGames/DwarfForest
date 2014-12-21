@@ -225,9 +225,11 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/Machine_Stamp.o: \
  jni/../../Classes/SpriteAnimation.h \
  jni/../../Classes/DailyChallengesScene.h \
  /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime \
- jni/../../Classes/TimedSpriteAnimation.h jni/../../Classes/User.h \
- jni/../../Classes/DailyChallenges.h jni/../../Classes/WeeklyChallenges.h \
- jni/../../Classes/UserStats.h jni/../../Classes/CCShake.h
+ jni/../../Classes/AdvancedAnimation.h jni/../../Classes/InGamePowers.h \
+ jni/../../Classes/Enemy_Bee.h jni/../../Classes/TimedSpriteAnimation.h \
+ jni/../../Classes/User.h jni/../../Classes/DailyChallenges.h \
+ jni/../../Classes/WeeklyChallenges.h jni/../../Classes/UserStats.h \
+ jni/../../Classes/CCShake.h
 
 jni/../../Classes/Machine_Stamp.h:
 
@@ -690,6 +692,12 @@ jni/../../Classes/SpriteAnimation.h:
 jni/../../Classes/DailyChallengesScene.h:
 
 /Users/kristapsauzins/Desktop/GameDev/Android/android-ndk-r9/sources/cxx-stl/gnu-libstdc++/4.6/include/ctime:
+
+jni/../../Classes/AdvancedAnimation.h:
+
+jni/../../Classes/InGamePowers.h:
+
+jni/../../Classes/Enemy_Bee.h:
 
 jni/../../Classes/TimedSpriteAnimation.h:
 
