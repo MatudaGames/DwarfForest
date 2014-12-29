@@ -42,6 +42,7 @@
 #define MASTER_ACTION_BULLET 11
 #define MASTER_ACTION_BULLET_ICE 12
 #define MASTER_ACTION_BULLET_POISON 13
+#define MASTER_ACTION_BULLET_STRAIGHT 14
 
 // Mission types
 #define MissionType_PointCount 0
@@ -51,6 +52,8 @@
 #define MissionType_Time 3
 #define MissionType_Mushroom 4
 #define MissionType_TrollEscape 5
+
+#define MissionType_DwarfSave 6
 
 // Activate power up
 #define MissionType_AP_Freezer 200
@@ -138,6 +141,8 @@ public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::CCScene* scene();
     
+    cocos2d::CCLabelTTF* mDwarfSaveCounter;
+    
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();
     void IceBlitz();
@@ -148,6 +153,9 @@ public:
     int _mission_escaped_trolls;
     int _mission_AP_Freezer;
     int _mission_AP_GhostDwarfs;
+    
+    int _mission_SaveDwarfs_KillMax;
+    int _mission_SaveDwarfs_Left;
     
     bool _mInstantBulletAction; // Will this be a instant bullet
     int mCurrentBulletType;// What type of bullet will fly now
@@ -330,6 +338,8 @@ public:
     
     void disableBooster(int theType);
     void createRandomBoos(cocos2d::CCPoint thePos);
+    
+    void UpdateDwarfSaveLabel();
     
     void checkBoosterAvailability();
     

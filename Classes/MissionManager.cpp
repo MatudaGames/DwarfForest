@@ -17,6 +17,10 @@
 
 #include <algorithm>
 
+#include "CCDirector.h"
+
+#include "LoadingScreen.h"
+
 //urllib2
 //#include "stdio.h"
 //#include "stdlib.h"
@@ -29,7 +33,7 @@
 //#include <string>
 
 
-
+using namespace cocos2d;
 
 //#pragma  comment(lib,"libcurl_imp.lib")
 
@@ -854,7 +858,7 @@ std::vector<int> static &split(const std::string &s, char delim, std::vector<int
     
     while (std::getline(ss, item, delim)) {
         resultInt = atoi(item.c_str());
-        CCLOG("resultInt:%i",resultInt);
+//        CCLOG("resultInt:%i",resultInt);
         elems.push_back(resultInt);
     }
     return elems;
@@ -888,7 +892,14 @@ std::vector<int> MissionManager::SplitString(const std::string s,char delim){
 MissionManager::MissionManager()
 {
     ///Do the magic here !!!
-    OnDownloadSpecialMissions();
+    
+//    LoadingScreen* aLoading = static_cast<LoadingScreen*>(CCDirector::sharedDirector()->getRunningScene()->getChildByTag(888));
+//    if(aLoading->mMissionMiscLoopFix){
+//        return;
+//    }
+//    aLoading->mMissionMiscLoopFix = true;
+    
+//    OnDownloadSpecialMissions();
     return;
     
     CURL *pCurl;
@@ -4488,8 +4499,13 @@ void MissionManager::AddExtraDownloadedMissions_3()
 
 void MissionManager::OnDownloadSpecialMissions()
 {
+    
     CURL *pCurl;
     CURLcode nResCode;
+    
+    int32_t code;
+    
+    char s_errorBuffer[CURL_ERROR_SIZE];
     
     pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
     if (pCurl != NULL)
@@ -4498,10 +4514,11 @@ void MissionManager::OnDownloadSpecialMissions()
         saveFileName = "DF_MissionsTest.plist";
         saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
         
-        pFile = fopen(saveFileName.c_str(), "w+");
-//        https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=0
-//        https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1
+//        pFile = fopen(saveFileName.c_str(), "w+");
+        pFile = fopen(saveFileName.c_str(), "wb");
         
+        
+        // The test
         curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1");
         if(pFile != NULL)
         {
@@ -4515,12 +4532,60 @@ void MissionManager::OnDownloadSpecialMissions()
             curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
             nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
             curl_easy_cleanup(pCurl);           //Release the related resources
-            fputs ("fopen example",pFile);
             fclose(pFile);
-            OnDownloadedSpecial();
+            OnFailToLoad(nResCode);
+//            nResCode == CURLE_OK ? CCLOG("DownLoad Success") : CCLOG("CODE: %d",nResCode);
         }
         
+        //--------------------------------------
+        
+        // The working stuff
+        /*
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+//            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            
+            code = curl_easy_setopt(pCurl, CURLOPT_NOSIGNAL, 1L);
+            if (code != CURLE_OK) {
+                OnFailToLoad();return;
+            }
+            
+            code = curl_easy_setopt(pCurl, CURLOPT_ERRORBUFFER, s_errorBuffer);
+            if (code != CURLE_OK) {
+                OnFailToLoad();return;
+            }
+            code = curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);
+            if (code != CURLE_OK) {
+                OnFailToLoad();return;
+            }
+            code = curl_easy_setopt(pCurl, CURLOPT_CONNECTTIMEOUT, 30);
+            if (code != CURLE_OK) {
+                OnFailToLoad();return;
+            }
+            
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fputs ("fopen example",pFile);
+            fclose(pFile);
+//            OnDownloadedSpecial();
+        }
+        */
+        
     }
+}
+
+void MissionManager::OnFailToLoad(CURLcode code)
+{
+//    code == CURLE_OK ? CCLOG("DownLoad Success") : CCLOG("CODE: %d",code);
+    OnDownloadedSpecial();
 }
 
 // Load the global values?
@@ -4532,9 +4597,109 @@ void MissionManager::OnLoadGloablValues()
 
 void MissionManager::OnDownloadedSpecial()
 {
-    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsTest.plist";
+    // Start with local file check - then if we have local - try to check if downloaded file exists and is newer
+    bool _doWeHaveLocalFile = false;
+    std::string path_local = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_Missions_Local.plist";
+    if(cocos2d::CCFileUtils::sharedFileUtils()->isFileExist(path_local))
+    {
+        //Safe check
+        cocos2d::CCDictionary* pRet = cocos2d::CCDictionary::createWithContentsOfFileThreadSafe(path_local.c_str());
+        if(pRet != NULL){
+            // We have local file !!!
+            _doWeHaveLocalFile = true;
+        }
+    }
     
-    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    // Now that we have local file - we can check futher whats with out downloaded file !!!
+    bool _doWeHaveDownloadedFile = false;
+    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_MissionsTest.plist";
+    if(cocos2d::CCFileUtils::sharedFileUtils()->isFileExist(path))
+    {
+        // We have donwloaded something !!!
+        cocos2d::CCDictionary* pRet = cocos2d::CCDictionary::createWithContentsOfFileThreadSafe(path.c_str());
+        if(pRet != NULL){
+            _doWeHaveDownloadedFile = true;
+            
+            // Update the local file !!!
+            FILE *pWriteDummy = fopen(path_local.c_str(), "w+");
+            
+            FILE *pFile = fopen(path.c_str(),"r+");
+            fseek(pFile,0,SEEK_END);
+            int size = ftell(pFile);
+            
+            fclose(pFile);
+            
+            //ReOpen it?
+            pFile = fopen(path.c_str(), "r+");
+            
+            char buffer [size];
+            /*
+             for(int i=0;i<size;i++)
+             {
+             fgets (buffer , size , pFile);
+             fputs (buffer , pWriteDummy);
+             }
+             */
+            
+            while ( ! feof (pFile) )
+            {
+                fgets (buffer , size , pFile);
+                fputs (buffer , pWriteDummy);
+            }
+            
+            fclose(pFile);
+            fclose(pWriteDummy);
+            
+            _doWeHaveLocalFile = true;
+        }
+    }
+    
+    // Get a internet connection for 1st time xml file downloads !!!
+    if(_doWeHaveLocalFile == false){
+        CCLOG("We have no mission files !!!");
+        
+        //Show popup that need internet connection to continue !!!
+        CreateNoInternet();
+        return;
+    }
+    
+    
+//    std::string saveFileName;
+//    saveFileName = "DF_MissionsTest.plist";
+//    saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+    
+    //        pFile = fopen(saveFileName.c_str(), "w+");
+//    pFile = fopen(saveFileName.c_str(), "wb");
+    
+//    pFile = fopen(path_local.c_str(),"wb");
+    
+    
+    // Now check what the hell is going on here !!!
+//    std::string path = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath()+"DF_Missions_Ready.plist";
+    
+    /*
+    if(cocos2d::CCFileUtils::sharedFileUtils()->isFileExist(path))
+    {
+        // Check if this file really can be created !!
+        cocos2d::CCDictionary* pRet = cocos2d::CCDictionary::createWithContentsOfFileThreadSafe(path.c_str());
+        if(pRet == NULL){
+            CCLOG("The file is broken !!!");
+            return;
+        }
+        else{
+            CCLOG("We can use the old one !!!");
+        }
+    }
+    else
+    {
+        // No file - no game
+        CCLOG("No file to use !!!");
+        return;
+    }
+    */
+    
+//    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
+    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path_local.c_str());
     
     mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
     mCurrentActiveMission = 0;
@@ -4871,6 +5036,20 @@ void MissionManager::OnDownloadedSpecial()
 //            mission->MT_Bullet_Speed_Max = Bullet_Speeds[1];
         }
         
+        // Disabled if 0
+        mission->Mission_SaveDwarfs = 0;
+        aDummyVar = missionDict->valueForKey("Task_DwarfCount")->floatValue();
+        if(aDummyVar>=1){
+            mission->Mission_SaveDwarfs = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("Task_MaxDwarfKill")->floatValue();
+        if(aDummyVar>=1){
+            mission->Mission_MaxKillDwarfs = aDummyVar;
+        }
+        
+        
+        
         std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
         if(Bullet_Speeds.size()>0)
         {
@@ -5003,7 +5182,60 @@ void MissionManager::OnDownloadedSpecial()
     mAllFinished = true;
     
     //Create popup for wait !!!
-    cocos2d::CCMessageBox("Test Mission file downloaded","Continue");
+//    cocos2d::CCMessageBox("Test Mission file downloaded","Continue");
+    
+//    OnMissionsLoaded
+//    cocos2d::CCDirector->getcu
+    
+//    cocos2d::CCDirector::sharedDirector()->getRunningScene()->addChild(pop);
+    
+//    cocos2d::CCScene* aScene = static_cast<cocos2d::CCScene*>(cocos2d::CCDirector::sharedDirector()->getRunningScene());
+    cocos2d::CCScene* aScene = cocos2d::CCDirector::sharedDirector()->getRunningScene();
+    LoadingScreen* aLoading = static_cast<LoadingScreen*>(aScene->getChildByTag(888));
+    aLoading->OnMissionsLoaded();
+}
+
+void MissionManager::CreateNoInternet()
+{
+    cocos2d::CCLayerColor* aBG = cocos2d::CCLayerColor::create(cocos2d::ccc4(0,0,0,128),
+                                                               cocos2d::CCDirector::sharedDirector()->getVisibleSize().width,
+                                                               cocos2d::CCDirector::sharedDirector()->getVisibleSize().height);
+    
+    // Create some popup about this error
+    //Add some button
+    cocos2d::CCSprite* popup = cocos2d::CCSprite::create("Interfeiss/before_quit/dont_leave.png");
+    popup->setPosition(ccp(aBG->getContentSize().width/2,aBG->getContentSize().height/2));
+    aBG->addChild(popup);
+    
+    cocos2d::CCMenuItemImage* okBtn = cocos2d::CCMenuItemImage::create("Interfeiss/before_quit/check_btn0001.png",
+                                                     "Interfeiss/before_quit/check_btn0002.png",
+                                                     aBG,
+                                                     menu_selector(MissionManager::menuCloseCallback_mission));
+    
+    cocos2d::CCMenu* menu = cocos2d::CCMenu::create(okBtn, NULL);
+    menu->alignItemsHorizontally();
+    menu->setPosition(ccp(465, 262));
+    popup->addChild(menu);
+    
+    cocos2d::CCScene* aScene = cocos2d::CCDirector::sharedDirector()->getRunningScene();
+    aScene->addChild(aBG);
+}
+
+// Show the popup and exit game - because need to be connected at least once !!!
+void MissionManager::menuCloseCallback_mission()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
+    return;
+#endif
+    
+    cocos2d::CCDirector::sharedDirector()->end();
+//    Director::getInstance()->end();
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    exit(0);
+#endif
+    
 }
 
 

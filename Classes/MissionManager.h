@@ -8,7 +8,7 @@
 
 #pragma once
 
-//#include "cocos2d.h"
+#include "cocos2d.h"
 
 #include "Crystal.h"
 
@@ -139,7 +139,16 @@ struct MissionSet
     int32_t Star_3;// || Star_3
     
     //Point counter for task
-    int32_t Task_type;//If 1 then count dwarf for point, if 0 then count crystal points, 2 activate some powerup, 3 collect green crstals? || Task_Type
+    int32_t Task_type;//Desc under || Task_Type
+    // = 0 then count crystal points,
+    // = 1 then count dwarf for point,
+    // = 2 activate some powerup,
+    // = 3 collect green crstals?
+    // = 4 hatch mission
+    // = 5 dwarf survive
+    
+    
+    
     // 0 = crystal point count
     // 1 = dwarf count
     // 2 = combo level reach
@@ -264,6 +273,9 @@ struct MissionSet
     
     int32_t MT_Event_ForceSpawnEnemy_Time;
     
+    int32_t Mission_SaveDwarfs;
+    int32_t Mission_MaxKillDwarfs;
+    
 };
 
 struct CompletedStuff
@@ -302,6 +314,7 @@ public:
     GameScene* _gameScene;
     
     void OnLoadGloablValues();
+    void OnFailToLoad(CURLcode code);
     
     void downloadPackage();
     
@@ -343,6 +356,9 @@ public:
     
     void GetExtraMissions_3();
     void AddExtraDownloadedMissions_3();
+    
+    void menuCloseCallback_mission();
+    void CreateNoInternet();
     
 private:
     bool mAllFinished;

@@ -10829,6 +10829,7 @@ void GameScene::updateDwarfs(float delta)
                     dwarfEnterDoor(true,dwarf);
                     mTotalBlueDwarfs+=1;
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
+                    CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
@@ -10983,6 +10984,7 @@ void GameScene::updateDwarfs(float delta)
                     dwarfEnterDoor(false,dwarf);
                     mTotalOrangeDwarfs+=1;
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
+                    CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
@@ -11040,20 +11042,25 @@ void GameScene::updateDwarfs(float delta)
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), gob->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
                         {
-                            stopInGameSound("Footsteps");
-                            stopInGameSound("troll_walk");
-                            
-                            stopInGameSound("dwarf_web_stuck",true);
-                            //                            dwarf->createCrash();
-                            
-                            dwarf->setDisabled(true);
-                            dwarf->createCrash();
-                            dwarf->doDwarfBang(dwarf->_angle);
-                            dwarf->setTag(999);//Will skip his pause !!!
-                            
-                            //                            dwarf->createTrollCrash();
-//                            gob->HitGoblin(false);
-                            lose();
+                            if(mCurrentMission.Task_type == MissionType_DwarfSave){
+                                dwarf->removeFromSave();
+                            }
+                            else{
+                                stopInGameSound("Footsteps");
+                                stopInGameSound("troll_walk");
+                                
+                                stopInGameSound("dwarf_web_stuck",true);
+                                //                            dwarf->createCrash();
+                                
+                                dwarf->setDisabled(true);
+                                dwarf->createCrash();
+                                dwarf->doDwarfBang(dwarf->_angle);
+                                dwarf->setTag(999);//Will skip his pause !!!
+                                
+                                //                            dwarf->createTrollCrash();
+                                //                            gob->HitGoblin(false);
+                                lose();
+                            }
                         }
                     }
                 }
@@ -11067,19 +11074,24 @@ void GameScene::updateDwarfs(float delta)
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), gob->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
                         {
-                            stopInGameSound("Footsteps");
-                            stopInGameSound("troll_walk");
-                            
-                            stopInGameSound("dwarf_web_stuck",true);
-//                            dwarf->createCrash();
-                            
-                            dwarf->setDisabled(true);
-                            dwarf->createCrash();
-                            dwarf->doDwarfBang(dwarf->_angle);
-                            dwarf->setTag(999);//Will skip his pause !!!
-                            
-//                            dwarf->createTrollCrash();
-                            gob->HitGoblin(false);
+                            if(mCurrentMission.Task_type == MissionType_DwarfSave){
+                                dwarf->removeFromSave();
+                            }
+                            else{
+                                stopInGameSound("Footsteps");
+                                stopInGameSound("troll_walk");
+                                
+                                stopInGameSound("dwarf_web_stuck",true);
+                                //                            dwarf->createCrash();
+                                
+                                dwarf->setDisabled(true);
+                                dwarf->createCrash();
+                                dwarf->doDwarfBang(dwarf->_angle);
+                                dwarf->setTag(999);//Will skip his pause !!!
+                                
+                                //                            dwarf->createTrollCrash();
+                                gob->HitGoblin(false);
+                            }
                         }
                     }
                 }
@@ -11189,22 +11201,27 @@ void GameScene::updateDwarfs(float delta)
                             }
                             else{
                                 // GameOver
-                                troll->setVictory();
-                                
-                                //Use this for now !!!
-                                stopInGameSound("Footsteps");
-                                stopInGameSound("troll_walk");
-                                
-                                stopInGameSound("dwarf_web_stuck",true);
-                                
-                                dwarf->createTrollCrash();
-                                
-                                //------------------------
-                                
-                                troll->setTag(999);
-                                dwarf->setTag(999);
-                                
-                                menuSaveMeCallBack(dwarf,NULL,troll);
+                                if(mCurrentMission.Task_type == MissionType_DwarfSave){
+                                    dwarf->removeFromSave();
+                                }
+                                else{
+                                    troll->setVictory();
+                                    
+                                    //Use this for now !!!
+                                    stopInGameSound("Footsteps");
+                                    stopInGameSound("troll_walk");
+                                    
+                                    stopInGameSound("dwarf_web_stuck",true);
+                                    
+                                    dwarf->createTrollCrash();
+                                    
+                                    //------------------------
+                                    
+                                    troll->setTag(999);
+                                    dwarf->setTag(999);
+                                    
+                                    menuSaveMeCallBack(dwarf,NULL,troll);
+                                }
                             }
                             
                             
@@ -11679,22 +11696,28 @@ void GameScene::updateDwarfs(float delta)
                                     //Suck in this dwarf and throw bouth dwarfs out as gameover !!!
                                     //                            troll->setVictory();
                                     
-                                    stopInGameSound("Footsteps");
-                                    stopInGameSound("troll_walk");
-                                    
-                                    stopInGameSound("dwarf_web_stuck",true);
-                                    
-                                    dwarf->createTrollCrash();
-                                    
-                                    //------------------------
-                                    
-                                    //                            troll->setTag(999);
-                                    dwarf->setTag(999);
-                                    
-                                    menuSaveMeCallBack(dwarf,NULL,NULL);
-                                    
-                                    //------------------------
-                                    break;
+                                    if(mCurrentMission.Task_type == MissionType_DwarfSave){
+                                        dwarf->removeFromSave();
+                                        break;
+                                    }
+                                    else{
+                                        stopInGameSound("Footsteps");
+                                        stopInGameSound("troll_walk");
+                                        
+                                        stopInGameSound("dwarf_web_stuck",true);
+                                        
+                                        dwarf->createTrollCrash();
+                                        
+                                        //------------------------
+                                        
+                                        //                            troll->setTag(999);
+                                        dwarf->setTag(999);
+                                        
+                                        menuSaveMeCallBack(dwarf,NULL,NULL);
+                                        
+                                        //------------------------
+                                        break;
+                                    }
                                 }
                             }
                             else if(ccpDistanceSQ(dwarf->getPosition(), effect->getPosition())<=EFFECT_DISTANCE_TORNADO*10.0f)
@@ -11790,6 +11813,17 @@ void GameScene::updateDwarfs(float delta)
 				_dwarves->removeObjectAtIndex(dwarfIndex);
 				dwarf = NULL;
                 
+                if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                {
+                    _mission_SaveDwarfs_KillMax-=1;
+                    if(_mission_SaveDwarfs_KillMax <= 0){
+                        // Game over
+                        lose();
+                    }
+                    // Update dwarf label
+                    UpdateDwarfSaveLabel();
+                }
+                
                 stopInGameSound("Footsteps");
             }
 		}
@@ -11800,6 +11834,17 @@ void GameScene::updateDwarfs(float delta)
                 this->removeChild(dwarf);
 				_dwarves->removeObjectAtIndex(dwarfIndex);
 				dwarf = NULL;
+                
+                if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                {
+                    _mission_SaveDwarfs_KillMax-=1;
+                    if(_mission_SaveDwarfs_KillMax <= 0){
+                        // Game over
+                        lose();
+                    }
+                    // Update dwarf label
+                    UpdateDwarfSaveLabel();
+                }
             }
         }
 	}
@@ -11823,6 +11868,19 @@ void GameScene::updateDwarfs(float delta)
         mSpecialCrystalSpawnTimer = 2.0f;
 //        generateCrystal();
     }
+}
+
+void GameScene::UpdateDwarfSaveLabel()
+{
+    if(mDwarfSaveCounter == NULL){
+        return;
+    }
+    
+    //Update timer
+    std::stringstream theMT_Timer;
+    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left<<" | "<<mCurrentMission.Mission_MaxKillDwarfs<<"/"<<_mission_SaveDwarfs_KillMax;
+    
+    mDwarfSaveCounter->setString(theMT_Timer.str().c_str());
 }
 
 void GameScene::createRandomBoos(cocos2d::CCPoint thePos)
@@ -13155,9 +13213,19 @@ Goblin* GameScene::generateGoblin(int theX,int theY,float theRadius)
 
 void GameScene::generateDwarfMission(bool theInstant)
 {
+    // Safe check
+    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    {
+        if(_mission_SaveDwarfs_Left<=0){
+            return;//no dwarf spawn !!!
+        }
+    }
+    
     //Why do we have 2 values of this?
     _mission_dwarfs_spawned+=1;
     _DwarfsSpawned+=1;
+    
+    
     
     mBlockFatCave = false;
     mBlockTallCave = false;
@@ -13233,6 +13301,13 @@ void GameScene::generateDwarfMission(bool theInstant)
 //    }
     
     Dwarf* dwarf = Dwarf::create(this,theType);
+    
+    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    {
+        _mission_SaveDwarfs_Left-=1;
+        // Check if limit is not too low ?
+        UpdateDwarfSaveLabel();
+    }
     
     if(theType == DWARF_TYPE_FAT){
         dwarf->_speed = mCurrentMission.DwarfSpeed_Fat;
@@ -18019,7 +18094,7 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
-    else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON)
+    else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON || theType == MASTER_ACTION_BULLET_STRAIGHT)
     {
         if(mMT_LastBulletTimer==-1){
             mMT_LastBulletTimer = 10;
@@ -18170,17 +18245,30 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         return;
     }
     
-    dwarf->mBulletActive = true;
-    CCSprite* theIndicator = CCSprite::create("beta/target.png");
-    theIndicator->setPosition(ccp(dwarf->getContentSize().width/2,dwarf->getContentSize().height+theIndicator->getContentSize().height));
-    dwarf->addChild(theIndicator,100,MT_BULLET_ID);
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT){
+        // No indicator ????
+    }
+    else{
+        dwarf->mBulletActive = true;
+        CCSprite* theIndicator = CCSprite::create("beta/target.png");
+        theIndicator->setPosition(ccp(dwarf->getContentSize().width/2,dwarf->getContentSize().height+theIndicator->getContentSize().height));
+        dwarf->addChild(theIndicator,100,MT_BULLET_ID);
+    }
+
     
     TrollBullet* aBullet = TrollBullet::create(this,mCurrentBulletType);
     aBullet->setPosition(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
     aBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
     aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
     aBullet->_speedAddValue = (aBullet->_speedMax-aBullet->_speed)*0.1;
-    aBullet->_dwarf = dwarf;
+    
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT){
+        aBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
+        aBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
+    }
+    else{
+        aBullet->_dwarf = dwarf;
+    }
     
     this->addChild(aBullet, 1000);
     _bullets->addObject(aBullet);
@@ -18786,7 +18874,7 @@ void GameScene::UpdateBullets(float delta)
                 {
                     if (ccpDistanceSQ(dwarf->getPosition(), troll->getPosition()) <= 1000)
                     {
-                        if(troll != NULL && troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
+                        if(troll != NULL && troll->_dwarf != NULL && troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
                             troll->_dwarf->removeChildByTag(MT_BULLET_ID);
                         }
                         
@@ -18873,6 +18961,8 @@ void GameScene::ResetValues()
     
     mTotalMushroom = 0;
     
+    _mission_SaveDwarfs_Left = 0;
+    
     mTotalGreen_Crystals = 0;
     mTotalBlue_Crystals = 0;
     mTotalRed_Crystals = 0;
@@ -18886,6 +18976,8 @@ void GameScene::ResetValues()
     
     _SubDwarfSpawn = 0;
     _LeftNotSpawnDwatfs = 0;
+    
+    
     
     mMasterTrollActionTimer = 60;// for now
     mMasterTrollLastActionID = -1;
@@ -18955,6 +19047,23 @@ void GameScene::ResetValues()
         */
      
     }
+    
+    // Some new stuff
+    mDwarfSaveCounter = NULL;
+    
+    if(mCurrentMission.Mission_SaveDwarfs>0){
+        _mission_SaveDwarfs_Left = mCurrentMission.Mission_SaveDwarfs;
+        
+        mDwarfSaveCounter = CCLabelTTF::create("10/0 | 4/0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+        mDwarfSaveCounter->setPosition(ccp(160,450));
+        addChild(mDwarfSaveCounter,kHUD_Z_Order+1);
+    }
+    
+    if(mCurrentMission.Mission_MaxKillDwarfs>0){
+        _mission_SaveDwarfs_KillMax = mCurrentMission.Mission_MaxKillDwarfs;
+    }
+    
+    UpdateDwarfSaveLabel();
     
     
     if(mCurrentMission.MT_Event_Timer_Min>0){

@@ -203,7 +203,7 @@ void WorldMap::CreateLevels()
 
 void WorldMap::OnClickedPlayer(CCObject* sender)
 {
-    ShowMissionScreen(User::getInstance()->mCurrentMissionLevel-1);
+    ShowMissionScreen(User::getInstance()->mCurrentMissionLevel);
 }
 
 void WorldMap::OnClickedMission(CCObject* sender)
@@ -329,7 +329,6 @@ std::vector<int> static &split(const std::string &s, char delim, std::vector<int
     
     while (std::getline(ss, item, delim)) {
         resultInt = atoi(item.c_str());
-        CCLOG("resultInt:%i",resultInt);
         elems.push_back(resultInt);
     }
     return elems;

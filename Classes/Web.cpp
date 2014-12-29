@@ -70,7 +70,6 @@ bool Web::init(GameScene* gameScene)
     if (GLOBAL_SCALE!=1.0f)
     {
         _startAnimation->setScale(GLOBAL_SCALE);
-        _sprite->setScale(GLOBAL_SCALE);
     }
     
     _startAnimation->setPosition(ccp(12,14));
@@ -154,8 +153,6 @@ void Web::onComplete()
 void Web::touch(Dwarf* dwarf,Troll* troll)
 {
 	Effect::touch(dwarf,NULL);
-	
-	removeChild(_sprite);
     
     _dwarfType = dwarf->getType();
     _dwarf = dwarf;

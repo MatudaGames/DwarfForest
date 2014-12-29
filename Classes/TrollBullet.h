@@ -41,6 +41,7 @@ public:
     
     cocos2d::CCSprite* _sprite;
     
+    cocos2d::CCPoint _straightCords;
     Dwarf* _dwarf;
     
     float _angle;

@@ -61,6 +61,8 @@ bool TrollBullet::init(GameScene* game,int theType)
 		return false;
 	}
     
+    _dwarf = NULL;
+    
     _speedAddValue = 1;
     
     _type = theType;
@@ -99,7 +101,7 @@ bool TrollBullet::init(GameScene* game,int theType)
 //        p = CCParticleSystemQuad::create("Particles/bullet_part_green.plist");
         aaaaa<<"Particles/bullet_part_green.plist";
     }
-    else if(theType == MASTER_ACTION_BULLET)
+    else// if(theType == MASTER_ACTION_BULLET)
     {
         _sprite->setColor(ccc3(255, 0, 0));
         
@@ -163,6 +165,11 @@ void TrollBullet::OnDoAction(Dwarf* theForced)
     else if(_type == MASTER_ACTION_BULLET_POISON)
     {
         // This would be better if all would go to one place - not like now :D
+        theForced->setAction(_type);
+    }
+    else if (_type == MASTER_ACTION_BULLET_STRAIGHT)
+    {
+//        _game->_mission_SaveDwarfs_KillMax-=1;
         theForced->setAction(_type);
     }
 }
@@ -250,6 +257,10 @@ bool TrollBullet::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
     
     if(_canMove == false){
         _touched = false;
+        return false;
+    }
+    
+    if(_type == MASTER_ACTION_BULLET_STRAIGHT){
         return false;
     }
     

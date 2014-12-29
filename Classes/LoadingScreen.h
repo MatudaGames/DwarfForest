@@ -49,6 +49,13 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
+    bool mMissionMiscLoopFix;
+    bool mResourceLoadingCompleted;
+    bool mMissionLoadingCompleted;
+    
+    void OnMissionsLoaded();
+    void OnContinueGameInit();
+    
     /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     FMOD::System     *system;

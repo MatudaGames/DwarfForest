@@ -224,7 +224,8 @@ bool Dwarf::init(GameScene* game,int theType)
 	
 //	_speed = DWARF_SPEED;
 	
-	_line = CCSpriteBatchNode::create("trajectory_dot_white.png");
+//	_line = CCSpriteBatchNode::create("trajectory_dot_white_white.png");
+    _line = CCSpriteBatchNode::create("trajectory_dot_white.png");
 	addChild(_line);
     
     //Add the kuku anim
@@ -2263,6 +2264,13 @@ bool Dwarf::addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& 
 		_movePoints->addControlPoint(ccp(x, y));
 		
 		CCSprite* dot = CCSprite::create("trajectory_dot_white.png");
+        
+        // Check if line has the same texture !!!
+        if(_line->getTexture()->getName() != dot->getTexture()->getName()){
+            return false;// Stop it
+        }
+        
+        
 //		dot->setPosition(ccp(x, y));
         //Add some fx
         dot->setOpacity(0);
@@ -2427,5 +2435,9 @@ void Dwarf::setAction(int theType)
     else if(theType == MASTER_ACTION_BULLET_ICE)
     {
         _game->FreezeDwarfTotal(this);
+    }
+    else if(theType == MASTER_ACTION_BULLET_STRAIGHT)
+    {
+        removeFromSave();
     }
 }

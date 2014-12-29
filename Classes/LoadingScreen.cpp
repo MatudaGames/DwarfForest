@@ -37,6 +37,10 @@ bool LoadingScreen::init()
     {
         return false;
     }
+    
+    mMissionMiscLoopFix = false;
+    
+    setTag(888);
 	
     // enables back button on android
     this->setKeypadEnabled(true);
@@ -400,27 +404,66 @@ void LoadingScreen::AllCompleted()
     return;
     */
     
+    // Do not switch to mission screen - 1st check whats going on with the mission file !!!
+    
+    
+    // Do this step only when mission manager has loaded all the needed data !!!
+    /*
     CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
     CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
     CCDirector::sharedDirector()->replaceScene(transition);
-    
-    /*
-    if(User::getInstance()->mSpecialMissionBuild || User::getInstance()->mNewMissionBuild)
-    {
-        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
-        CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
-        CCDirector::sharedDirector()->replaceScene(transition);
-    }
-    else
-    {
-        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MAIN_MENU);;
-        CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
-        CCDirector::sharedDirector()->replaceScene(transition);
-    }
     */
+    
+    mResourceLoadingCompleted = true;
+    
+    if(mMissionLoadingCompleted){
+        // If all is completed - go fuher
+        OnContinueGameInit();
+    }
+    
+    // Do the other stuff
+    
+//    if(User::getInstance()->FirstSessionDone<2)
+//    {
+//        int _FirstSession = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("userFirstSession", 0);
+//        _FirstSession+=1;
+//        
+//        User::getInstance()->FirstSessionDone = _FirstSession;
+//        cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("userFirstSession", _FirstSession);
+//        cocos2d::CCUserDefault::sharedUserDefault()->flush();
+//    }
+//    
+//    //randomize seed
+//    srand(Time::getTime());
+//    
+//    //Lets init the Userdata already here ?
+////    User::getInstance()->getDailyChallenges().checkDayCounter();
+//    
+//    User::getInstance()->setActivationCount(User::getInstance()->getActivationCount() + 1);
+//    User::getInstance()->startSessionTime();
+    
+//    DF::StaticSceneManager::getInstance();
+    
+    User::getInstance()->getMissionManager().OnDownloadSpecialMissions();
 }
 
-//123
+void LoadingScreen::OnMissionsLoaded()
+{
+    mMissionLoadingCompleted = true;
+    
+    // Do we have bouth flags ready?
+    if(mResourceLoadingCompleted){
+        OnContinueGameInit();
+    }
+}
+
+void LoadingScreen::OnContinueGameInit()
+{
+    // If all is completed - go fuher
+    CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
+    CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);
+    CCDirector::sharedDirector()->replaceScene(transition);
+}
 
 
 void LoadingScreen::onEnter()
