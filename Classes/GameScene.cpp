@@ -5034,6 +5034,29 @@ void GameScene::highlightSmallDoor(bool theOff)
     */
 }
 
+void GameScene::CheckForDwarfCancel(Dwarf* theDwarf)
+{
+    //Check if this dwarf is not on some bullet adictive
+    if(theDwarf->mBulletActive){
+        //Disable at bullet dwarf
+        for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
+        {
+            TrollBullet* bullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
+            if(bullet->_dwarf == theDwarf){
+                bullet->_dwarf = NULL;//NO MORE DWARF
+                break;
+            }
+        }
+    }
+    
+    //infrom all trolls that catch is over for this dwarf !!!
+    for (int trollIndex = _trolls->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
+        troll->CancelDwarfCatch(theDwarf);
+    }
+}
+
 void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
 {
     
@@ -6110,6 +6133,12 @@ void GameScene::onSaveFromPause()
     
     //Update subtask
     User::getInstance()->getMissionManager().CheckSubMission(SUB_USE_SAVE_ME,1);
+    
+    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    {
+        // Give extra 5 dwarfs
+        _mission_SaveDwarfs_Left = 5;
+    }
     
 //    PlaySpecialMusic(_dwarves->count());
 }
@@ -10831,6 +10860,14 @@ void GameScene::updateDwarfs(float delta)
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
+                    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                    {
+                        if(_mission_SaveDwarfs_Left<=0){
+                            //Win win
+                            showWinScreen();
+                        }
+                    }
+                    
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
                     p->setAutoRemoveOnFinish(true);
@@ -10991,6 +11028,13 @@ void GameScene::updateDwarfs(float delta)
                     p->setAutoRemoveOnFinish(true);
                     addChild(p,kPoints_Z_Order-1);
                     
+                    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                    {
+                        if(_mission_SaveDwarfs_Left<=0){
+                            //Win win
+                            showWinScreen();
+                        }
+                    }
                     
                     this->removeChild(dwarf);
                     _dwarves->removeObjectAtIndex(dwarfIndex);
@@ -11809,14 +11853,15 @@ void GameScene::updateDwarfs(float delta)
             
             if (dwarf && dwarf->getForceRemove())
             {
+                CheckForDwarfCancel(dwarf);
+                
                 this->removeChild(dwarf);
 				_dwarves->removeObjectAtIndex(dwarfIndex);
 				dwarf = NULL;
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    _mission_SaveDwarfs_KillMax-=1;
-                    if(_mission_SaveDwarfs_KillMax <= 0){
+                    if(_mission_SaveDwarfs_Left <= 0){
                         // Game over
                         lose();
                     }
@@ -11831,17 +11876,19 @@ void GameScene::updateDwarfs(float delta)
         {
             if (dwarf && dwarf->getForceRemove())
             {
+                CheckForDwarfCancel(dwarf);
+                
                 this->removeChild(dwarf);
 				_dwarves->removeObjectAtIndex(dwarfIndex);
 				dwarf = NULL;
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    _mission_SaveDwarfs_KillMax-=1;
-                    if(_mission_SaveDwarfs_KillMax <= 0){
+                    if(_mission_SaveDwarfs_Left<=0){
                         // Game over
                         lose();
                     }
+                    
                     // Update dwarf label
                     UpdateDwarfSaveLabel();
                 }
@@ -11878,7 +11925,7 @@ void GameScene::UpdateDwarfSaveLabel()
     
     //Update timer
     std::stringstream theMT_Timer;
-    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left<<" | "<<mCurrentMission.Mission_MaxKillDwarfs<<"/"<<_mission_SaveDwarfs_KillMax;
+    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left;
     
     mDwarfSaveCounter->setString(theMT_Timer.str().c_str());
 }
@@ -12776,8 +12823,30 @@ void GameScene::createPoints(int amount,int theBonus,cocos2d::CCPoint thePos,coc
 //    }
 }
 
-void GameScene::lose()
+// Dont know where it is - do we have it - for now this then
+void GameScene::showWinScreen()
 {
+    lose();
+}
+
+void GameScene::lose(bool ignoreMissionSave)
+{
+    if(mCurrentMission.Task_type == MissionType_DwarfSave && !ignoreMissionSave)
+    {
+        // Check if user has got 1 star !!!
+        if(_mission_SaveDwarfs_Left<=0 && _missionCurrentValue<_mission_star_points_1)
+        {
+            // We can give save me stuff
+            SimpleAudioEngine::sharedEngine()->stopAllEffects();
+            
+            SaveMeScene* saveLayer = SaveMeScene::create();
+            saveLayer->setAnchorPoint(ccp(0,0));
+            this->addChild(saveLayer,kHUD_Z_Order);
+            
+            return;
+        }
+    }
+    
     if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mDynamicTrolls){
         //Go back to the mission scene
         
@@ -13803,37 +13872,82 @@ void GameScene::CaveBlock(int theType){
 	
 	if(theType == 0)
 	{
-    if(mCurrentMission.BlueCave_x==0 && mCurrentMission.BlueCave_y==0){	
-    mBlockFatCave = false;
-    }
-    else{
-	CCMoveTo* aMove2;
-	CCDelayTime* aDelay2;
-	CCEaseBackIn* aEase2;
-	CCSequence* aSeq2;
-    CCSprite* bCaveBlock = CCSprite::create("key_small_b.png");
-    bCaveBlock->setPosition(ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
-    aDelay2 = CCDelayTime::create(3.0f);
+        if(mCurrentMission.BlueCave_x==0 && mCurrentMission.BlueCave_y==0){
+            mBlockFatCave = false;
+        }
+        else{
             
-    aMove2 = CCMoveTo::create(2.2,ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
-    aEase2 = CCEaseBackIn::create(aMove2);
-    bCaveBlock->runAction(aEase2);
-    aSeq2 = CCSequence::create(aDelay2,aEase2,bCaveBlock,NULL);
+            // A bit updated version - should not crash now
+            CCSprite* cCaveBlock = CCSprite::create("key_small_b.png");
+            cCaveBlock->setTag(69);
+            cCaveBlock->setScale(0);
+            cCaveBlock->setPosition(ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+            addChild(cCaveBlock);
+            
+            mBlockFatCave = true;
+            
+            // The show action part
+            CCScaleTo* aKeyScale = CCScaleTo::create(0.5, 1.0f);
+            CCEaseBackIn* aKeyEase = CCEaseBackIn::create(aKeyScale);
+            
+            // The remove action part
+            CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+            CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
+            CCSequence* aRemoveSeq = CCSequence::create(aKeyEase,aRemoveDelay,aRemoveCall,NULL);
+            cCaveBlock->runAction(aRemoveSeq);
+            
+            /*
+            CCMoveTo* aMove2;
+            CCDelayTime* aDelay2;
+            CCEaseBackIn* aEase2;
+            CCSequence* aSeq2;
+            CCSprite* bCaveBlock = CCSprite::create("key_small_b.png");
+            bCaveBlock->setPosition(ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+            aDelay2 = CCDelayTime::create(3.0f);
+            
+            aMove2 = CCMoveTo::create(2.2,ccp(mCurrentMission.BlueCave_x,mCurrentMission.BlueCave_y));
+            aEase2 = CCEaseBackIn::create(aMove2);
+            bCaveBlock->runAction(aEase2);
+            aSeq2 = CCSequence::create(aDelay2,aEase2,bCaveBlock,NULL); // THIS CRASHED GAME - AS ACTION THAT WAS RUNNING WAS USED AGAIN - NOT OK :) BUT ALL OK
     
-    addChild(bCaveBlock);
-    bCaveBlock->setTag(69);
-    mBlockFatCave = true;
+            addChild(bCaveBlock);
+            bCaveBlock->setTag(69);
+            mBlockFatCave = true;
     
-    CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
-    CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
-    CCSequence* aRemoveSeq = CCSequence::create(aRemoveDelay,aRemoveCall,NULL);
-    bCaveBlock->runAction(aRemoveSeq);
-	}
-    }else if(theType == 1)
+            CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+            CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
+            CCSequence* aRemoveSeq = CCSequence::create(aRemoveDelay,aRemoveCall,NULL);
+            bCaveBlock->runAction(aRemoveSeq);
+            */
+        }
+    }
+    else if(theType == 1)
     {
     	if(mCurrentMission.OrangeCave_x==0 && mCurrentMission.OrangeCave_y==0){
     	}
     	else{
+            
+            CCSprite* cCaveBlock = CCSprite::create("key_small_o.png");
+            cCaveBlock->setTag(68);
+            cCaveBlock->setScale(0);
+            cCaveBlock->setPosition(ccp(mCurrentMission.OrangeCave_x,mCurrentMission.OrangeCave_y));
+            addChild(cCaveBlock);
+            
+            mBlockTallCave = true;
+            
+            // The show action part
+            CCScaleTo* aKeyScale = CCScaleTo::create(0.5, 1.0f);
+            CCEaseBackIn* aKeyEase = CCEaseBackIn::create(aKeyScale);
+            
+            // The remove action part
+            CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+            CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
+            CCSequence* aRemoveSeq = CCSequence::create(aKeyEase,aRemoveDelay,aRemoveCall,NULL);
+            cCaveBlock->runAction(aRemoveSeq);
+            
+            
+            // Something was fishy here - made a quick tweek
+            /*
     		CCMoveTo* aMove2;
 			CCDelayTime* aDelay2;
 			CCEaseBackIn* aEase2;
@@ -13856,6 +13970,7 @@ void GameScene::CaveBlock(int theType){
     		CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
     		CCSequence* aRemoveSeq = CCSequence::create(aRemoveDelay,aRemoveCall,NULL);
     		cCaveBlock->runAction(aRemoveSeq);
+            */
     	}
     } 
 }
@@ -19057,10 +19172,6 @@ void GameScene::ResetValues()
         mDwarfSaveCounter = CCLabelTTF::create("10/0 | 4/0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
         mDwarfSaveCounter->setPosition(ccp(160,450));
         addChild(mDwarfSaveCounter,kHUD_Z_Order+1);
-    }
-    
-    if(mCurrentMission.Mission_MaxKillDwarfs>0){
-        _mission_SaveDwarfs_KillMax = mCurrentMission.Mission_MaxKillDwarfs;
     }
     
     UpdateDwarfSaveLabel();

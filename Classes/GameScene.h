@@ -154,7 +154,6 @@ public:
     int _mission_AP_Freezer;
     int _mission_AP_GhostDwarfs;
     
-    int _mission_SaveDwarfs_KillMax;
     int _mission_SaveDwarfs_Left;
     
     bool _mInstantBulletAction; // Will this be a instant bullet
@@ -251,7 +250,9 @@ public:
     void createPoints(int amount,int theBonus,cocos2d::CCPoint thePos,cocos2d::ccColor3B theColor,bool crystalPoint=false);
 	void addScore(int score);
     void addPickedUpCrystall(CrystalColor col);
-	void lose();
+	void lose(bool ignoreMissionSave = false);
+    
+    void showWinScreen();
     
     double _gameTime;
     
@@ -335,6 +336,8 @@ public:
     void highlightSmallDoor(bool theOff);
 //    void dwarfEnterDoor(bool theFat);
     void dwarfEnterDoor(bool theFat, Dwarf* theDwarf);
+    
+    void CheckForDwarfCancel(Dwarf* theDwarf);
     
     void disableBooster(int theType);
     void createRandomBoos(cocos2d::CCPoint thePos);

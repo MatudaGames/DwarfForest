@@ -274,7 +274,6 @@ struct MissionSet
     int32_t MT_Event_ForceSpawnEnemy_Time;
     
     int32_t Mission_SaveDwarfs;
-    int32_t Mission_MaxKillDwarfs;
     
 };
 

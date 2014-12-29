@@ -279,7 +279,7 @@ void SaveMeScene::menuSkipCallback(CCObject* sender)
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
     
     GameScene* gameScene = dynamic_cast<GameScene*>(this->getParent());
-    gameScene->lose();
+    gameScene->lose(true);
     
     this->getParent()->removeChild(this);
 }

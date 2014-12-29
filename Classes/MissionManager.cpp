@@ -5043,11 +5043,6 @@ void MissionManager::OnDownloadedSpecial()
             mission->Mission_SaveDwarfs = aDummyVar;
         }
         
-        aDummyVar = missionDict->valueForKey("Task_MaxDwarfKill")->floatValue();
-        if(aDummyVar>=1){
-            mission->Mission_MaxKillDwarfs = aDummyVar;
-        }
-        
         
         
         std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');
