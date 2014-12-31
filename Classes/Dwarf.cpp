@@ -1696,13 +1696,19 @@ void Dwarf::setAngle(float value)
     int aOffY = 0;
     
     if (IsConnectedBlockTime==true && _game->mBlockFatCave==true){
-    removeMovePoints();
-    _isConnectedToCave = false;
+    	if (_type == DWARF_TYPE_FAT)
+    	{
+    		removeMovePoints();
+    		//_isConnectedToCave = false;
+    	}
 	}
 	
-	if (IsConnectedBlockTime==true && _game->mBlockTallCave ==true){
-    removeMovePoints();
-    _isConnectedToCave = false;
+	if (IsConnectedBlockTime==true && _game->mBlockTallCave==true){
+    	if (_type == DWARF_TYPE_TALL)
+    	{
+		removeMovePoints();
+    	//_isConnectedToCave = false;
+		}
 	}
     
     if (_diognalMove)
@@ -2324,6 +2330,7 @@ void Dwarf::startLine()
 {
 	_line->setTexture(CCTextureCache::sharedTextureCache()->addImage("trajectory_dot_white.png"));
     _isConnectedToCave = false;
+    IsConnectedBlockTime = false;
 }
 
 void Dwarf::connectLine()
@@ -2380,6 +2387,7 @@ void Dwarf::connectLine()
     
 	_line->setTexture(CCTextureCache::sharedTextureCache()->addImage("trajectory_dot_yellow.png"));
 	_isConnectedToCave = true;
+	IsConnectedBlockTime = true;
 //	CCLOG("Connected");
     
     //Special stuff

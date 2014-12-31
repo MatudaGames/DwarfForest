@@ -325,6 +325,10 @@ void MissionManager::Donwloaded()
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
         
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
+        
         //---------------------------------------------------------------------------------------------------
         //New stuff || Dwarf Spawn Control ||
         
@@ -521,6 +525,18 @@ void MissionManager::Donwloaded()
         mission->MT_Event_Percent_Mass = 0;
         if(aDummyVar>0){
             mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_CAVEBLOCK")->floatValue();
+        mission->MT_Event_Percent_Caveblock = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Caveblock = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_ICEBLITZ")->floatValue();
+        mission->MT_Event_Percent_Iceblitz = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Iceblitz = aDummyVar;
         }
         
         // The timers for Master Troll
@@ -1101,6 +1117,10 @@ MissionManager::MissionManager()
         cocos2d::CCDictionary* caveOrangeDict = (cocos2d::CCDictionary*)missionDict->objectForKey("OrangeCave");
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
+        
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
         
         //Add to all missions parsed
         mAllMission.push_back(*mission);
@@ -2500,6 +2520,10 @@ void MissionManager::AddExtraDownloadedMissions_1()
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
         
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
+        
         //---------------------------------------------------------------------------------------------------
         //New stuff || Dwarf Spawn Control ||
         
@@ -2696,6 +2720,18 @@ void MissionManager::AddExtraDownloadedMissions_1()
         mission->MT_Event_Percent_Mass = 0;
         if(aDummyVar>0){
             mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_CAVEBLOCK")->floatValue();
+        mission->MT_Event_Percent_Caveblock = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Caveblock = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_ICEBLITZ")->floatValue();
+        mission->MT_Event_Percent_Iceblitz = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Iceblitz = aDummyVar;
         }
         
         // The timers for Master Troll
@@ -3243,6 +3279,10 @@ void MissionManager::AddExtraDownloadedMissions_2()
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
         
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
+        
         //---------------------------------------------------------------------------------------------------
         //New stuff || Dwarf Spawn Control ||
         
@@ -3439,6 +3479,18 @@ void MissionManager::AddExtraDownloadedMissions_2()
         mission->MT_Event_Percent_Mass = 0;
         if(aDummyVar>0){
             mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_CAVEBLOCK")->floatValue();
+        mission->MT_Event_Percent_Caveblock = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Caveblock = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_ICEBLITZ")->floatValue();
+        mission->MT_Event_Percent_Iceblitz = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Iceblitz = aDummyVar;
         }
         
         // The timers for Master Troll
@@ -3986,6 +4038,10 @@ void MissionManager::AddExtraDownloadedMissions_3()
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
         
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
+        
         //---------------------------------------------------------------------------------------------------
         //New stuff || Dwarf Spawn Control ||
         
@@ -4182,6 +4238,18 @@ void MissionManager::AddExtraDownloadedMissions_3()
         mission->MT_Event_Percent_Mass = 0;
         if(aDummyVar>0){
             mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_CAVEBLOCK")->floatValue();
+        mission->MT_Event_Percent_Caveblock = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Caveblock = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_ICEBLITZ")->floatValue();
+        mission->MT_Event_Percent_Iceblitz = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Iceblitz = aDummyVar;
         }
         
         // The timers for Master Troll
@@ -4892,6 +4960,10 @@ void MissionManager::OnDownloadedSpecial()
         mission->OrangeCave_x = caveOrangeDict->valueForKey("position_x")->intValue();
         mission->OrangeCave_y = caveOrangeDict->valueForKey("position_y")->intValue();
         
+        mission->MT_Event_CaveBlock_duration = missionDict->valueForKey("MT_EVENT_CAVEBLOCK_TIME")->intValue();
+        //Define count, how many dwarfs we would freeze
+        mission->MT_Event_IceBlitz_count = missionDict->valueForKey("MT_EVENT_ICEBLITZ_COUNT")->intValue();
+        
         //---------------------------------------------------------------------------------------------------
         //New stuff || Dwarf Spawn Control ||
         
@@ -5097,6 +5169,18 @@ void MissionManager::OnDownloadedSpecial()
         mission->MT_Event_Percent_Mass = 0;
         if(aDummyVar>0){
             mission->MT_Event_Percent_Mass = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_CAVEBLOCK")->floatValue();
+        mission->MT_Event_Percent_Caveblock = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Caveblock = aDummyVar;
+        }
+        
+        aDummyVar = missionDict->valueForKey("MT_EVENT_PROCENT_ICEBLITZ")->floatValue();
+        mission->MT_Event_Percent_Iceblitz = 0;
+        if(aDummyVar>0){
+            mission->MT_Event_Percent_Iceblitz = aDummyVar;
         }
         
         // The timers for Master Troll

@@ -185,6 +185,8 @@ struct MissionSet
     int32_t OrangeCave_x;
     int32_t OrangeCave_y;
     
+    int32_t MT_Event_CaveBlock_duration;
+    
     //Dwarf spawn
     int32_t DSpawn_zone;//Whats the spawn zone control
     int32_t DSpawn_min;//Whats the min spawn dwarfs in one time
@@ -250,6 +252,10 @@ struct MissionSet
     int32_t MT_Event_Percent_Trap;
     int32_t MT_Event_Percent_Troll;
     int32_t MT_Event_Percent_Mass;
+    int32_t MT_Event_Percent_Caveblock;
+    int32_t MT_Event_Percent_Iceblitz;
+    
+    int32_t MT_Event_IceBlitz_count;
     
     int32_t MT_Event_Timer_Min;
     int32_t MT_Event_Timer_Max;

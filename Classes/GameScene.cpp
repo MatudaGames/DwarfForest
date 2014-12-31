@@ -1074,6 +1074,7 @@ void GameScene::CreateGameByMission()
     mTotalOrangeDwarfs = 0;
     CheckMissionByValue(mCurrentMission.Task_type,0);
     
+    /*
     CCSequence* caveBlockSeq = CCSequence::create(CCDelayTime::create(15.0)
     										  , CCCallFunc::create(this, callfunc_selector(GameScene::CaveBlock))
                                               , CCDelayTime::create(8.0)
@@ -1093,8 +1094,9 @@ void GameScene::CreateGameByMission()
                                               , NULL
                                              );
     this->runAction(CCRepeatForever::create(iceBlitzSeq));
-    
-    //For now - use the old map mask stuff
+    */
+	
+//For now - use the old map mask stuff
 //    _mask = new CCImage();
 //    _mask->initWithImageFile("kartes_maska.png");
 //    _mask->retain();
@@ -13868,14 +13870,13 @@ Dwarf* GameScene::generateDwarf(int theType,int theSpawnPoint)
 
 void GameScene::CaveBlock(int theType){   
 	
-	theType = rand()%2;
+	//theType = rand()%2;
 	
 	if(theType == 0)
 	{
         if(mCurrentMission.BlueCave_x==0 && mCurrentMission.BlueCave_y==0){
-            mBlockFatCave = false;
-        }
-        else{
+        	//mBlockFatCave = false;
+    	}else if(mCurrentMission.BlueCave_x>0 && mCurrentMission.BlueCave_y>0){
             
             // A bit updated version - should not crash now
             CCSprite* cCaveBlock = CCSprite::create("key_small_b.png");
@@ -13891,7 +13892,7 @@ void GameScene::CaveBlock(int theType){
             CCEaseBackIn* aKeyEase = CCEaseBackIn::create(aKeyScale);
             
             // The remove action part
-            CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+    		CCActionInterval* aRemoveDelay = CCDelayTime::create(mCurrentMission.MT_Event_CaveBlock_duration);
             CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
             CCSequence* aRemoveSeq = CCSequence::create(aKeyEase,aRemoveDelay,aRemoveCall,NULL);
             cCaveBlock->runAction(aRemoveSeq);
@@ -13924,8 +13925,7 @@ void GameScene::CaveBlock(int theType){
     else if(theType == 1)
     {
     	if(mCurrentMission.OrangeCave_x==0 && mCurrentMission.OrangeCave_y==0){
-    	}
-    	else{
+    	}else if(mCurrentMission.OrangeCave_x>0 && mCurrentMission.OrangeCave_y>0){
             
             CCSprite* cCaveBlock = CCSprite::create("key_small_o.png");
             cCaveBlock->setTag(68);
@@ -13940,7 +13940,7 @@ void GameScene::CaveBlock(int theType){
             CCEaseBackIn* aKeyEase = CCEaseBackIn::create(aKeyScale);
             
             // The remove action part
-            CCActionInterval* aRemoveDelay = CCDelayTime::create(8.0f);
+            CCActionInterval* aRemoveDelay = CCDelayTime::create(mCurrentMission.MT_Event_CaveBlock_duration);
             CCCallFunc* aRemoveCall = CCCallFuncN::create(this, callfuncN_selector (GameScene::CaveBlockRemover));
             CCSequence* aRemoveSeq = CCSequence::create(aKeyEase,aRemoveDelay,aRemoveCall,NULL);
             cCaveBlock->runAction(aRemoveSeq);
@@ -18612,7 +18612,24 @@ void GameScene::UpdateMasterTroll(float delta)
                         break;
                     }
                 }
-                
+                else if(_possibleEvents[aStartIndex] == MT_EVENT_CAVEBLOCK)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Caveblock) <= aRandomMaxSpawn){
+                        //Spawn the trap
+                        aFinalMT_Action = MT_EVENT_CAVEBLOCK;
+                        break;
+                    }
+                }
+                else if(_possibleEvents[aStartIndex] == MT_EVENT_ICEBLITZ)
+                {
+                    //Check the possibilty
+                    if((100-mCurrentMission.MT_Event_Percent_Iceblitz) <= aRandomMaxSpawn){
+                        //Spawn the trap
+                        aFinalMT_Action = MT_EVENT_ICEBLITZ;
+                        break;
+                    }
+                }
                 
                 // Do the magic
                 if(aStartIndex>_possibleEvents.size()){
@@ -18702,6 +18719,14 @@ void GameScene::UpdateMasterTroll(float delta)
             {
                 // Pagaidām
                 SetMasterTrollAction(MASTER_ACTION_CONFUSE);
+            }
+            else if(aFinalMT_Action == MT_EVENT_CAVEBLOCK)
+            {
+                CaveBlock(rand()%2);
+            }
+             else if(aFinalMT_Action == MT_EVENT_ICEBLITZ)
+            {
+                StartIceBlitz();
             }
             
             //Update timer
@@ -19041,7 +19066,7 @@ void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
     dwarf->pauseAnimation();
 }
 
-void GameScene::StartIceBlitz()
+void GameScene::StartIceBlitz()//Intro before big freezing
 {
 	SetMasterTrollAnimation("HitGround");
 	
@@ -19053,9 +19078,10 @@ void GameScene::StartIceBlitz()
 }
 void GameScene::IceBlitz()
 {
-    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    int dwarfCount = _dwarves->count() - 1;
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex > dwarfCount - mCurrentMission.MT_Event_IceBlitz_count; --dwarfIndex)//choise how many dwarfs we would freeze
     {
-    Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));//choise all dwarfs
+    Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
     
     //Freeze
     Effect* effect = NULL;

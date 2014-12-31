@@ -72,6 +72,8 @@
 #define MT_EVENT_TRAP 2
 #define MT_EVENT_TROLL 3
 #define MT_EVENT_MASS 4
+#define MT_EVENT_ICEBLITZ 5
+#define MT_EVENT_CAVEBLOCK 6
 
 
 class IntroAnimation;
