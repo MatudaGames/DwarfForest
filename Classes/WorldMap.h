@@ -2,6 +2,7 @@
 #define __DwarfForest__WorldMap__
 
 #include "cocos2d.h"
+#include "MissionManager.h"
 
 class WorldMap : public cocos2d::CCLayer
 {
@@ -31,6 +32,8 @@ public:
     void OnClickedMission(CCObject* sender);
     void OnClickedPlayer(CCObject* sender);
     
+    void MissionTaskInditificator(int theID);
+    
     void CreatePlayer();
     
     // The all node cords
@@ -46,8 +49,12 @@ public:
     void OnPlayerFinishedMove();
     
     cocos2d::CCMenu* mPlayer;
+    cocos2d::CCLabelTTF * taskInfo;
     int mCurrentMissionID;
     int mLastMissionID;
+    int WhatMission;
+    
+    MissionSet mCall;
     
     cocos2d::CCLayerColor* mSmallMissionScreen;
 };

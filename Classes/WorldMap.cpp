@@ -8,6 +8,7 @@
 
 #include "WorldMap.h"
 #include "PanZoomLayer.h"
+#include "AppMacros.h"
 #include "GameScene.h"
 #include "User.h"
 
@@ -217,6 +218,7 @@ void WorldMap::OnClickedMission(CCObject* sender)
     CCMenuItemImage* aButton =(CCMenuItemImage*)sender;
     int aID = aButton->getTag();
     CCLog("Clicked Mission:%i",aID);
+    MissionTaskInditificator(aID);
     
     //Check if this mission is clickable !!!
 //    if(aID > User::getInstance()->mCurrentMissionLevel){
@@ -233,6 +235,128 @@ void WorldMap::OnClickedMission(CCObject* sender)
     }
     
     ShowMissionScreen(aID);
+}
+
+void WorldMap::MissionTaskInditificator(int theID)
+{
+	WhatMission = theID;
+	
+	if(WhatMission == 1)//Identificate what mission number we need
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_1.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+    	
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(0);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());		
+	}else if(WhatMission == 2)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_2.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);	
+    	
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(1);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		//removeChildByTag(30004);		
+	}else if(WhatMission == 3)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_3.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);	
+    	
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());		
+	}else if(WhatMission == 4)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_4.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+    	
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(3);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());		
+	}else if(WhatMission == 5)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_5.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);	
+    	
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(4);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());		
+	}else if(WhatMission == 6)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_6.png");
+    	missionNumber->setPosition(ccp(580,580));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+		
+		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());			
+    }
 }
 
 void WorldMap::CreatePlayer()
@@ -349,7 +473,7 @@ void WorldMap::PrepeareSmallMissionScreen()
     mSmallMissionScreen->setVisible(false);
     
     //Add the screen
-    CCSprite* aScreenPlay = CCSprite::create("WorldMap/mission_screen_map.png");
+    CCSprite* aScreenPlay = CCSprite::create("WorldMap/pre_screen.png");
     aScreenPlay->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2,mSmallMissionScreen->getContentSize().height/2));
     mSmallMissionScreen->addChild(aScreenPlay);
     
@@ -392,6 +516,9 @@ void WorldMap::HideMissionScreen(CCObject * pSender)
 {
     CCMenuItem* pMenuItem = (CCMenuItem *)(pSender);
     int tag = (int)pMenuItem->getTag();
+    
+    mSmallMissionScreen->removeChildByTag(30004);
+    mSmallMissionScreen->removeChildByTag(30002);
     
     mSmallMissionScreen->setVisible(false);
     
