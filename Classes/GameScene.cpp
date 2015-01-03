@@ -10864,7 +10864,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type == MissionType_DwarfSave)
                     {
-                        if(_mission_SaveDwarfs_Left<=0){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                             //Win win
                             showWinScreen();
                         }
@@ -11032,7 +11032,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type == MissionType_DwarfSave)
                     {
-                        if(_mission_SaveDwarfs_Left<=0){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                             //Win win
                             showWinScreen();
                         }
@@ -11863,7 +11863,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left <= 0){
+                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=0){
                         // Game over
                         lose();
                     }
@@ -11886,7 +11886,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left<=0){
+                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                         // Game over
                         lose();
                     }
@@ -13288,6 +13288,17 @@ void GameScene::generateDwarfMission(bool theInstant)
     if(mCurrentMission.Task_type == MissionType_DwarfSave)
     {
         if(_mission_SaveDwarfs_Left<=0){
+            // Check if dwarfs on map are 0
+            if(_dwarves->count() <= 0 && _missionCurrentValue<_mission_star_points_1)
+            {
+                // We can give save me stuff
+                SimpleAudioEngine::sharedEngine()->stopAllEffects();
+                
+                SaveMeScene* saveLayer = SaveMeScene::create();
+                saveLayer->setAnchorPoint(ccp(0,0));
+                this->addChild(saveLayer,kHUD_Z_Order);
+            }
+            
             return;//no dwarf spawn !!!
         }
     }
