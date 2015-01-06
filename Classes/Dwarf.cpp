@@ -83,6 +83,9 @@ bool Dwarf::init(GameScene* game,int theType)
 		return false;
 	}
     
+    mContainsPowerUp = -1;// No power
+    mSnapedTroll = NULL;
+    
     _SpawnID = -1;
     
     mBulletActive = false;
@@ -491,6 +494,12 @@ void Dwarf::update(float delta)
             }
         }
         return;
+    }
+    
+    // We have some powerup
+    if(mContainsPowerUp!=-1)
+    {
+        updateDwarfPowerZone();
     }
     
     if(_animation->getOpacity()<250)
@@ -1513,7 +1522,7 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 	{
 		CCPoint position = touch->getLocation();
 		
-		if (addMovePoint(position, previousPoint))
+		if (addMovePoint(position, previousPoint,false))
 		{
 			CCPoint cavePosition = _game->getCavePoint(_type);
 			
@@ -1545,7 +1554,7 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         if(_game->mBlockTallCave == true){
                     	crashLine();
                     	}else{
-                    	addMovePoint(cavePosition, position);
+                    	addMovePoint(cavePosition, position,false);
                         _touchEnded = true;
                         connectLine();
                         vibrate();	
@@ -1584,7 +1593,7 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         if(_game->mBlockFatCave==true){
                     	crashLine();
                     	}else{
-                    	addMovePoint(cavePosition, position);
+                    	addMovePoint(cavePosition, position,false);
                         _touchEnded = true;
                         connectLine();
                         vibrate();	
@@ -1594,6 +1603,35 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     {
                         _touchEnded = true;
                         removeMovePoints();
+                    }
+                }
+            }
+            
+            //Check if does not want to connect to troll
+            if(mContainsPowerUp!=-1)
+            {
+                //Check if does not want to snap to troll
+//                mSnapedTroll
+                
+                for (int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)
+                {
+                    Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+                    
+                    //Little update - warning light on gnome !!!
+                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove())
+                    {
+                        if(ccpDistanceSQ(troll->getPosition(), position) <= FAT_SNAP_TO_CAVE)
+                        {
+                            //Snap to troll
+                            mSnapedTroll = troll;
+                            
+                            addMovePoint(troll->getPosition(), position,false);
+                            _touchEnded = true;
+                            connectLine();
+                            vibrate();
+                            
+                            break;
+                        }
                     }
                 }
             }
@@ -2147,7 +2185,7 @@ void Dwarf::removeEffect()
 	}
 }
 
-bool Dwarf::addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint)
+bool Dwarf::addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint, bool ingoreTexture)
 {
 	CCPoint diff = point - previousPoint;
 		
@@ -2272,8 +2310,25 @@ bool Dwarf::addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& 
 		CCSprite* dot = CCSprite::create("trajectory_dot_white.png");
         
         // Check if line has the same texture !!!
-        if(_line->getTexture()->getName() != dot->getTexture()->getName()){
-            return false;// Stop it
+        if(ingoreTexture)
+        {
+            //Get texture by the same name !!!
+            
+//            dot = CCSprite::cre
+            if(_line->getTexture()->getName() != dot->getTexture()->getName()){
+                
+                //Possible this is yellow dot
+                dot = CCSprite::create("trajectory_dot_yellow.png");
+                if(_line->getTexture()->getName() != dot->getTexture()->getName()){
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            if(_line->getTexture()->getName() != dot->getTexture()->getName()){
+                return false;// Stop it
+            }
         }
         
         
@@ -2308,6 +2363,10 @@ bool Dwarf::addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& 
 
 void Dwarf::removeMovePoints()
 {
+    if(mSnapedTroll!=NULL){
+        mSnapedTroll = NULL;
+    }
+    
 	// remove all control points
 	while (_movePoints->count() != 0)
 	{
@@ -2448,4 +2507,109 @@ void Dwarf::setAction(int theType)
     {
         removeFromSave();
     }
+}
+
+// The dull snap crap
+void Dwarf::updateDwarfPowerZone()
+{
+    // If has troll attached - then follow to him?
+    if(mSnapedTroll != NULL)
+    {
+        //Check what are the zone range
+        float theDistance2 = sqrtf((getPositionX()-mSnapedTroll->getPositionX())*(getPositionX()-mSnapedTroll->getPositionX()) +
+                                   (getPositionY()-mSnapedTroll->getPositionY())*(getPositionY()-mSnapedTroll->getPositionY()));
+        if(theDistance2 <= 100)
+        {
+            // Kill or freeze the troll
+            if(mContainsPowerUp == 0)
+            {
+                mSnapedTroll->removeFromSave();
+            }
+            else if(mContainsPowerUp == 1)
+            {
+                // Do all the magic here
+                mSnapedTroll->mFreezedTime = 10;//Get from missions some param?
+                
+                // Add for now blue troll FX
+                mSnapedTroll->_animation->setColor(ccc3(0, 164, 255));
+                
+                // Create some particles and sound ???
+                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+                p->setPosition(mSnapedTroll->getPositionX(), mSnapedTroll->getPositionY());
+                p->setAutoRemoveOnFinish(true);
+                _game->addChild(p,5002);
+                
+                _game->playInGameSound("dwarf_crash");
+            }
+            
+            // Remove from dwarf it !!!
+            mSnapedTroll = NULL;
+            
+            //Remove magic from dwarf
+            mContainsPowerUp = -1;
+            
+            if(mPowerUpIcon != NULL){
+                removeChild(mPowerUpIcon);
+            }
+            
+            return;
+        }
+        
+        
+        // Try to follow?
+        //Snap to troll
+        /*
+        CCPoint previousPoint = touch->getStartLocation();
+        
+        if (_movePoints->count() > 0)
+        {
+            previousPoint = _movePoints->getControlPointAtIndex(_movePoints->count() - 1);
+        }
+        
+        // if this will be the first point, start only when it is away from pick point
+        if (ccpDistanceSQ(touch->getLocation(), previousPoint) > POINT_RADIUS * POINT_RADIUS)
+        {
+            CCPoint position = touch->getLocation();
+            
+            if (addMovePoint(position, previousPoint))
+            {
+                CCPoint cavePosition = _game->getCavePoint(_type);
+            }
+        }
+        */
+        
+        
+        CCPoint previousPoint = mSnapedTroll->getPosition();//touch->getStartLocation();
+        
+        if (_movePoints->count() > 0)
+        {
+            previousPoint = _movePoints->getControlPointAtIndex(_movePoints->count() - 1);
+        }
+        
+        if (ccpDistanceSQ(mSnapedTroll->getPosition(), previousPoint) > POINT_RADIUS * POINT_RADIUS)
+        {
+            CCPoint position = mSnapedTroll->getPosition();//touch->getLocation();
+            addMovePoint(position, previousPoint,true);
+        }
+    }
+}
+
+void Dwarf::setPowerButton(int theID)
+{
+    mContainsPowerUp = theID;
+    
+    if(mPowerUpIcon != NULL){
+        removeChild(mPowerUpIcon);
+    }
+    
+    if(theID == 0)
+    {
+        mPowerUpIcon = CCSprite::create("button_electro.png");
+    }
+    else
+    {
+        mPowerUpIcon = CCSprite::create("button_freez.png");
+    }
+    
+    addChild(mPowerUpIcon,0);
 }

@@ -1037,6 +1037,9 @@ void GameScene::CreateGameByMission()
 	
 	_crystals = CCArray::create();
 	_crystals->retain();
+    
+    _powersOnMap = CCArray::create();
+    _powersOnMap->retain();
 	
 	_effects = CCArray::create();
 	_effects->retain();
@@ -1837,6 +1840,9 @@ bool GameScene::init()
     
     _tornadoActive = CCArray::create();
     _tornadoActive->retain();
+    
+    _powersOnMap = CCArray::create();
+    _powersOnMap->retain();
 	
 	_diamonds = CCArray::create();
 	_diamonds->retain();
@@ -8601,6 +8607,57 @@ void GameScene::UpdateTestStuff(float delta)
     UpdateBullets(delta);
 }
 
+void GameScene::updatePowerUpSpawn(float delta)
+{
+//    _powersOnMap
+//    GameItem_PowerUp
+    
+    // The main update loop
+    for(int otherIndex = _powersOnMap->count()-1;otherIndex>=0;--otherIndex)
+    {
+        GameItem_PowerUp* bee = static_cast<GameItem_PowerUp*>(_powersOnMap->objectAtIndex(otherIndex));
+        
+        // Order the z order
+        if (getSpriteOrderZ(bee->getPositionY())!=bee->getZOrder())
+        {
+            reorderChild(bee,getSpriteOrderZ(bee->getPositionY()));
+        }
+        
+        bee->update(delta);
+    }
+    
+    //Check if need to spawn anything
+    if(mPowerUpSpawnTime>0)
+    {
+        mPowerUpSpawnTime-=delta*_gameSpeed;
+        
+        if(mPowerUpSpawnTime<=1)
+        {
+            mPowerUpSpawnTime = rand()%5+5;// Get new value
+            
+            // What power will it be?
+            int aPowerID = rand()%2;
+            
+            // Create it
+            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,aPowerID);
+            
+            // Set some position
+            int aPositionID = rand()%8;
+            CCPoint aPosition = getRandomPointFromBlock(aPositionID);
+            
+            Bee->setPosition(aPosition);
+            
+            this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+            _powersOnMap->addObject(Bee);
+        }
+    }
+    else
+    {
+        // Some random spawn time if not given
+        mPowerUpSpawnTime = rand()%5+5;
+    }
+}
+
 void GameScene::update(float delta)
 {
     if (_gamePause)
@@ -8617,6 +8674,8 @@ void GameScene::update(float delta)
     UpdateDwarfSpawn(delta);
     UpdateCrystalSpawn(delta);
 //    UpdateTrapsSpawn(delta);
+    
+    updatePowerUpSpawn(delta);
     
     //Update new caves animation ??
     if(_SpawnBlueDwarf){
@@ -11078,6 +11137,23 @@ void GameScene::updateDwarfs(float delta)
 			
 			if (dwarf && _boostShieldTimer<=0)//If has shield then nothing can scare our dwarf =D
 			{
+                // Check powers
+                // The main update loop
+                for(int otherIndex = _powersOnMap->count()-1;otherIndex>=0;--otherIndex)
+                {
+                    GameItem_PowerUp* bee = static_cast<GameItem_PowerUp*>(_powersOnMap->objectAtIndex(otherIndex));
+                    
+                    if(bee->isVisible() && !bee->_needToRemove)
+                    {
+                        if (ccpDistanceSQ(dwarf->getPosition(), bee->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
+                        {
+                            dwarf->setPowerButton(bee->mPowerID);
+                            // Pick up the power
+                            bee->onRemove();
+                        }
+                    }
+                }
+                
                 // Check bees
                 //Check gobs
                 for(int beeIndex = _otherEnemy->count()-1;beeIndex>=0;--beeIndex)
@@ -14255,7 +14331,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
             float aCurrentDistance = 0;
             CCPoint aCurrentPos;
             
-            if(mSpeciaCrystallDwarfID!=-1)
+            if(mSpeciaCrystallDwarfID>=0)
             {
                 if(mSpeciaCrystallDwarfID>_dwarves->count())
                     mSpeciaCrystallDwarfID = 0;
@@ -19109,6 +19185,8 @@ void GameScene::IceBlitz()
 //---------------------------------------------------------------
 void GameScene::ResetValues()
 {
+    mPowerUpSpawnTime = 0;
+    
     mSpeciaCrystallDwarfID = 0;
     
     mTotalMushroom = 0;

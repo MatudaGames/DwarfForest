@@ -27,6 +27,8 @@
 
 #include "Enemy_Bee.h"
 
+#include "GameItem_PowerUp.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -144,6 +146,16 @@ public:
     static cocos2d::CCScene* scene();
     
     cocos2d::CCLabelTTF* mDwarfSaveCounter;
+    
+    //----------------------------------------
+    // The new special power up spawn stuff
+    void updatePowerUpSpawn(float delta);
+    
+    cocos2d::CCArray* _powersOnMap;
+    
+    float mPowerUpSpawnTime;
+    
+    //----------------------------------------
     
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();

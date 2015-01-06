@@ -14,6 +14,7 @@
 class GameScene;
 class Effect;
 class SpriteAnimation;
+class Troll;
 
 #define MT_BULLET_ID 344
 
@@ -44,6 +45,19 @@ public:
 	virtual void ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
 	
 	DwarfType getType() const { return _type; }
+    
+    // The power button stuff
+    
+    void setPowerButton(int theID);
+    void updateDwarfPowerZone();
+    
+    Troll* mSnapedTroll;
+    
+    int mContainsPowerUp;
+    
+    cocos2d::CCSprite *mPowerUpIcon;
+    
+    //--------------------------------------
 	
 	void setEffect(Effect* value);
 	void removeEffect();
@@ -132,7 +146,7 @@ public:
     float _defaultSpeed;
 	
 private:
-	bool addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint);
+	bool addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint,bool ingoreTexture);
 	
 	void startLine();
 	void connectLine();
