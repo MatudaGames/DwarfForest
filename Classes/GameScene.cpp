@@ -14223,6 +14223,13 @@ void GameScene::generateEnemyForMission(MissionTroll theEnemy)
         troll->setTag(879);
         troll->SetMissionStuff(theEnemy);
         
+        if(theEnemy._enemySpawnID == 3){
+        troll->setEvilTreeAnimation();
+    	}
+		else if(theEnemy._enemySpawnID == 2){
+		troll->setGoblinAnimation();
+		}
+        
         this->addChild(troll, getSpriteOrderZ(troll->getPositionY()));
         _trolls->addObject(troll);
         troll->setVisible(false);

@@ -74,6 +74,9 @@ public:
     
     cocos2d::CCArray* _pathSprites;
     
+    void setEvilTreeAnimation();
+    void setGoblinAnimation();
+    
     void UpdateRadar(float delta);
     
     cocos2d::CCSprite* mDebugPoint1;
@@ -102,7 +105,7 @@ public:
 	void setAnimation(SpriteAnimation* animation);
 	
 	bool getTouchable();
-    
+	    
     void SetMissionStuff(MissionTroll theMission);
     MissionTroll _missionInfo;
     

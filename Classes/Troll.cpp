@@ -140,6 +140,8 @@ bool Troll::init(GameScene* game)
 	
 	_game = game;
 	_game->retain();
+	
+	//TestTest();
     
     //--------------
     /*
@@ -176,7 +178,8 @@ bool Troll::init(GameScene* game)
     mWarnIcon->setPosition(ccp(0,40));
     mWarnIcon->setVisible(false);
     addChild(mWarnIcon,100);
-	
+    
+    
 	_leftUpAnimation = SpriteAnimation::create("Characters/troll/troll_diagonal_up.plist");
 	_leftUpAnimation->retain();
 	
@@ -191,13 +194,13 @@ bool Troll::init(GameScene* game)
 	
 	_downAnimation = SpriteAnimation::create("Characters/troll/troll_down_front.plist");
 	_downAnimation->retain();
-    
+	
     _victory = SpriteAnimation::create("Characters/troll/troll_victory_dance.plist");
     _victory->retain();
     
     _removeSmoke = SpriteAnimation::create("effects/virpulis.plist");
     _removeSmoke->retain();
-	
+
 	_angle = 6.0f * M_PI / 8.0f;
 //	_speed = TROLL_SPEED;
     
@@ -221,6 +224,8 @@ bool Troll::init(GameScene* game)
     _movePoints->retain();
     
     _moveInCircle = false;
+    
+    //TestTest();
     
     // The radar stuff
     mCatchRadar = CCDrawNode::create();
@@ -276,7 +281,7 @@ void Troll::setRadar(int theRadius,int theWidth)
     
     points.push_back(ccp(0,0));
     
-    mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    //mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
     mCatchRadar->setRotation(0);
 }
@@ -285,6 +290,54 @@ void Troll::setAnimationVisibility(bool theValue)
 {
     if (_animation)
         _animation->setVisible(theValue);
+}
+
+void Troll::setEvilTreeAnimation()
+{	
+		_leftUpAnimation = SpriteAnimation::create("Characters/evil_tree/evil_tree_diagonal_up.plist");
+		_leftUpAnimation->retain();
+		
+		_leftDownAnimation = SpriteAnimation::create("Characters/evil_tree/evil_tree_diagonal_down.plist");
+		_leftDownAnimation->retain();
+	
+		_leftAnimation = SpriteAnimation::create("Characters/evil_tree/evil_tree_profile.plist");
+		_leftAnimation->retain();
+		
+		_upAnimation = SpriteAnimation::create("Characters/evil_tree/evil_tree_up.plist");
+		_upAnimation->retain();
+		
+		_downAnimation = SpriteAnimation::create("Characters/evil_tree/evil_tree_down.plist");
+		_downAnimation->retain();
+		
+		_leftUpAnimation->setScale(GLOBAL_SCALE);
+        _leftDownAnimation->setScale(GLOBAL_SCALE);
+        _leftAnimation->setScale(GLOBAL_SCALE);
+        _upAnimation->setScale(GLOBAL_SCALE);
+        _downAnimation->setScale(GLOBAL_SCALE);
+}
+
+void Troll::setGoblinAnimation()
+{	
+		_leftUpAnimation = SpriteAnimation::create("Characters/goblin/goblin_walk_diagonal_up.plist");
+		_leftUpAnimation->retain();
+		
+		_leftDownAnimation = SpriteAnimation::create("Characters/goblin/goblin_walk_diagonal_down.plist");
+		_leftDownAnimation->retain();
+	
+		_leftAnimation = SpriteAnimation::create("Characters/goblin/goblin_walk_profile.plist");
+		_leftAnimation->retain();
+	
+		_upAnimation = SpriteAnimation::create("Characters/goblin/goblin_walk_up.plist");
+		_upAnimation->retain();
+	
+		_downAnimation = SpriteAnimation::create("Characters/goblin/goblin_walk_down.plist");
+		_downAnimation->retain();
+		
+		_leftUpAnimation->setScale(GLOBAL_SCALE);
+        _leftDownAnimation->setScale(GLOBAL_SCALE);
+        _leftAnimation->setScale(GLOBAL_SCALE);
+        _upAnimation->setScale(GLOBAL_SCALE);
+        _downAnimation->setScale(GLOBAL_SCALE);
 }
 
 void Troll::setEffect(Effect* value)
@@ -1254,7 +1307,6 @@ void Troll::onExit()
 	CCNode::onExit();
 }
 
-
 void Troll::removeFromSave()
 {
     _disabled = true;
@@ -1282,7 +1334,6 @@ void Troll::setAngle(float value)
     _lastSetAngle = value;
     
 	_angle = wrapTwoPI(value);
-    
     
     /*
     if(mCatchRadar){
@@ -1403,21 +1454,27 @@ void Troll::setAnimation(SpriteAnimation* animation)
     if(mGoblinFunctional)
     {
         // Set some blue to all
+        /*
         ccColor3B currentColor = _animation->getColor();
         
         if(currentColor.r != 201 || currentColor.g != 0 || currentColor.b != 255){
-            _animation->setColor(ccc3(201, 0, 255));
+            _animation->setColor(ccc3(222, 0, 255));
         }
+        */
     }
+    
     else if(mEvilTreeFunctional)
     {
-        // Set some blue to all
+        //Set some blue to all
+        /*
         ccColor3B currentColor = _animation->getColor();
-        
+		
         if(currentColor.r != 255 || currentColor.g != 154 || currentColor.b != 0){
             _animation->setColor(ccc3(255, 154, 0));
         }
-    }
+        */    
+	}
+
 }
 
 bool Troll::getTouchable()

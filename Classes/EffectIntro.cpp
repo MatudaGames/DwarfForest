@@ -70,6 +70,21 @@ void EffectIntro::OnRainCompleted()
     schedule(schedule_selector(IntroAnimation::finished), 0.0f, 1, 0.0f);
 }
 
+void EffectIntro::OnWebCompleted()
+{
+	stickyGrowAnimation->stopAllActions();
+	removeChild(stickyGrowAnimation);
+    schedule(schedule_selector(IntroAnimation::finished), 0.0f, 1, 0.0f);
+}
+
+void EffectIntro::WebIntro()
+{
+	 stickyGrowAnimation = SpriteAnimation::create("sticky_web/trap_sticky_intro.plist");
+     stickyGrowAnimation->retain();
+     stickyGrowAnimation->setTag(45);
+     addChild(stickyGrowAnimation);
+}
+
 bool EffectIntro::init(GameScene* game, Effect* effect)
 {
 	if (!IntroAnimation::init(INTRO_EFFECT, game))
@@ -106,6 +121,31 @@ bool EffectIntro::init(GameScene* game, Effect* effect)
         
         runAction(aSeqFun);
 //        runAction(_meteoriteFadeIn);
+        
+        return true;
+    }
+    
+    	if(effect->getType() == EFFECT_TYPE_WEB)
+    {
+        //stickyIntroAnimation = SpriteAnimation::create("sticky_web/trap_sticky_intro.plist",true);
+        //stickyIntroAnimation->retain();
+        //addChild(stickyIntroAnimation);
+        
+        CCScaleTo* aScale = CCScaleTo::create(1.5f, GLOBAL_SCALE);
+        _meteoriteFadeIn = CCDelayTime::create(0.0f);
+        _meteoriteFadeIn->retain();
+        _introDelay = CCDelayTime::create(2.0f);
+        _introDelay->retain();
+        
+        
+        CCCallFuncN* aFunc = CCCallFuncN::create(this, callfuncN_selector(EffectIntro::WebIntro));
+        CCCallFuncN* bFunc = CCCallFuncN::create(this, callfuncN_selector(EffectIntro::OnWebCompleted));
+        CCSequence* aSeqFun = CCSequence::create(aFunc,_introDelay,bFunc);//,bFunc,NULL);
+        runAction(aSeqFun);
+        
+        /*_meteoriteFadeIn,aScale,*/
+        
+        removeChildByTag(45);
         
         return true;
     }

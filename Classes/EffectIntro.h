@@ -28,6 +28,8 @@ public:
 	Effect* getEffect() const;
     
     void OnRainCompleted();
+    void OnWebCompleted();
+    void WebIntro();
     
 private:
 	SpriteAnimation* _animation;
@@ -38,12 +40,15 @@ private:
 	cocos2d::CCSprite* _shadowSprite;
 	cocos2d::CCSprite* _meteoriteSprite;
 	SpriteAnimation* _collisionAnimation;//Not needed anymore
+    SpriteAnimation* stickyIntroAnimation;
+	SpriteAnimation* stickyGrowAnimation;
     
     cocos2d::CCSprite* _boomSprite;
 	cocos2d::CCSprite* _areaSprite;
     
 	cocos2d::CCActionInterval* _shadowFadeIn;
 	cocos2d::CCActionInterval* _meteoriteFadeIn;
+	cocos2d::CCActionInterval* _introDelay;
     
     cocos2d::CCSequence* _fallIntro;
 };
