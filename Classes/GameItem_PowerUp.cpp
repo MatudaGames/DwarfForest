@@ -8,7 +8,7 @@
 
 #include "GameItem_PowerUp.h"
 
-#include "GameScene.h"
+
 #include "Dwarf.h"
 #include "User.h"
 
