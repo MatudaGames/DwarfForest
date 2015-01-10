@@ -86,6 +86,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/StatsScreen.cpp \
                    ../../Classes/TrollBullet.cpp \
                    ../../Classes/SupportPopup.cpp \
+				   ../../Classes/GameItem_PowerUp.cpp \
                    ../../Classes/Goblin.cpp \
                    ../../Classes/Hidra.cpp \
                    ../../Classes/HidraIntro.cpp \

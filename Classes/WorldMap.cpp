@@ -375,6 +375,8 @@ void WorldMap::CreatePlayer()
     
     map_base->addChild(mPlayer);
     
+    //MissionTaskInditificator(_currentLevel);
+    
     // Maybe now create other players with their progress ? TODO
     
 }
@@ -508,7 +510,10 @@ void WorldMap::PrepeareSmallMissionScreen()
 
 void WorldMap::ShowMissionScreen(int theID)
 {
+	mSmallMissionScreen->removeChildByTag(30004);
+    mSmallMissionScreen->removeChildByTag(30002);
     mCurrentMissionID = theID;
+    MissionTaskInditificator(mCurrentMissionID);
     mSmallMissionScreen->setVisible(true);
 }
 

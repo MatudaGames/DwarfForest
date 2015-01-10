@@ -58,8 +58,8 @@ bool Web::init(GameScene* gameScene)
     _growAnimation->setTag(876);
 	addChild(_growAnimation);
 	    
-    _growDelay = CCDelayTime::create(3.9f);
-    _growDelay->retain();
+    _growDelay = CCDelayTime::create(2.4f);//Maybe 2.4f will be good.
+    //_growDelay->retain();
     CCCallFuncN* aFunc = CCCallFuncN::create(this, callfuncN_selector(Web::pauseGrow));
     CCSequence* aSeqFun = CCSequence::create(_growDelay,aFunc,NULL);
     runAction(aSeqFun);
@@ -173,6 +173,7 @@ void Web::touch(Dwarf* dwarf,Troll* troll)
     }
     
     //Play the intro
+    removeChild(_growAnimation);
     addChild(_startAnimation);
     schedule(schedule_selector(Web::startStuckAnim), 0, 0, 0.6f);
     
