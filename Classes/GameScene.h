@@ -162,18 +162,27 @@ public:
     bool mAttackFunctionalActive;
     
     int mMasterTroll_HP;        // What is Master Troll HP?
+    float mMasterTroll_CurrentHP; // For smooth progress bar fill
+    
     int mMasterTroll_Damege;    // What is the attack damage
+    
     int mMasterTroll_Attack;    // Whats the current value for attack
+    float mMasterTroll_CurrentAttack;
     
     bool mWinGameOnMasterTrollKill; // Will we win game if master troll will fall?
     
     void CreateBattleArena();
     void UpdateBattleLabel();
+    void UpdateSmoothBattleBars(float delta);
     void OnAttackHitTroll(CCNode* sender);
     
-    // This will be converted to progress bars
-    cocos2d::CCLabelTTF* mBattle_TrollHP;
-    cocos2d::CCLabelTTF* mBattle_DwarfLoad;
+    // The progress bars !!!
+    cocos2d::CCSprite* mBattleBar_TrollBase;
+    cocos2d::CCSprite* mBattleBar_MachineBase;
+    
+    // The actual progress bars
+    cocos2d::CCSprite* mBattleBar_TrollHP;
+    cocos2d::CCSprite* mBattleBar_MachinePower;
     
     //----------------------------------------
     
@@ -494,7 +503,8 @@ public:
     void MasterAction_Confusion(cocos2d::CCObject *sender);
     
     void CreateMasters();
-    void OnMasterHitGround();
+    void OnMasterHitGround(CCNode* sender);
+    void OnMasterHitGroundSFX(CCNode* sender);
     
     float _mission_dwarf_spawn_timer;
     float _mission_crystal_spawn_timer;

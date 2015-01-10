@@ -4759,10 +4759,12 @@ void GameScene::CreateMasterTrollEnter()
 void GameScene::CreateMasters()
 {
     _MasterTrollBase = CCSprite::create("mastertroll_placeholder.png");
+    _MasterTrollBase->setTag(7001);
     _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterTrollBase);
     
     _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
+    _MasterDwarfBase->setTag(7002);
     _MasterDwarfBase->setPosition(ccp(visibleSize.width-100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterDwarfBase);
     
@@ -4776,6 +4778,13 @@ void GameScene::CreateMasters()
     CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
     _MasterTrollBase->runAction(aSeq);
     
+    //Add particle for coller look
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
+    p->setTag(70003);// The particle tag for remove when falled down !!!
+    p->setPosition(ccp(_MasterTrollBase->getContentSize().width/2,_MasterTrollBase->getContentSize().height/2));
+    p->setPositionType(kCCPositionTypeGrouped);
+    p->setAutoRemoveOnFinish(true);
+    _MasterTrollBase->addChild(p,-1);
     
     aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
     aBounceOff = CCEaseExponentialIn::create(aFallOff);
@@ -4783,10 +4792,46 @@ void GameScene::CreateMasters()
     aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
     aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
     _MasterDwarfBase->runAction(aSeq);
+    
+    p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
+    p->setTag(70003);// The particle tag for remove when falled down !!!
+    p->setPosition(ccp(_MasterDwarfBase->getContentSize().width/2,_MasterDwarfBase->getContentSize().height/2));
+    p->setPositionType(kCCPositionTypeGrouped);
+    p->setAutoRemoveOnFinish(true);
+    _MasterDwarfBase->addChild(p,-1);
 }
 
-void GameScene::OnMasterHitGround()
+void GameScene::OnMasterHitGround(CCNode* sender)
 {
+    if(sender != NULL)
+    {
+        if(sender->getTag() == 7001)
+        {
+            //Show the hp bar
+            CCDelayTime* aDelay = CCDelayTime::create(0.2f);
+            CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
+            CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
+            CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
+            mBattleBar_TrollBase->runAction(aSeq);
+            
+            CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterTrollBase->getChildByTag(70003));
+            p->setDuration(1.0f);
+        }
+        else if(sender->getTag() == 7002)
+        {
+            // The machine progress bar
+            CCDelayTime* aDelay = CCDelayTime::create(0.2f);
+            CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
+            CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
+            CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
+            mBattleBar_MachineBase->runAction(aSeq);
+            
+            CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterDwarfBase->getChildByTag(70003));
+            p->setDuration(1.0f);
+        }
+    }
+
+    
     _MasterTrollBase->setZOrder(getSpriteOrderZ(_MasterTrollBase->getPositionY()));
     _MasterDwarfBase->setZOrder(getSpriteOrderZ(_MasterDwarfBase->getPositionY()));
     
@@ -8743,6 +8788,7 @@ void GameScene::update(float delta)
 //    UpdateTrapsSpawn(delta);
     
     updatePowerUpSpawn(delta);
+    UpdateSmoothBattleBars(delta);
     
     //Update new caves animation ??
     if(_SpawnBlueDwarf){
@@ -11388,7 +11434,7 @@ void GameScene::updateDwarfs(float delta)
                                 dwarf->doDwarfBang(dwarf->_angle);
                                 dwarf->setTag(999);
                             }
-                            else{
+                            else if(troll->_disabled == false){
                                 // GameOver
                                 if(mCurrentMission.Task_type == MissionType_DwarfSave){
                                     dwarf->removeFromSave();
@@ -18373,11 +18419,16 @@ void GameScene::SetMasterTrollAnimation(const char* theAnimation)
         // Just jump up and down
         CCMoveTo* aJump = CCMoveTo::create(0.25f,ccp(64,420));
         CCMoveTo* aJumpBack = CCMoveTo::create(0.25f,ccp(64,360));
-        CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+        CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGroundSFX));
         CCSequence* aJumps = CCSequence::create(aJump,aJumpBack,aFunc1,NULL);
         
         _MasterTrollBase->runAction(aJumps);
     }
+}
+
+void GameScene::OnMasterHitGroundSFX(CCNode* sender)
+{
+    playInGameSound("meteorite_hit_ground");
 }
 
 void GameScene::SetMasterTrollAction(int theType)
@@ -19323,14 +19374,15 @@ void GameScene::ResetValues()
     //------------------------------------------------------------
     // The Master troll attack stuff
     
+    mMasterTroll_CurrentHP = 0;
     mAttackFunctionalActive = false;
     mMasterTroll_HP = -1;
     mMasterTroll_Damege = -1;
     mMasterTroll_Attack = -1;
     mWinGameOnMasterTrollKill = false;
     
-    mBattle_TrollHP = NULL;
-    mBattle_DwarfLoad = NULL;
+    mBattleBar_TrollHP = NULL;
+    mBattleBar_MachinePower = NULL;
     
     // Now check the mission stuff
     if(mCurrentMission.MT_Battle_HP>0) mMasterTroll_HP = mCurrentMission.MT_Battle_HP;
@@ -19450,36 +19502,111 @@ void GameScene::ResetValues()
 
 void GameScene::CreateBattleArena()
 {
-    //Create some progress bar over troll
-    std::stringstream theString;
-    theString<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
+    // Set the current HP
+    mMasterTroll_CurrentHP = mMasterTroll_HP;
+    mMasterTroll_CurrentAttack = mMasterTroll_Attack = 0;
     
-    mBattle_TrollHP = CCLabelTTF::create(theString.str().c_str(),FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
-    mBattle_TrollHP->setPosition(ccp(160,600));
-    addChild(mBattle_TrollHP,kHUD_Z_Order+1);
+    // The progress bar !!!
+    // Dwarf king or electro machine
+    CCSize aScreenSize = CCDirector::sharedDirector()->getVisibleSize();
     
-    theString.str("");
-    theString.clear();
-    theString<<mCurrentMission.MT_Battle_Attack<<"/"<<mMasterTroll_Attack;
+    mBattleBar_MachineBase = CCSprite::create("small_dot_red.png");
+    mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
+    mBattleBar_MachineBase->setScaleX(0.0f);     //(0.15);
+    mBattleBar_MachineBase->setScaleY(0.0f);     //(0.3);
     
-    mBattle_DwarfLoad = CCLabelTTF::create(theString.str().c_str(),FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
-    mBattle_DwarfLoad->setPosition(ccp(1000,600));
-    addChild(mBattle_DwarfLoad,kHUD_Z_Order+1);
+    addChild(mBattleBar_MachineBase,kHUD_Z_Order+1);
+    
+    CCSprite* aDummy = CCSprite::create("Interfeiss/challenges/daily/progress_days.png");
+    mBattleBar_MachineBase->addChild(aDummy);
+    
+    // The actual progress bar
+    mBattleBar_MachinePower = CCSprite::create("Interfeiss/challenges/daily/progress_days_fill.png");
+    mBattleBar_MachinePower->setAnchorPoint(ccp(0,0.5f));
+    mBattleBar_MachinePower->setPosition(ccp((aDummy->getContentSize().width-mBattleBar_MachinePower->getContentSize().width)/2,aDummy->getContentSize().height/2));
+    aDummy->addChild(mBattleBar_MachinePower);
+    
+    // The progress bar
+    mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                              mBattleBar_MachinePower->getTexture()->getContentSize().width*(0.0f),
+                                              mBattleBar_MachinePower->getTexture()->getContentSize().height));
+    
+    
+    //----------------------------------------------------------------
+    // The base sprites !!!
+    // Master troll progress bar
+    
+    mBattleBar_TrollBase = CCSprite::create("small_dot_red.png");
+    mBattleBar_TrollBase->setPosition(ccp(60,294));
+    mBattleBar_TrollBase->setScaleX(0.0f);     //(0.15);
+    mBattleBar_TrollBase->setScaleY(0.0f);     //(0.3);
+    
+    addChild(mBattleBar_TrollBase,kHUD_Z_Order+1);
+    
+    // The background of bar
+    aDummy = CCSprite::create("Interfeiss/challenges/daily/progress_days.png");
+    mBattleBar_TrollBase->addChild(aDummy);
+    
+    // The actual progress bar
+    mBattleBar_TrollHP = CCSprite::create("Interfeiss/challenges/daily/progress_days_fill.png");
+    mBattleBar_TrollHP->setAnchorPoint(ccp(0,0.5f));
+    mBattleBar_TrollHP->setPosition(ccp((aDummy->getContentSize().width-mBattleBar_TrollHP->getContentSize().width)/2,aDummy->getContentSize().height/2));
+    aDummy->addChild(mBattleBar_TrollHP);
+    
+    // The progress bar
+    mBattleBar_TrollHP->setTextureRect(CCRect(0, 0,
+                                                   mBattleBar_TrollHP->getTexture()->getContentSize().width*(1.0f),
+                                                   mBattleBar_TrollHP->getTexture()->getContentSize().height));
+}
+
+void GameScene::UpdateSmoothBattleBars(float delta)
+{
+    //Constantly checks if has any changes
+    if(mMasterTroll_CurrentHP != mMasterTroll_HP)
+    {
+        mMasterTroll_CurrentHP -= delta;
+        if(mMasterTroll_CurrentHP<=mMasterTroll_HP) mMasterTroll_CurrentHP = mMasterTroll_HP;
+        
+        mBattleBar_TrollHP->setTextureRect(CCRect(0, 0,
+                                                  mBattleBar_TrollHP->getTexture()->getContentSize().width*((float)mMasterTroll_CurrentHP / mCurrentMission.MT_Battle_HP),
+                                                  mBattleBar_TrollHP->getTexture()->getContentSize().height));
+    }
+    
+    //Constantly checks if has any changes
+    if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
+    {
+        if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
+        {
+            mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
+            if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+        }
+        else
+        {
+            mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
+            if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+        }
+        
+        mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                  mBattleBar_MachinePower->getTexture()->getContentSize().width*((float)mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack),
+                                                  mBattleBar_MachinePower->getTexture()->getContentSize().height));
+    }
+    
 }
 
 void GameScene::UpdateBattleLabel()
 {
-    if(mBattle_TrollHP == NULL || mBattle_DwarfLoad == NULL){
+    if(mBattleBar_TrollHP == NULL || mBattleBar_MachinePower == NULL){
         return;
     }
     
     //Update timer
+    /*
     std::stringstream theMT_Timer;
     theMT_Timer<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
     mBattle_TrollHP->setString(theMT_Timer.str().c_str());
+    */
     
-    theMT_Timer.str("");
-    theMT_Timer.clear();
+    // Just update the bar
     
     // Check if attack is not above shoot !!!
     if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
@@ -19487,25 +19614,31 @@ void GameScene::UpdateBattleLabel()
         mMasterTroll_Attack = 0;
         //Fire bullet at master troll !!!
         
-        CCSprite* aDummyBullet = CCSprite::create();
-        aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()-_MasterDwarfBase->getContentSize().height));
+        CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+        aDummyBullet->setScale(0.5f);
+        aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
         
         //Move bullet to troll
-        CCMoveTo* aMoveAction = CCMoveTo::create(1.0,ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+        
+        ccBezierConfig bezier;
+        bezier.controlPoint_1 = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//1096,168
+        bezier.controlPoint_2 = ccp(_MasterTrollBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//635,105
+        bezier.endPosition = ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
+        
+        CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+        
+//        CCMoveTo* aMoveAction = CCMoveTo::create(1.0,ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
         CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnAttackHitTroll));
         CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
         aDummyBullet->runAction(aSequence);
         
         // Add particle for fx
-        CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
+        CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
         p->setAutoRemoveOnFinish(true);
         aDummyBullet->addChild(p,-1);
         
         addChild(aDummyBullet);
     }
-    
-    theMT_Timer<<mCurrentMission.MT_Battle_Attack<<"/"<<mMasterTroll_Attack;
-    mBattle_DwarfLoad->setString(theMT_Timer.str().c_str());
 }
 
 void GameScene::OnAttackHitTroll(CCNode* sender)
@@ -19522,9 +19655,14 @@ void GameScene::OnAttackHitTroll(CCNode* sender)
     mMasterTroll_HP -= mMasterTroll_Damege;
     
     //Update label
+    /*
     std::stringstream theMT_Timer;
     theMT_Timer<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
     mBattle_TrollHP->setString(theMT_Timer.str().c_str());
+    */
+    
+    CCBlink* aBlink = CCBlink::create(0.25f, 2);
+    _MasterTrollBase->runAction(aBlink);
     
     if(mMasterTroll_HP<=0)
     {
@@ -19532,6 +19670,8 @@ void GameScene::OnAttackHitTroll(CCNode* sender)
         
         
         // GG if flag true
+        // Create a delay - that troll falls !!!
+        
         if(mWinGameOnMasterTrollKill){
             showWinScreen();
         }
