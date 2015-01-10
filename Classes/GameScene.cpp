@@ -8533,10 +8533,8 @@ void GameScene::UpdateCrystalSpawn(float delta)
             aRotatedValue = 0;// Use the old stuff
             for(int i=0;i<mCurrentMission.ItemTypeProbs.size();i++)
             {
-                CCLog("ItemTypeProbs: [%i] = %i",i,mCurrentMission.ItemTypeProbs[i]);
                 aRotatedValue += mCurrentMission.ItemTypeProbs[i];
                 aRotatedItemValues.push_back(aRotatedValue);
-                CCLog("aRotatedValue: %i",aRotatedValue);
             }
             
             // The power up check
@@ -8554,17 +8552,12 @@ void GameScene::UpdateCrystalSpawn(float delta)
             int aCrystalNum = 0;
             int aPowerUpNum = 0; // The new stuff for power up spawn
             
-            CCLog("aSpawnCrystals: %i",aSpawnCrystals);
-            CCLog("aRotatedItemValues: %lu",aRotatedItemValues.size());
-            
             for(int i=0;i<aSpawnCrystals;i++)
             {
                 int aWhatToSpawn = rand()%100;
-                CCLog("aWhatToSpawn: %i",aWhatToSpawn);
                 
                 for(int r=0;r<aRotatedItemValues.size();r++)
                 {
-                    CCLog("aRotatedItemValues: [%i] = %i",r,aRotatedItemValues[r]);
                     if(aWhatToSpawn<aRotatedItemValues[r])
                     {
                         //What to spawn

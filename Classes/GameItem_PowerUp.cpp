@@ -8,7 +8,7 @@
 
 #include "GameItem_PowerUp.h"
 
-
+#include "GameScene.h"
 #include "Dwarf.h"
 #include "User.h"
 
@@ -31,7 +31,7 @@ GameItem_PowerUp* GameItem_PowerUp::create(GameScene* gameScene,int theTimeOnMap
 }
 
 GameItem_PowerUp::GameItem_PowerUp():
-_mushroomSpriteOn(NULL),_mushroomSpriteOff(NULL)
+    _mushroomSpriteOn(NULL),_mushroomSpriteOff(NULL)
 {
 }
 

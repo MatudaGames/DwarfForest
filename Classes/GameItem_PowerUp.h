@@ -10,10 +10,7 @@
 
 #include <cocos2d.h>
 
-#include "GameScene.h"
-
-//class GameScene;
-class Dwarf;
+class GameScene;
 
 class GameItem_PowerUp: public cocos2d::CCNode
 {
