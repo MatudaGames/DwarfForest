@@ -140,7 +140,7 @@ bool EffectIntro::init(GameScene* game, Effect* effect)
         
         CCCallFuncN* aFunc = CCCallFuncN::create(this, callfuncN_selector(EffectIntro::WebIntro));
         CCCallFuncN* bFunc = CCCallFuncN::create(this, callfuncN_selector(EffectIntro::OnWebCompleted));
-        CCSequence* aSeqFun = CCSequence::create(aFunc,_introDelay,bFunc);//,bFunc,NULL);
+        CCSequence* aSeqFun = CCSequence::create(aFunc,_introDelay,bFunc,NULL);//,bFunc,NULL);
         runAction(aSeqFun);
         
         /*_meteoriteFadeIn,aScale,*/
