@@ -5237,6 +5237,16 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
         }
     }
     
+    //------------------------------------------
+    // The new stuff for battle attack
+    
+    if(mAttackFunctionalActive)
+    {
+        mMasterTroll_Attack+=100;
+        UpdateBattleLabel();
+    }
+    
+    //------------------------------------------
 }
 
 void GameScene::disableBooster(int theType)
@@ -5987,6 +5997,12 @@ void GameScene::menuSaveMeCallBack(Dwarf* dwarf_1,Dwarf* dwarf_2,Troll* troll)
 
 void GameScene::nowCreateSaveMe()
 {
+    if(mWaitForSaveMe){
+        return;
+    }
+    
+    mWaitForSaveMe = true;
+    
     //Wait for 2 sec and only then show up the menu with save me !!!
     SimpleAudioEngine::sharedEngine()->stopAllEffects();
     
@@ -6147,6 +6163,8 @@ void GameScene::onSaveFromPause()
         // Give extra 5 dwarfs
         _mission_SaveDwarfs_Left = 5;
     }
+    
+    mWaitForSaveMe = false;
     
 //    PlaySpecialMusic(_dwarves->count());
 }
@@ -8515,21 +8533,38 @@ void GameScene::UpdateCrystalSpawn(float delta)
             aRotatedValue = 0;// Use the old stuff
             for(int i=0;i<mCurrentMission.ItemTypeProbs.size();i++)
             {
+                CCLog("ItemTypeProbs: [%i] = %i",i,mCurrentMission.ItemTypeProbs[i]);
                 aRotatedValue += mCurrentMission.ItemTypeProbs[i];
                 aRotatedItemValues.push_back(aRotatedValue);
+                CCLog("aRotatedValue: %i",aRotatedValue);
+            }
+            
+            // The power up check
+            std::vector<int> aRotatedPowerValues;
+            aRotatedValue = 0;// Use the old stuff
+            for(int i=0;i<mCurrentMission.PowerTypeProbs.size();i++)
+            {
+                aRotatedValue += mCurrentMission.PowerTypeProbs[i];
+                aRotatedPowerValues.push_back(aRotatedValue);
             }
             
             // Do the spawn item stuff
             int aShroomNum = 0; // How much need of each stuff to spawn
             int aDiamondNum = 0;
             int aCrystalNum = 0;
+            int aPowerUpNum = 0; // The new stuff for power up spawn
+            
+            CCLog("aSpawnCrystals: %i",aSpawnCrystals);
+            CCLog("aRotatedItemValues: %lu",aRotatedItemValues.size());
             
             for(int i=0;i<aSpawnCrystals;i++)
             {
                 int aWhatToSpawn = rand()%100;
+                CCLog("aWhatToSpawn: %i",aWhatToSpawn);
                 
                 for(int r=0;r<aRotatedItemValues.size();r++)
                 {
+                    CCLog("aRotatedItemValues: [%i] = %i",r,aRotatedItemValues[r]);
                     if(aWhatToSpawn<aRotatedItemValues[r])
                     {
                         //What to spawn
@@ -8543,6 +8578,9 @@ void GameScene::UpdateCrystalSpawn(float delta)
                         else if(r == 2) {
                             if(aShroomNum<1) aShroomNum+=1; // Spawn shroom
                             else aCrystalNum+=1;// Spawn crystal
+                        }
+                        else if(r == 3){
+                            aPowerUpNum += 1;
                         }
                         break;
                     }
@@ -8580,9 +8618,25 @@ void GameScene::UpdateCrystalSpawn(float delta)
                     
                     generateCrystal(true,aRandomColorFin,mCurrentMission.ItemTimeOnMap);
                 }
+                else if(aPowerUpNum>0){
+                    aPowerUpNum-=1;
+                    
+                    // PowerUp choose
+                    int aRadomColor = rand()%100;
+                    aRandomColorFin = 0;//Blitz by default
+                    
+                    for(int c=0;c<aRotatedPowerValues.size();c++)
+                    {
+                        if(aRadomColor<aRotatedPowerValues[c]){
+                            aRandomColorFin = c;
+                            break;
+                        }
+                    }
+                    
+                    // Spawn the power item
+                    GeneratePowerUp(aRandomColorFin,mCurrentMission.PowerTimeOnMap);
+                }
             }
-            
-            
             
             //---------------------------------------------------------------
         }
@@ -8627,6 +8681,8 @@ void GameScene::updatePowerUpSpawn(float delta)
     }
     
     //Check if need to spawn anything
+    // Do we need to integrate it in item spawn?
+    /*
     if(mPowerUpSpawnTime>0)
     {
         mPowerUpSpawnTime-=delta*_gameSpeed;
@@ -8639,7 +8695,9 @@ void GameScene::updatePowerUpSpawn(float delta)
             int aPowerID = rand()%2;
             
             // Create it
-            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,aPowerID);
+            // Get the time on map?
+            float aTimeOnMap = 5;
+            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,aPowerID,aTimeOnMap);
             
             // Set some position
             int aPositionID = rand()%8;
@@ -8656,6 +8714,22 @@ void GameScene::updatePowerUpSpawn(float delta)
         // Some random spawn time if not given
         mPowerUpSpawnTime = rand()%5+5;
     }
+    */
+}
+
+void GameScene::GeneratePowerUp(int theType,int theTime)
+{
+    // What power will it be?
+    GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,theType,theTime);
+    
+    // Set some position
+    int aPositionID = rand()%8;
+    CCPoint aPosition = getRandomPointFromBlock(aPositionID);
+    
+    Bee->setPosition(aPosition);
+    
+    this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+    _powersOnMap->addObject(Bee);
 }
 
 void GameScene::update(float delta)
@@ -11145,7 +11219,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(bee->isVisible() && !bee->_needToRemove)
                     {
-                        if (ccpDistanceSQ(dwarf->getPosition(), bee->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
+                        if (ccpDistanceSQ(dwarf->getPosition(), bee->getPosition())<= (powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)*2)
                         {
                             dwarf->setPowerButton(bee->mPowerID);
                             // Pick up the power
@@ -11617,6 +11691,20 @@ void GameScene::updateDwarfs(float delta)
                             mTimeNotCollectedCrystal = 0.0f;
                             mTimeToCheckAgainNoCrystal = 0.0f;
                         }
+                        
+                        //----------------------------------------------------------------
+                        // New stuff
+                        
+                        if(mAttackFunctionalActive)
+                        {
+                            if(crystal->_color == CRYSTAL_COLOR_BLUE) mMasterTroll_Attack+=20;
+                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) mMasterTroll_Attack+=15;
+                            else if(crystal->_color == CRYSTAL_COLOR_RED) mMasterTroll_Attack+=30;
+                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW) mMasterTroll_Attack+=50;
+                            UpdateBattleLabel();
+                        }
+                        
+                        //----------------------------------------------------------------
                         
                         crystal->pickUp(dwarf,mCombo_CollectCrystals*aExtraForSimpleCrystal);//For now disabled
                         
@@ -12909,15 +12997,26 @@ void GameScene::showWinScreen()
 
 void GameScene::lose(bool ignoreMissionSave)
 {
+    if(mWaitForSaveMe && !ignoreMissionSave){
+        return;
+    }
+    
     if(mCurrentMission.Task_type == MissionType_DwarfSave && !ignoreMissionSave)
     {
         // Check if user has got 1 star !!!
         if(_mission_SaveDwarfs_Left<=0 && _missionCurrentValue<_mission_star_points_1)
         {
+            if(getChildByTag(5544) != NULL){
+                return;// Do not come here !!!
+            }
+            
+            mWaitForSaveMe = true;
+            
             // We can give save me stuff
             SimpleAudioEngine::sharedEngine()->stopAllEffects();
             
             SaveMeScene* saveLayer = SaveMeScene::create();
+            saveLayer->setTag(5544);
             saveLayer->setAnchorPoint(ccp(0,0));
             this->addChild(saveLayer,kHUD_Z_Order);
             
@@ -13360,6 +13459,10 @@ Goblin* GameScene::generateGoblin(int theX,int theY,float theRadius)
 
 void GameScene::generateDwarfMission(bool theInstant)
 {
+    if(mWaitForSaveMe){
+        return;
+    }
+    
     // Safe check
     if(mCurrentMission.Task_type == MissionType_DwarfSave)
     {
@@ -13367,10 +13470,17 @@ void GameScene::generateDwarfMission(bool theInstant)
             // Check if dwarfs on map are 0
             if(_dwarves->count() <= 0 && _missionCurrentValue<_mission_star_points_1)
             {
+                if(getChildByTag(5544) != NULL){
+                    return;// Do not come here !!!
+                }
+                
+                mWaitForSaveMe = true;
+                
                 // We can give save me stuff
                 SimpleAudioEngine::sharedEngine()->stopAllEffects();
                 
                 SaveMeScene* saveLayer = SaveMeScene::create();
+                saveLayer->setTag(5544);
                 saveLayer->setAnchorPoint(ccp(0,0));
                 this->addChild(saveLayer,kHUD_Z_Order);
             }
@@ -13491,10 +13601,11 @@ void GameScene::generateDwarfMission(bool theInstant)
     this->addChild(dwarf, getSpriteOrderZ(dwarf->getPositionY()));
     _dwarves->addObject(dwarf);
     
-    dwarf->_disabled = false;
+//    dwarf->_disabled = false;
 //    dwarf->setVisible(false);
     
     if(theInstant){
+        dwarf->_disabled = false;
         return;
     }
     
@@ -14333,7 +14444,7 @@ Crystal* GameScene::generateCrystal(bool theNearDwarf,int theCrystalID,int theTi
             
             if(mSpeciaCrystallDwarfID>=0)
             {
-                if(mSpeciaCrystallDwarfID>_dwarves->count())
+                if(mSpeciaCrystallDwarfID>=_dwarves->count())
                     mSpeciaCrystallDwarfID = 0;
                 
                 CCLog("Dwarf array size: %i",_dwarves->count());
@@ -19187,6 +19298,8 @@ void GameScene::ResetValues()
 {
     mPowerUpSpawnTime = 0;
     
+    mWaitForSaveMe = false;
+    
     mSpeciaCrystallDwarfID = 0;
     
     mTotalMushroom = 0;
@@ -19207,6 +19320,32 @@ void GameScene::ResetValues()
     _SubDwarfSpawn = 0;
     _LeftNotSpawnDwatfs = 0;
     
+    //------------------------------------------------------------
+    // The Master troll attack stuff
+    
+    mAttackFunctionalActive = false;
+    mMasterTroll_HP = -1;
+    mMasterTroll_Damege = -1;
+    mMasterTroll_Attack = -1;
+    mWinGameOnMasterTrollKill = false;
+    
+    mBattle_TrollHP = NULL;
+    mBattle_DwarfLoad = NULL;
+    
+    // Now check the mission stuff
+    if(mCurrentMission.MT_Battle_HP>0) mMasterTroll_HP = mCurrentMission.MT_Battle_HP;
+    if(mCurrentMission.MT_Battle_Damage>0) mMasterTroll_Damege = mCurrentMission.MT_Battle_Damage;
+    if(mCurrentMission.MT_Battle_Attack>0) mMasterTroll_Attack = 0;//mCurrentMission.MT_Battle_Attack;
+    if(mCurrentMission.MT_Battle_WinOnKill) mWinGameOnMasterTrollKill = mCurrentMission.MT_Battle_WinOnKill;
+    
+    if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
+        mAttackFunctionalActive = true;
+        
+        // Create the progress bars and shoot cannon
+        CreateBattleArena();
+    }
+    
+    //------------------------------------------------------------
     
     
     mMasterTrollActionTimer = 60;// for now
@@ -19308,6 +19447,97 @@ void GameScene::ResetValues()
     
     mCurrentBulletType = 1;// Standrart bullet
 }
+
+void GameScene::CreateBattleArena()
+{
+    //Create some progress bar over troll
+    std::stringstream theString;
+    theString<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
+    
+    mBattle_TrollHP = CCLabelTTF::create(theString.str().c_str(),FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    mBattle_TrollHP->setPosition(ccp(160,600));
+    addChild(mBattle_TrollHP,kHUD_Z_Order+1);
+    
+    theString.str("");
+    theString.clear();
+    theString<<mCurrentMission.MT_Battle_Attack<<"/"<<mMasterTroll_Attack;
+    
+    mBattle_DwarfLoad = CCLabelTTF::create(theString.str().c_str(),FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    mBattle_DwarfLoad->setPosition(ccp(1000,600));
+    addChild(mBattle_DwarfLoad,kHUD_Z_Order+1);
+}
+
+void GameScene::UpdateBattleLabel()
+{
+    if(mBattle_TrollHP == NULL || mBattle_DwarfLoad == NULL){
+        return;
+    }
+    
+    //Update timer
+    std::stringstream theMT_Timer;
+    theMT_Timer<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
+    mBattle_TrollHP->setString(theMT_Timer.str().c_str());
+    
+    theMT_Timer.str("");
+    theMT_Timer.clear();
+    
+    // Check if attack is not above shoot !!!
+    if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
+    {
+        mMasterTroll_Attack = 0;
+        //Fire bullet at master troll !!!
+        
+        CCSprite* aDummyBullet = CCSprite::create();
+        aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()-_MasterDwarfBase->getContentSize().height));
+        
+        //Move bullet to troll
+        CCMoveTo* aMoveAction = CCMoveTo::create(1.0,ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+        CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnAttackHitTroll));
+        CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+        aDummyBullet->runAction(aSequence);
+        
+        // Add particle for fx
+        CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
+        p->setAutoRemoveOnFinish(true);
+        aDummyBullet->addChild(p,-1);
+        
+        addChild(aDummyBullet);
+    }
+    
+    theMT_Timer<<mCurrentMission.MT_Battle_Attack<<"/"<<mMasterTroll_Attack;
+    mBattle_DwarfLoad->setString(theMT_Timer.str().c_str());
+}
+
+void GameScene::OnAttackHitTroll(CCNode* sender)
+{
+    // Remove bullet
+    this->removeChild(sender, true);
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    // Take damage - and check if not dead
+    mMasterTroll_HP -= mMasterTroll_Damege;
+    
+    //Update label
+    std::stringstream theMT_Timer;
+    theMT_Timer<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
+    mBattle_TrollHP->setString(theMT_Timer.str().c_str());
+    
+    if(mMasterTroll_HP<=0)
+    {
+        // ToDo add some animation?
+        
+        
+        // GG if flag true
+        if(mWinGameOnMasterTrollKill){
+            showWinScreen();
+        }
+    }
+}
+
 
 
 // The new stuff for user perks - maybe it can choose them in mission start and then use them !!!

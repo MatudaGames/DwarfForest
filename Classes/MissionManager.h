@@ -215,6 +215,7 @@ struct MissionSet
     int32_t ItemInterval_Max;
     float ItemProbMultiplier;
     float ItemTimeOnMap;
+    float PowerTimeOnMap;
     
     float DwarfSpeed_Fat;
     float DwarfSpeed_Tall;
@@ -227,6 +228,7 @@ struct MissionSet
     std::vector<int> ItemNumProbs;
     std::vector<int> CrystalColProbs;
     std::vector<int> ItemTypeProbs;
+    std::vector<int> PowerTypeProbs;
     
     // The test stuff
     float SpawnBee;
@@ -280,6 +282,12 @@ struct MissionSet
     int32_t MT_Event_ForceSpawnEnemy_Time;
     
     int32_t Mission_SaveDwarfs;
+    
+    // The master troll attack stuff
+    int32_t MT_Battle_HP;
+    int32_t MT_Battle_Damage;
+    int32_t MT_Battle_Attack;
+    bool MT_Battle_WinOnKill;
     
 };
 

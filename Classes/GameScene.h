@@ -147,6 +147,9 @@ public:
     
     cocos2d::CCLabelTTF* mDwarfSaveCounter;
     
+    bool mWaitForSaveMe;
+    void GeneratePowerUp(int theType,int theTime);
+    
     //----------------------------------------
     // The new special power up spawn stuff
     void updatePowerUpSpawn(float delta);
@@ -154,6 +157,23 @@ public:
     cocos2d::CCArray* _powersOnMap;
     
     float mPowerUpSpawnTime;
+    
+    // The Master Troll Attack stuff
+    bool mAttackFunctionalActive;
+    
+    int mMasterTroll_HP;        // What is Master Troll HP?
+    int mMasterTroll_Damege;    // What is the attack damage
+    int mMasterTroll_Attack;    // Whats the current value for attack
+    
+    bool mWinGameOnMasterTrollKill; // Will we win game if master troll will fall?
+    
+    void CreateBattleArena();
+    void UpdateBattleLabel();
+    void OnAttackHitTroll(CCNode* sender);
+    
+    // This will be converted to progress bars
+    cocos2d::CCLabelTTF* mBattle_TrollHP;
+    cocos2d::CCLabelTTF* mBattle_DwarfLoad;
     
     //----------------------------------------
     

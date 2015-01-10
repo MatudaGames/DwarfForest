@@ -5115,6 +5115,35 @@ void MissionManager::OnDownloadedSpecial()
             mission->Mission_SaveDwarfs = aDummyVar;
         }
         
+        //------------------------------------------------------------------
+        // New Attack stuff
+        
+        mission->MT_Battle_WinOnKill = false;
+        if(missionDict->valueForKey("MT_WIN_ON_KILL")->compare("") != 0){
+            aDummyVar =  missionDict->valueForKey("MT_WIN_ON_KILL")->intValue();
+            if(aDummyVar == 1) mission->MT_Battle_WinOnKill = true;
+        }
+        
+        mission->MT_Battle_HP = -1;
+        if(missionDict->valueForKey("MT_BATTLE_HP")->compare("") != 0) mission->MT_Battle_HP = missionDict->valueForKey("MT_BATTLE_HP")->intValue();
+        
+        mission->MT_Battle_Damage = -1;
+        if(missionDict->valueForKey("MT_BATTLE_DAMAGE")->compare("") != 0) mission->MT_Battle_Damage = missionDict->valueForKey("MT_BATTLE_DAMAGE")->intValue();
+        
+        mission->MT_Battle_Attack = -1;
+        if(missionDict->valueForKey("MT_BATTLE_SHOOT")->compare("") != 0) mission->MT_Battle_Attack = missionDict->valueForKey("MT_BATTLE_SHOOT")->intValue();
+        
+        //------------------------------------------------------------------
+        // New item stuff
+        
+        mission->PowerTimeOnMap = 0;
+        if(missionDict->valueForKey("ItemSpecial_TimeOnMap")->compare("") != 0) mission->PowerTimeOnMap = missionDict->valueForKey("ItemSpecial_TimeOnMap")->intValue();
+        
+        if(missionDict->valueForKey("ItemSpecial_Prob")->compare("") != 0) mission->PowerTypeProbs = SplitString(missionDict->valueForKey("ItemSpecial_Prob")->getCString(),',');
+        else mission->PowerTypeProbs = std::vector<int>(2,50);
+        
+        
+        //------------------------------------------------------------------
         
         
         std::vector<int> Bullet_Speeds = SplitString(missionDict->valueForKey("MT_Bullet_Speed")->getCString(),',');

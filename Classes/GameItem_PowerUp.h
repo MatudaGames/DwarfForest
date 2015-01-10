@@ -16,12 +16,12 @@ class Dwarf;
 class GameItem_PowerUp: public cocos2d::CCNode
 {
 public:
-    static GameItem_PowerUp* create(GameScene* gameScene,int theTimeOnMap);
+    static GameItem_PowerUp* create(GameScene* gameScene,int theTimeOnMap,float realTimeOnMap);
     
     GameItem_PowerUp();
     virtual ~GameItem_PowerUp();
     
-    virtual bool init(GameScene* gameScene,int theTimeOnMap);
+    virtual bool init(GameScene* gameScene,int theTimeOnMap,float realTimeOnMap);
     
     void onFinishedShowUp();
     void onFinishedTrans();

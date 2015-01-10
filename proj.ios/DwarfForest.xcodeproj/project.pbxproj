@@ -252,6 +252,7 @@
 		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
 		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
 		755DD4FA1A439C8C005E1E0B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */; };
+		7578F6791A5B057000E9700A /* GameItem_PowerUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */; };
 		758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */; };
 		758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E951A42080C00CECB9F /* CoreText.framework */; };
 		758E3E981A42081E00CECB9F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E971A42081E00CECB9F /* MobileCoreServices.framework */; };
@@ -888,6 +889,8 @@
 		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
 		755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
 		755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
+		7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameItem_PowerUp.cpp; sourceTree = "<group>"; };
+		7578F6781A5B057000E9700A /* GameItem_PowerUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameItem_PowerUp.h; sourceTree = "<group>"; };
 		758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		758E3E951A42080C00CECB9F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		758E3E971A42081E00CECB9F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1720,6 +1723,8 @@
 				75BCB11E19E9238D000C7C65 /* MissionScene.h */,
 				75BCB11F19E9238D000C7C65 /* Mushroom.cpp */,
 				75BCB12019E9238D000C7C65 /* Mushroom.h */,
+				7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */,
+				7578F6781A5B057000E9700A /* GameItem_PowerUp.h */,
 				75BCB12119E9238D000C7C65 /* OptionsScene.cpp */,
 				75BCB12219E9238D000C7C65 /* OptionsScene.h */,
 				75BCB12319E9238D000C7C65 /* PauseScene.cpp */,
@@ -2677,6 +2682,7 @@
 				15A3D9B01682F7F9002FB0C5 /* cpSpatialIndex.c in Sources */,
 				15A3D9B11682F7F9002FB0C5 /* cpSweep1D.c in Sources */,
 				15C0B588196D412F007F909D /* ImageViewReader.cpp in Sources */,
+				7578F6791A5B057000E9700A /* GameItem_PowerUp.cpp in Sources */,
 				75BCB17C19E9238E000C7C65 /* SaveMeScene.cpp in Sources */,
 				75BCB10619E92383000C7C65 /* LevelEndMenu.cpp in Sources */,
 				75BCB16D19E9238E000C7C65 /* Machine_Stamp.cpp in Sources */,

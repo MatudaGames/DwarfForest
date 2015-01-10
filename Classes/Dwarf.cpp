@@ -85,6 +85,7 @@ bool Dwarf::init(GameScene* game,int theType)
     
     mContainsPowerUp = -1;// No power
     mSnapedTroll = NULL;
+    mSnapedTroll_FallBack = NULL;
     
     _SpawnID = -1;
     
@@ -2509,17 +2510,81 @@ void Dwarf::setAction(int theType)
     }
 }
 
+void Dwarf::FireBulletAtTroll(int thePowerID)
+{
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setPosition(ccp(getPositionX(),getPositionY()));
+    
+    //Move bullet to troll
+    CCMoveTo* aMoveAction = CCMoveTo::create(0.5f,ccp(mSnapedTroll_FallBack->getPositionX(),mSnapedTroll_FallBack->getPositionY()));
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(Dwarf::OnFireBulletHitTroll));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->setTag(thePowerID);
+    aDummyBullet->runAction(aSequence);
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part.plist");
+    p->setPosition(ccp(aDummyBullet->getContentSize().width/2,aDummyBullet->getContentSize().height/2));
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    _game->addChild(aDummyBullet);
+}
+
+void Dwarf::OnFireBulletHitTroll(CCNode* sender)
+{
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(sender->getPositionX(),sender->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    
+    if(sender->getTag() == 0)
+    {
+        mSnapedTroll_FallBack->removeFromSave();
+    }
+    else if(sender->getTag() == 1)
+    {
+        // Do all the magic here
+        mSnapedTroll_FallBack->mFreezedTime = 10;//Get from missions some param?
+        
+        // Add for now blue troll FX
+        mSnapedTroll_FallBack->_animation->setColor(ccc3(0, 164, 255));
+        
+        // Play some attack sound
+        _game->playInGameSound("dwarf_crash");
+    }
+    
+    // Remove old particle
+    _game->removeChild(sender, true);
+    
+    // Add new particle
+    _game->addChild(p,1000);
+    
+    // No more snaped trolls
+    mSnapedTroll_FallBack = NULL;
+}
+
 // The dull snap crap
 void Dwarf::updateDwarfPowerZone()
 {
+    if(mContainsPowerUp == -1){
+        return;// No need to go futher
+    }
+    
     // If has troll attached - then follow to him?
     if(mSnapedTroll != NULL)
     {
         //Check what are the zone range
         float theDistance2 = sqrtf((getPositionX()-mSnapedTroll->getPositionX())*(getPositionX()-mSnapedTroll->getPositionX()) +
                                    (getPositionY()-mSnapedTroll->getPositionY())*(getPositionY()-mSnapedTroll->getPositionY()));
-        if(theDistance2 <= 100)
+        if(theDistance2 <= 140)
         {
+            //Fire some fast particle
+            mSnapedTroll_FallBack = mSnapedTroll;
+            mSnapedTroll = NULL;
+            
+            FireBulletAtTroll(mContainsPowerUp);
+            
+            /*
             // Kill or freeze the troll
             if(mContainsPowerUp == 0)
             {
@@ -2547,6 +2612,11 @@ void Dwarf::updateDwarfPowerZone()
             
             //Remove magic from dwarf
             mContainsPowerUp = -1;
+            
+            if(mPowerUpIcon != NULL){
+                removeChild(mPowerUpIcon);
+            }
+            */
             
             if(mPowerUpIcon != NULL){
                 removeChild(mPowerUpIcon);

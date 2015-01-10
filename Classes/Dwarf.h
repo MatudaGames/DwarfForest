@@ -50,8 +50,11 @@ public:
     
     void setPowerButton(int theID);
     void updateDwarfPowerZone();
+    void FireBulletAtTroll(int thePowerID);
+    void OnFireBulletHitTroll(CCNode* sender);
     
     Troll* mSnapedTroll;
+    Troll* mSnapedTroll_FallBack;
     
     int mContainsPowerUp;
     

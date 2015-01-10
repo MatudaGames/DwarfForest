@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Classes/GameScene.cpp"
-            timestampString = "440867153.422068"
+            filePath = "../Classes/User.cpp"
+            timestampString = "441498724.491899"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "6109"
-            endingLineNumber = "6109"
-            landmarkName = "GameScene::clearAllMap()"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "User::ResetData()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

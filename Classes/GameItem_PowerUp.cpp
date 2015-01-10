@@ -14,10 +14,10 @@
 
 USING_NS_CC;
 
-GameItem_PowerUp* GameItem_PowerUp::create(GameScene* gameScene,int theTimeOnMap)
+GameItem_PowerUp* GameItem_PowerUp::create(GameScene* gameScene,int theTimeOnMap,float realTimeOnMap)
 {
     GameItem_PowerUp *pRet = new GameItem_PowerUp();
-    if (pRet && pRet->init(gameScene,theTimeOnMap))
+    if (pRet && pRet->init(gameScene,theTimeOnMap,realTimeOnMap))
     {
         pRet->autorelease();
         return pRet;
@@ -39,7 +39,7 @@ GameItem_PowerUp::~GameItem_PowerUp()
 {
 }
 
-bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap)
+bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap,float realTimeOnMap)
 {
     if (!CCNode::init())
     {
@@ -63,7 +63,7 @@ bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap)
     
     addChild(_mushroomSpriteOff);
     
-    _mushroomSpriteOff->setAnchorPoint(ccp(0.5,0.0f));
+//    _mushroomSpriteOff->setAnchorPoint(ccp(0.5,0.5f));
     _mushroomSpriteOff->setScaleX(0);
     _mushroomSpriteOff->setScaleY(0);
     
@@ -103,7 +103,8 @@ bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap)
     _mushroomSpriteOff->runAction(aTotal);
     
     //10 sec to collect this bad boy
-    schedule(schedule_selector(GameItem_PowerUp::createRemove), 0.0f, 0, 5.0f);
+    //Get power up time?
+    schedule(schedule_selector(GameItem_PowerUp::createRemove), 0.0f, 0, realTimeOnMap);
     
     _needToRemove = false;
     
