@@ -243,12 +243,12 @@ void WorldMap::MissionTaskInditificator(int theID)
 	
 	if(WhatMission == 1)//Identificate what mission number we need
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_1.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M1.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-    	
+    	/*
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(0);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -259,15 +259,20 @@ void WorldMap::MissionTaskInditificator(int theID)
     
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
-    	taskInfo->setString(taskInfoCount.str().c_str());		
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);		
 	}else if(WhatMission == 2)
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_2.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M2.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	
+    	/*
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(1);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -279,15 +284,20 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		//removeChildByTag(30004);		
+		//removeChildByTag(30004);
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);				
 	}else if(WhatMission == 3)
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_3.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M3.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	
+    	/*
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -298,15 +308,20 @@ void WorldMap::MissionTaskInditificator(int theID)
     
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
-    	taskInfo->setString(taskInfoCount.str().c_str());		
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);				
 	}else if(WhatMission == 4)
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_4.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M4.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-    	
+    	/*
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(3);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -317,15 +332,33 @@ void WorldMap::MissionTaskInditificator(int theID)
     
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
-    	taskInfo->setString(taskInfoCount.str().c_str());		
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);				
 	}else if(WhatMission == 5)
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_5.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M5.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	
+    	/*
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(4);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -336,15 +369,33 @@ void WorldMap::MissionTaskInditificator(int theID)
     
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
-    	taskInfo->setString(taskInfoCount.str().c_str());		
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/	
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);			
 	}else if(WhatMission == 6)
 	{
-		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/mission_6.png");
-    	missionNumber->setPosition(ccp(580,580));//550,480
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M6.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-		
+		/*
 		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -355,7 +406,136 @@ void WorldMap::MissionTaskInditificator(int theID)
     
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
-    	taskInfo->setString(taskInfoCount.str().c_str());			
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);					
+    }else if(WhatMission == 7)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M7.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+		/*
+		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());	
+		*/
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);				
+    }else if(WhatMission == 8)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M8.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+		/*
+		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);					
+    }else if(WhatMission == 9)
+	{
+		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M9.png");
+    	missionNumber->setPosition(ccp(595,570));//550,480
+    	missionNumber->setTag(30002);
+    	missionNumber->setScale(0.5);
+    	mSmallMissionScreen->addChild(missionNumber);
+		/*
+		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		    	/*
+    	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
+ 		int minCrystalCount = mCall.Star_1;
+		
+		taskInfo = CCLabelTTF::create("",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+140,mSmallMissionScreen->getContentSize().height/2.0+220));//160,700
+    	taskInfo->setTag(30004);
+    	mSmallMissionScreen->addChild(taskInfo);	
+    
+    	std::stringstream taskInfoCount;
+    	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
+    	taskInfo->setString(taskInfoCount.str().c_str());
+		*/
+		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
+    	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
+    	missionTask->setTag(30004);
+    	mSmallMissionScreen->addChild(missionTask);					
     }
 }
 

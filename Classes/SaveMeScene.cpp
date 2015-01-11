@@ -33,17 +33,20 @@ bool SaveMeScene::init()
     }
 	
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+    mScreenSize = CCDirector::sharedDirector()->getVisibleSize();
     
 //    CCSprite* back = CCSprite::create("Interfeiss/bg_2.png");
 //    back->setAnchorPoint(ccp(0,0));
 //    addChild(back, 0);
     
     CCLayerColor* back = CCLayerColor::create(ccc4(0,0,0,60), visibleSize.width, visibleSize.height);
+    back->setTag(928);
     addChild(back);
     
     CCSprite* logo = CCSprite::create("Interfeiss/save_me/saveme_logs.png");
     logo->setPositionX(visibleSize.width/2);
     logo->setPositionY(visibleSize.height/2);
+    logo->setTag(929);
     addChild(logo);
     
     //Add the 2 buttons
@@ -51,7 +54,7 @@ bool SaveMeScene::init()
                                                          "Interfeiss/save_me/skip_btn0001.png",
                                                          "Interfeiss/save_me/skip_btn0002.png",
                                                          this,
-                                                         menu_selector(SaveMeScene::menuSkipCallback));
+                                                         menu_selector(SaveMeScene::endGameScreen));//menuSkipCallback
     
     CCMenuItemImage *saveButton = CCMenuItemImage::create(
                                                           "Interfeiss/save_me/TheCrystalButtonHolder.png",
@@ -62,6 +65,7 @@ bool SaveMeScene::init()
     CCMenu* mainMenu = CCMenu::create(saveButton, skipButton, NULL);
     mainMenu->alignItemsHorizontally();
     mainMenu->setPositionY(240);
+    mainMenu->setTag(931);
     this->addChild(mainMenu, 1);
     
     skipButton->setPosition(100, 0);
@@ -167,6 +171,7 @@ void SaveMeScene::onCreatePrice()
     SpriteAnimation* animationDimant = SpriteAnimation::create("Interfeiss/save_me/diamond_btn.plist");
     animationDimant->setPosition(ccp(visibleSize.width/2-120, visibleSize.height/2-80));
 	animationDimant->retain();
+	animationDimant->setTag(932);
 	addChild(animationDimant);
     
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -245,11 +250,77 @@ void SaveMeScene::onCreatePrice()
     SpriteAnimation* animationTimer = SpriteAnimation::create("Interfeiss/save_me/saveme_timer.plist");
     animationTimer->setPosition(ccp(visibleSize.width/2+80, visibleSize.height/2-10));
 	animationTimer->retain();
+	animationTimer->setTag(930);
 	addChild(animationTimer);
     
-    schedule(schedule_selector(SaveMeScene::menuSkipCallback), 3.2f, 1, 0.0f);//A bit later !!! [0.7f, 1, 0.0f]//For now disabled
+    schedule(schedule_selector(SaveMeScene::endGameScreen), 3.2f, 1, 0.0f);//A bit later !!! [0.7f, 1, 0.0f]//For now disabled
     
     gameScene->playInGameSound("save_me_wait");
+    
+    //endGameScreen();
+}
+
+void SaveMeScene::endGameScreen()
+{
+	//CCLayerColor* back = CCLayerColor::create(ccc4(0,0,0,60), visibleSize.width, visibleSize.height);
+    //back->setTag(928);
+    //addChild(back);
+
+	removeChildByTag(929);
+	removeChildByTag(930);
+	removeChildByTag(931);
+	removeChildByTag(932);
+	mKautkasScreen = CCLayerColor::create(ccc4(0,0,0,128),mScreenSize.width,mScreenSize.height);
+    mKautkasScreen->setVisible(false);
+    
+    //Add mission status
+    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/mission_lost.png");
+    aEndScreen->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/1.2f));
+    addChild(aEndScreen,1);
+     
+	//Add stars 
+	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    aStar->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/2));
+    addChild(aStar,1);
+    
+    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    bStar->setPosition(ccp(mKautkasScreen->getContentSize().width/6.8f,mKautkasScreen->getContentSize().height/2));
+    addChild(bStar,1);
+    
+    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    cStar->setPosition(ccp(mKautkasScreen->getContentSize().width/1.2f,mKautkasScreen->getContentSize().height/2));
+    addChild(cStar,1);
+    
+    
+    // Add 2 buttons clouse and play for now !!!
+    
+    // The play button
+    
+    CCMenuItemImage* MainMenuItem = CCMenuItemImage::create(
+                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        this,
+                                                        menu_selector(SaveMeScene::menuSkipCallback));//menuSkipCallback
+    MainMenuItem->setTag(1);//Play the level
+    MainMenuItem->setPosition(ccp(mKautkasScreen->getContentSize().width/1.3,mKautkasScreen->getContentSize().height/12));
+    
+    // The clouse button
+    CCMenuItemImage* PlayItem = CCMenuItemImage::create(
+                                                        "Interfeiss/endgame_screen/play_btn_small0001.png",
+                                                        "Interfeiss/endgame_screen/play_btn_small0001.png",
+                                                        this,
+                                                        menu_selector(SaveMeScene::playAgain));//menuSaveCallback
+    PlayItem->setTag(2);//Clouse screen
+    PlayItem->setPosition(ccp(mKautkasScreen->getContentSize().width/7,mKautkasScreen->getContentSize().height/12));
+    
+    CCMenu* aButtonMenu = CCMenu::create(MainMenuItem,PlayItem,NULL);
+    aButtonMenu->setAnchorPoint(ccp(0,0));
+    aButtonMenu->setPosition(ccp(0,0));
+    addChild(aButtonMenu,1);
+    
+    
+    
+    addChild(mKautkasScreen,1);//Above all
 }
 
 void SaveMeScene::onEnter()
@@ -270,6 +341,20 @@ void SaveMeScene::onExit()
 bool SaveMeScene::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 {
     return true;
+}
+
+void SaveMeScene::playAgain(CCObject* sender)
+{
+        
+        // Set the value what level will be played now
+        User::getInstance()->getMissionManager().mCurrentActiveMission;
+        
+        CCScene* scene;
+        
+        // If need to show some promo - do it
+        scene = GameScene::scene();
+        CCTransitionScene* transition = CCTransitionFade::create(0.5f, scene);
+        CCDirector::sharedDirector()->replaceScene(transition);
 }
 
 void SaveMeScene::menuSkipCallback(CCObject* sender)
@@ -311,6 +396,7 @@ void SaveMeScene::menuSaveCallback(CCObject* sender)
     gameScene->checkBoosterAvailability();
     
     this->getParent()->removeChild(this);
+    
 }
 
 void SaveMeScene::menuResumeCallback(CCObject* sender)
@@ -332,9 +418,9 @@ void SaveMeScene::menuMainMenuCallback(cocos2d::CCObject *sender)
 
 void SaveMeScene::menuTutorialCallback(cocos2d::CCObject *sender)
 {
-//    CCScene* tutorial = TutorialScene::scene();
-//	CCTransitionScene* transition = CCTransitionProgressInOut::create(0.5f, tutorial);
-//	CCDirector::sharedDirector()->pushScene(transition);
+    //CCScene* tutorial = TutorialScene::scene();
+	//CCTransitionScene* transition = CCTransitionProgressInOut::create(0.5f, tutorial);
+	//CCDirector::sharedDirector()->pushScene(transition);
     
     TutorialScene* tutorial = TutorialScene::create();
     tutorial->setScale(0);
