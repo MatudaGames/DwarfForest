@@ -18,6 +18,8 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
+    void endGameScreen();
+    
 private:
 	void menuResumeCallback(CCObject* sender);
     void menuMainMenuCallback(CCObject* sender);
@@ -27,7 +29,11 @@ private:
     void menuMusicCallback(CCObject* sender);
 	
     void onCreatePrice();
+    void playAgain(CCObject* sender);
     void menuSkipCallback(CCObject* sender);
     void menuSaveCallback(CCObject* sender);
+    
+    cocos2d::CCSize mScreenSize;
+    cocos2d::CCLayerColor* mKautkasScreen;
     
 };

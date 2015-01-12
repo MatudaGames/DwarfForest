@@ -955,7 +955,8 @@ private:
     cocos2d::CCSprite* _caveDoorBig;
     cocos2d::CCSprite* _caveDoorSmall;
     
-    
+    cocos2d::CCLayerColor* mGeneralScreen;
+    cocos2d::CCSize mScreenSize;
     
     std::vector<int> _possibleGeneratePoints;
     

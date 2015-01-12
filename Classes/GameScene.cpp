@@ -11037,8 +11037,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mAttackFunctionalActive)
                     {
-                        // Do not touch it !!!
-                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                             //Win win
                             showWinScreen();
                         }
@@ -11217,8 +11216,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mAttackFunctionalActive)
                     {
-                        // Do nothing for now !!!
-                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                             //Win win
                             showWinScreen();
                         }
@@ -12090,7 +12088,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=0){
+                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=1){
                         // Game over
                         lose();
                     }
@@ -12113,7 +12111,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
+                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                         // Game over
                         lose();
                     }
@@ -13055,7 +13053,88 @@ void GameScene::createPoints(int amount,int theBonus,cocos2d::CCPoint thePos,coc
 // Dont know where it is - do we have it - for now this then
 void GameScene::showWinScreen()
 {
-    lose();
+    _gamePause = true;
+    pauseSchedulerAndActionsRecursive(this,false);
+    
+    CCLayerColor* back = CCLayerColor::create(ccc4(0,0,0,200), visibleSize.width, visibleSize.height);
+    back->setTag(928);
+    addChild(back,kHUD_Z_Order-1);
+    
+    SimpleAudioEngine::sharedEngine()->stopAllEffects();
+    
+	mScreenSize = CCDirector::sharedDirector()->getVisibleSize();
+	//removeChild(back);
+	mGeneralScreen = CCLayerColor::create(ccc4(0,0,0,128),mScreenSize.width,mScreenSize.height);
+    mGeneralScreen->setVisible(false);
+    
+    //Add mission status
+    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/mission_completed.png");
+    aEndScreen->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/1.2f));
+    addChild(aEndScreen,kHUD_Z_Order+1);
+     
+	//Add stars 
+	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    aStar->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+    addChild(aStar,kHUD_Z_Order+1);
+    
+    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    bStar->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    addChild(bStar,kHUD_Z_Order+1);
+    
+    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
+    cStar->setPosition(ccp(mGeneralScreen->getContentSize().width/1.2f,mGeneralScreen->getContentSize().height/2));
+    addChild(cStar,kHUD_Z_Order+1);
+    
+    if(_missionCurrentValue>=_mission_star_points_1 && _missionCurrentValue<_mission_star_points_2){
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	addChild(aStarGlow,kHUD_Z_Order+1);
+    }
+	if(_missionCurrentValue>=_mission_star_points_2 && _missionCurrentValue<_mission_star_points_3)
+    {
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	addChild(aStarGlow,kHUD_Z_Order+1);
+    	
+    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+    	addChild(bStarGlow,kHUD_Z_Order+1);
+    }
+	if(_missionCurrentValue>=_mission_star_points_3)
+    {
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	addChild(aStarGlow,kHUD_Z_Order+1);
+    	
+    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+    	addChild(bStarGlow,kHUD_Z_Order+1);
+    	
+    	CCSprite* cStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
+    	cStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.2f,mGeneralScreen->getContentSize().height/2));
+    	addChild(cStarGlow,kHUD_Z_Order+1);
+    }
+    
+    
+    // Add 2 buttons clouse and play for now !!!
+    
+    // The play button
+    
+    CCMenuItemImage* MainMenuItem = CCMenuItemImage::create(
+                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        this,
+                                                        menu_selector(GameScene::OnExitWithNewMission));//menuSkipCallback
+    MainMenuItem->setTag(1);
+    MainMenuItem->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0,mGeneralScreen->getContentSize().height/12));
+    
+    CCMenu* aButtonMenu = CCMenu::create(MainMenuItem, NULL);
+    aButtonMenu->setAnchorPoint(ccp(0,0));
+    aButtonMenu->setPosition(ccp(0,0));
+    addChild(aButtonMenu,kHUD_Z_Order+1);
+    
+    addChild(mGeneralScreen,kHUD_Z_Order+1);//Above all
+	//lose();
 }
 
 void GameScene::lose(bool ignoreMissionSave)
@@ -13566,12 +13645,13 @@ void GameScene::generateDwarfMission(bool theInstant)
                 mWaitForSaveMe = true;
                 
                 // We can give save me stuff
-                SimpleAudioEngine::sharedEngine()->stopAllEffects();
+                //SimpleAudioEngine::sharedEngine()->stopAllEffects();
                 
-                SaveMeScene* saveLayer = SaveMeScene::create();
-                saveLayer->setTag(5544);
-                saveLayer->setAnchorPoint(ccp(0,0));
-                this->addChild(saveLayer,kHUD_Z_Order);
+                //SaveMeScene* saveLayer = SaveMeScene::create();
+                //saveLayer->setTag(5544);
+                //saveLayer->setAnchorPoint(ccp(0,0));
+                //this->addChild(saveLayer,kHUD_Z_Order);
+                lose();
             }
             
             return;//no dwarf spawn !!!
