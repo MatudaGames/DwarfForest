@@ -2904,6 +2904,8 @@ void GameScene::OnExitWithSpecialMission()
     //This time shows mission screen
     if(User::getInstance()->mSpecialMissionBuild)
     {
+        User::getInstance()->mCurrentMissionLevel += 1;
+        
         if(User::getInstance()->mSpecialMissionProgress<4){
             User::getInstance()->mSpecialMissionProgress+=1;
             User::getInstance()->mShowNewPart = true;
@@ -2920,6 +2922,8 @@ void GameScene::OnExitWithSpecialMission()
     }
     else
     {
+        User::getInstance()->mCurrentMissionLevel += 1;
+        
 //        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MAIN_MENU);
         CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);
         //        CCTransitionScene* transition = CCTransitionSlideInL::create(0.5f, options);
@@ -11038,9 +11042,10 @@ void GameScene::updateDwarfs(float delta)
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
+                    
                     if(mAttackFunctionalActive)
                     {
-                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
                             //Win win
                             lose();//showWinScreen
                         }
@@ -11219,7 +11224,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mAttackFunctionalActive)
                     {
-                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
+                        if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
                             //Win win
                             lose();//showWinScreen
                         }
@@ -13153,7 +13158,7 @@ void GameScene::lose(bool ignoreMissionSave)
     }
     
     // New stuff
-    if(mAttackFunctionalActive && ignoreMissionSave)
+    if(mAttackFunctionalActive && !ignoreMissionSave)
     {
         if(mMasterTroll_HP>0 && _mission_SaveDwarfs_Left<=0)
         {
@@ -13203,6 +13208,8 @@ void GameScene::lose(bool ignoreMissionSave)
     
     if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mDynamicTrolls){
         //Go back to the mission scene
+        
+        User::getInstance()->mCurrentMissionLevel += 1;
         
 //        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);
 //        CCScene* options = MissionScene::scene();
@@ -19547,7 +19554,7 @@ void GameScene::ResetValues()
     }
     
     //------------------------------------------------------------
-    
+    mIgnoreDwarfSave = false;
     
     mMasterTrollActionTimer = 60;// for now
     mMasterTrollLastActionID = -1;
@@ -19769,6 +19776,11 @@ void GameScene::UpdateBattleLabel()
     {
         mMasterTroll_Attack = 0;
         //Fire bullet at master troll !!!
+        
+        if(mMasterTroll_HP - mMasterTroll_Damege <= 0)
+        {
+            mIgnoreDwarfSave = true;//If no more dwarfs - do not save - because troll dead
+        }
         
         CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
         aDummyBullet->setScale(0.5f);

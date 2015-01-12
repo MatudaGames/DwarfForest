@@ -150,6 +150,8 @@ public:
     bool mWaitForSaveMe;
     void GeneratePowerUp(int theType,int theTime);
     
+    bool mIgnoreDwarfSave;
+    
     //----------------------------------------
     // The new special power up spawn stuff
     void updatePowerUpSpawn(float delta);
