@@ -265,6 +265,9 @@ void SaveMeScene::endGameScreen()
 	//CCLayerColor* back = CCLayerColor::create(ccc4(0,0,0,60), visibleSize.width, visibleSize.height);
     //back->setTag(928);
     //addChild(back);
+    
+    GameScene* gameScene = static_cast<GameScene*>(this->getParent());
+    gameScene->pauseGame();
 
 	removeChildByTag(929);
 	removeChildByTag(930);

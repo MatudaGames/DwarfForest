@@ -295,6 +295,7 @@ public:
     void addPickedUpCrystall(CrystalColor col);
 	void lose(bool ignoreMissionSave = false);
     
+    void pauseGame();
     void showWinScreen();
     
     double _gameTime;

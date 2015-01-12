@@ -2,6 +2,8 @@
 
 #include <cocos2d.h>
 
+class GameScene;
+
 class SaveMeScene: public cocos2d::CCLayer
 {
 public:
@@ -35,5 +37,7 @@ private:
     
     cocos2d::CCSize mScreenSize;
     cocos2d::CCLayerColor* mKautkasScreen;
+    
+    GameScene *_game;
     
 };
