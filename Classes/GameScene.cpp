@@ -974,6 +974,7 @@ void GameScene::CreateGameByMission()
     _boosterMushroom = false;//If true - will allow extra booster to enable
     _totalActiveBoosters = 0;
     
+    
     _diamondTimer = 0;
     
     _willUseMushroom = false;
@@ -11038,7 +11039,7 @@ void GameScene::updateDwarfs(float delta)
                     {
                         if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                             //Win win
-                            showWinScreen();
+                            lose();//showWinScreen
                         }
                     }
                     
@@ -11206,7 +11207,7 @@ void GameScene::updateDwarfs(float delta)
                     {
                         if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                             //Win win
-                            showWinScreen();
+                            lose();//showWinScreen
                         }
                     }
                     
@@ -13026,6 +13027,12 @@ void GameScene::createPoints(int amount,int theBonus,cocos2d::CCPoint thePos,coc
         addScore(amount*mScoreMulti_Global);
         addScore(theBonus);
 //    }
+}
+
+void GameScene::pauseGame()
+{
+	_gamePause = true;
+    pauseSchedulerAndActionsRecursive(this,false);
 }
 
 // Dont know where it is - do we have it - for now this then
