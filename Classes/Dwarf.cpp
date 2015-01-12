@@ -2576,13 +2576,15 @@ void Dwarf::updateDwarfPowerZone()
         //Check what are the zone range
         float theDistance2 = sqrtf((getPositionX()-mSnapedTroll->getPositionX())*(getPositionX()-mSnapedTroll->getPositionX()) +
                                    (getPositionY()-mSnapedTroll->getPositionY())*(getPositionY()-mSnapedTroll->getPositionY()));
-        if(theDistance2 <= 140)
+        if(theDistance2 <= 210)//140
         {
             //Fire some fast particle
             mSnapedTroll_FallBack = mSnapedTroll;
             mSnapedTroll = NULL;
             
             FireBulletAtTroll(mContainsPowerUp);
+            
+            mContainsPowerUp = -1;
             
             /*
             // Kill or freeze the troll

@@ -4763,7 +4763,8 @@ void GameScene::CreateMasters()
     _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterTrollBase);
     
-    _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
+    // Check what do we need to create her [dwarfking_placeholder]
+    _MasterDwarfBase = CCSprite::create("NewPowerMachine.png");
     _MasterDwarfBase->setTag(7002);
     _MasterDwarfBase->setPosition(ccp(visibleSize.width-100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterDwarfBase);
@@ -11034,13 +11035,25 @@ void GameScene::updateDwarfs(float delta)
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
-                    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                    if(mAttackFunctionalActive)
                     {
+                        // Do not touch it !!!
                         if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                             //Win win
                             showWinScreen();
                         }
                     }
+                    else
+                    {
+                        if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                        {
+                            if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
+                                //Win win
+                                showWinScreen();
+                            }
+                        }
+                    }
+                    
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
                     p->setPosition(cavePosition.x, cavePosition.y+20);
@@ -11202,11 +11215,22 @@ void GameScene::updateDwarfs(float delta)
                     p->setAutoRemoveOnFinish(true);
                     addChild(p,kPoints_Z_Order-1);
                     
-                    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                    if(mAttackFunctionalActive)
                     {
+                        // Do nothing for now !!!
                         if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                             //Win win
                             showWinScreen();
+                        }
+                    }
+                    else
+                    {
+                        if(mCurrentMission.Task_type == MissionType_DwarfSave)
+                        {
+                            if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
+                                //Win win
+                                showWinScreen();
+                            }
                         }
                     }
                     
@@ -13040,6 +13064,31 @@ void GameScene::lose(bool ignoreMissionSave)
         return;
     }
     
+    // New stuff
+    if(mAttackFunctionalActive && ignoreMissionSave)
+    {
+        if(mMasterTroll_HP>0 && _mission_SaveDwarfs_Left<=0)
+        {
+            // We need more dwarfs
+            if(getChildByTag(5544) != NULL){
+                return;// Do not come here !!!
+            }
+            
+            mWaitForSaveMe = true;
+            
+            // We can give save me stuff
+            SimpleAudioEngine::sharedEngine()->stopAllEffects();
+            
+            SaveMeScene* saveLayer = SaveMeScene::create();
+            saveLayer->setTag(5544);
+            saveLayer->setAnchorPoint(ccp(0,0));
+            this->addChild(saveLayer,kHUD_Z_Order);
+            
+            return;
+        }
+    }
+    
+    /*
     if(mCurrentMission.Task_type == MissionType_DwarfSave && !ignoreMissionSave)
     {
         // Check if user has got 1 star !!!
@@ -13062,6 +13111,7 @@ void GameScene::lose(bool ignoreMissionSave)
             return;
         }
     }
+    */
     
     if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mDynamicTrolls){
         //Go back to the mission scene
@@ -18523,6 +18573,8 @@ void GameScene::MasterAction_Enemy(cocos2d::CCObject *sender)
     {
         Troll* bee = static_cast<Troll*>(_trolls->objectAtIndex(otherIndex));
         int theID = bee->mEnemyID;
+        CCLog("Spawn Enemy ID [ON MAP]: %i",theID);
+        
         _spawnedEnemys.push_back(theID);
     }
     
@@ -18541,9 +18593,14 @@ void GameScene::MasterAction_Enemy(cocos2d::CCObject *sender)
 //        if(std::find(_spawnedEnemys.begin(), _spawnedEnemys.end(), i)) // Somehow did not work :/
         didFound = false;
         
+        CCLog("Search for ID: %i",i);
+        
         for(int x=0;x<_spawnedEnemys.size();x++)
         {
+            CCLog("Already spawned ID: %i",x);
+            
             if(_spawnedEnemys[x] == i){
+                CCLog("Found Already spawned ID: %i [searched for: %i]",x,i);
                 didFound = true;
                 break;
             }
@@ -18551,20 +18608,21 @@ void GameScene::MasterAction_Enemy(cocos2d::CCObject *sender)
         
         // Add the possible stuff here
         if(didFound == false){
+            CCLog("Was not spawned ID: %i",i);
             _possibleEnemys.push_back(i);
         }
     }
     
-    
     //What will be the ranom enemy !!!
-    int aRandomEnemy = rand()%_possibleEnemys.size();
-    CCLog("Random enemy %i",aRandomEnemy);
-    
-    
-    //Lets spawn it !!!
-    MissionTroll theTroll = mCurrentMission.Enemy_info[aRandomEnemy];
-//    generateTrollForMission(theTroll);
-    generateEnemyForMission(theTroll);
+    if(_possibleEnemys.size() > 0)
+    {
+        // We have something to spawn
+        int aRandomEnemy = rand()%_possibleEnemys.size();
+        aRandomEnemy = _possibleEnemys[aRandomEnemy];
+        //Lets spawn it !!!
+        MissionTroll theTroll = mCurrentMission.Enemy_info[aRandomEnemy];
+        generateEnemyForMission(theTroll);
+    }
 }
 
 void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
@@ -19561,6 +19619,11 @@ void GameScene::CreateBattleArena()
 
 void GameScene::UpdateSmoothBattleBars(float delta)
 {
+    // Check if all is created !!!
+    if(mBattleBar_TrollHP == NULL || mBattleBar_MachinePower == NULL){
+        return;
+    }
+    
     //Constantly checks if has any changes
     if(mMasterTroll_CurrentHP != mMasterTroll_HP)
     {

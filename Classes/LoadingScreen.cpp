@@ -630,9 +630,11 @@ void LoadingScreen::onPreloadImages()
     
 //    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("gadalaiki.plist");
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/summer/map_summer.png");
+    /*
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/autumn/map_autumn.png");
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/winter/map_winter.png");
     CCTextureCache::sharedTextureCache()->addImage("gadalaiki/spring/map_spring.png");
+    */
     
     //Lets preload some images =)
     
@@ -713,6 +715,7 @@ void LoadingScreen::onPreloadImages()
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/save_me/TheCrystalButtonHolder.png");
     
     //The level up and upgrades!!!
+    /*
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/blue.png");
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/fatass_dead.png");
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/forest.png");
@@ -736,7 +739,9 @@ void LoadingScreen::onPreloadImages()
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/upgrade_btn0001.png");
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/upgrade_btn0002.png");
     CCTextureCache::sharedTextureCache()->addImage("Interfeiss/level_end/yellow.png");
+    */
     
+    /*
     std::stringstream theDummy;
     for(int x=1;x<6;x++)
     {
@@ -760,5 +765,6 @@ void LoadingScreen::onPreloadImages()
         theDummy.str("");
         theDummy.clear();
     }
+    */
     
 }

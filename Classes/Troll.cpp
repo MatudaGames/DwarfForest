@@ -281,7 +281,7 @@ void Troll::setRadar(int theRadius,int theWidth)
     
     points.push_back(ccp(0,0));
     
-    //mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
     mCatchRadar->setRotation(0);
 }
@@ -719,6 +719,15 @@ void Troll::update(float delta)
         }
         else
         {
+            // Catch till catch him
+            setAngle(atan2f(point.y - y, point.x - x));
+            
+            CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
+                                      y + sinf(_angle) * delta * (_speed * _game->getGameSpeed()));
+            
+            cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
+            
+            /*
             float theDistance2 = sqrtf((getPositionX()-point.x)*(getPositionX()-point.x) + (getPositionY()-point.y)*(getPositionY()-point.y));
             
             if (theDistance2<coneRadius){
@@ -734,6 +743,7 @@ void Troll::update(float delta)
                 //He lost it
                 CancelDwarfCatch(mDwarfToCatch);
             }
+            */
         }
         
         return;
