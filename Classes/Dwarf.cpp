@@ -2683,5 +2683,5 @@ void Dwarf::setPowerButton(int theID)
         mPowerUpIcon = CCSprite::create("button_freez.png");
     }
     
-    addChild(mPowerUpIcon,0);
+    addChild(mPowerUpIcon,-1);
 }

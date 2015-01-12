@@ -70,7 +70,11 @@ bool PauseScene::init()
     CCSprite* aDwarfHead = CCSprite::create("Interfeiss/pause_menu/darf_head.png");
     
 //    CCSprite* aMissionDwarf = CCSprite::create("Interfeiss/pause_menu/dwarf_speech.png");
+//    CCSprite* aMissionDwarf = CCSprite::create("Interfeiss/missions/frame_mission_info.png");
+    
+    //For now add dwarf forest logo for nicer look
     CCSprite* aMissionDwarf = CCSprite::create("Interfeiss/missions/frame_mission_info.png");
+    aMissionDwarf->setVisible(false); // For now
     aMissionDwarf->setAnchorPoint(ccp(0.5,0.5));
     aMissionDwarf->setPositionX(visibleSize.width/2-aDwarfHead->getContentSize().width/2);
     aMissionDwarf->setPositionY(visibleSize.height-aMissionDwarf->getContentSize().height);//+40
@@ -109,6 +113,8 @@ bool PauseScene::init()
     
     
     CCSprite* aChallangeBG = CCSprite::create("Interfeiss/pause_menu/challenge_base.png");
+    aChallangeBG->setVisible(false); // For now disabled
+    
 //    aChallangeBG->setPosition(ccp(visibleSize.width/2,aMissionDwarf->getPositionY()-70-aChallangeBG->getContentSize().height));
     addChild(aChallangeBG);
     
@@ -491,6 +497,7 @@ bool PauseScene::init()
     //Create the ultra combo bar !!!
     
     CCSprite* aBaseProgress = CCSprite::create("small_dot_red.png");
+    aBaseProgress->setVisible(false); // Disabled for now !!!
     aMissionDwarf->addChild(aBaseProgress);
     aBaseProgress->setPosition(ccp(300,150));
     aBaseProgress->setScaleX(0.5);
