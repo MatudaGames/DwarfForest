@@ -1440,10 +1440,12 @@ void GameScene::CreateGameStartHUD()
 //    mPowerMenu.setPosition(ccp(visibleSize.width/2,500));
 //    addChild(&mPowerMenu,kHUD_Z_Order+1);
     
+    /* // Not needed for now !!!
     mPowerMenu = InGamePowers::create();
     mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
     mPowerMenu->mGameScene = this;
     addChild(mPowerMenu,kHUD_Z_Order+1);
+    */
     
 //    InGamePowers* saveLayer = InGamePowers::create();
 //    saveLayer->setAnchorPoint(ccp(0,0));
@@ -5882,12 +5884,12 @@ void GameScene::menuPauseCallback(cocos2d::CCObject *sender)//menuPauseCallback
     _gamePause = true;
     pauseSchedulerAndActionsRecursive(this,false);
     
-    CCLayerColor* aBlackBG = CCLayerColor::create(ccc4(0,0,0,64),_screenSize.width,_screenSize.height);
+    CCLayerColor* aBlackBG = CCLayerColor::create(ccc4(0,0,0,0),_screenSize.width,_screenSize.height);
     aBlackBG->setTag(7777);
     aBlackBG->setOpacity(0);
     addChild(aBlackBG,kHUD_Z_Order);
     
-    CCFadeTo* aFadeBG = CCFadeTo::create(0.5f,128);
+    CCFadeTo* aFadeBG = CCFadeTo::create(0.5f,1);
     aBlackBG->runAction(aFadeBG);
     
     PauseScene* pauseLayer = PauseScene::create();
@@ -12088,7 +12090,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=1){
+                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=0){
                         // Game over
                         lose();
                     }
@@ -12111,7 +12113,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
+                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
                         // Game over
                         lose();
                     }
@@ -13529,6 +13531,8 @@ void GameScene::NewMissionCompleted()
 
 void GameScene::OnExitWithNewMission()
 {
+    User::getInstance()->mCurrentMissionLevel += 1;
+    
     removeChildByTag(2014);
     
     //just exit for now !!!
@@ -16689,7 +16693,7 @@ void GameScene::onEnterTransitionDidFinish()
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_GriegLoop.mp3", true);
     
     // Debug
-    User::getInstance()->mCurrentMissionLevel += 1;
+//    User::getInstance()->mCurrentMissionLevel += 1;
 }
 
 //The map change effects !!!
@@ -19613,9 +19617,11 @@ void GameScene::ResetValues()
     if(mCurrentMission.Mission_SaveDwarfs>0){
         _mission_SaveDwarfs_Left = mCurrentMission.Mission_SaveDwarfs;
         
+        /* // not for release
         mDwarfSaveCounter = CCLabelTTF::create("10/0 | 4/0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
         mDwarfSaveCounter->setPosition(ccp(160,450));
         addChild(mDwarfSaveCounter,kHUD_Z_Order+1);
+        */
     }
     
     UpdateDwarfSaveLabel();
