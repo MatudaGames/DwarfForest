@@ -146,11 +146,14 @@ public:
     static cocos2d::CCScene* scene();
     
     cocos2d::CCLabelTTF* mDwarfSaveCounter;
+    cocos2d::CCLabelTTF* mExtraCrystalCounter;
     
     bool mWaitForSaveMe;
     void GeneratePowerUp(int theType,int theTime);
     
     bool mIgnoreDwarfSave;
+    
+    void OnTryToShoot();
     
     //----------------------------------------
     // The new special power up spawn stuff

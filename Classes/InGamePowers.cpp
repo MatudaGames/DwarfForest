@@ -43,11 +43,13 @@ bool InGamePowers::init()
                                                           this,
                                                           menu_selector(InGamePowers::onButton_1));
     
+    /*
     button_2 = CCMenuItemImage::create(
                                                           "button_electro.png",
                                                           "button_electro.png",
                                                           this,
                                                           menu_selector(InGamePowers::onButton_2));
+    */
     
     /*
     button_3 = CCMenuItemImage::create(
@@ -57,7 +59,7 @@ bool InGamePowers::init()
                                                           menu_selector(InGamePowers::onButton_3));
     */
     
-    CCMenu* mainMenu = CCMenu::create(button_1, button_2, NULL);
+    CCMenu* mainMenu = CCMenu::create(button_1, NULL);
     mainMenu->alignItemsHorizontally();
     mainMenu->setPosition(ccp(0,0));
     addChild(mainMenu, 1);
@@ -75,7 +77,8 @@ void InGamePowers::onButton_1(CCObject* sender)
     CCLOG("CLick 1 !!!");
     
 //    OnGhoustDwarfs();
-    OnFreezeTroll();
+//    OnFreezeTroll();
+    mGameScene->OnTryToShoot();
 }
 
 void InGamePowers::onButton_2(CCObject* sender)

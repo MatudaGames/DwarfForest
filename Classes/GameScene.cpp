@@ -1441,12 +1441,12 @@ void GameScene::CreateGameStartHUD()
 //    mPowerMenu.setPosition(ccp(visibleSize.width/2,500));
 //    addChild(&mPowerMenu,kHUD_Z_Order+1);
     
-    /* // Not needed for now !!!
+    // Not needed for now !!!
     mPowerMenu = InGamePowers::create();
     mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
     mPowerMenu->mGameScene = this;
     addChild(mPowerMenu,kHUD_Z_Order+1);
-    */
+    
     
 //    InGamePowers* saveLayer = InGamePowers::create();
 //    saveLayer->setAnchorPoint(ccp(0,0));
@@ -5295,7 +5295,7 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
     
     if(mAttackFunctionalActive)
     {
-        mMasterTroll_Attack+=100;
+        mMasterTroll_Attack+=30;
         UpdateBattleLabel();
     }
     
@@ -19543,8 +19543,15 @@ void GameScene::ResetValues()
     // Now check the mission stuff
     if(mCurrentMission.MT_Battle_HP>0) mMasterTroll_HP = mCurrentMission.MT_Battle_HP;
     if(mCurrentMission.MT_Battle_Damage>0) mMasterTroll_Damege = mCurrentMission.MT_Battle_Damage;
-    if(mCurrentMission.MT_Battle_Attack>0) mMasterTroll_Attack = 0;//mCurrentMission.MT_Battle_Attack;
+    if(mCurrentMission.MT_Battle_Attack>0)
+    {
+        //Forced for now - test mission !!!
+        mCurrentMission.MT_Battle_Attack = 100;
+        mMasterTroll_Attack = 0;//mCurrentMission.MT_Battle_Attack;
+    }
     if(mCurrentMission.MT_Battle_WinOnKill) mWinGameOnMasterTrollKill = mCurrentMission.MT_Battle_WinOnKill;
+    
+
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
@@ -19660,6 +19667,11 @@ void GameScene::ResetValues()
 
 void GameScene::CreateBattleArena()
 {
+    // The debug info for now
+    mExtraCrystalCounter = CCLabelTTF::create("0 Crystals",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(240,240), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+    mExtraCrystalCounter->setPosition(ccp(500,800));
+    addChild(mExtraCrystalCounter,kHUD_Z_Order+1);
+    
     // Set the current HP
     mMasterTroll_CurrentHP = mMasterTroll_HP;
     mMasterTroll_CurrentAttack = mMasterTroll_Attack = 0;
@@ -19749,8 +19761,12 @@ void GameScene::UpdateSmoothBattleBars(float delta)
             if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
         }
         
+        //Limit to 100 for now !!!
+        float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
+        if(aTotalValue>1)aTotalValue = 1;
+        
         mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
-                                                  mBattleBar_MachinePower->getTexture()->getContentSize().width*((float)mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack),
+                                                  mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
                                                   mBattleBar_MachinePower->getTexture()->getContentSize().height));
     }
     
@@ -19762,16 +19778,20 @@ void GameScene::UpdateBattleLabel()
         return;
     }
     
+    // Some debug stuff
+    if(mExtraCrystalCounter != NULL){
+        std::stringstream theMT_Timer;
+        theMT_Timer<<mMasterTroll_Attack<<" Crystals";
+        mExtraCrystalCounter->setString(theMT_Timer.str().c_str());
+    }
+    
+    
     //Update timer
-    /*
-    std::stringstream theMT_Timer;
-    theMT_Timer<<mCurrentMission.MT_Battle_HP<<"/"<<mMasterTroll_HP;
-    mBattle_TrollHP->setString(theMT_Timer.str().c_str());
-    */
     
     // Just update the bar
     
     // Check if attack is not above shoot !!!
+    /* // Now the shoot will be manualy by player !!!
     if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
     {
         mMasterTroll_Attack = 0;
@@ -19807,6 +19827,48 @@ void GameScene::UpdateBattleLabel()
         
         addChild(aDummyBullet);
     }
+    */
+}
+
+void GameScene::OnTryToShoot()
+{
+    if(mMasterTroll_Attack<100){
+        return;// Not enought powa
+    }
+    
+    mMasterTroll_Attack -= 100;
+    //Fire bullet at master troll !!!
+    UpdateBattleLabel(); // For debug mission
+    
+    if(mMasterTroll_HP - mMasterTroll_Damege <= 0)
+    {
+        mIgnoreDwarfSave = true;//If no more dwarfs - do not save - because troll dead
+    }
+    
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setScale(0.5f);
+    aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
+    
+    //Move bullet to troll
+    
+    ccBezierConfig bezier;
+    bezier.controlPoint_1 = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//1096,168
+    bezier.controlPoint_2 = ccp(_MasterTrollBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//635,105
+    bezier.endPosition = ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
+    
+    CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+    
+    //        CCMoveTo* aMoveAction = CCMoveTo::create(1.0,ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnAttackHitTroll));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->runAction(aSequence);
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    addChild(aDummyBullet);
 }
 
 void GameScene::OnAttackHitTroll(CCNode* sender)
