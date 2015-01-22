@@ -174,12 +174,20 @@ public:
     int mMasterTroll_Attack;    // Whats the current value for attack
     float mMasterTroll_CurrentAttack;
     
+    int mDwarfMachineHP;
+    bool mDwarfMachineProtect;
+    
     bool mWinGameOnMasterTrollKill; // Will we win game if master troll will fall?
     
     void CreateBattleArena();
     void UpdateBattleLabel();
     void UpdateSmoothBattleBars(float delta);
     void OnAttackHitTroll(CCNode* sender);
+    
+    // The dwarf machine attack
+    float mAttackDwarfMachineTimer;
+    void OnTryToShoot_ToDwarf();
+    void OnAttackHitMachine(CCNode* sender);
     
     // The progress bars !!!
     cocos2d::CCSprite* mBattleBar_TrollBase;
@@ -193,6 +201,8 @@ public:
     
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();
+    void StartTrollFreeze();
+    void StartDwarfFreeze_All();
     void IceBlitz();
     void StartIceBlitz();
     void BulletDwarf();

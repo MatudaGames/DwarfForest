@@ -8841,6 +8841,15 @@ void GameScene::update(float delta)
     // The test enemies and other stuff
     UpdateTestStuff(delta);
     
+    if(mDwarfMachineProtect)
+    {
+        mAttackDwarfMachineTimer+=delta;
+        if(mAttackDwarfMachineTimer>=20)
+        {
+            OnTryToShoot_ToDwarf();
+        }
+    }
+    
     return;
     
     
@@ -12956,6 +12965,11 @@ void GameScene::addDebugCrystalPoints(int amount)
     mCrystalPoints+=amount;
     
     _scoreLabel->setString(toString(mCrystalPoints).c_str());
+    
+    // Update the crystal stuff
+    if(mPowerMenu!=NULL){
+        mPowerMenu->UpdateButtons();
+    }
     
     if(!mDebugInfoVisible)
         return;
@@ -19437,6 +19451,35 @@ void GameScene::UpdateBullets(float delta)
     }
 }
 
+void GameScene::StartTrollFreeze()
+{
+    // Do all the magic here
+    /*
+    mSnapedTroll_FallBack->mFreezedTime = 10;//Get from missions some param?
+    
+    // Add for now blue troll FX
+    mSnapedTroll_FallBack->_animation->setColor(ccc3(0, 164, 255));
+    */
+}
+
+void GameScene::StartDwarfFreeze_All()
+{
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        //Freeze
+        Effect* effect = NULL;
+        effect = IceBarrage::create(this);
+        effect->setPosition(ccp(dwarf->getPositionX(),dwarf->getPositionY()));
+        
+        effect->touch(dwarf,NULL);
+        effect->setVisible(true);
+        
+        dwarf->pauseAnimation();
+    }
+}
+
 void GameScene::StartDwarfFreeze()
 {
     //Choose any dwarf !!!
@@ -19540,6 +19583,10 @@ void GameScene::ResetValues()
     mBattleBar_TrollHP = NULL;
     mBattleBar_MachinePower = NULL;
     
+    mDwarfMachineHP = 0;
+    mDwarfMachineProtect = false;
+    mAttackDwarfMachineTimer = 0;
+    
     // Now check the mission stuff
     if(mCurrentMission.MT_Battle_HP>0) mMasterTroll_HP = mCurrentMission.MT_Battle_HP;
     if(mCurrentMission.MT_Battle_Damage>0) mMasterTroll_Damege = mCurrentMission.MT_Battle_Damage;
@@ -19551,7 +19598,10 @@ void GameScene::ResetValues()
     }
     if(mCurrentMission.MT_Battle_WinOnKill) mWinGameOnMasterTrollKill = mCurrentMission.MT_Battle_WinOnKill;
     
-
+    // The new stuff
+    mDwarfMachineHP = 5;
+    mAttackDwarfMachineTimer = 0;
+    mDwarfMachineProtect = true;
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
@@ -19748,28 +19798,54 @@ void GameScene::UpdateSmoothBattleBars(float delta)
     }
     
     //Constantly checks if has any changes
-    if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
+    if(mDwarfMachineProtect)
     {
-        if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
+        if(mMasterTroll_CurrentAttack != mDwarfMachineHP)
         {
-            mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
-            if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            if(mMasterTroll_CurrentAttack > mDwarfMachineHP)
+            {
+                mMasterTroll_CurrentAttack -= delta*(float)(2);
+                if(mMasterTroll_CurrentAttack<=mDwarfMachineHP) mMasterTroll_CurrentAttack = mDwarfMachineHP;
+            }
+            else
+            {
+                mMasterTroll_CurrentAttack += delta*(float)(2);
+                if(mMasterTroll_CurrentAttack>=mDwarfMachineHP) mMasterTroll_CurrentAttack = mDwarfMachineHP;
+            }
+            
+            //Limit to 100 for now !!!
+            float aTotalValue = (float)mDwarfMachineHP / 5;
+            if(aTotalValue>1)aTotalValue = 1;
+            
+            mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().height));
         }
-        else
-        {
-            mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
-            if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
-        }
-        
-        //Limit to 100 for now !!!
-        float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
-        if(aTotalValue>1)aTotalValue = 1;
-        
-        mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
-                                                  mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
-                                                  mBattleBar_MachinePower->getTexture()->getContentSize().height));
     }
-    
+    else
+    {
+        if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
+        {
+            if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
+            {
+                mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
+                if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            }
+            else
+            {
+                mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
+                if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            }
+            
+            //Limit to 100 for now !!!
+            float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
+            if(aTotalValue>1)aTotalValue = 1;
+            
+            mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().height));
+        }
+    }
 }
 
 void GameScene::UpdateBattleLabel()
@@ -19783,6 +19859,10 @@ void GameScene::UpdateBattleLabel()
         std::stringstream theMT_Timer;
         theMT_Timer<<mMasterTroll_Attack<<" Crystals";
         mExtraCrystalCounter->setString(theMT_Timer.str().c_str());
+    }
+    
+    if(mPowerMenu != NULL){
+        mPowerMenu->UpdateButtons();
     }
     
     
@@ -19829,6 +19909,58 @@ void GameScene::UpdateBattleLabel()
     }
     */
 }
+
+void GameScene::OnAttackHitMachine(CCNode* sender)
+{
+    // Remove bullet
+    this->removeChild(sender, true);
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    CCBlink* aBlink = CCBlink::create(0.25f, 2);
+    _MasterDwarfBase->runAction(aBlink);
+    
+    mDwarfMachineHP-=1;
+    
+    if(mDwarfMachineHP<=0){
+        // Game over
+        lose();
+    }
+}
+
+void GameScene::OnTryToShoot_ToDwarf()
+{
+    mAttackDwarfMachineTimer = 0;// Reset timer
+    
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setScale(0.5f);
+    aDummyBullet->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    
+    //Move bullet to dwarf machine
+    ccBezierConfig bezier;
+    bezier.controlPoint_1 = ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()+300);//1096,168
+    bezier.controlPoint_2 = ccp(_MasterDwarfBase->getPositionX(),_MasterTrollBase->getPositionY()+300);//635,105
+    bezier.endPosition = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY());
+    
+    CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+    
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnAttackHitMachine));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->runAction(aSequence);
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    addChild(aDummyBullet);
+}
+
+//-----------------
+
 
 void GameScene::OnTryToShoot()
 {
