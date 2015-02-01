@@ -1441,11 +1441,15 @@ void GameScene::CreateGameStartHUD()
 //    mPowerMenu.setPosition(ccp(visibleSize.width/2,500));
 //    addChild(&mPowerMenu,kHUD_Z_Order+1);
     
+    mPowerMenu = NULL;
+    
     // Not needed for now !!!
+    /*
     mPowerMenu = InGamePowers::create();
     mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
     mPowerMenu->mGameScene = this;
     addChild(mPowerMenu,kHUD_Z_Order+1);
+    */
     
     
 //    InGamePowers* saveLayer = InGamePowers::create();
@@ -4770,21 +4774,13 @@ void GameScene::CreateMasters()
     _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterTrollBase);
     
-    // Check what do we need to create her [dwarfking_placeholder]
-    _MasterDwarfBase = CCSprite::create("NewPowerMachine.png");
+    // Check what do we need to create her [dwarfking_placeholder] NewPowerMachine.png
+    _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
     _MasterDwarfBase->setTag(7002);
     _MasterDwarfBase->setPosition(ccp(visibleSize.width-100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterDwarfBase);
     
 //    playInGameSound("meteorite_hit_ground");
-    
-    //Create the fall animations
-    CCMoveTo* aFallOff = CCMoveTo::create(1.0f,ccp(64,360));
-    CCEaseExponentialIn* aBounceOff = CCEaseExponentialIn::create(aFallOff);
-    CCDelayTime* aDelay = CCDelayTime::create(0.1f);
-    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
-    CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
-    _MasterTrollBase->runAction(aSeq);
     
     //Add particle for coller look
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
@@ -4794,12 +4790,13 @@ void GameScene::CreateMasters()
     p->setAutoRemoveOnFinish(true);
     _MasterTrollBase->addChild(p,-1);
     
-    aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
-    aBounceOff = CCEaseExponentialIn::create(aFallOff);
-    aDelay = CCDelayTime::create(0.6f);
-    aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
-    aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
-    _MasterDwarfBase->runAction(aSeq);
+    //Create the fall animations
+    CCMoveTo* aFallOff = CCMoveTo::create(1.0f,ccp(64,360));
+    CCEaseExponentialIn* aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    CCDelayTime* aDelay = CCDelayTime::create(0.1f);
+    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterTrollBase->runAction(aSeq);
     
     p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
     p->setTag(70003);// The particle tag for remove when falled down !!!
@@ -4807,6 +4804,13 @@ void GameScene::CreateMasters()
     p->setPositionType(kCCPositionTypeGrouped);
     p->setAutoRemoveOnFinish(true);
     _MasterDwarfBase->addChild(p,-1);
+    
+    aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
+    aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    aDelay = CCDelayTime::create(0.6f);
+    aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterDwarfBase->runAction(aSeq);
 }
 
 void GameScene::OnMasterHitGround(CCNode* sender)
@@ -8687,6 +8691,110 @@ void GameScene::UpdateCrystalSpawn(float delta)
             //---------------------------------------------------------------
         }
     }
+}
+
+void GameScene::StartDwarKingItemSpawn()
+{
+    mDwarfKingItemSpawnID = rand()%5;
+    
+    // Choose some spot !!!
+    int aPositionID = rand()%8;
+    mDwarfKingItemSpawnPos = getRandomPointFromBlock(aPositionID);
+    
+    // Fire the bullet to that spot - where smoke should be
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setScale(0.5f);
+    aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    addChild(aDummyBullet);
+    
+    //Move bullet to troll
+    ccBezierConfig bezier;
+    bezier.controlPoint_1 = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//1096,168
+    bezier.controlPoint_2 = ccp(mDwarfKingItemSpawnPos.x,_MasterDwarfBase->getPositionY()+300);//635,105
+    bezier.endPosition = ccp(mDwarfKingItemSpawnPos.x,mDwarfKingItemSpawnPos.y);
+    
+    CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnDwarfKingSpawnHitGround));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->runAction(aSequence);
+}
+
+void GameScene::OnDwarfKingSpawnHitGround(CCNode* sender)
+{
+    // Remove bullet
+    this->removeChild(sender, true);
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    //-----------------------------------
+    
+    // Spawn the needed item !!! + smoke
+    int aSubPowerID = 0;
+    
+    SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
+    aBlitz->retain();
+    aBlitz->setAnchorPoint(ccp(0.5,0.5));
+    aBlitz->setPosition(mDwarfKingItemSpawnPos);
+    addChild(aBlitz,kPoints_Z_Order);
+    
+    CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+    CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+    CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+    aBlitz->runAction(aSeq1);
+    
+    if(mDwarfKingItemSpawnID == 0)
+    {
+        Mushroom* mushroom = Mushroom::create(this,mCurrentMission.ItemTimeOnMap);
+        mushroom->setPosition(mDwarfKingItemSpawnPos);
+        addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
+        _mushrooms->addObject(mushroom);
+    }
+    else if(mDwarfKingItemSpawnID == 1)
+    {
+        Diamond* diamond = Diamond::create(this,mCurrentMission.ItemTimeOnMap);
+        diamond->setPosition(mDwarfKingItemSpawnPos);
+        addChild(diamond, getSpriteOrderZ(diamond->getPositionY()));
+        _diamonds->addObject(diamond);
+    }
+    else if(mDwarfKingItemSpawnID == 2)
+    {
+        // Check what power up !!!
+        aSubPowerID = rand()%mCurrentMission.PowerTypeProbs.size();
+        
+        // What power will it be?
+        GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,aSubPowerID,mCurrentMission.PowerTimeOnMap);
+        
+        // Set some position
+        Bee->setPosition(mDwarfKingItemSpawnPos);
+        
+        this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+        _powersOnMap->addObject(Bee);
+    }
+    else
+    {
+        // Check what crystal !!!
+        aSubPowerID = rand()%mCurrentMission.CrystalColProbs.size();
+        
+        Crystal* crystal = Crystal::create(this,aSubPowerID,mCurrentMission.ItemTimeOnMap);
+        crystal->setPosition(mDwarfKingItemSpawnPos);
+        
+        addChild(crystal, getSpriteOrderZ(crystal->getPositionY()));
+        _crystals->addObject(crystal);
+        
+        crystal->setVisible(true);
+    }
+    
+    mMasterTroll_Attack = 0;
+    mDwarfKingSpawn_Active = false;
 }
 
 void GameScene::UpdateTestStuff(float delta)
@@ -19599,9 +19707,15 @@ void GameScene::ResetValues()
     if(mCurrentMission.MT_Battle_WinOnKill) mWinGameOnMasterTrollKill = mCurrentMission.MT_Battle_WinOnKill;
     
     // The new stuff
+    /*
     mDwarfMachineHP = 5;
     mAttackDwarfMachineTimer = 0;
     mDwarfMachineProtect = true;
+    */
+    
+    // For now
+    mDwarfKingSpawnItems = true;
+    mDwarfKingSpawn_Active = false;
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
@@ -19869,6 +19983,17 @@ void GameScene::UpdateBattleLabel()
     //Update timer
     
     // Just update the bar
+    
+    if(mDwarfKingSpawnItems)
+    {
+        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack && mDwarfKingSpawn_Active==false)
+        {
+            // Spawn some object?
+            mDwarfKingSpawn_Active = true; // Wait a bit
+            
+            StartDwarKingItemSpawn();
+        }
+    }
     
     // Check if attack is not above shoot !!!
     /* // Now the shoot will be manualy by player !!!

@@ -175,7 +175,14 @@ public:
     float mMasterTroll_CurrentAttack;
     
     int mDwarfMachineHP;
-    bool mDwarfMachineProtect;
+    bool mDwarfMachineProtect; // Troll attacks machine
+    
+    int mDwarfKingItemSpawnID; // What will dwarf king spawn when bullet hits ground
+    cocos2d::CCPoint mDwarfKingItemSpawnPos;
+    void StartDwarKingItemSpawn();
+    void OnDwarfKingSpawnHitGround(CCNode* sender);
+    bool mDwarfKingSpawn_Active;
+    bool mDwarfKingSpawnItems; // The new stuff when dwarf king spawns stuff after amount
     
     bool mWinGameOnMasterTrollKill; // Will we win game if master troll will fall?
     
