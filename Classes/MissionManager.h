@@ -283,6 +283,8 @@ struct MissionSet
     
     int32_t Mission_SaveDwarfs;
     
+    int32_t Mission_KillEnemys;
+    
     // The master troll attack stuff
     int32_t MT_Battle_HP;
     int32_t MT_Battle_Damage;

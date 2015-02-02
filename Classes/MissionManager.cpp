@@ -5115,6 +5115,12 @@ void MissionManager::OnDownloadedSpecial()
             mission->Mission_SaveDwarfs = aDummyVar;
         }
         
+        mission->Mission_KillEnemys = 0;
+        aDummyVar = missionDict->valueForKey("MT_WIN_ON_ENEMY_KILL")->floatValue();
+        if(aDummyVar>=1){
+            mission->Mission_KillEnemys = aDummyVar;
+        }
+        
         //------------------------------------------------------------------
         // New Attack stuff
         

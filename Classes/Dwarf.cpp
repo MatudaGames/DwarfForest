@@ -1614,24 +1614,55 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                 //Check if does not want to snap to troll
 //                mSnapedTroll
                 
-                for (int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)
+                // By default - always on
+                mCanSearchForTrollsForSnap = true;
+                
+                if(_game->mDwarfCollectMachine)
                 {
-                    Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
-                    
-                    //Little update - warning light on gnome !!!
-                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove())
+                    // Check if does not want to attack troll
+//                    if(_game->_MasterTrollBase)
+                    if(ccpDistanceSQ(_game->_MasterTrollBase->getPosition(), position) <= 6000)
                     {
-                        if(ccpDistanceSQ(troll->getPosition(), position) <= FAT_SNAP_TO_CAVE)
+                        mSnapedToMasterTroll = true;
+                        
+                        addMovePoint(_game->_MasterTrollBase->getPosition(), position,false);
+                        _touchEnded = true;
+                        connectLine();
+                        vibrate();
+                    }
+                }
+                
+                
+                if(_game->mDwarfCollectMachine)
+                {
+                    if(mSnapedToMasterTroll == false)
+                    {
+                        mCanSearchForTrollsForSnap = true;
+                    }
+                }
+                
+                
+                if(mCanSearchForTrollsForSnap)
+                {
+                    for (int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)
+                    {
+                        Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+                        
+                        //Little update - warning light on gnome !!!
+                        if (troll->isVisible() && troll->getTouchable() && troll->getCanMove())
                         {
-                            //Snap to troll
-                            mSnapedTroll = troll;
-                            
-                            addMovePoint(troll->getPosition(), position,false);
-                            _touchEnded = true;
-                            connectLine();
-                            vibrate();
-                            
-                            break;
+                            if(ccpDistanceSQ(troll->getPosition(), position) <= FAT_SNAP_TO_CAVE)
+                            {
+                                //Snap to troll
+                                mSnapedTroll = troll;
+                                
+                                addMovePoint(troll->getPosition(), position,false);
+                                _touchEnded = true;
+                                connectLine();
+                                vibrate();
+                                
+                                break;
+                            }
                         }
                     }
                 }
@@ -2516,7 +2547,17 @@ void Dwarf::FireBulletAtTroll(int thePowerID)
     aDummyBullet->setPosition(ccp(getPositionX(),getPositionY()));
     
     //Move bullet to troll
-    CCMoveTo* aMoveAction = CCMoveTo::create(0.5f,ccp(mSnapedTroll_FallBack->getPositionX(),mSnapedTroll_FallBack->getPositionY()));
+    CCMoveTo* aMoveAction;
+    
+    if(mSnapedToMasterTroll)
+    {
+        aMoveAction = CCMoveTo::create(0.5f,ccp(_game->_MasterTrollBase->getPositionX(),_game->_MasterTrollBase->getPositionY()));
+    }
+    else
+    {
+        aMoveAction = CCMoveTo::create(0.5f,ccp(mSnapedTroll_FallBack->getPositionX(),mSnapedTroll_FallBack->getPositionY()));
+    }
+    
     CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(Dwarf::OnFireBulletHitTroll));
     CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
     aDummyBullet->setTag(thePowerID);
@@ -2537,20 +2578,34 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     p->setPosition(ccp(sender->getPositionX(),sender->getPositionY()));
     p->setAutoRemoveOnFinish(true);
     
-    if(sender->getTag() == 0)
+    if(mSnapedToMasterTroll)
     {
-        mSnapedTroll_FallBack->removeFromSave();
+        _game->OnAttackHitTroll(NULL);
     }
-    else if(sender->getTag() == 1)
+    else
     {
-        // Do all the magic here
-        mSnapedTroll_FallBack->mFreezedTime = 10;//Get from missions some param?
-        
-        // Add for now blue troll FX
-        mSnapedTroll_FallBack->_animation->setColor(ccc3(0, 164, 255));
-        
-        // Play some attack sound
-        _game->playInGameSound("dwarf_crash");
+        if(sender->getTag() == 0)
+        {
+            mSnapedTroll_FallBack->removeFromSave();
+            if(_game->mKillTrollsAmountLeft>0){
+                _game->mKillTrollsAmountLeft-=1;
+                if(_game->mKillTrollsAmountLeft <= 0){
+                    // Win win
+                    _game->showWinScreen();
+                }
+            }
+        }
+        else if(sender->getTag() == 1)
+        {
+            // Do all the magic here
+            mSnapedTroll_FallBack->mFreezedTime = 10;//Get from missions some param?
+            
+            // Add for now blue troll FX
+            mSnapedTroll_FallBack->_animation->setColor(ccc3(0, 164, 255));
+            
+            // Play some attack sound
+            _game->playInGameSound("dwarf_crash");
+        }
     }
     
     // Remove old particle
@@ -2561,6 +2616,9 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     
     // No more snaped trolls
     mSnapedTroll_FallBack = NULL;
+    
+    // Finish
+    mSnapedToMasterTroll = false;
 }
 
 // The dull snap crap
@@ -2568,6 +2626,24 @@ void Dwarf::updateDwarfPowerZone()
 {
     if(mContainsPowerUp == -1){
         return;// No need to go futher
+    }
+    
+    if(mSnapedToMasterTroll)
+    {
+        float theDistance2 = sqrtf((getPositionX()-_game->_MasterTrollBase->getPositionX())*(getPositionX()-_game->_MasterTrollBase->getPositionX()) +
+                                   (getPositionY()-_game->_MasterTrollBase->getPositionY())*(getPositionY()-_game->_MasterTrollBase->getPositionY()));
+        if(theDistance2 <= 250)
+        {
+            FireBulletAtTroll(mContainsPowerUp);
+            
+            mContainsPowerUp = -1;
+            
+            if(mPowerUpIcon != NULL){
+                removeChild(mPowerUpIcon);
+            }
+            
+            return;
+        }
     }
     
     // If has troll attached - then follow to him?

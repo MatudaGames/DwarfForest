@@ -19714,8 +19714,17 @@ void GameScene::ResetValues()
     */
     
     // For now
-    mDwarfKingSpawnItems = true;
+    mDwarfKingSpawnItems = false;
     mDwarfKingSpawn_Active = false;
+    
+    mKillTrollsAmountLeft = -1;
+    
+    if(mCurrentMission.Mission_KillEnemys>0){
+        mKillTrollsAmountLeft = mCurrentMission.Mission_KillEnemys;//We want to win on enemy kill
+    }
+    
+    // New stuff
+    mDwarfCollectMachine = true;
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
@@ -19845,7 +19854,15 @@ void GameScene::CreateBattleArena()
     CCSize aScreenSize = CCDirector::sharedDirector()->getVisibleSize();
     
     mBattleBar_MachineBase = CCSprite::create("small_dot_red.png");
-    mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
+    
+    // The new stuff
+    if(mDwarfCollectMachine){
+        mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width/2,60));
+    }
+    else{
+        mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
+    }
+    
     mBattleBar_MachineBase->setScaleX(0.0f);     //(0.15);
     mBattleBar_MachineBase->setScaleY(0.0f);     //(0.3);
     
@@ -19994,6 +20011,77 @@ void GameScene::UpdateBattleLabel()
             StartDwarKingItemSpawn();
         }
     }
+    else if(mDwarfCollectMachine)
+    {
+        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
+        {
+            // Remove the amount and spawn some item near enterances?
+            CCLOG("Create item near cave for troll attack");
+            
+            // What power will it be?
+            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,0,mCurrentMission.PowerTimeOnMap);
+            
+            // Spawn near cave ???
+            CCPoint spawnSpot;
+            
+            // The offset from cave center
+            int aCaveOff_X = (rand()%50+50);
+            int aCaveOff_Y = (rand()%50+50);
+            
+            int aPositionID = rand()%2;
+            if(aPositionID == 0){
+                if(_SpawnOrangeDwarf){
+                    spawnSpot.x = _caveTall->getPositionX();
+                    spawnSpot.y = _caveTall->getPositionY();
+                }
+                else
+                {
+                    spawnSpot.x = _caveFat->getPositionX();
+                    spawnSpot.y = _caveFat->getPositionY();
+                }
+            }
+            else{
+                if(_SpawnBlueDwarf){
+                    spawnSpot.x = _caveFat->getPositionX();
+                    spawnSpot.y = _caveFat->getPositionY();
+                }
+                else
+                {
+                    spawnSpot.x = _caveTall->getPositionX();
+                    spawnSpot.y = _caveTall->getPositionY();
+                }
+            }
+            
+            // Quick stuff for more random
+            int aNegativeOrPositive = rand()%2;
+            if(aNegativeOrPositive == 0){
+                spawnSpot.x-=aCaveOff_X;
+                spawnSpot.y-=aCaveOff_Y;
+            }
+            else{
+                spawnSpot.x+=aCaveOff_X;
+                spawnSpot.y+=aCaveOff_Y;
+            }
+            
+            // Puff
+            SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
+            aBlitz->retain();
+            aBlitz->setAnchorPoint(ccp(0.5,0.5));
+            aBlitz->setPosition(spawnSpot);
+            addChild(aBlitz,kPoints_Z_Order);
+            
+            CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+            CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+            CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+            aBlitz->runAction(aSeq1);
+            
+            // The item add
+            Bee->setPosition(spawnSpot);
+            
+            this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+            _powersOnMap->addObject(Bee);
+        }
+    }
     
     // Check if attack is not above shoot !!!
     /* // Now the shoot will be manualy by player !!!
@@ -20131,7 +20219,9 @@ void GameScene::OnTryToShoot()
 void GameScene::OnAttackHitTroll(CCNode* sender)
 {
     // Remove bullet
-    this->removeChild(sender, true);
+    if(sender!=NULL){
+        this->removeChild(sender, true);
+    }
     
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
     p->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));

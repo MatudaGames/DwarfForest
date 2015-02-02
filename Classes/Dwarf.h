@@ -56,6 +56,9 @@ public:
     Troll* mSnapedTroll;
     Troll* mSnapedTroll_FallBack;
     
+    bool mSnapedToMasterTroll;
+    bool mCanSearchForTrollsForSnap;
+    
     int mContainsPowerUp;
     
     cocos2d::CCSprite *mPowerUpIcon;

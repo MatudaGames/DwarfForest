@@ -57,6 +57,8 @@
 
 #define MissionType_DwarfSave 6
 
+#define MissionType_KillEnemy 7
+
 // Activate power up
 #define MissionType_AP_Freezer 200
 #define MissionType_AP_GhostDwarfs 201
@@ -176,6 +178,12 @@ public:
     
     int mDwarfMachineHP;
     bool mDwarfMachineProtect; // Troll attacks machine
+    
+    // Even more new stuff
+    bool mDwarfCollectMachine;
+    
+    //Mission_KillEnemys
+    int mKillTrollsAmountLeft;
     
     int mDwarfKingItemSpawnID; // What will dwarf king spawn when bullet hits ground
     cocos2d::CCPoint mDwarfKingItemSpawnPos;
