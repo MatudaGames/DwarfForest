@@ -1441,11 +1441,15 @@ void GameScene::CreateGameStartHUD()
 //    mPowerMenu.setPosition(ccp(visibleSize.width/2,500));
 //    addChild(&mPowerMenu,kHUD_Z_Order+1);
     
+    mPowerMenu = NULL;
+    
     // Not needed for now !!!
+    /*
     mPowerMenu = InGamePowers::create();
     mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
     mPowerMenu->mGameScene = this;
     addChild(mPowerMenu,kHUD_Z_Order+1);
+    */
     
     
 //    InGamePowers* saveLayer = InGamePowers::create();
@@ -4770,21 +4774,13 @@ void GameScene::CreateMasters()
     _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterTrollBase);
     
-    // Check what do we need to create her [dwarfking_placeholder]
-    _MasterDwarfBase = CCSprite::create("NewPowerMachine.png");
+    // Check what do we need to create her [dwarfking_placeholder] NewPowerMachine.png
+    _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
     _MasterDwarfBase->setTag(7002);
     _MasterDwarfBase->setPosition(ccp(visibleSize.width-100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterDwarfBase);
     
 //    playInGameSound("meteorite_hit_ground");
-    
-    //Create the fall animations
-    CCMoveTo* aFallOff = CCMoveTo::create(1.0f,ccp(64,360));
-    CCEaseExponentialIn* aBounceOff = CCEaseExponentialIn::create(aFallOff);
-    CCDelayTime* aDelay = CCDelayTime::create(0.1f);
-    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
-    CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
-    _MasterTrollBase->runAction(aSeq);
     
     //Add particle for coller look
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
@@ -4794,12 +4790,13 @@ void GameScene::CreateMasters()
     p->setAutoRemoveOnFinish(true);
     _MasterTrollBase->addChild(p,-1);
     
-    aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
-    aBounceOff = CCEaseExponentialIn::create(aFallOff);
-    aDelay = CCDelayTime::create(0.6f);
-    aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
-    aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
-    _MasterDwarfBase->runAction(aSeq);
+    //Create the fall animations
+    CCMoveTo* aFallOff = CCMoveTo::create(1.0f,ccp(64,360));
+    CCEaseExponentialIn* aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    CCDelayTime* aDelay = CCDelayTime::create(0.1f);
+    CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    CCSequence* aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterTrollBase->runAction(aSeq);
     
     p = CCParticleSystemQuad::create("Particles/FallDownParticle.plist");
     p->setTag(70003);// The particle tag for remove when falled down !!!
@@ -4807,6 +4804,13 @@ void GameScene::CreateMasters()
     p->setPositionType(kCCPositionTypeGrouped);
     p->setAutoRemoveOnFinish(true);
     _MasterDwarfBase->addChild(p,-1);
+    
+    aFallOff = CCMoveTo::create(1.0f,ccp(visibleSize.width-64,360));
+    aBounceOff = CCEaseExponentialIn::create(aFallOff);
+    aDelay = CCDelayTime::create(0.6f);
+    aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
+    aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
+    _MasterDwarfBase->runAction(aSeq);
 }
 
 void GameScene::OnMasterHitGround(CCNode* sender)
@@ -8689,6 +8693,110 @@ void GameScene::UpdateCrystalSpawn(float delta)
     }
 }
 
+void GameScene::StartDwarKingItemSpawn()
+{
+    mDwarfKingItemSpawnID = rand()%5;
+    
+    // Choose some spot !!!
+    int aPositionID = rand()%8;
+    mDwarfKingItemSpawnPos = getRandomPointFromBlock(aPositionID);
+    
+    // Fire the bullet to that spot - where smoke should be
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setScale(0.5f);
+    aDummyBullet->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    addChild(aDummyBullet);
+    
+    //Move bullet to troll
+    ccBezierConfig bezier;
+    bezier.controlPoint_1 = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()+300);//1096,168
+    bezier.controlPoint_2 = ccp(mDwarfKingItemSpawnPos.x,_MasterDwarfBase->getPositionY()+300);//635,105
+    bezier.endPosition = ccp(mDwarfKingItemSpawnPos.x,mDwarfKingItemSpawnPos.y);
+    
+    CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnDwarfKingSpawnHitGround));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->runAction(aSequence);
+}
+
+void GameScene::OnDwarfKingSpawnHitGround(CCNode* sender)
+{
+    // Remove bullet
+    this->removeChild(sender, true);
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    //-----------------------------------
+    
+    // Spawn the needed item !!! + smoke
+    int aSubPowerID = 0;
+    
+    SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
+    aBlitz->retain();
+    aBlitz->setAnchorPoint(ccp(0.5,0.5));
+    aBlitz->setPosition(mDwarfKingItemSpawnPos);
+    addChild(aBlitz,kPoints_Z_Order);
+    
+    CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+    CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+    CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+    aBlitz->runAction(aSeq1);
+    
+    if(mDwarfKingItemSpawnID == 0)
+    {
+        Mushroom* mushroom = Mushroom::create(this,mCurrentMission.ItemTimeOnMap);
+        mushroom->setPosition(mDwarfKingItemSpawnPos);
+        addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
+        _mushrooms->addObject(mushroom);
+    }
+    else if(mDwarfKingItemSpawnID == 1)
+    {
+        Diamond* diamond = Diamond::create(this,mCurrentMission.ItemTimeOnMap);
+        diamond->setPosition(mDwarfKingItemSpawnPos);
+        addChild(diamond, getSpriteOrderZ(diamond->getPositionY()));
+        _diamonds->addObject(diamond);
+    }
+    else if(mDwarfKingItemSpawnID == 2)
+    {
+        // Check what power up !!!
+        aSubPowerID = rand()%mCurrentMission.PowerTypeProbs.size();
+        
+        // What power will it be?
+        GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,aSubPowerID,mCurrentMission.PowerTimeOnMap);
+        
+        // Set some position
+        Bee->setPosition(mDwarfKingItemSpawnPos);
+        
+        this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+        _powersOnMap->addObject(Bee);
+    }
+    else
+    {
+        // Check what crystal !!!
+        aSubPowerID = rand()%mCurrentMission.CrystalColProbs.size();
+        
+        Crystal* crystal = Crystal::create(this,aSubPowerID,mCurrentMission.ItemTimeOnMap);
+        crystal->setPosition(mDwarfKingItemSpawnPos);
+        
+        addChild(crystal, getSpriteOrderZ(crystal->getPositionY()));
+        _crystals->addObject(crystal);
+        
+        crystal->setVisible(true);
+    }
+    
+    mMasterTroll_Attack = 0;
+    mDwarfKingSpawn_Active = false;
+}
+
 void GameScene::UpdateTestStuff(float delta)
 {
     for(int otherIndex = _otherEnemy->count()-1;otherIndex>=0;--otherIndex)
@@ -8840,6 +8948,15 @@ void GameScene::update(float delta)
     
     // The test enemies and other stuff
     UpdateTestStuff(delta);
+    
+    if(mDwarfMachineProtect)
+    {
+        mAttackDwarfMachineTimer+=delta;
+        if(mAttackDwarfMachineTimer>=20)
+        {
+            OnTryToShoot_ToDwarf();
+        }
+    }
     
     return;
     
@@ -13059,6 +13176,11 @@ void GameScene::addDebugCrystalPoints(int amount)
     mCrystalPoints+=amount;
     
     _scoreLabel->setString(toString(mCrystalPoints).c_str());
+    
+    // Update the crystal stuff
+    if(mPowerMenu!=NULL){
+        mPowerMenu->UpdateButtons();
+    }
     
     if(!mDebugInfoVisible)
         return;
@@ -19612,6 +19734,35 @@ void GameScene::UpdateBullets(float delta)
     }
 }
 
+void GameScene::StartTrollFreeze()
+{
+    // Do all the magic here
+    /*
+    mSnapedTroll_FallBack->mFreezedTime = 10;//Get from missions some param?
+    
+    // Add for now blue troll FX
+    mSnapedTroll_FallBack->_animation->setColor(ccc3(0, 164, 255));
+    */
+}
+
+void GameScene::StartDwarfFreeze_All()
+{
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        Dwarf* dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        //Freeze
+        Effect* effect = NULL;
+        effect = IceBarrage::create(this);
+        effect->setPosition(ccp(dwarf->getPositionX(),dwarf->getPositionY()));
+        
+        effect->touch(dwarf,NULL);
+        effect->setVisible(true);
+        
+        dwarf->pauseAnimation();
+    }
+}
+
 void GameScene::StartDwarfFreeze()
 {
     //Choose any dwarf !!!
@@ -19715,6 +19866,10 @@ void GameScene::ResetValues()
     mBattleBar_TrollHP = NULL;
     mBattleBar_MachinePower = NULL;
     
+    mDwarfMachineHP = 0;
+    mDwarfMachineProtect = false;
+    mAttackDwarfMachineTimer = 0;
+    
     // Now check the mission stuff
     if(mCurrentMission.MT_Battle_HP>0) mMasterTroll_HP = mCurrentMission.MT_Battle_HP;
     if(mCurrentMission.MT_Battle_Damage>0) mMasterTroll_Damege = mCurrentMission.MT_Battle_Damage;
@@ -19726,7 +19881,25 @@ void GameScene::ResetValues()
     }
     if(mCurrentMission.MT_Battle_WinOnKill) mWinGameOnMasterTrollKill = mCurrentMission.MT_Battle_WinOnKill;
     
-
+    // The new stuff
+    /*
+    mDwarfMachineHP = 5;
+    mAttackDwarfMachineTimer = 0;
+    mDwarfMachineProtect = true;
+    */
+    
+    // For now
+    mDwarfKingSpawnItems = false;
+    mDwarfKingSpawn_Active = false;
+    
+    mKillTrollsAmountLeft = -1;
+    
+    if(mCurrentMission.Mission_KillEnemys>0){
+        mKillTrollsAmountLeft = mCurrentMission.Mission_KillEnemys;//We want to win on enemy kill
+    }
+    
+    // New stuff
+    mDwarfCollectMachine = true;
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
@@ -19856,7 +20029,15 @@ void GameScene::CreateBattleArena()
     CCSize aScreenSize = CCDirector::sharedDirector()->getVisibleSize();
     
     mBattleBar_MachineBase = CCSprite::create("small_dot_red.png");
-    mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
+    
+    // The new stuff
+    if(mDwarfCollectMachine){
+        mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width/2,60));
+    }
+    else{
+        mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
+    }
+    
     mBattleBar_MachineBase->setScaleX(0.0f);     //(0.15);
     mBattleBar_MachineBase->setScaleY(0.0f);     //(0.3);
     
@@ -19923,28 +20104,54 @@ void GameScene::UpdateSmoothBattleBars(float delta)
     }
     
     //Constantly checks if has any changes
-    if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
+    if(mDwarfMachineProtect)
     {
-        if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
+        if(mMasterTroll_CurrentAttack != mDwarfMachineHP)
         {
-            mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
-            if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            if(mMasterTroll_CurrentAttack > mDwarfMachineHP)
+            {
+                mMasterTroll_CurrentAttack -= delta*(float)(2);
+                if(mMasterTroll_CurrentAttack<=mDwarfMachineHP) mMasterTroll_CurrentAttack = mDwarfMachineHP;
+            }
+            else
+            {
+                mMasterTroll_CurrentAttack += delta*(float)(2);
+                if(mMasterTroll_CurrentAttack>=mDwarfMachineHP) mMasterTroll_CurrentAttack = mDwarfMachineHP;
+            }
+            
+            //Limit to 100 for now !!!
+            float aTotalValue = (float)mDwarfMachineHP / 5;
+            if(aTotalValue>1)aTotalValue = 1;
+            
+            mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().height));
         }
-        else
-        {
-            mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
-            if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
-        }
-        
-        //Limit to 100 for now !!!
-        float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
-        if(aTotalValue>1)aTotalValue = 1;
-        
-        mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
-                                                  mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
-                                                  mBattleBar_MachinePower->getTexture()->getContentSize().height));
     }
-    
+    else
+    {
+        if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
+        {
+            if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
+            {
+                mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
+                if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            }
+            else
+            {
+                mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
+                if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
+            }
+            
+            //Limit to 100 for now !!!
+            float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
+            if(aTotalValue>1)aTotalValue = 1;
+            
+            mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                           mBattleBar_MachinePower->getTexture()->getContentSize().height));
+        }
+    }
 }
 
 void GameScene::UpdateBattleLabel()
@@ -19960,10 +20167,96 @@ void GameScene::UpdateBattleLabel()
         mExtraCrystalCounter->setString(theMT_Timer.str().c_str());
     }
     
+    if(mPowerMenu != NULL){
+        mPowerMenu->UpdateButtons();
+    }
+    
     
     //Update timer
     
     // Just update the bar
+    
+    if(mDwarfKingSpawnItems)
+    {
+        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack && mDwarfKingSpawn_Active==false)
+        {
+            // Spawn some object?
+            mDwarfKingSpawn_Active = true; // Wait a bit
+            
+            StartDwarKingItemSpawn();
+        }
+    }
+    else if(mDwarfCollectMachine)
+    {
+        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
+        {
+            // Remove the amount and spawn some item near enterances?
+            CCLOG("Create item near cave for troll attack");
+            
+            // What power will it be?
+            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,0,mCurrentMission.PowerTimeOnMap);
+            
+            // Spawn near cave ???
+            CCPoint spawnSpot;
+            
+            // The offset from cave center
+            int aCaveOff_X = (rand()%50+50);
+            int aCaveOff_Y = (rand()%50+50);
+            
+            int aPositionID = rand()%2;
+            if(aPositionID == 0){
+                if(_SpawnOrangeDwarf){
+                    spawnSpot.x = _caveTall->getPositionX();
+                    spawnSpot.y = _caveTall->getPositionY();
+                }
+                else
+                {
+                    spawnSpot.x = _caveFat->getPositionX();
+                    spawnSpot.y = _caveFat->getPositionY();
+                }
+            }
+            else{
+                if(_SpawnBlueDwarf){
+                    spawnSpot.x = _caveFat->getPositionX();
+                    spawnSpot.y = _caveFat->getPositionY();
+                }
+                else
+                {
+                    spawnSpot.x = _caveTall->getPositionX();
+                    spawnSpot.y = _caveTall->getPositionY();
+                }
+            }
+            
+            // Quick stuff for more random
+            int aNegativeOrPositive = rand()%2;
+            if(aNegativeOrPositive == 0){
+                spawnSpot.x-=aCaveOff_X;
+                spawnSpot.y-=aCaveOff_Y;
+            }
+            else{
+                spawnSpot.x+=aCaveOff_X;
+                spawnSpot.y+=aCaveOff_Y;
+            }
+            
+            // Puff
+            SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
+            aBlitz->retain();
+            aBlitz->setAnchorPoint(ccp(0.5,0.5));
+            aBlitz->setPosition(spawnSpot);
+            addChild(aBlitz,kPoints_Z_Order);
+            
+            CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+            CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+            CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+            aBlitz->runAction(aSeq1);
+            
+            // The item add
+            Bee->setPosition(spawnSpot);
+            
+            this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+            _powersOnMap->addObject(Bee);
+        }
+    }
     
     // Check if attack is not above shoot !!!
     /* // Now the shoot will be manualy by player !!!
@@ -20004,6 +20297,58 @@ void GameScene::UpdateBattleLabel()
     }
     */
 }
+
+void GameScene::OnAttackHitMachine(CCNode* sender)
+{
+    // Remove bullet
+    this->removeChild(sender, true);
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    CCBlink* aBlink = CCBlink::create(0.25f, 2);
+    _MasterDwarfBase->runAction(aBlink);
+    
+    mDwarfMachineHP-=1;
+    
+    if(mDwarfMachineHP<=0){
+        // Game over
+        lose();
+    }
+}
+
+void GameScene::OnTryToShoot_ToDwarf()
+{
+    mAttackDwarfMachineTimer = 0;// Reset timer
+    
+    CCSprite* aDummyBullet = CCSprite::create("small_dot_blue.png");
+    aDummyBullet->setScale(0.5f);
+    aDummyBullet->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));
+    
+    //Move bullet to dwarf machine
+    ccBezierConfig bezier;
+    bezier.controlPoint_1 = ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()+300);//1096,168
+    bezier.controlPoint_2 = ccp(_MasterDwarfBase->getPositionX(),_MasterTrollBase->getPositionY()+300);//635,105
+    bezier.endPosition = ccp(_MasterDwarfBase->getPositionX(),_MasterDwarfBase->getPositionY());
+    
+    CCBezierTo* aMoveAction = CCBezierTo::create(1.0f, bezier);
+    
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnAttackHitMachine));
+    CCSequence* aSequence = CCSequence::create(aMoveAction,aFunction,NULL);
+    aDummyBullet->runAction(aSequence);
+    
+    // Add particle for fx
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KingBullet.plist");
+    p->setAutoRemoveOnFinish(true);
+    aDummyBullet->addChild(p,-1);
+    
+    addChild(aDummyBullet);
+}
+
+//-----------------
+
 
 void GameScene::OnTryToShoot()
 {
@@ -20049,7 +20394,9 @@ void GameScene::OnTryToShoot()
 void GameScene::OnAttackHitTroll(CCNode* sender)
 {
     // Remove bullet
-    this->removeChild(sender, true);
+    if(sender!=NULL){
+        this->removeChild(sender, true);
+    }
     
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
     p->setPosition(ccp(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY()));

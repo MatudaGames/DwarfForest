@@ -252,6 +252,7 @@
 		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
 		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
 		755DD4FA1A439C8C005E1E0B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */; };
+		756605571A7ECCE600AEF6A7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756605561A7ECCE600AEF6A7 /* Images.xcassets */; };
 		7578F6791A5B057000E9700A /* GameItem_PowerUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */; };
 		758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */; };
 		758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E951A42080C00CECB9F /* CoreText.framework */; };
@@ -889,6 +890,7 @@
 		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
 		755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
 		755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
+		756605561A7ECCE600AEF6A7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DwarfForest/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameItem_PowerUp.cpp; sourceTree = "<group>"; };
 		7578F6781A5B057000E9700A /* GameItem_PowerUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameItem_PowerUp.h; sourceTree = "<group>"; };
 		758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -2436,6 +2438,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				756605561A7ECCE600AEF6A7 /* Images.xcassets */,
 				75BCCD8219E93B60000C7C65 /* new_resources */,
 				1AFAF8B916D35E4900DB1158 /* CloseNormal.png */,
 				1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */,
@@ -2480,6 +2483,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0430;
+				TargetAttributes = {
+					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = 6E8CLJWKNG;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "DwarfForest" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2527,6 +2535,7 @@
 				D4EF949E15BD2D9600D803EB /* Icon-72.png in Resources */,
 				D4EF94A015BD2D9800D803EB /* Icon-144.png in Resources */,
 				75BCCD8319E93B60000C7C65 /* new_resources in Resources */,
+				756605571A7ECCE600AEF6A7 /* Images.xcassets in Resources */,
 				D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */,
 				D446FD6E16102124000ADA7B /* Default@2x.png in Resources */,
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,
@@ -2882,7 +2891,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2925,8 +2936,8 @@
 				);
 				OTHER_CFLAGS = "-O2";
 				PRODUCT_NAME = DwarfForest;
-				PROVISIONING_PROFILE = "4379c7bd-adb0-4a69-8659-04e78578db69";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4379c7bd-adb0-4a69-8659-04e78578db69";
+				PROVISIONING_PROFILE = "a7d53459-e820-48ca-8135-24ec98c6d0fb";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a7d53459-e820-48ca-8135-24ec98c6d0fb";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -2938,8 +2949,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Distribution: SIA \"GameVision\"";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2978,8 +2991,8 @@
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
 				);
 				PRODUCT_NAME = DwarfForest;
-				PROVISIONING_PROFILE = "4379c7bd-adb0-4a69-8659-04e78578db69";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4379c7bd-adb0-4a69-8659-04e78578db69";
+				PROVISIONING_PROFILE = "96728f92-181c-4c2c-85f0-4e73256d5b82";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "96728f92-181c-4c2c-85f0-4e73256d5b82";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";

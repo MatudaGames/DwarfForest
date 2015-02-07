@@ -62,6 +62,8 @@
 
 #define MissionType_DwarfSave 6
 
+#define MissionType_KillEnemy 7
+
 // Activate power up
 #define MissionType_AP_Freezer 200
 #define MissionType_AP_GhostDwarfs 201
@@ -179,12 +181,33 @@ public:
     int mMasterTroll_Attack;    // Whats the current value for attack
     float mMasterTroll_CurrentAttack;
     
+    int mDwarfMachineHP;
+    bool mDwarfMachineProtect; // Troll attacks machine
+    
+    // Even more new stuff
+    bool mDwarfCollectMachine;
+    
+    //Mission_KillEnemys
+    int mKillTrollsAmountLeft;
+    
+    int mDwarfKingItemSpawnID; // What will dwarf king spawn when bullet hits ground
+    cocos2d::CCPoint mDwarfKingItemSpawnPos;
+    void StartDwarKingItemSpawn();
+    void OnDwarfKingSpawnHitGround(CCNode* sender);
+    bool mDwarfKingSpawn_Active;
+    bool mDwarfKingSpawnItems; // The new stuff when dwarf king spawns stuff after amount
+    
     bool mWinGameOnMasterTrollKill; // Will we win game if master troll will fall?
     
     void CreateBattleArena();
     void UpdateBattleLabel();
     void UpdateSmoothBattleBars(float delta);
     void OnAttackHitTroll(CCNode* sender);
+    
+    // The dwarf machine attack
+    float mAttackDwarfMachineTimer;
+    void OnTryToShoot_ToDwarf();
+    void OnAttackHitMachine(CCNode* sender);
     
     // The progress bars !!!
     cocos2d::CCSprite* mBattleBar_TrollBase;
@@ -198,6 +221,8 @@ public:
     
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();
+    void StartTrollFreeze();
+    void StartDwarfFreeze_All();
     void IceBlitz();
     void StartIceBlitz();
     void BulletDwarf();
