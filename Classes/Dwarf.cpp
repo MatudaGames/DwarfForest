@@ -2504,7 +2504,7 @@ void Dwarf::setAction(int theType)
     {
         _game->FreezeDwarfTotal(this);
     }
-    else if(theType == MASTER_ACTION_BULLET_STRAIGHT)
+    else if(theType == MASTER_ACTION_BULLET_STRAIGHT || theType == MASTER_ACTION_BULLET_SPLIT_UP || theType == MASTER_ACTION_BULLET_ONE_LINE || theType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || theType == MASTER_ACTION_BULLET_ZIGZAG || theType == MASTER_ACTION_BULLET_SPLIT_MIDDLE)
     {
         removeFromSave();
     }
