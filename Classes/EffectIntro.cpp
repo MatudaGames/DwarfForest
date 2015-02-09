@@ -79,7 +79,9 @@ void EffectIntro::OnWebCompleted()
 
 void EffectIntro::WebIntro()
 {
+	 CCScaleTo* aScale = CCScaleTo::create(1.5f, GLOBAL_SCALE);
 	 stickyGrowAnimation = SpriteAnimation::create("sticky_web/trap_sticky_intro.plist");
+	 stickyGrowAnimation->setScale(GLOBAL_SCALE);
      stickyGrowAnimation->retain();
      stickyGrowAnimation->setTag(45);
      addChild(stickyGrowAnimation);

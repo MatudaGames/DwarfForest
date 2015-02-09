@@ -12154,6 +12154,109 @@ void GameScene::updateDwarfs(float delta)
 				}
 			}
             
+            if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE)
+			{
+        	for (int bulletIndex = _bullets->count() - 1; bulletIndex >= 0; --bulletIndex)
+            {
+			TrollBullet* aBullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(bulletIndex));
+            
+            int bulletX = aBullet->getPositionX();
+            
+			if ((bulletX >= 480.0f) && (bulletX <=520.0f))
+			{
+            if(bulletIndex == 1 || bulletIndex == 3 || bulletIndex == 5 || bulletIndex == 7 || bulletIndex == 9){
+            aBullet->setAngle(5.8);	
+        	}
+        	if(bulletIndex == 0 || bulletIndex == 2 || bulletIndex == 4 || bulletIndex == 6 || bulletIndex == 8){
+            aBullet->setAngle(0.6);
+            aBullet->setVisible(true);
+        	}
+        			}
+    			}
+    		}
+    		
+    		if(mCurrentBulletType == MASTER_ACTION_BULLET_ZIGZAG)
+			{
+        	for (int bulletIndex = _bullets->count() - 1; bulletIndex >= 0; --bulletIndex)
+            {
+			TrollBullet* aBullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(bulletIndex));
+			
+        	int aBulletY = aBullet->getPositionY();
+        	
+        	if(bulletIndex == 0 || bulletIndex == 1 || bulletIndex == 2 || bulletIndex == 3 || bulletIndex == 4 || bulletIndex == 5){
+        	
+            if (aBulletY == _MasterTrollBase->getPositionY())
+            {
+            	aBullet->setAngle(atan2f(90,90));	
+            }
+            
+        	if (aBulletY >= 405)//405
+        	{
+        		aBullet->setAngle(5.8);	
+    		}
+    		
+    		if (aBulletY <= 305)//305
+        	{
+        		aBullet->setAngle(0.6);	
+    		}
+    				}
+    			}
+    		}
+    		
+    		if(mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING)
+			{
+			for (int bulletIndex = _bullets->count() - 1; bulletIndex >= 0; --bulletIndex)
+            {
+        	
+			TrollBullet* aBullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(bulletIndex));
+			
+			if (aBullet->getPositionX() == _MasterTrollBase->getPositionX()) 
+            {
+	
+	        aBullet->setScale(0.7f);
+	        
+					}
+				}
+			}
+			
+			if(mCurrentBulletType == MASTER_ACTION_BULLET_ONE_LINE)
+			{
+				for (int bulletIndex = _bullets->count() - 1; bulletIndex >= 0; --bulletIndex)
+            	{
+				TrollBullet* aBullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(bulletIndex));
+				if (aBullet->getPositionX() >= 820.0f)
+				{
+					aBullet->setAngle(atan2f(_MasterTrollBase->getPositionY() - aBullet->getPositionY(), _MasterTrollBase->getPositionX() - aBullet->getPositionX()));
+					}
+				}
+			}
+			
+
+			if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP)
+			{
+        	for (int bulletIndex = _bullets->count() - 1; bulletIndex >= 0; --bulletIndex)
+            {
+			TrollBullet* aBullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(bulletIndex));
+            
+            int bulletX = aBullet->getPositionX();
+            int bulletY = aBullet->getPositionY();
+            
+			if (bulletX >= 480.0f)
+			{
+			if ((bulletY >=350) && (bulletY <=360))
+			{
+            if(bulletIndex == 1 || bulletIndex == 3 || bulletIndex == 5 || bulletIndex == 7 || bulletIndex == 9){
+            aBullet->setAngle(atan2f(visibleSize.height - aBullet->getPositionY(), visibleSize.width/2 - aBullet->getPositionX()));
+        	}   
+        	if(bulletIndex == 0 || bulletIndex == 2 || bulletIndex == 4 || bulletIndex == 6 || bulletIndex == 8){
+            aBullet->setAngle(atan2f(visibleSize.height/6 - aBullet->getPositionY(), visibleSize.width/2 - aBullet->getPositionX()));
+            aBullet->setVisible(true);
+        	}
+        	}
+        			}
+    			}
+    		}
+            
             if (dwarf)
             {
                 for (int diamondIndex = _mushrooms->count() - 1; diamondIndex >= 0; --diamondIndex)
@@ -18728,7 +18831,7 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
-    else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON || theType == MASTER_ACTION_BULLET_STRAIGHT)
+    else if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON || theType == MASTER_ACTION_BULLET_STRAIGHT || theType == MASTER_ACTION_BULLET_SPLIT_MIDDLE || theType == MASTER_ACTION_BULLET_ZIGZAG || theType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || theType == MASTER_ACTION_BULLET_ONE_LINE || theType == MASTER_ACTION_BULLET_SPLIT_UP)
     {
         if(mMT_LastBulletTimer==-1){
             mMT_LastBulletTimer = 10;
@@ -18887,7 +18990,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         return;
     }
     
-    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT){
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT || mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE || mCurrentBulletType == MASTER_ACTION_BULLET_ZIGZAG || mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || mCurrentBulletType == MASTER_ACTION_BULLET_ONE_LINE || mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP){
         // No indicator ????
     }
     else{
@@ -18904,17 +19007,90 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
     aBullet->_speedAddValue = (aBullet->_speedMax-aBullet->_speed)*0.1;
     
-    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT){
-        aBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT)
+	{
+    	aBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
         aBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
+    }
+    
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING)
+	{
+		TrollBullet* bBullet = TrollBullet::create(this,mCurrentBulletType);
+        bBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        bBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+        bBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+        bBullet->_speedAddValue = (bBullet->_speedMax-bBullet->_speed)*0.1;
+        bBullet->setScale(0.7f);
+        bBullet->setAngle(5.8);//90,90 //5.8
+            
+        TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
+        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+        cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+        cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
+        cBullet->setScale(0.7f);
+        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+            
+        this->addChild(bBullet, 1000);
+        this->addChild(cBullet, 1000);
+            
+        _bullets->addObject(bBullet);
+		_bullets->addObject(cBullet);
+	}
+	
+	if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE)
+	{
+		TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
+        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+        cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+        cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
+        //cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+        cBullet->setVisible(false);
+            
+        //this->addChild(bBullet, 1000);
+        this->addChild(cBullet, 1000);
+            
+        //_bullets->addObject(bBullet);
+		_bullets->addObject(cBullet);
+	}
+	if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP)
+	{
+		TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
+        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+        cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+        cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
+        //cBullet->setScale(0.7f);
+        cBullet->setVisible(false);
+        //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+            
+        //this->addChild(bBullet, 1000);
+        this->addChild(cBullet, 1000);
+            
+        //_bullets->addObject(bBullet);
+		_bullets->addObject(cBullet);
+	}
+    
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE || mCurrentBulletType == MASTER_ACTION_BULLET_ZIGZAG || mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || mCurrentBulletType == MASTER_ACTION_BULLET_ONE_LINE || mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP){
+        ///aBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
+        ///aBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
+        //aBullet->getPositionX();
+        
+        //bBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
+        //bBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
+        /*
+		if (aBullet->getPositionY() == _MasterTrollBase->getPositionY()){
+        	playInGameSound("dwarf_freeze");
+        }
+        */
     }
     else{
         aBullet->_dwarf = dwarf;
     }
     
     this->addChild(aBullet, 1000);
-    _bullets->addObject(aBullet);
-    
+    _bullets->addObject(aBullet);        
     //clear the arr !!!
     _dwarvesToAttack->release();
 }
@@ -19484,8 +19660,7 @@ void GameScene::BulletDwarf()
     aBullet->_dwarf = dwarf;
     
     this->addChild(aBullet, 1000);
-    _bullets->addObject(aBullet);
-    
+    _bullets->addObject(aBullet); 
     //    CCLOG("Bullet amount 1: %f",_bullets->count());
     
     //clear the arr !!!
