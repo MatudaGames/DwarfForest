@@ -11,6 +11,9 @@
 #include "AppMacros.h"
 #include "GameScene.h"
 #include "User.h"
+#include "StoreScene.h"
+#include "ChallengesScene.h"
+#include "UpgradeScene.h"
 
 USING_NS_CC;
 
@@ -120,6 +123,8 @@ bool WorldMap::init()
     CreatePlayer();
     
     PrepeareSmallMissionScreen();
+    
+    CreateHud();
     
     return true;
 }
@@ -725,4 +730,74 @@ void WorldMap::HideMissionScreen(CCObject * pSender)
         CCLOG("Do nothing cloused screen");
     }
 }
+
+// The other stuff
+void WorldMap::CreateHud()
+{
+    CCSprite * storeNormalSprite= CCSprite::create("Interfeiss/main_menu/new/store_btn_new0001.png");
+    CCSprite * storeSelectedlSprite= CCSprite::create("Interfeiss/main_menu/new/store_btn_new0002.png");
+    
+    CCMenuItemSprite *storeItem = CCMenuItemSprite::create(storeNormalSprite, storeSelectedlSprite,
+                                                           this,
+                                                           menu_selector(WorldMap::Hud_ShowStore));
+    
+    CCSprite * challengesNormalSprite= CCSprite::create("Interfeiss/main_menu/new/challenges_btn_new0001.png");
+    CCSprite * challengesSelectedlSprite= CCSprite::create("Interfeiss/main_menu/new/challenges_btn_new0002.png");
+    
+    CCMenuItemSprite *challengesItem = CCMenuItemSprite::create(challengesNormalSprite, challengesSelectedlSprite,
+                                                                this,
+                                                                menu_selector(WorldMap::Hud_ShowChallenges));
+    
+    CCMenu *mMainMenu = CCMenu::create(storeItem,
+                               challengesItem,
+                               NULL);
+    
+    mMainMenu->alignItemsHorizontally();
+    
+    mMainMenu->setPosition(ccp(mScreenSize.width/2-27,44));
+    
+    this->addChild(mMainMenu, 1);
+    
+    
+    
+    
+}
+
+void WorldMap::Hud_ShowStore(CCObject* sender)
+{
+//    CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
+    
+//    if(mOptionsOpen)
+//        return;
+//    
+//    mOptionsOpen = true;
+    
+    StoreScene* storeLayer = StoreScene::create();
+    storeLayer->setTag(2223);
+    this->addChild(storeLayer,100);
+}
+
+void WorldMap::OnRemoveStore()
+{
+//    AnalyticX::flurryLogEvent("Menu Hide: Store");
+    
+    removeChildByTag(2223,true);
+//    mOptionsOpen = false;
+}
+
+void WorldMap::Hud_ShowChallenges(CCObject* sender)
+{
+    //Old stuff
+//    mOptionsOpen = true;
+    
+//    mMainMenu->setEnabled(false);
+    
+//    AnalyticX::flurryLogEvent("Menu Show: Challenges");
+    
+    ChallengesScene* challengeLayer = ChallengesScene::create();
+    this->addChild(challengeLayer,100);
+    
+//    SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
+}
+
 

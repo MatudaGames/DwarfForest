@@ -57,6 +57,14 @@ public:
     MissionSet mCall;
     
     cocos2d::CCLayerColor* mSmallMissionScreen;
+    
+    // Hud stuff
+    void CreateHud();
+    void Hud_ShowStore(CCObject* sender);
+    void OnRemoveStore();
+    void Hud_ShowChallenges(CCObject* sender);
+    void Hud_ShowUpgades(CCObject* sender);
+    
 };
 
 #endif // __DwarfForest__WorldMap__

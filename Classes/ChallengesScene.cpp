@@ -21,6 +21,7 @@
 #include "Utils.h"
 
 #include "AnalyticX.h"
+#include "WorldMap.h"
 
 USING_NS_CC;
 
@@ -940,12 +941,17 @@ void ChallengesScene::RemovePopup()
 
 void ChallengesScene::RealRemove()
 {
+    WorldMap* map = (WorldMap*)this->getParent();
+    this->getParent()->removeChild(this);
+    
+    /*
     MainMenuScene* mainMenu = (MainMenuScene*)this->getParent();
     mainMenu->mOptionsOpen = false;
     //Enable the low menu
     mainMenu->mMainMenu->setEnabled(true);
     
     this->getParent()->removeChild(this);
+    */
 }
 
 

@@ -20080,6 +20080,8 @@ void GameScene::UpdateBattleLabel()
             
             this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
             _powersOnMap->addObject(Bee);
+            
+            mMasterTroll_Attack = 0;//Reset to 0
         }
     }
     

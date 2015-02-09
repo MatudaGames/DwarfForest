@@ -19,6 +19,7 @@
 #include "LevelEndMenu.h"
 
 #include "AnalyticX.h"
+#include "WorldMap.h"
 
 USING_NS_CC;
 //using namespace CocosDenshion;
@@ -61,6 +62,11 @@ void StoreScene::RemovePopup()
 void StoreScene::RealRemove()
 {
     //Check if this is level end or main menu !!!
+    
+    WorldMap* map = (WorldMap*)this->getParent();
+    map->OnRemoveStore();
+    
+    return;
     
 //    MainMenuScene* mainMenu = (MainMenuScene*)this->getParent();
 //    mainMenu->mOptionsOpen = false;
