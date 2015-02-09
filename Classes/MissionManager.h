@@ -291,6 +291,20 @@ struct MissionSet
     int32_t MT_Battle_Attack;
     bool MT_Battle_WinOnKill;
     
+    // The totem stuff
+    bool Mission_Totem;
+    int32_t TOTEM_HP;
+    int32_t TOTEM_Bullet_Event;
+    int32_t TOTEM_Bullet_Freq;
+    int32_t TOTEM_BubleShield_Event;
+    int32_t TOTEM_BubleShield_Freq;
+    int32_t TOTEM_BubleShield_ActiveTime;
+    int32_t TOTEM_Flame_Freq;
+    int32_t TOTEM_Flame_Radius;// If 0
+    int32_t TOTEM_Flame_ActiveTime;
+    int32_t TOTEM_x;
+    int32_t TOTEM_y;
+    
 };
 
 struct CompletedStuff

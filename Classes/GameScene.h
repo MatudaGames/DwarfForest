@@ -29,6 +29,8 @@
 
 #include "GameItem_PowerUp.h"
 
+#include "Enemy_Totem.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -218,6 +220,12 @@ public:
     cocos2d::CCSprite* mBattleBar_MachinePower;
     
     //----------------------------------------
+    // Totem stuff
+    
+    Enemy_Totem* mTotem;
+    void OnAttackHitTotem(CCNode* sender);
+    
+    //------------
     
     void FreezeDwarfTotal(cocos2d::CCObject *sender);
     void StartDwarfFreeze();
@@ -296,6 +304,7 @@ public:
 //    float _MasterTroll_TimeToAct;
     float mMasterTrollLastActionID;
     
+    void CreateBulletByType(int theType,int theStartX,int theStartY);
     
     //------------------------------------------
     

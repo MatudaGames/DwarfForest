@@ -56,6 +56,7 @@ public:
     Troll* mSnapedTroll;
     Troll* mSnapedTroll_FallBack;
     
+    bool mSnapedToTotem;
     bool mSnapedToMasterTroll;
     bool mCanSearchForTrollsForSnap;
     

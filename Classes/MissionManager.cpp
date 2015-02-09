@@ -5122,6 +5122,47 @@ void MissionManager::OnDownloadedSpecial()
         }
         
         //------------------------------------------------------------------
+        // New TOTEM stuff
+        
+        mission->Mission_Totem = false;
+        
+        if(missionDict->valueForKey("TOTEM_Position")->compare("") != 0)
+        {
+            // Totem will be active
+            mission->Mission_Totem = true;
+            
+            // We have totem pos
+            std::vector<int> dummyVec = SplitString(missionDict->valueForKey("TOTEM_Position")->getCString(),',');
+            mission->TOTEM_x = dummyVec[0];
+            mission->TOTEM_y = dummyVec[1];
+        }
+        
+        mission->TOTEM_HP = 0;
+        if(missionDict->valueForKey("TOTEM_HP")->compare("") != 0) mission->TOTEM_HP = missionDict->valueForKey("TOTEM_HP")->intValue();
+        
+        mission->TOTEM_Bullet_Event = 0;
+        if(missionDict->valueForKey("TOTEM_Bullet_Event")->compare("") != 0) mission->TOTEM_Bullet_Event = missionDict->valueForKey("TOTEM_Bullet_Event")->intValue();
+        mission->TOTEM_Bullet_Freq = 0;
+        if(missionDict->valueForKey("TOTEM_Bullet_Freq")->compare("") != 0) mission->TOTEM_Bullet_Freq = missionDict->valueForKey("TOTEM_Bullet_Freq")->intValue();
+        
+        mission->TOTEM_BubleShield_Event = 0;
+        if(missionDict->valueForKey("TOTEM_Bubble_Event")->compare("") != 0) mission->TOTEM_BubleShield_Event = missionDict->valueForKey("TOTEM_Bubble_Event")->intValue();
+        mission->TOTEM_BubleShield_Freq = 0;
+        if(missionDict->valueForKey("TOTEM_Bubble_Freq")->compare("") != 0) mission->TOTEM_BubleShield_Freq = missionDict->valueForKey("TOTEM_Bubble_Freq")->intValue();
+        
+        mission->TOTEM_Flame_Freq = 0;
+        if(missionDict->valueForKey("TOTEM_Flame_Freq")->compare("") != 0) mission->TOTEM_Flame_Freq = missionDict->valueForKey("TOTEM_Flame_Freq")->intValue();
+        mission->TOTEM_Flame_Radius = 0;
+        if(missionDict->valueForKey("TOTEM_Flame_Radius")->compare("") != 0) mission->TOTEM_Flame_Radius = missionDict->valueForKey("TOTEM_Flame_Radius")->intValue();
+        
+        
+        mission->TOTEM_BubleShield_ActiveTime = 0;
+        if(missionDict->valueForKey("TOTEM_Bubble_ActiveTime")->compare("") != 0) mission->TOTEM_BubleShield_ActiveTime = missionDict->valueForKey("TOTEM_Bubble_ActiveTime")->intValue();
+        
+        mission->TOTEM_Flame_ActiveTime = 0;
+        if(missionDict->valueForKey("TOTEM_Flame_ActiveTime")->compare("") != 0) mission->TOTEM_Flame_ActiveTime = missionDict->valueForKey("TOTEM_Flame_ActiveTime")->intValue();
+        
+        //------------------------------------------------------------------
         // New Attack stuff
         
         mission->MT_Battle_WinOnKill = false;

@@ -4811,6 +4811,18 @@ void GameScene::CreateMasters()
     aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::OnMasterHitGround));
     aSeq = CCSequence::create(aDelay,aBounceOff,aFunc1,NULL);
     _MasterDwarfBase->runAction(aSeq);
+    
+    // Check for totems
+    mTotem = NULL;
+    if(mCurrentMission.Mission_Totem)
+    {
+        // Lets add totemos !!!
+        mTotem = Enemy_Totem::create(this);
+        
+        mTotem->SetMissionStuff(mCurrentMission.TOTEM_x,mCurrentMission.TOTEM_y, mCurrentMission.TOTEM_HP, mCurrentMission.TOTEM_Bullet_Event, mCurrentMission.TOTEM_Bullet_Freq, mCurrentMission.TOTEM_BubleShield_Event, mCurrentMission.TOTEM_BubleShield_Freq, mCurrentMission.TOTEM_BubleShield_ActiveTime, mCurrentMission.TOTEM_Flame_Freq, mCurrentMission.TOTEM_Flame_Radius, mCurrentMission.TOTEM_Flame_ActiveTime);
+        
+        this->addChild(mTotem, getSpriteOrderZ(mTotem->getPositionY()));
+    }
 }
 
 void GameScene::OnMasterHitGround(CCNode* sender)
@@ -5102,6 +5114,7 @@ void GameScene::highlightSmallDoor(bool theOff)
 void GameScene::CheckForDwarfCancel(Dwarf* theDwarf)
 {
     //Check if this dwarf is not on some bullet adictive
+    /*
     if(theDwarf->mBulletActive){
         //Disable at bullet dwarf
         for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
@@ -5109,8 +5122,17 @@ void GameScene::CheckForDwarfCancel(Dwarf* theDwarf)
             TrollBullet* bullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
             if(bullet->_dwarf == theDwarf){
                 bullet->_dwarf = NULL;//NO MORE DWARF
-                break;
             }
+        }
+    }
+    */
+    
+    // For safe - check if not attached to any dwarf !!!
+    for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        TrollBullet* bullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
+        if(bullet->_dwarf == theDwarf){
+            bullet->_dwarf = NULL;//NO MORE DWARF
         }
     }
     
@@ -5124,9 +5146,10 @@ void GameScene::CheckForDwarfCancel(Dwarf* theDwarf)
 
 void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
 {
-    
+    CCLog("Dwarf entered door");
     
     //Check if this dwarf is not on some bullet adictive
+    /*
     if(theDwarf->mBulletActive){
         //Disable at bullet dwarf
         for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
@@ -5134,8 +5157,18 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
             TrollBullet* bullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
             if(bullet->_dwarf == theDwarf){
                 bullet->_dwarf = NULL;//NO MORE DWARF
-                break;
+                CCLog("Removed dwarf from bullet");
             }
+        }
+    }
+    */
+    
+    for (int trollIndex = _bullets->count() - 1; trollIndex >= 0; --trollIndex)
+    {
+        TrollBullet* bullet = static_cast<TrollBullet*>(_bullets->objectAtIndex(trollIndex));
+        if(bullet->_dwarf == theDwarf){
+            bullet->_dwarf = NULL;//NO MORE DWARF
+            CCLog("Removed dwarf from bullet");
         }
     }
     
@@ -8958,6 +8991,11 @@ void GameScene::update(float delta)
         }
     }
     
+    // Totem stuff - update if available
+    if(mTotem != NULL){
+        mTotem->update(delta);
+    }
+    
     return;
     
     
@@ -11177,6 +11215,7 @@ void GameScene::updateDwarfs(float delta)
                             }
                         }
                     }
+                    
                     
                     
                     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/KaboomFx.plist");
@@ -18948,6 +18987,62 @@ void GameScene::MasterAction_Enemy(cocos2d::CCObject *sender)
     }
 }
 
+void GameScene::CreateBulletByType(int theType,int theStartX,int theStartY)
+{
+    //-----------------------------------------
+    // The dwarf get part
+    
+    // Chouuuuuse one random dwarf + check if is not near !!!
+    Dwarf* dwarf;
+    cocos2d::CCArray* _dwarvesToAttack = CCArray::create();
+    _dwarvesToAttack->retain();
+    
+    // Collect all far dwarfs !!!
+    for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+    {
+        dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+        
+        if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
+        {
+            float dwarfDistance = sqrtf((_MasterTrollBase->getPositionX()-dwarf->getPositionX())*(_MasterTrollBase->getPositionX()-dwarf->getPositionX()) +
+                                        (_MasterTrollBase->getPositionY()-dwarf->getPositionY())*(_MasterTrollBase->getPositionY()-dwarf->getPositionY()));
+            if(dwarfDistance>300)
+            {
+                //This can be choosen to attack !!!
+                _dwarvesToAttack->addObject(dwarf);
+            }
+        }
+    }
+    
+    if(_dwarvesToAttack->count() == 0){
+        return;//No luck
+    }
+    
+    //Now choose !!!
+    int aRanodmDwarf = rand()%_dwarvesToAttack->count();
+    dwarf = static_cast<Dwarf*>(_dwarvesToAttack->objectAtIndex(aRanodmDwarf));
+    
+    //-----------------------------------------
+    
+    TrollBullet* aBullet = TrollBullet::create(this,mCurrentBulletType);
+    aBullet->setPosition(theStartX,theStartY);
+    aBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
+    aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
+    aBullet->_speedAddValue = (aBullet->_speedMax-aBullet->_speed)*0.1;
+    
+    if(theType == MASTER_ACTION_BULLET_STRAIGHT)
+    {
+        aBullet->setAngle(atan2f(dwarf->getPositionY() - theStartY, dwarf->getPositionX() - theStartX));
+        aBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
+    }
+    
+    // Add it now
+    this->addChild(aBullet, 1000);
+    _bullets->addObject(aBullet);
+    //clear the arr !!!
+    _dwarvesToAttack->release();
+}
+
 void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
 {
     // Chouuuuuse one random dwarf + check if is not near !!!
@@ -20391,6 +20486,25 @@ void GameScene::OnTryToShoot()
     aDummyBullet->addChild(p,-1);
     
     addChild(aDummyBullet);
+}
+
+void GameScene::OnAttackHitTotem(CCNode* sender)
+{
+    if(sender!=NULL){
+        this->removeChild(sender, true);
+    }
+    
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+    p->setPosition(ccp(mTotem->getPositionX(),mTotem->getPositionY()));
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,1000);
+    
+    if(mTotem->mBubble_ActiveTimeCurrent>0){
+        // Shield active !!!
+    }
+    else{
+        mTotem->mNeedHP-=1; // how much damage???
+    }
 }
 
 void GameScene::OnAttackHitTroll(CCNode* sender)

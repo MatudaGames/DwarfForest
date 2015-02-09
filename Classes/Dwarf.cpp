@@ -83,6 +83,8 @@ bool Dwarf::init(GameScene* game,int theType)
 		return false;
 	}
     
+    mSnapedToTotem = false;
+    
     mContainsPowerUp = -1;// No power
     mSnapedTroll = NULL;
     mSnapedTroll_FallBack = NULL;
@@ -1632,10 +1634,22 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                     }
                 }
                 
+                if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
+                {
+                    if(ccpDistanceSQ(_game->mTotem->getPosition(), position) <= 2000)
+                    {
+                        mSnapedToTotem = true;
+                        
+                        addMovePoint(_game->mTotem->getPosition(), position,false);
+                        _touchEnded = true;
+                        connectLine();
+                        vibrate();
+                    }
+                }
                 
                 if(_game->mDwarfCollectMachine)
                 {
-                    if(mSnapedToMasterTroll == false)
+                    if(mSnapedToMasterTroll == false && mSnapedToTotem == false)
                     {
                         mCanSearchForTrollsForSnap = true;
                     }
@@ -2553,6 +2567,10 @@ void Dwarf::FireBulletAtTroll(int thePowerID)
     {
         aMoveAction = CCMoveTo::create(0.5f,ccp(_game->_MasterTrollBase->getPositionX(),_game->_MasterTrollBase->getPositionY()));
     }
+    else if(mSnapedToTotem)
+    {
+        aMoveAction = CCMoveTo::create(0.5f,ccp(_game->mTotem->getPositionX(),_game->mTotem->getPositionY()));
+    }
     else
     {
         aMoveAction = CCMoveTo::create(0.5f,ccp(mSnapedTroll_FallBack->getPositionX(),mSnapedTroll_FallBack->getPositionY()));
@@ -2581,6 +2599,10 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     if(mSnapedToMasterTroll)
     {
         _game->OnAttackHitTroll(NULL);
+    }
+    else if(mSnapedToTotem)
+    {
+        _game->OnAttackHitTotem(NULL);
     }
     else
     {
@@ -2619,6 +2641,7 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     
     // Finish
     mSnapedToMasterTroll = false;
+    mSnapedToTotem = false;
 }
 
 // The dull snap crap
@@ -2626,6 +2649,24 @@ void Dwarf::updateDwarfPowerZone()
 {
     if(mContainsPowerUp == -1){
         return;// No need to go futher
+    }
+    
+    if(mSnapedToTotem)
+    {
+        float theDistance2 = sqrtf((getPositionX()-_game->mTotem->getPositionX())*(getPositionX()-_game->mTotem->getPositionX()) +
+                                   (getPositionY()-_game->mTotem->getPositionY())*(getPositionY()-_game->mTotem->getPositionY()));
+        if(theDistance2 <= 220)
+        {
+            FireBulletAtTroll(mContainsPowerUp);
+            
+            mContainsPowerUp = -1;
+            
+            if(mPowerUpIcon != NULL){
+                removeChild(mPowerUpIcon);
+            }
+            
+            return;
+        }
     }
     
     if(mSnapedToMasterTroll)

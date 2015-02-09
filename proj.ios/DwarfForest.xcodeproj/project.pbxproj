@@ -248,6 +248,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752F54391A02D248007A817F /* AdvancedAnimation.cpp */; };
+		753502BF1A89308000758EC8 /* Enemy_Totem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753502BD1A89308000758EC8 /* Enemy_Totem.cpp */; };
 		754A47891A152F4900F48C5C /* Enemy_Bee.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754A47871A152F4900F48C5C /* Enemy_Bee.cpp */; };
 		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
 		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
@@ -885,6 +886,8 @@
 		37C62C0718E156AE00D16FC4 /* ExtensionExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionExport.h; sourceTree = "<group>"; };
 		752F54391A02D248007A817F /* AdvancedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedAnimation.cpp; sourceTree = "<group>"; };
 		752F543A1A02D248007A817F /* AdvancedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAnimation.h; sourceTree = "<group>"; };
+		753502BD1A89308000758EC8 /* Enemy_Totem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Totem.cpp; sourceTree = "<group>"; };
+		753502BE1A89308000758EC8 /* Enemy_Totem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy_Totem.h; sourceTree = "<group>"; };
 		754A47871A152F4900F48C5C /* Enemy_Bee.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Bee.cpp; sourceTree = "<group>"; };
 		754A47881A152F4900F48C5C /* Enemy_Bee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy_Bee.h; sourceTree = "<group>"; };
 		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
@@ -1653,6 +1656,8 @@
 				75BCB0BE19E92383000C7C65 /* DiamondIntro.h */,
 				754A47871A152F4900F48C5C /* Enemy_Bee.cpp */,
 				754A47881A152F4900F48C5C /* Enemy_Bee.h */,
+				753502BD1A89308000758EC8 /* Enemy_Totem.cpp */,
+				753502BE1A89308000758EC8 /* Enemy_Totem.h */,
 				75BCB0BF19E92383000C7C65 /* Dwarf.cpp */,
 				75BCB0C019E92383000C7C65 /* Dwarf.h */,
 				75BCB0C119E92383000C7C65 /* DwarfIntro.cpp */,
@@ -2848,6 +2853,7 @@
 				1A8F3B76175E05DA00049216 /* BoneData.cpp in Sources */,
 				1A8F3B77175E05DA00049216 /* CCSkeleton.cpp in Sources */,
 				1A8F3B78175E05DA00049216 /* CCSkeletonAnimation.cpp in Sources */,
+				753502BF1A89308000758EC8 /* Enemy_Totem.cpp in Sources */,
 				75BCB17519E9238E000C7C65 /* PlantCrystal.cpp in Sources */,
 				15C0B567196D412F007F909D /* CCTweenFunction.cpp in Sources */,
 				15C0B58B196D412F007F909D /* LabelReader.cpp in Sources */,
