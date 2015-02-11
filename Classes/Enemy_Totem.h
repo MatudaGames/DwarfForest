@@ -37,8 +37,8 @@ public:
     void SetMissionStuff(int theX,int theY,int HP,int BulletEvent,int BulletFreq,int BubbleShieldEvent,int BubbleShieldFreq,int BubbleShieldActive,int FlameFreq,int FlameRadius,int FlameActive);
     
     int mHP;
-    int mCurrentHP;
-    int mNeedHP;
+    float mCurrentHP;
+    float mNeedHP;
     
     int mBubbleShield_Event;
     float mBubble_TimeCurrent;
@@ -64,6 +64,11 @@ public:
     void OnShowedUp();
     
     float mRadius;
+    
+    // New stuff
+    cocos2d::CCLabelTTF* mDebugTimerLabel;
+    std::stringstream mDebugTimerStr;
+    
     
 private:
     GameScene* _game;

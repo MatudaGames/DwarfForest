@@ -88,6 +88,17 @@ bool Enemy_Totem::init(GameScene* game)
                                               mBar_TotemHP->getTexture()->getContentSize().width*(1.0f),
                                               mBar_TotemHP->getTexture()->getContentSize().height));
     
+    // Create the 3 timers !!!
+    mDebugTimerLabel = CCLabelTTF::create("111\n222\n100",FONT_SKRANJI,
+                                          TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+    mDebugTimerLabel->setPosition(ccp(0,_base->getContentSize().height));
+    addChild(mDebugTimerLabel);
+    
+    
+    CCSprite* aDummy2 = CCSprite::create("small_dot_red.png");
+    addChild(aDummy2);
+    
+    
     return true;
 }
 
@@ -106,7 +117,20 @@ void Enemy_Totem::update(float delta)
     if(mCurrentHP != mNeedHP)
     {
         mCurrentHP -= delta;
-        if(mCurrentHP<=mNeedHP) mCurrentHP = mNeedHP;
+        if(mCurrentHP<=mNeedHP)
+        {
+            // Check if mission not completed
+            mCurrentHP = mNeedHP;
+            if(mCurrentHP == 0)
+            {
+                // Destroy it
+                if(_game->mCurrentMission.Task_type == MissionType_DestroyTotem)
+                {
+                    // Win Win
+                    _game->showWinScreen();
+                }
+            }
+        }
         
         mBar_TotemHP->setTextureRect(CCRect(0, 0,
                                                   mBar_TotemHP->getTexture()->getContentSize().width*((float)mCurrentHP / mHP),
@@ -264,6 +288,13 @@ void Enemy_Totem::update(float delta)
             }
         }
     }
+    
+    // Update debug stuff
+    mDebugTimerStr.str("");
+    mDebugTimerStr.clear();
+    
+    mDebugTimerStr<<"F:"<<ceilf(mFlame_CurrentTime)<<"\nS:"<<ceilf(mBubble_TimeCurrent)<<"\nB:"<<ceilf(mBullet_TimeCurrent);
+    mDebugTimerLabel->setString(mDebugTimerStr.str().c_str());
 }
 
 void Enemy_Totem::onEnter()

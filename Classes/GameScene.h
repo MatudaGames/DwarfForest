@@ -66,6 +66,8 @@
 
 #define MissionType_KillEnemy 7
 
+#define MissionType_DestroyTotem 8
+
 // Activate power up
 #define MissionType_AP_Freezer 200
 #define MissionType_AP_GhostDwarfs 201

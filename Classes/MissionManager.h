@@ -324,7 +324,11 @@ public:
     void Donwloaded();
     void ReDownloadStuff();
     
+    void OnReDownload(CURLcode code);
+    
     FILE *pFile;
+    
+    bool mReDownload;
     
     int mCurrentActiveMission;
     
