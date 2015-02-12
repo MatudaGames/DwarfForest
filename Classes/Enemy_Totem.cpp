@@ -91,12 +91,8 @@ bool Enemy_Totem::init(GameScene* game)
     // Create the 3 timers !!!
     mDebugTimerLabel = CCLabelTTF::create("111\n222\n100",FONT_SKRANJI,
                                           TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
-    mDebugTimerLabel->setPosition(ccp(0,_base->getContentSize().height));
+    mDebugTimerLabel->setPosition(ccp(16,20));
     addChild(mDebugTimerLabel);
-    
-    
-    CCSprite* aDummy2 = CCSprite::create("small_dot_red.png");
-    addChild(aDummy2);
     
     
     return true;

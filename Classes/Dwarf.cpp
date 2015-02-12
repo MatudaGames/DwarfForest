@@ -269,7 +269,7 @@ bool Dwarf::init(GameScene* game,int theType)
     _TargetIcon->setVisible(false);
     addChild(_TargetIcon,100);
     
-    setPowerButton(0);
+//    setPowerButton(0);
 	
 	return true;
 }
