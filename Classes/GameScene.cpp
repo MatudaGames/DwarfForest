@@ -12170,6 +12170,10 @@ void GameScene::updateDwarfs(float delta)
 			
 			if (dwarf)
 			{
+				EnemyLineCount = mCurrentMission._EnemyLines;
+				mtSnipe = mCurrentMission.MT_Snipe;
+				mtSnipeDelay = mCurrentMission.MT_Snipe_Delay;
+				
 				// checks if diamond is picked up
                 for (int diamondIndex = _diamonds->count() - 1; diamondIndex >= 0; --diamondIndex)
 				{

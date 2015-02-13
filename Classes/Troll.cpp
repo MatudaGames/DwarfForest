@@ -1576,6 +1576,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
         
         for (float a = 0.0f; a < cir; a += precision)
         {
+        	if(_game->EnemyLineCount >0){
             float x = theCircleX + mRadius * cos(a);
             float y = theCircleY + mRadius/theCircleWidth * sin(a);
             
@@ -1602,6 +1603,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             
             last_x = x;
             last_y = y;
+        	}
         }
         
         //Set it to the point?
@@ -1624,6 +1626,7 @@ void Troll::SetMissionStuff(MissionTroll theMission)
             //Lets do magic
             if(a>0)
             {
+            	if(_game->EnemyLineCount >0){
                 // Get the draw cords
                 int P1_y = y;
                 int P1_x = x;
@@ -1658,7 +1661,8 @@ void Troll::SetMissionStuff(MissionTroll theMission)
                     _game->addChild(pointsBack,1);
                     
                     _pathSprites->addObject(pointsBack);
-                }
+                	}
+				}
             }
             
             /*

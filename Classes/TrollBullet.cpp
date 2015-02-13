@@ -167,7 +167,7 @@ void TrollBullet::OnDoAction(Dwarf* theForced)
         // This would be better if all would go to one place - not like now :D
         theForced->setAction(_type);
     }
-    else if (_type == MASTER_ACTION_BULLET_STRAIGHT)
+    else if (_type == MASTER_ACTION_BULLET_STRAIGHT|| _type == MASTER_ACTION_BULLET_SPLIT_MIDDLE || _type == MASTER_ACTION_BULLET_ZIGZAG || _type == MASTER_ACTION_BULLET_ONE_LINE || _type == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || _type == MASTER_ACTION_BULLET_SPLIT_UP ||_type == MASTER_ACTION_BULLLET_TRAP_GET)
     {
 //        _game->_mission_SaveDwarfs_KillMax-=1;
         theForced->setAction(_type);

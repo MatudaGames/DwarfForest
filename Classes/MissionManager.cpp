@@ -169,6 +169,8 @@ void MissionManager::Donwloaded()
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
         
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
+        
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
         
@@ -413,6 +415,9 @@ void MissionManager::Donwloaded()
             mission->MT_Event_Confusion_Time = aDummyVar;
         }
         
+        //MT snipes
+        mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
+        mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
@@ -996,6 +1001,8 @@ MissionManager::MissionManager()
         mission->Star_3 = missionDict->valueForKey("Star_3")->floatValue();
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
+        
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
         
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
@@ -2364,6 +2371,8 @@ void MissionManager::AddExtraDownloadedMissions_1()
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
         
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
+        
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
         
@@ -2608,6 +2617,9 @@ void MissionManager::AddExtraDownloadedMissions_1()
             mission->MT_Event_Confusion_Time = aDummyVar;
         }
         
+        //MT snipes
+        mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
+        mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
@@ -3123,6 +3135,8 @@ void MissionManager::AddExtraDownloadedMissions_2()
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
         
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
+        
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
         
@@ -3367,6 +3381,9 @@ void MissionManager::AddExtraDownloadedMissions_2()
             mission->MT_Event_Confusion_Time = aDummyVar;
         }
         
+        //MT snipes
+        mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
+        mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
@@ -3882,6 +3899,8 @@ void MissionManager::AddExtraDownloadedMissions_3()
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
         
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
+        
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
         
@@ -4125,7 +4144,11 @@ void MissionManager::AddExtraDownloadedMissions_3()
         if(aDummyVar>0){
             mission->MT_Event_Confusion_Time = aDummyVar;
         }
+        //MT snipes
+        mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
+        mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
+        //
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
@@ -4804,6 +4827,8 @@ void MissionManager::OnDownloadedSpecial()
         
         mission->MapType = missionDict->valueForKey("MapVisualType")->floatValue();
         
+        mission->_EnemyLines = missionDict->valueForKey("EnemyLines")->floatValue();
+        
         //Get the task type
         mission->Task_type = missionDict->valueForKey("Task_Type")->floatValue();
         
@@ -5048,6 +5073,9 @@ void MissionManager::OnDownloadedSpecial()
             mission->MT_Event_Confusion_Time = aDummyVar;
         }
         
+        //MT snipes
+        mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
+        mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff

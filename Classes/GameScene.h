@@ -189,6 +189,8 @@ public:
     // Even more new stuff
     bool mDwarfCollectMachine;
     
+    int EnemyLineCount;
+    
     //Mission_KillEnemys
     int mKillTrollsAmountLeft;
     
