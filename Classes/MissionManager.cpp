@@ -94,11 +94,48 @@ int static DownProgresss(void* clientp,double fDownLoadTotal,double fDownLoaded,
 void MissionManager::ReDownloadStuff()
 {
     //Clear old stuff
-    mAllMission.clear();
+//    mAllMission.clear();
     
     CURL *pCurl;
     CURLcode nResCode;
     
+    int32_t code;
+    
+    char s_errorBuffer[CURL_ERROR_SIZE];
+    
+    pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
+    if (pCurl != NULL)
+    {
+        std::string saveFileName;
+        saveFileName = "DF_MissionsTest.plist";
+        saveFileName = cocos2d::CCFileUtils::sharedFileUtils()->getWritablePath() + saveFileName;
+        
+        //        pFile = fopen(saveFileName.c_str(), "w+");
+        pFile = fopen(saveFileName.c_str(), "wb");
+        
+        
+        // The test
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1");
+        if(pFile != NULL)
+        {
+            curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
+            curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
+            curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
+            curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
+            curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
+            curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, true);
+            nResCode = curl_easy_perform(pCurl);//Executing the above a set operation and return a status code
+            curl_easy_cleanup(pCurl);           //Release the related resources
+            fclose(pFile);
+//            OnFailToLoad(nResCode);
+            OnReDownload(nResCode);
+            //            nResCode == CURLE_OK ? CCLOG("DownLoad Success") : CCLOG("CODE: %d",nResCode);
+        }
+    }
+    
+    /*
     pCurl = curl_easy_init();//Initialize the CURL has initialized after the success of the CURL pointer
     if (pCurl != NULL)
     {
@@ -125,6 +162,13 @@ void MissionManager::ReDownloadStuff()
             Donwloaded();
         }
     }
+    */
+}
+
+void MissionManager::OnReDownload(CURLcode code)
+{
+    cocos2d::CCMessageBox("Downloade Completed","Continue");
+    OnDownloadedSpecial();
 }
 
 
@@ -921,6 +965,8 @@ MissionManager::MissionManager()
 //    aLoading->mMissionMiscLoopFix = true;
     
 //    OnDownloadSpecialMissions();
+    mReDownload = false;
+    
     return;
     
     CURL *pCurl;
@@ -5373,9 +5419,21 @@ void MissionManager::OnDownloadedSpecial()
 //    cocos2d::CCDirector::sharedDirector()->getRunningScene()->addChild(pop);
     
 //    cocos2d::CCScene* aScene = static_cast<cocos2d::CCScene*>(cocos2d::CCDirector::sharedDirector()->getRunningScene());
-    cocos2d::CCScene* aScene = cocos2d::CCDirector::sharedDirector()->getRunningScene();
-    LoadingScreen* aLoading = static_cast<LoadingScreen*>(aScene->getChildByTag(888));
-    aLoading->OnMissionsLoaded();
+    
+    if(mReDownload)
+    {
+        cocos2d::CCMessageBox("Download Complete !!!","Continue");
+    }
+    else
+    {
+        mReDownload = true;
+        
+        cocos2d::CCScene* aScene = cocos2d::CCDirector::sharedDirector()->getRunningScene();
+        LoadingScreen* aLoading = static_cast<LoadingScreen*>(aScene->getChildByTag(888));
+        aLoading->OnMissionsLoaded();
+    }
+    
+
 }
 
 void MissionManager::CreateNoInternet()

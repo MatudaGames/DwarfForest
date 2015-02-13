@@ -281,7 +281,17 @@ void Troll::setRadar(int theRadius,int theWidth)
     
     points.push_back(ccp(0,0));
     
-    mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+//    mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
+    
+    CCPoint* pPoints = new CCPoint[points.size()];
+    
+    for (unsigned int i = 0; i < points.size(); ++i)
+    {
+        pPoints[i].x = points[i].x;
+        pPoints[i].y = points[i].y;
+    }
+    
+    mCatchRadar->drawPolygon(pPoints, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
     mCatchRadar->setRotation(0);
 }

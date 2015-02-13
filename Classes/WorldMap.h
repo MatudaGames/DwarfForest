@@ -60,6 +60,7 @@ public:
     
     // Hud stuff
     void CreateHud();
+    void OnReloadStuff();
     void Hud_ShowStore(CCObject* sender);
     void OnRemoveStore();
     void Hud_ShowChallenges(CCObject* sender);

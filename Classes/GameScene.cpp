@@ -18725,6 +18725,7 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
 {
     if(theType == mCurrentMission.Task_type)
     {
+        
         //We have a match !!! Check what is this !!!
         if(theValue>_missionCurrentValue){
             _missionCurrentValue = theValue;
@@ -19171,7 +19172,13 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
 		_bullets->addObject(cBullet);
 	}
     
-    if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE || mCurrentBulletType == MASTER_ACTION_BULLET_ZIGZAG || mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || mCurrentBulletType == MASTER_ACTION_BULLET_ONE_LINE || mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP){
+    if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT ||
+       mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE ||
+       mCurrentBulletType == MASTER_ACTION_BULLET_ZIGZAG ||
+       mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING ||
+       mCurrentBulletType == MASTER_ACTION_BULLET_ONE_LINE ||
+       mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP)
+    {
         ///aBullet->setAngle(atan2f(dwarf->getPositionY() - _MasterTrollBase->getPositionY(), dwarf->getPositionX() - _MasterTrollBase->getPositionX()));
         ///aBullet->_straightCords.setPoint(dwarf->getPositionX(),dwarf->getPositionY());
         //aBullet->getPositionX();

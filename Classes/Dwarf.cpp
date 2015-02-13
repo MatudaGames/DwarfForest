@@ -85,6 +85,10 @@ bool Dwarf::init(GameScene* game,int theType)
     
     mSnapedToTotem = false;
     
+    mCanSearchForTrollsForSnap = false;
+    mSnapedToMasterTroll = false;
+    mSnapedToTotem = false;
+    
     mContainsPowerUp = -1;// No power
     mSnapedTroll = NULL;
     mSnapedTroll_FallBack = NULL;
@@ -264,6 +268,8 @@ bool Dwarf::init(GameScene* game,int theType)
     _TargetIcon->setPosition(ccp(5,0));
     _TargetIcon->setVisible(false);
     addChild(_TargetIcon,100);
+    
+//    setPowerButton(0);
 	
 	return true;
 }
@@ -1617,7 +1623,9 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
 //                mSnapedTroll
                 
                 // By default - always on
-                mCanSearchForTrollsForSnap = true;
+                mCanSearchForTrollsForSnap = false;
+                mSnapedToMasterTroll = false;
+                mSnapedToTotem = false;
                 
                 if(_game->mDwarfCollectMachine)
                 {
@@ -1636,7 +1644,10 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                 
                 if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
                 {
-                    if(ccpDistanceSQ(_game->mTotem->getPosition(), position) <= 2000)
+                    float theDistance2 = sqrtf((position.x-_game->mTotem->getPositionX())*(position.x-_game->mTotem->getPositionX()) +
+                                               (position.y-_game->mTotem->getPositionY())*(position.y-_game->mTotem->getPositionY()));
+                    
+                    if(theDistance2<90)
                     {
                         mSnapedToTotem = true;
                         

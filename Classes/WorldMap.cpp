@@ -748,8 +748,15 @@ void WorldMap::CreateHud()
                                                                 this,
                                                                 menu_selector(WorldMap::Hud_ShowChallenges));
     
+    CCMenuItemImage* backButtonReload = CCMenuItemImage::create(
+                                                                "DebugStuff/load_mission_1.png",
+                                                                "DebugStuff/load_mission_1.png",
+                                                                this,
+                                                                menu_selector(WorldMap::OnReloadStuff));
+    backButtonReload->setAnchorPoint(ccp(0,0));
+    
     CCMenu *mMainMenu = CCMenu::create(storeItem,
-                               challengesItem,
+                               challengesItem,backButtonReload,
                                NULL);
     
     mMainMenu->alignItemsHorizontally();
@@ -760,6 +767,11 @@ void WorldMap::CreateHud()
     
     map_base->addChild(mMainMenu);
     
+}
+
+void WorldMap::OnReloadStuff()
+{
+    User::getInstance()->getMissionManager().OnDownloadSpecialMissions();
 }
 
 void WorldMap::Hud_ShowStore(CCObject* sender)
