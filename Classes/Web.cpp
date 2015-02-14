@@ -150,6 +150,11 @@ void Web::onComplete()
     _dwarf->setAnimationVisibility(true);
 }
 
+void Web::shotBulletAtDwarf()
+{
+	_game->CreateBulletByType(MASTER_ACTION_BULLET_STRAIGHT, _game->_MasterTrollBase->getPositionX(), _game->_MasterTrollBase->getPositionY());
+}
+
 void Web::touch(Dwarf* dwarf,Troll* troll)
 {
 	Effect::touch(dwarf,NULL);
@@ -175,6 +180,14 @@ void Web::touch(Dwarf* dwarf,Troll* troll)
     //Play the intro
     removeChild(_growAnimation);
     addChild(_startAnimation);
+
+   	if(_game->mtSnipe>0)
+    {
+   	CCDelayTime* aSnipeDelay = CCDelayTime::create(_game->mtSnipeDelay);
+    CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(Web::shotBulletAtDwarf));
+    CCSequence* aSeq1 = CCSequence::create(aSnipeDelay,func,NULL);
+	runAction(aSeq1);
+	}
     schedule(schedule_selector(Web::startStuckAnim), 0, 0, 0.6f);
     
 //    CreateAnims();

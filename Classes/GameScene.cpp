@@ -19005,9 +19005,15 @@ void GameScene::CreateBulletByType(int theType,int theStartX,int theStartY)
     // Collect all far dwarfs !!!
     for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
     {
-        dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
-        
-        if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
+    	dwarf = static_cast<Dwarf*>(_dwarves->objectAtIndex(dwarfIndex));
+    	
+    	if(mCurrentBulletType == MASTER_ACTION_BULLET_STRAIGHT)
+    	{
+    		if(dwarf->getEffect()!=NULL)
+    		{
+    			_dwarvesToAttack->addObject(dwarf);
+    		}
+    	}else if (!dwarf->mBulletActive && dwarf->getEffect()==NULL && !dwarf->_knockOut && dwarf->getDisabled()==false)
         {
             float dwarfDistance = sqrtf((_MasterTrollBase->getPositionX()-dwarf->getPositionX())*(_MasterTrollBase->getPositionX()-dwarf->getPositionX()) +
                                         (_MasterTrollBase->getPositionY()-dwarf->getPositionY())*(_MasterTrollBase->getPositionY()-dwarf->getPositionY()));
