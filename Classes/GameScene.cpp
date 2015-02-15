@@ -4832,23 +4832,29 @@ void GameScene::OnMasterHitGround(CCNode* sender)
         if(sender->getTag() == 7001)
         {
             //Show the hp bar
-            CCDelayTime* aDelay = CCDelayTime::create(0.2f);
-            CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
-            CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
-            CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
-            mBattleBar_TrollBase->runAction(aSeq);
+            if(mBattleBar_TrollBase != NULL)
+            {
+                CCDelayTime* aDelay = CCDelayTime::create(0.2f);
+                CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
+                CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
+                CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
+                mBattleBar_TrollBase->runAction(aSeq);
+            }
             
             CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterTrollBase->getChildByTag(70003));
             p->setDuration(1.0f);
         }
         else if(sender->getTag() == 7002)
         {
-            // The machine progress bar
-            CCDelayTime* aDelay = CCDelayTime::create(0.2f);
-            CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
-            CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
-            CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
-            mBattleBar_MachineBase->runAction(aSeq);
+            if(mBattleBar_MachineBase != NULL)
+            {
+                // The machine progress bar
+                CCDelayTime* aDelay = CCDelayTime::create(0.2f);
+                CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
+                CCEaseBackOut* aEase = CCEaseBackOut::create(aScaleAction);
+                CCSequence* aSeq = CCSequence::create(aDelay,aEase,NULL);
+                mBattleBar_MachineBase->runAction(aSeq);
+            }
             
             CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterDwarfBase->getChildByTag(70003));
             p->setDuration(1.0f);
@@ -20002,6 +20008,9 @@ void GameScene::ResetValues()
     
     // New stuff
     mDwarfCollectMachine = true;
+    
+    mBattleBar_TrollBase = NULL;
+    mBattleBar_MachineBase = NULL;
     
     if(mMasterTroll_HP>0 && mMasterTroll_Damege>0 && mMasterTroll_Attack>=0){
         mAttackFunctionalActive = true;
