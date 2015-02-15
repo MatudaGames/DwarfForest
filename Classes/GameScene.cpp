@@ -12288,6 +12288,7 @@ void GameScene::updateDwarfs(float delta)
 			{
 			if ((bulletY >=350) && (bulletY <=360))
 			{
+			
             if(bulletIndex == 1 || bulletIndex == 3 || bulletIndex == 5 || bulletIndex == 7 || bulletIndex == 9){
             aBullet->setAngle(atan2f(visibleSize.height - aBullet->getPositionY(), visibleSize.width/2 - aBullet->getPositionX()));
         	}   
