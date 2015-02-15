@@ -166,6 +166,8 @@ struct MissionSet
     //What map background will be
     int32_t MapType;
     
+    int32_t _EnemyLines;
+    
     //As they will be randomly placed - just give the count
     int32_t Dwarf_spawn_points;//How much cave enterances  || DSP
     
@@ -278,6 +280,9 @@ struct MissionSet
     int32_t MT_Event_Traps_Percent;
     
     int32_t MT_Event_Confusion_Time;
+    
+    int32_t MT_Snipe;
+    int32_t MT_Snipe_Delay;
     
     int32_t MT_Event_ForceSpawnEnemy_Time;
     

@@ -191,6 +191,8 @@ public:
     // Even more new stuff
     bool mDwarfCollectMachine;
     
+    int EnemyLineCount;
+    
     //Mission_KillEnemys
     int mKillTrollsAmountLeft;
     
@@ -256,6 +258,11 @@ public:
     
     int mCombo_DwarfEnter;
     float mComboTimer_DwarfEnter;
+    
+    //Snipe stuff
+    
+    int mtSnipe;
+    int mtSnipeDelay;
     
 //    InGamePowers* mPowerMenu;
     InGamePowers* mPowerMenu;

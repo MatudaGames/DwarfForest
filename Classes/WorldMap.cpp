@@ -687,7 +687,7 @@ void WorldMap::PrepeareSmallMissionScreen()
     CCMenu* aButtonMenu = CCMenu::create(playItem,clouseItem,NULL);
     aButtonMenu->setAnchorPoint(ccp(0,0));
     aButtonMenu->setPosition(ccp(0,0));
-    aScreenPlay->addChild(aButtonMenu);
+    aScreenPlay->addChild(aButtonMenu, 1);
     
     
     addChild(mSmallMissionScreen,1);//Above all
@@ -697,6 +697,7 @@ void WorldMap::ShowMissionScreen(int theID)
 {
 	mSmallMissionScreen->removeChildByTag(30004);
     mSmallMissionScreen->removeChildByTag(30002);
+    //removeChildByTag(67881);
     mCurrentMissionID = theID;
     MissionTaskInditificator(mCurrentMissionID);
     mSmallMissionScreen->setVisible(true);
@@ -709,7 +710,6 @@ void WorldMap::HideMissionScreen(CCObject * pSender)
     
     mSmallMissionScreen->removeChildByTag(30004);
     mSmallMissionScreen->removeChildByTag(30002);
-    
     mSmallMissionScreen->setVisible(false);
     
     if(tag == 1){
@@ -763,10 +763,9 @@ void WorldMap::CreateHud()
     
     mMainMenu->setPosition(ccp(mScreenSize.width/2-27,44));
     
-    this->addChild(mMainMenu, 1);
+    mMainMenu->setTag(67881);
     
-    
-    
+    map_base->addChild(mMainMenu);
     
 }
 

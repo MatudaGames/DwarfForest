@@ -31,6 +31,7 @@ public:
     void finishStuckAnim();
     void startStuckAnim();
     void pauseGrow();
+    void shotBulletAtDwarf();
 	
 private:
 	GameScene *_game;
