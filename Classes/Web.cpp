@@ -139,7 +139,8 @@ void Web::finishStuckAnim()
 
 void Web::pauseGrow()
 {
-	_growAnimation->pause();
+	//_growAnimation->pause();
+	_growAnimation->stopAllActions();
 }
 
 void Web::onComplete()
