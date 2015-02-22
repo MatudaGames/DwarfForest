@@ -117,6 +117,32 @@ struct MissionTroll
     float _speed;
 };
 
+struct MissionQuadInfo
+{
+    int32_t ID; // For what quad is this !!!
+    
+    int32_t type; // Is it a shield or etc
+    
+    // More like global
+    int32_t active_time; // How long is active
+    int32_t activate_time; // After how long time will activate
+    
+    // For shield - what visual shield will be used?
+    int32_t event_type;
+    
+    // For deadzone radius
+    int32_t deadzone_radius;
+    
+    // For bullets
+    int32_t bullet_distance; // How far will fly till explodes
+    int32_t bullet_amount; // How much bullets can fire?
+    
+    // Flame sub stuff
+    int32_t flame_radius; // Flame radius?
+    int32_t flame_active_time; // How long flame throewr will be active?
+    int32_t flame_rotate_speed; // How fast rotates flame thrower?
+};
+
 struct MissionSet
 {
     int32_t ID;// || ID
@@ -299,6 +325,17 @@ struct MissionSet
     // The totem stuff
     bool Mission_Totem;
     int32_t TOTEM_HP;
+    int32_t TOTEM_PASSIVE_TYPE;
+    int32_t TOTEM_RADIUS;
+    int32_t TOTEM_x;
+    int32_t TOTEM_y;
+    
+    std::vector<MissionQuadInfo> TOTEM_QUAD_1;// Whats in for totem quad 1
+    std::vector<MissionQuadInfo> TOTEM_QUAD_2;// Whats in for totem quad 1
+    std::vector<MissionQuadInfo> TOTEM_QUAD_3;// Whats in for totem quad 1
+    std::vector<MissionQuadInfo> TOTEM_QUAD_4;// Whats in for totem quad 1
+    
+    /*
     int32_t TOTEM_Bullet_Event;
     int32_t TOTEM_Bullet_Freq;
     int32_t TOTEM_BubleShield_Event;
@@ -309,6 +346,7 @@ struct MissionSet
     int32_t TOTEM_Flame_ActiveTime;
     int32_t TOTEM_x;
     int32_t TOTEM_y;
+    */
     
 };
 

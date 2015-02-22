@@ -67,6 +67,8 @@ bool TrollBullet::init(GameScene* game,int theType)
     
     _type = theType;
     
+    _timeActive = 0;
+    
     //Create the sprite and add some particles :)
     _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite);
@@ -176,6 +178,8 @@ void TrollBullet::OnDoAction(Dwarf* theForced)
 
 void TrollBullet::update(float delta)
 {
+//    CCLog("The Angle at bullet in loop: %f",_angle);
+    
     if(!_canMove){
         return;//Wait for start move allow !!!
     }
@@ -225,6 +229,8 @@ void TrollBullet::update(float delta)
         x += cosf(_angle) * delta * (_speed * _game->getGameSpeed());
         y += sinf(_angle) * delta * (_speed * _game->getGameSpeed());
         
+        if(_timeActive>0)CCLog("The angle at bullet %f",_angle);
+        
         cocos2d::CCNode::setPosition(x, y);
         
         _touchable = (x > 0 &&
@@ -234,6 +240,16 @@ void TrollBullet::update(float delta)
         
         if (!_touchable)
         {
+            _isDisabled = true;
+        }
+    }
+    
+    if(_timeActive>0)
+    {
+        _timeActive-=delta*_game->getGameSpeed();
+        if(_timeActive<=0)
+        {
+            //Disable it - remove
             _isDisabled = true;
         }
     }

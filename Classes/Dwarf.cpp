@@ -83,6 +83,12 @@ bool Dwarf::init(GameScene* game,int theType)
 		return false;
 	}
     
+    mTotemSlow = 1;
+    mTotemZoneIn = 0;
+    
+    // Qucik check for quad system - helper that says if dwarf is already removing
+    _dwarfIsRemoving = false;
+    
     mSnapedToTotem = false;
     
     mCanSearchForTrollsForSnap = false;
@@ -92,6 +98,8 @@ bool Dwarf::init(GameScene* game,int theType)
     mContainsPowerUp = -1;// No power
     mSnapedTroll = NULL;
     mSnapedTroll_FallBack = NULL;
+    
+    _effect = NULL;
     
     _SpawnID = -1;
     
@@ -582,35 +590,8 @@ void Dwarf::update(float delta)
             _speed *= _PoisonSlowValue;
         }
         
-        /*
-        if(User::getInstance()->mDynamicTrolls)
-        {
-            //Dont do anything only debug speed take in action
-            _speed*=User::getInstance()->mDebugSpeed_dwarf;
-        }
-        else if(User::getInstance()->mSpecial_13_Mission)
-        {
-            //Check if snaped to cave - then move 2x faster
-            if(_isConnectedToCave){
-                _speed*=2;
-            }
-        }
-        else if(User::getInstance()->mSpecial_14_Mission)
-        {
-            //Check if snaped to cave - then move 2x faster
-            if(_isConnectedToCave){
-                _speed*=3;
-            }
-        }
-        else if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission || User::getInstance()->mSpecial_18_Mission
-                || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission
-                || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission)
-        {
-            if(_isConnectedToCave){
-                _speed*=2.2;
-            }
-        }
-        */
+        // If totem wants to slow down - do it !!!
+        _speed*=mTotemSlow;
 		
 		if (_movePoints->count() > 0)
 		{
@@ -626,11 +607,6 @@ void Dwarf::update(float delta)
 			{
 				setAngle(atan2f(point.y - y, point.x - x));
 			}
-            
-            //Moves quicker if has points where to walk
-//            if(User::getInstance()->mNewMissionBuild && !User::getInstance()->mSpecial_16_Mission && !User::getInstance()->mSpecial_17_Mission){
-//                _speed*=1.5;
-//            }
 		}
 		
 		CCPoint newPosition = ccp(x + cosf(_angle) * delta * _speed,
@@ -2613,7 +2589,7 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     }
     else if(mSnapedToTotem)
     {
-        _game->OnAttackHitTotem(NULL);
+        _game->OnAttackHitTotem(ccp(getPositionX(),getPositionY()),1);
     }
     else
     {

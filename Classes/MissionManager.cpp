@@ -4838,6 +4838,13 @@ void MissionManager::OnDownloadedSpecial()
 //    cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path.c_str());
     cocos2d::CCDictionary* plistDictionary = cocos2d::CCDictionary::createWithContentsOfFile(path_local.c_str());
     
+    if(plistDictionary == NULL)
+    {
+        // Problem - mission file down?
+        CreateNoInternet();
+        return;
+    }
+    
     mCurrentActiveMission = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("ActiveMission", 0);
     mCurrentActiveMission = 0;
     
@@ -5068,6 +5075,108 @@ void MissionManager::OnDownloadedSpecial()
         }
         
         //--------------------------------------------------
+        // Even more new stuff TOTEM !!!
+        
+        // No hp - no totem
+        mission->TOTEM_HP = 0;
+        mission->TOTEM_PASSIVE_TYPE = 0;
+        mission->TOTEM_PASSIVE_TYPE = 0;
+        
+        mission->Mission_Totem = false;
+        
+        //The dwarf spawn points forced
+        cocos2d::CCDictionary* totemDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Totem_Data");
+        if(totemDict != NULL)
+        {
+            mission->Mission_Totem = true;
+            
+            // Check if value is set - if not - then not !!!
+            if(totemDict->valueForKey("HP")->compare("") != 0) mission->TOTEM_HP = totemDict->valueForKey("HP")->intValue();
+            
+            // Check the passive stuff
+            if(totemDict->valueForKey("Passive_Type")->compare("0") != 0) mission->TOTEM_PASSIVE_TYPE = totemDict->valueForKey("Passive_Type")->intValue();
+            if(totemDict->valueForKey("Passive_Radius")->compare("0") != 0) mission->TOTEM_RADIUS = totemDict->valueForKey("Passive_Radius")->intValue();
+            
+            std::vector<int> dummyVec = SplitString(totemDict->valueForKey("Position")->getCString(),',');
+            mission->TOTEM_x = dummyVec[0];
+            mission->TOTEM_y = dummyVec[1];
+            
+            // The quad loop
+            std::stringstream aQuadLoop;
+            for(int i=1;i<5;i++)
+            {
+                aQuadLoop.str("");aQuadLoop.clear();
+                aQuadLoop<<"Quad_"<<i;
+                
+                cocos2d::CCDictionary* quadInfo = (cocos2d::CCDictionary*)totemDict->objectForKey(aQuadLoop.str().c_str());
+                cocos2d::CCDICT_FOREACH(quadInfo,pElement_dummy_sub_point)
+                {
+                    // Looop trought the actions for each quad
+                    std::string aPathValue = pElement_dummy_sub_point->getStrKey();
+                    cocos2d::CCDictionary* quadSubDict = (cocos2d::CCDictionary*)quadInfo->objectForKey(aPathValue);
+                    
+                    // Check what type is this action
+                    MissionQuadInfo theQuadAction = *new MissionQuadInfo();
+                    theQuadAction.ID = quadSubDict->valueForKey("ID")->intValue(); // Quad ID? or what :D forgot it O:
+                    theQuadAction.type = quadSubDict->valueForKey("type")->intValue();
+                    
+                    // Set all values to 0 at start
+                    theQuadAction.active_time = 0;
+                    theQuadAction.activate_time = 0;
+                    theQuadAction.event_type = 0;
+                    theQuadAction.deadzone_radius = 0;
+                    theQuadAction.bullet_distance = 0;
+                    theQuadAction.bullet_amount = 0;
+                    theQuadAction.flame_radius = 0;
+                    theQuadAction.flame_active_time = 0;
+                    theQuadAction.flame_rotate_speed = 0;
+                    
+                    //Special var read
+                    if(theQuadAction.type == 1)// Shield stuff
+                    {
+                        theQuadAction.active_time = quadSubDict->valueForKey("active_time")->intValue();
+                        theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
+                        theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
+                    }
+                    else if(theQuadAction.type == 2) // The Deadzones
+                    {
+                        theQuadAction.active_time = quadSubDict->valueForKey("active_time")->intValue();
+                        theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
+                        theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
+                        theQuadAction.deadzone_radius = quadSubDict->valueForKey("deadzone_radius")->intValue();
+                    }
+                    else if(theQuadAction.type == 3) // The Projectiles
+                    {
+                        theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
+                        theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
+                        
+                        // The bullet part
+                        theQuadAction.bullet_distance = quadSubDict->valueForKey("bullet_distance")->intValue();
+                        theQuadAction.bullet_amount = quadSubDict->valueForKey("bullet_amount")->intValue();
+                        
+                        // The flame part
+                        theQuadAction.flame_radius = quadSubDict->valueForKey("flame_radius")->intValue();
+                        theQuadAction.flame_active_time = quadSubDict->valueForKey("flame_active_time")->intValue();
+                        theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue();
+                    }
+                    
+                    if(i == 1){
+                        mission->TOTEM_QUAD_1.push_back(theQuadAction);
+                    }
+                    else if(i==2){
+                        mission->TOTEM_QUAD_2.push_back(theQuadAction);
+                    }
+                    else if(i==3){
+                        mission->TOTEM_QUAD_3.push_back(theQuadAction);
+                    }
+                    else if(i==4){
+                        mission->TOTEM_QUAD_4.push_back(theQuadAction);
+                    }
+                }
+            }
+        }
+        
+        //==================================================
         
         
         aDummyVar = missionDict->valueForKey("MT_EVENT_ENEMY_CHECK_TIME")->intValue();
@@ -5198,8 +5307,9 @@ void MissionManager::OnDownloadedSpecial()
         //------------------------------------------------------------------
         // New TOTEM stuff
         
-        mission->Mission_Totem = false;
         
+        
+        /*
         if(missionDict->valueForKey("TOTEM_Position")->compare("") != 0)
         {
             // Totem will be active
@@ -5235,6 +5345,7 @@ void MissionManager::OnDownloadedSpecial()
         
         mission->TOTEM_Flame_ActiveTime = 0;
         if(missionDict->valueForKey("TOTEM_Flame_ActiveTime")->compare("") != 0) mission->TOTEM_Flame_ActiveTime = missionDict->valueForKey("TOTEM_Flame_ActiveTime")->intValue();
+        */
         
         //------------------------------------------------------------------
         // New Attack stuff

@@ -227,7 +227,7 @@ public:
     // Totem stuff
     
     Enemy_Totem* mTotem;
-    void OnAttackHitTotem(CCNode* sender);
+    void OnAttackHitTotem(cocos2d::CCPoint position,int theDamage);
     
     //------------
     

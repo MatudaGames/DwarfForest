@@ -4819,7 +4819,11 @@ void GameScene::CreateMasters()
         // Lets add totemos !!!
         mTotem = Enemy_Totem::create(this);
         
+        mTotem->SetNewMissionStuff(mCurrentMission);
+        
+        /*
         mTotem->SetMissionStuff(mCurrentMission.TOTEM_x,mCurrentMission.TOTEM_y, mCurrentMission.TOTEM_HP, mCurrentMission.TOTEM_Bullet_Event, mCurrentMission.TOTEM_Bullet_Freq, mCurrentMission.TOTEM_BubleShield_Event, mCurrentMission.TOTEM_BubleShield_Freq, mCurrentMission.TOTEM_BubleShield_ActiveTime, mCurrentMission.TOTEM_Flame_Freq, mCurrentMission.TOTEM_Flame_Radius, mCurrentMission.TOTEM_Flame_ActiveTime);
+        */
         
         this->addChild(mTotem, getSpriteOrderZ(mTotem->getPositionY()));
     }
@@ -20506,23 +20510,28 @@ void GameScene::OnTryToShoot()
     addChild(aDummyBullet);
 }
 
-void GameScene::OnAttackHitTotem(CCNode* sender)
+void GameScene::OnAttackHitTotem(cocos2d::CCPoint position,int theDamage)
 {
-    if(sender!=NULL){
-        this->removeChild(sender, true);
-    }
-    
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
     p->setPosition(ccp(mTotem->getPositionX(),mTotem->getPositionY()));
     p->setAutoRemoveOnFinish(true);
     addChild(p,1000);
     
+    //Check from what position attacked !!!
+//    mTotem->getPositionX();
+//    float angle = 360-(atan2(y - last_y, x - mTotem->getPositionX()) * 180 / M_PI) ;
+    
+    // Check if can attack at this pos
+    mTotem->AttackFromPlayer(position,theDamage);
+    
+    /*
     if(mTotem->mBubble_ActiveTimeCurrent>0){
         // Shield active !!!
     }
     else{
         mTotem->mNeedHP-=1; // how much damage???
     }
+    */
 }
 
 void GameScene::OnAttackHitTroll(CCNode* sender)

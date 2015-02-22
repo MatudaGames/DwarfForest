@@ -151,6 +151,12 @@ public:
     float _speed;
     
     float _defaultSpeed;
+    
+    bool _dwarfIsRemoving;
+    float mTotemSlow;
+    float mTotemZoneIn;
+    
+    Effect* _effect;
 	
 private:
 	bool addMovePoint(const cocos2d::CCPoint& point, const cocos2d::CCPoint& previousPoint,bool ingoreTexture);
@@ -208,5 +214,5 @@ private:
     bool _isConnectedToCave;
     
     
-    Effect* _effect;
+    
 };

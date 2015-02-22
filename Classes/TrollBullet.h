@@ -52,6 +52,8 @@ public:
     float _speedMax; //Ends with fast
     float _speedAddValue;
     
+    float _timeActive; // new stuff for totem bullets with life
+    
     float GetAngle();
     void setAngle(float value);
 	
