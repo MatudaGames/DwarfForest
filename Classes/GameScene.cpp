@@ -11626,6 +11626,11 @@ void GameScene::updateDwarfs(float delta)
                             }
                             else if(troll->_disabled == false){
                                 // GameOver
+                                
+                                // New update - remove dwarf - if mission not completed - then call save me !!!
+                                dwarf->removeFromSave();
+                                
+                                /*
                                 if(mCurrentMission.Task_type == MissionType_DwarfSave){
                                     dwarf->removeFromSave();
                                 }
@@ -11647,6 +11652,7 @@ void GameScene::updateDwarfs(float delta)
                                     
                                     menuSaveMeCallBack(dwarf,NULL,troll);
                                 }
+                                */
                             }
                             
                             
@@ -12134,7 +12140,9 @@ void GameScene::updateDwarfs(float delta)
                                 {
                                     //Suck in this dwarf and throw bouth dwarfs out as gameover !!!
                                     //                            troll->setVictory();
+                                    dwarf->removeFromSave();
                                     
+                                    /*
                                     if(mCurrentMission.Task_type == MissionType_DwarfSave){
                                         dwarf->removeFromSave();
                                         break;
@@ -12157,6 +12165,7 @@ void GameScene::updateDwarfs(float delta)
                                         //------------------------
                                         break;
                                     }
+                                    */
                                 }
                             }
                             else if(ccpDistanceSQ(dwarf->getPosition(), effect->getPosition())<=EFFECT_DISTANCE_TORNADO*10.0f)

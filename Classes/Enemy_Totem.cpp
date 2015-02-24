@@ -18,6 +18,8 @@
 USING_NS_CC;
 using namespace CocosDenshion;
 
+
+
 Enemy_Totem* Enemy_Totem::create(GameScene* game)
 {
     Enemy_Totem *pRet = new Enemy_Totem();
@@ -52,12 +54,38 @@ bool Enemy_Totem::init(GameScene* game)
         return false;
     }
     
-    //------------------
+    //------------------------
     
     mQuad_1_AngleWidth = 0;
     mQuad_2_AngleWidth = 0;
     mQuad_3_AngleWidth = 0;
     mQuad_4_AngleWidth = 0;
+    
+    /*
+    mQuad_1_Nodes = CCArray::create();
+    mQuad_1_Nodes->retain();
+    mQuad_2_Nodes = CCArray::create();
+    mQuad_2_Nodes->retain();
+    mQuad_3_Nodes = CCArray::create();
+    mQuad_3_Nodes->retain();
+    mQuad_4_Nodes = CCArray::create();
+    mQuad_4_Nodes->retain();
+    
+    mQuad_1_NodeData = CCPointArray::create(0);
+    mQuad_1_NodeData->initWithCapacity(1000);
+    mQuad_1_NodeData->retain();
+    mQuad_2_NodeData = CCPointArray::create(0);
+    mQuad_2_NodeData->initWithCapacity(1000);
+    mQuad_2_NodeData->retain();
+    mQuad_3_NodeData = CCPointArray::create(1000);
+    mQuad_3_NodeData->retain();
+    mQuad_4_NodeData = CCPointArray::create(1000);
+    mQuad_4_NodeData->retain();
+    */
+    
+//    std::vector<QuadActionInfo> mQuad_1_Nodes;
+    
+    //------------------------
     
     _game = game;
     
@@ -69,7 +97,7 @@ bool Enemy_Totem::init(GameScene* game)
     _base = CCSprite::create("beta/Totem1.png");
     _base->setAnchorPoint(ccp(0.5,0.5));
 //    _base->setOpacity(128);
-    addChild(_base);
+    addChild(_base,1);
     
     mBar_TotemBase = CCSprite::create("small_dot_red.png");
     mBar_TotemBase->setPosition(ccp(0,-_base->getContentSize().height/2));
@@ -89,6 +117,7 @@ bool Enemy_Totem::init(GameScene* game)
     aDummy->addChild(mBar_TotemHP);
     
     // The progress bar
+    /*
     mBar_TotemHP->setTextureRect(CCRect(0, 0,
                                               mBar_TotemHP->getTexture()->getContentSize().width*(1.0f),
                                               mBar_TotemHP->getTexture()->getContentSize().height));
@@ -98,12 +127,13 @@ bool Enemy_Totem::init(GameScene* game)
                                           TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
     mDebugTimerLabel->setPosition(ccp(16,20));
     addChild(mDebugTimerLabel);
+    */
     
     // Create the 4 sides for dwarf check?
-    mQuad_1 = CCDrawNode::create();this->addChild( mQuad_1 );craeteQuad(1, 100, 0, 90);
-    mQuad_2 = CCDrawNode::create();this->addChild( mQuad_2 );craeteQuad(2, 100, 0, 90);
-    mQuad_3 = CCDrawNode::create();this->addChild( mQuad_3 );craeteQuad(3, 100, 0, 90);
-    mQuad_4 = CCDrawNode::create();this->addChild( mQuad_4 );craeteQuad(4, 100, 0, 90);
+//    mQuad_1 = CCDrawNode::create();this->addChild( mQuad_1 );craeteQuad(1, 100, 0, 90);
+//    mQuad_2 = CCDrawNode::create();this->addChild( mQuad_2 );craeteQuad(2, 100, 0, 90);
+//    mQuad_3 = CCDrawNode::create();this->addChild( mQuad_3 );craeteQuad(3, 100, 0, 90);
+//    mQuad_4 = CCDrawNode::create();this->addChild( mQuad_4 );craeteQuad(4, 100, 0, 90);
     
     mPassive_Zone = CCDrawNode::create();this->addChild( mPassive_Zone );
     mPassive_Zone->setVisible(false);
@@ -217,6 +247,170 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
     mNeedHP-=finalDamage;
 }
 
+void Enemy_Totem::removeQuadAction(int theID,int theSubID)
+{
+    int aValue = (theID*100)+theSubID;
+    
+    if(theID == 1)
+    {
+        for(int i=0;i<mQuad_1_Nodes.size();i++)
+        {
+            if(mQuad_1_Nodes[i].tag == aValue)
+            {
+                // Remove this one
+                removeChildByTag(aValue);
+                mQuad_1_Nodes.erase(mQuad_1_Nodes.begin()+i);
+                break;// No more stuff here
+            }
+        }
+    }
+    else if(theID == 2)
+    {
+        for(int i=0;i<mQuad_2_Nodes.size();i++)
+        {
+            if(mQuad_2_Nodes[i].tag == aValue)
+            {
+                // Remove this one
+                removeChildByTag(aValue);
+                mQuad_2_Nodes.erase(mQuad_2_Nodes.begin()+i);
+                break;// No more stuff here
+            }
+        }
+    }
+    else if(theID == 3)
+    {
+        for(int i=0;i<mQuad_3_Nodes.size();i++)
+        {
+            if(mQuad_3_Nodes[i].tag == aValue)
+            {
+                // Remove this one
+                removeChildByTag(aValue);
+                mQuad_3_Nodes.erase(mQuad_3_Nodes.begin()+i);
+                break;// No more stuff here
+            }
+        }
+    }
+    else if(theID == 4)
+    {
+        for(int i=0;i<mQuad_4_Nodes.size();i++)
+        {
+            if(mQuad_4_Nodes[i].tag == aValue)
+            {
+                // Remove this one
+                removeChildByTag(aValue);
+                mQuad_4_Nodes.erase(mQuad_4_Nodes.begin()+i);
+                break;// No more stuff here
+            }
+        }
+    }
+
+
+}
+
+// The new multi layer quad stuff
+CCDrawNode* Enemy_Totem::addQuadAction(int theID,int theSubID,int theWidth,int theType,int theAngle, int theEventType)
+{
+    std::vector<CCPoint> points;
+    points.push_back(ccp(0,0));
+    
+    int coneWidth = theAngle;
+    int coneRadius = theWidth;
+    
+    for (float ii = 0; ii < coneWidth; ii += 0.1)
+    {
+        points.push_back(ccp(0 + coneRadius * cos(ii * (M_PI / 180)), 0 + coneRadius * sin(ii * (M_PI / 180))));
+    }
+    
+    points.push_back(ccp(0,0));
+    
+    CCPoint* pPoints = new CCPoint[points.size()];
+    
+    ccColor4F pShieldColor;
+    
+    // Here comes the magic
+    if(theType == 0)// The brutal shield
+    {
+        pShieldColor = ccc4f(0, 0, 0, 0.05f);
+    }
+    else if(theType == 1)// The brutal shield
+    {
+        pShieldColor = ccc4FFromccc4B(ccc4(0, 0, 255, 128));
+    }
+    else if(theType == 2)// The half brutal shield
+    {
+        pShieldColor = ccc4FFromccc4B(ccc4(120, 200, 255, 64));
+    }
+    else if(theType == 3)// The burn zone
+    {
+        pShieldColor = ccc4FFromccc4B(ccc4(255, 0, 0, 64));
+    }
+    
+    for (unsigned int i = 0; i < points.size(); ++i)
+    {
+        pPoints[i].x = points[i].x;
+        pPoints[i].y = points[i].y;
+    }
+    
+    // Add this new stuff under all
+    int theTag = (100*theID)+theSubID;
+    CCDrawNode* _Quad_dummy = CCDrawNode::create();
+    _Quad_dummy->setTag(theTag);
+    
+    _Quad_dummy->clear();
+    _Quad_dummy->drawPolygon(pPoints, points.size(), pShieldColor, 2, ccc4f(0, 0, 0, 0.1) );
+    _Quad_dummy->setRotation(0);
+    
+    if(theID == 1){
+        QuadActionInfo* aQuadNodeInfo = new QuadActionInfo();
+        aQuadNodeInfo->size = theAngle;
+        aQuadNodeInfo->width = theWidth;
+        aQuadNodeInfo->tag = theTag;
+        aQuadNodeInfo->event_type = theEventType;
+        
+        mQuad_1_Nodes.push_back(*aQuadNodeInfo);
+        
+        _Quad_dummy->setRotation(0);
+    }
+    else if(theID == 2){
+        QuadActionInfo* aQuadNodeInfo = new QuadActionInfo();
+        aQuadNodeInfo->size = theAngle;
+        aQuadNodeInfo->width = theWidth;
+        aQuadNodeInfo->tag = theTag;
+        aQuadNodeInfo->event_type = theEventType;
+        
+        mQuad_2_Nodes.push_back(*aQuadNodeInfo);
+        
+        _Quad_dummy->setRotation(90);
+    }
+    else if(theID == 3){
+        QuadActionInfo* aQuadNodeInfo = new QuadActionInfo();
+        aQuadNodeInfo->size = theAngle;
+        aQuadNodeInfo->width = theWidth;
+        aQuadNodeInfo->tag = theTag;
+        aQuadNodeInfo->event_type = theEventType;
+        
+        mQuad_3_Nodes.push_back(*aQuadNodeInfo);
+        
+        _Quad_dummy->setRotation(180);
+    }
+    else if(theID == 4){
+        QuadActionInfo* aQuadNodeInfo = new QuadActionInfo();
+        aQuadNodeInfo->size = theAngle;
+        aQuadNodeInfo->width = theWidth;
+        aQuadNodeInfo->tag = theTag;
+        aQuadNodeInfo->event_type = theEventType;
+        
+        mQuad_4_Nodes.push_back(*aQuadNodeInfo);
+        
+        _Quad_dummy->setRotation(270);
+    }
+    
+    this->addChild( _Quad_dummy ,0);
+    
+    return _Quad_dummy;
+}
+
+
 void Enemy_Totem::craeteQuad(int theID,int theWidth,int theType,int theAngle)
 {
     // Draw the conus from settings
@@ -306,6 +500,133 @@ int Enemy_Totem::collideAtPoint(cocos2d::CCPoint point)
     //Check on what quad does collide !!!
     int aCollideQuad = -1;
     
+    // Some def values
+    int coneAngleOffset = 0;
+    int coneAngle = 0;
+    int dx = 0;
+    int dy = 0;
+    int distanceFromTroll = 0;
+    int angle = 0;
+    
+    // The new universal stuff for multi
+    CCDrawNode* aDummy;
+    int aValue = 0;
+    CCPoint aData;
+    
+    //mQuad_1_NodeData.x = mQuad_1_AngleWidth;
+    //mQuad_1_NodeData.y = mQuad_1_Size;
+    
+    // The 1st quad check !!!
+    for(int i = 0; i<mQuad_1_Nodes.size();i++)
+    {
+        // Do not check shields
+        if(mQuad_1_Nodes[i].event_type == 2) continue;
+        
+        aValue = mQuad_1_Nodes[i].tag;
+        aDummy = static_cast<CCDrawNode*>(getChildByTag(aValue));
+        
+        if(aDummy == NULL) {CCLog("Cant find child with tag:%i",aValue); continue;}
+        
+        coneAngleOffset = -fmod(aDummy->getRotation(), 360);
+        coneAngle = mQuad_1_Nodes[i].size + coneAngleOffset;
+        
+        dx = point.x - getPositionX();
+        dy = point.y - getPositionY();
+        
+        distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
+        angle = atan2(dy, dx) * (180 / M_PI);
+        
+        if(angle>0 && fmod(aDummy->getRotation(), 360)>=mQuad_1_Nodes[i].width){angle-=360;}
+        
+        // We found something !!! Givi it this info back
+        if(distanceFromTroll <= mQuad_1_Nodes[i].width && (angle >= coneAngleOffset && angle <= coneAngle)) return aCollideQuad = 1;
+    }
+    
+    // The 2nd quad check !!!
+    for(int i = 0; i<mQuad_2_Nodes.size();i++)
+    {
+        // Do not check shields
+        if(mQuad_2_Nodes[i].event_type == 1) continue;
+        
+        aValue = mQuad_2_Nodes[i].tag;
+        aDummy = static_cast<CCDrawNode*>(getChildByTag(aValue));
+        
+        if(aDummy == NULL) {CCLog("Cant find child with tag:%i",aValue); continue;}
+        
+        coneAngleOffset = -fmod(aDummy->getRotation(), 360);
+        coneAngle = mQuad_2_Nodes[i].size + coneAngleOffset;
+        
+        dx = point.x - getPositionX();
+        dy = point.y - getPositionY();
+        
+        distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
+        angle = atan2(dy, dx) * (180 / M_PI);
+        
+        if(angle>0 && fmod(aDummy->getRotation(), 360)>=mQuad_2_Nodes[i].width){angle-=360;}
+        
+        // We found something !!! Givi it this info back
+        if(distanceFromTroll <= mQuad_2_Nodes[i].width && (angle >= coneAngleOffset && angle <= coneAngle)) return aCollideQuad = 2;
+    }
+    
+    // The 1st quad check !!!
+    for(int i = 0; i<mQuad_3_Nodes.size();i++)
+    {
+        // Do not check shields
+        if(mQuad_3_Nodes[i].event_type == 1) continue;
+        
+        aValue = mQuad_3_Nodes[i].tag;
+        aDummy = static_cast<CCDrawNode*>(getChildByTag(aValue));
+        
+        if(aDummy == NULL) {CCLog("Cant find child with tag:%i",aValue); continue;}
+        
+        coneAngleOffset = -fmod(aDummy->getRotation(), 360);
+        coneAngle = mQuad_3_Nodes[i].size + coneAngleOffset;
+        
+        dx = point.x - getPositionX();
+        dy = point.y - getPositionY();
+        
+        distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
+        angle = atan2(dy, dx) * (180 / M_PI);
+        
+        if(angle>0 && fmod(aDummy->getRotation(), 360)>=mQuad_3_Nodes[i].width){angle-=360;}
+        
+        // We found something !!! Givi it this info back
+        if(distanceFromTroll <= mQuad_3_Nodes[i].width && (angle >= coneAngleOffset && angle <= coneAngle)) return aCollideQuad = 3;
+    }
+    
+    // The 1st quad check !!!
+    for(int i = 0; i<mQuad_4_Nodes.size();i++)
+    {
+        // Do not check shields
+        if(mQuad_4_Nodes[i].event_type == 1) continue;
+        
+        aValue = mQuad_4_Nodes[i].tag;
+        aDummy = static_cast<CCDrawNode*>(getChildByTag(aValue));
+        
+        if(aDummy == NULL) {CCLog("Cant find child with tag:%i",aValue); continue;}
+        
+        coneAngleOffset = -fmod(aDummy->getRotation(), 360);
+        coneAngle = mQuad_4_Nodes[i].size + coneAngleOffset;
+        
+        dx = point.x - getPositionX();
+        dy = point.y - getPositionY();
+        
+        distanceFromTroll = sqrt(pow(dx, 2) + pow(dy, 2));
+        angle = atan2(dy, dx) * (180 / M_PI);
+        
+        if(angle>0 && fmod(aDummy->getRotation(), 360)>=mQuad_4_Nodes[i].width){angle-=360;}
+        
+        // We found something !!! Givi it this info back
+        if(distanceFromTroll <= mQuad_4_Nodes[i].width && (angle >= coneAngleOffset && angle <= coneAngle)) return aCollideQuad = 4;
+    }
+    
+    return aCollideQuad;
+    
+    
+    /*
+    //Check on what quad does collide !!!
+    int aCollideQuad = -1;
+    
     int coneAngleOffset = 0;
     int coneAngle = 0;
     int dx = 0;
@@ -363,6 +684,7 @@ int Enemy_Totem::collideAtPoint(cocos2d::CCPoint point)
     //CCLOG("Collided at quad :%i",aCollideQuad);
     
     return aCollideQuad;
+    */
 }
 
 bool Enemy_Totem::collideAtPassive(cocos2d::CCPoint point)
@@ -516,7 +838,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
             {
@@ -531,7 +853,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
             {
@@ -577,7 +899,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
             {
@@ -592,7 +914,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
             {
@@ -638,7 +960,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
             {
@@ -653,7 +975,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
             {
@@ -699,7 +1021,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
             {
@@ -714,7 +1036,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 
                 // The timer for activation
                 quad_info.current_time_till_active = quad_info.active_time;// Start from 0
-                quad_info.current_time_active = quad_info.activate_time;// Start from 0
+                quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
             {
@@ -764,7 +1086,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_1[i].current_time_active = 0;
                         // Disable shield
-                        craeteQuad(1, 100, 0, 90);
+//                        craeteQuad(1, 100, 0, 90);
+                        removeQuadAction(1, i);
                     }
                 }
                 else
@@ -778,12 +1101,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         if(mQuad_Vector_1[i].event_type == 1)
                         {
                             // basic shield
-                            craeteQuad(1, 100, 1, 90);
+//                            craeteQuad(1, 100, 1, 90);
+                            addQuadAction(1,i,100,1,90,mQuad_Vector_1[i].type);
                         }
                         else if(mQuad_Vector_1[i].event_type == 2)
                         {
                             // some different shield
-                            craeteQuad(1, 100, 2, 90);
+//                            craeteQuad(1, 100, 2, 90);
+                            addQuadAction(1,i,100,1,90,mQuad_Vector_1[i].type);
                         }
                     }
                 }
@@ -821,7 +1146,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_1[i].current_time_active = 0;
                         // Disable deadzone
-                        craeteQuad(1, 100, 0, 90);
+//                        craeteQuad(1, 100, 0, 90);
+                        removeQuadAction(1, i);
                     }
                 }
                 else
@@ -834,7 +1160,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].active_time;
                         
                         // Create by the radius
-                        craeteQuad(1, mQuad_Vector_1[i].deadzone_radius, 3, 90);
+//                        craeteQuad(1, mQuad_Vector_1[i].deadzone_radius, 3, 90);
+                        addQuadAction(1,i,mQuad_Vector_1[i].deadzone_radius,3,90,mQuad_Vector_1[i].type);
                     }
                 }
             }
@@ -871,11 +1198,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     mQuad_Vector_1[i].current_time_active-=delta*_game->getGameSpeed();
                     if(mQuad_Vector_1[i].current_time_active<=0)
                     {
-                        mQuad_1->stopAllActions();
+//                        mQuad_1->stopAllActions();
                         mQuad_Vector_1[i].current_time_active = 0;
                         // Disable deadzone
-                        mQuad_1->removeAllChildren();//Remove the fire stuff
-                        craeteQuad(1, 100, 0, 90);
+//                        mQuad_1->removeAllChildren();//Remove the fire stuff
+//                        craeteQuad(1, 100, 0, 90);
+                        removeQuadAction(1, i);
                     }
                 }
                 else
@@ -898,26 +1226,27 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         else if(mQuad_Vector_1[i].event_type == 2)// The flamethrower
                         {
                             mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].flame_active_time;
-                            craeteQuad(1, 100, 3, mQuad_Vector_1[i].flame_radius);
+//                            craeteQuad(1, 100, 3, mQuad_Vector_1[i].flame_radius);
+                            CCDrawNode* aTheNode = addQuadAction(1,i,100,3,mQuad_Vector_1[i].flame_radius,mQuad_Vector_1[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
                                 CCParticleSystemQuad* fx = CCParticleSystemQuad::create("Particles/FlameDot_Fx.plist");
                                 fx->setPosition(ccp(p*20,0));
                                 fx->setAutoRemoveOnFinish(true);
-                                mQuad_1->addChild(fx);
+                                aTheNode->addChild(fx);
                             }
                             
                             // Reset
-                            mQuad_1->stopAllActions();
-                            mQuad_1->setRotation(-45);// Reset rotation to default? or mid?
+                            aTheNode->stopAllActions();
+                            aTheNode->setRotation(-45);// Reset rotation to default? or mid?
                             
                             CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed, (-90+mQuad_Vector_1[i].flame_radius*0.5));
                             CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed,mQuad_Vector_1[i].flame_radius*0.5);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
-                            mQuad_1->runAction(aRotateRepeat);
+                            aTheNode->runAction(aRotateRepeat);
                         }
                     }
                 }
@@ -942,7 +1271,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_2[i].current_time_active = 0;
                         // Disable shield
-                        craeteQuad(2, 100, 0, 90);
+//                        craeteQuad(2, 100, 0, 90);
+                        //Remove now the quad sprite
+                        removeQuadAction(2, i);
                     }
                 }
                 else
@@ -956,12 +1287,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         if(mQuad_Vector_2[i].event_type == 1)
                         {
                             // basic shield
-                            craeteQuad(2, 100, 1, 90);
+//                            craeteQuad(2, 100, 1, 90);
+                            addQuadAction(2,i,100,1,90,mQuad_Vector_2[i].type);
                         }
                         else if(mQuad_Vector_2[i].event_type == 2)
                         {
                             // some different shield
-                            craeteQuad(2, 100, 2, 90);
+//                            craeteQuad(2, 100, 2, 90);
+                            addQuadAction(2,i,100,1,90,mQuad_Vector_2[i].type);
                         }
                     }
                 }
@@ -999,7 +1332,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_2[i].current_time_active = 0;
                         // Disable deadzone
-                        craeteQuad(2, 100, 0, 90);
+//                        craeteQuad(2, 100, 0, 90);
+                        removeQuadAction(2, i);
                     }
                 }
                 else
@@ -1012,7 +1346,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].active_time;
                         
                         // Create by the radius
-                        craeteQuad(2, mQuad_Vector_2[i].deadzone_radius, 3, 90);
+//                        craeteQuad(2, mQuad_Vector_2[i].deadzone_radius, 3, 90);
+                        addQuadAction(2,i,mQuad_Vector_2[i].deadzone_radius, 3, 90,mQuad_Vector_2[i].type);
                     }
                 }
             }
@@ -1049,11 +1384,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     mQuad_Vector_2[i].current_time_active-=delta*_game->getGameSpeed();
                     if(mQuad_Vector_2[i].current_time_active<=0)
                     {
-                        mQuad_2->stopAllActions();
+//                        mQuad_2->stopAllActions();
                         mQuad_Vector_2[i].current_time_active = 0;
-                        // Disable deadzone
-                        mQuad_2->removeAllChildren();//Remove the fire stuff
-                        craeteQuad(2, 100, 0, 90);
+                        removeQuadAction(2, i);
                     }
                 }
                 else
@@ -1076,26 +1409,26 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         else if(mQuad_Vector_2[i].event_type == 2)// The flamethrower
                         {
                             mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].flame_active_time;
-                            craeteQuad(2, 100, 3, mQuad_Vector_2[i].flame_radius);
+                            CCDrawNode* aTheQuadNode = addQuadAction(2,i,100,3,mQuad_Vector_2[i].flame_radius,mQuad_Vector_2[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
                                 CCParticleSystemQuad* fx = CCParticleSystemQuad::create("Particles/FlameDot_Fx.plist");
                                 fx->setPosition(ccp(p*20,0));
                                 fx->setAutoRemoveOnFinish(true);
-                                mQuad_2->addChild(fx);
+                                aTheQuadNode->addChild(fx);
                             }
                             
                             // Reset
-                            mQuad_2->stopAllActions();
-                            mQuad_2->setRotation(90);// Reset rotation to default? or mid?
+                            aTheQuadNode->stopAllActions();
+                            aTheQuadNode->setRotation(90);// Reset rotation to default? or mid?
                             
                             CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,0);
                             CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,90);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
-                            mQuad_2->runAction(aRotateRepeat);
+                            aTheQuadNode->runAction(aRotateRepeat);
                         }
                     }
                 }
@@ -1120,7 +1453,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_3[i].current_time_active = 0;
                         // Disable shield
-                        craeteQuad(3, 100, 0, 90);
+//                        craeteQuad(3, 100, 0, 90);
+                        removeQuadAction(3, i);
                     }
                 }
                 else
@@ -1134,12 +1468,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         if(mQuad_Vector_3[i].event_type == 1)
                         {
                             // basic shield
-                            craeteQuad(3, 100, 1, 90);
+//                            craeteQuad(3, 100, 1, 90);
+                            addQuadAction(3,i,100,1,90,mQuad_Vector_3[i].type);
                         }
                         else if(mQuad_Vector_3[i].event_type == 2)
                         {
                             // some different shield
-                            craeteQuad(3, 100, 2, 90);
+//                            craeteQuad(3, 100, 2, 90);
+                            addQuadAction(3,i,100,1,90,mQuad_Vector_3[i].type);
                         }
                     }
                 }
@@ -1177,7 +1513,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_3[i].current_time_active = 0;
                         // Disable deadzone
-                        craeteQuad(3, 100, 0, 90);
+//                        craeteQuad(3, 100, 0, 90);
+                        removeQuadAction(3, i);
                     }
                 }
                 else
@@ -1190,7 +1527,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].active_time;
                         
                         // Create by the radius
-                        craeteQuad(3, mQuad_Vector_3[i].deadzone_radius, 3, 90);
+//                        craeteQuad(3, mQuad_Vector_3[i].deadzone_radius, 3, 90);
+                        addQuadAction(3,i,mQuad_Vector_3[i].deadzone_radius,3,90,mQuad_Vector_3[i].type);
                     }
                 }
             }
@@ -1227,11 +1565,13 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     mQuad_Vector_3[i].current_time_active-=delta*_game->getGameSpeed();
                     if(mQuad_Vector_3[i].current_time_active<=0)
                     {
-                        mQuad_3->stopAllActions();
+//                        mQuad_3->stopAllActions();
                         mQuad_Vector_3[i].current_time_active = 0;
                         // Disable deadzone
-                        mQuad_3->removeAllChildren();//Remove the fire stuff
-                        craeteQuad(3, 100, 0, 90);
+//                        mQuad_3->removeAllChildren();//Remove the fire stuff
+//                        craeteQuad(3, 100, 0, 90);
+                        
+                        removeQuadAction(3, i);
                     }
                 }
                 else
@@ -1254,26 +1594,27 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         else if(mQuad_Vector_3[i].event_type == 2)// The flamethrower
                         {
                             mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].flame_active_time;
-                            craeteQuad(3, 100, 3, mQuad_Vector_3[i].flame_radius);
+//                            craeteQuad(3, 100, 3, mQuad_Vector_3[i].flame_radius);
+                            CCDrawNode* aTheNode = addQuadAction(3,i,100,3,mQuad_Vector_3[i].flame_radius,mQuad_Vector_3[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
                                 CCParticleSystemQuad* fx = CCParticleSystemQuad::create("Particles/FlameDot_Fx.plist");
                                 fx->setPosition(ccp(p*20,0));
                                 fx->setAutoRemoveOnFinish(true);
-                                mQuad_3->addChild(fx);
+                                aTheNode->addChild(fx);
                             }
                             
                             // Reset
-                            mQuad_3->stopAllActions();
-                            mQuad_3->setRotation(180);// Reset rotation to default? or mid?
+                            aTheNode->stopAllActions();
+                            aTheNode->setRotation(180);// Reset rotation to default? or mid?
                             
                             CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed, 90);
                             CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed,180);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
-                            mQuad_3->runAction(aRotateRepeat);
+                            aTheNode->runAction(aRotateRepeat);
                         }
                     }
                 }
@@ -1298,7 +1639,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_4[i].current_time_active = 0;
                         // Disable shield
-                        craeteQuad(4, 100, 0, 90);
+//                        craeteQuad(4, 100, 0, 90);
+                        removeQuadAction(4, i);
                     }
                 }
                 else
@@ -1312,12 +1654,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         if(mQuad_Vector_4[i].event_type == 1)
                         {
                             // basic shield
-                            craeteQuad(4, 100, 1, 90);
+//                            craeteQuad(4, 100, 1, 90);
+                            addQuadAction(4,i,100,1,90,mQuad_Vector_4[i].type);
                         }
                         else if(mQuad_Vector_4[i].event_type == 2)
                         {
                             // some different shield
-                            craeteQuad(4, 100, 2, 90);
+//                            craeteQuad(4, 100, 2, 90);
+                            addQuadAction(4,i,100,2,90,mQuad_Vector_4[i].type);
                         }
                     }
                 }
@@ -1355,7 +1699,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     {
                         mQuad_Vector_4[i].current_time_active = 0;
                         // Disable deadzone
-                        craeteQuad(4, 100, 0, 90);
+//                        craeteQuad(4, 100, 0, 90);
+                        removeQuadAction(4, i);
                     }
                 }
                 else
@@ -1368,7 +1713,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].active_time;
                         
                         // Create by the radius
-                        craeteQuad(4, mQuad_Vector_4[i].deadzone_radius, 3, 90);
+//                        craeteQuad(4, mQuad_Vector_4[i].deadzone_radius, 3, 90);
+                        addQuadAction(4,i,mQuad_Vector_4[i].deadzone_radius,3,90,mQuad_Vector_4[i].type);
                     }
                 }
             }
@@ -1405,11 +1751,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     mQuad_Vector_4[i].current_time_active-=delta*_game->getGameSpeed();
                     if(mQuad_Vector_4[i].current_time_active<=0)
                     {
-                        mQuad_4->stopAllActions();
+//                        mQuad_4->stopAllActions();
                         mQuad_Vector_4[i].current_time_active = 0;
                         // Disable deadzone
-                        mQuad_4->removeAllChildren();//Remove the fire stuff
-                        craeteQuad(4, 100, 0, 90);
+//                        mQuad_4->removeAllChildren();//Remove the fire stuff
+//                        craeteQuad(4, 100, 0, 90);
+                        removeQuadAction(4, i);
                     }
                 }
                 else
@@ -1432,26 +1779,27 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         else if(mQuad_Vector_4[i].event_type == 2)// The flamethrower
                         {
                             mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].flame_active_time;
-                            craeteQuad(4, 100, 3, mQuad_Vector_4[i].flame_radius);
+//                            craeteQuad(4, 100, 3, mQuad_Vector_4[i].flame_radius);
+                            CCDrawNode* aTheNode = addQuadAction(4,i,100,3,mQuad_Vector_4[i].flame_radius,mQuad_Vector_4[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
                                 CCParticleSystemQuad* fx = CCParticleSystemQuad::create("Particles/FlameDot_Fx.plist");
                                 fx->setPosition(ccp(p*20,0));
                                 fx->setAutoRemoveOnFinish(true);
-                                mQuad_4->addChild(fx);
+                                aTheNode->addChild(fx);
                             }
                             
                             // Reset
-                            mQuad_4->stopAllActions();
-                            mQuad_4->setRotation(270);// Reset rotation to default? or mid?
+                            aTheNode->stopAllActions();
+                            aTheNode->setRotation(270);// Reset rotation to default? or mid?
                             
-                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,360);
+                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,180);
                             CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,270);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
-                            mQuad_4->runAction(aRotateRepeat);
+                            aTheNode->runAction(aRotateRepeat);
                         }
                     }
                 }

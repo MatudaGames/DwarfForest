@@ -348,6 +348,8 @@ struct MissionSet
     int32_t TOTEM_y;
     */
     
+    int32_t DEBUG_Electrify_range;// At what distance fires bullet to totem
+    
 };
 
 struct CompletedStuff

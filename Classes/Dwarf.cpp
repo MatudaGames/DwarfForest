@@ -682,144 +682,72 @@ void Dwarf::update(float delta)
                 //The danger !!!
                 if (ccpDistanceSQ(getPosition(), otherDwarf->getPosition())<=powf(RADIUS + RADIUS, 2) * GLOBAL_SCALE)
                 {
-                    //New special stuff
-                    if(User::getInstance()->mNewMissionBuild)
+                    // New check
+                    //Crash !!!
+                    _disabled = true;
+                    otherDwarf->setDisabled(true);
+                    
+                    createCrash();
+                    
+                    doDwarfBang(_angle);
+                    otherDwarf->doDwarfBang(_angle+M_PI);
+                    
+                    //------------------------------------------------------------
+                    
+                    bool otherDwarfTaked = false;
+                    for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)//To catch dwarfs, what bang.
                     {
-                        //Crash !!!
-                        _disabled = true;
-                        otherDwarf->setDisabled(true);
+                        Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
                         
-                        createCrash();
-                        
-                        doDwarfBang(_angle);
-                        otherDwarf->doDwarfBang(_angle+M_PI);
-                        
-                        //------------------------------------------------------------
-                        
-                        bool otherDwarfTaked = false;
-                        for(int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)//To catch dwarfs, what bang.
+                        // This one wants to catch
+                        if(troll->mCatchingDwarf == false && troll->mEnemySpawnID == 3)
                         {
-                            Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
-                            
-                            // This one wants to catch
-                            if(troll->mCatchingDwarf == false && troll->mEnemySpawnID == 3)
+                            if(otherDwarfTaked == false)
                             {
-                                if(otherDwarfTaked == false)
-                                {
-                                    otherDwarfTaked = true;
-                                    troll->CatchDwarf(otherDwarf);
-                                }
-                                else
-                                {
-                                    troll->CatchDwarf(this);
-                                    break; 
-                                }
+                                otherDwarfTaked = true;
+                                troll->CatchDwarf(otherDwarf);
+                            }
+                            else
+                            {
+                                troll->CatchDwarf(this);
+                                break;
                             }
                         }
-                        
-                        //------------------------------------------------------------
-                        
-                        if (otherDwarf->getChildByTag(222))
-                        {
-                            _canPlayAlarm = false;
-                            _alarmWasSet = false;
-                            otherDwarf->getAlarmAnimation()->setVisible(false);
-                        }
-                        
-                        otherDwarf->setTag(999);//Will skip his pause !!!
-                        this->setTag(999);
-                        
-                        //Create score off
-                        if(User::getInstance()->mSpecial_17_Mission){
-                            _game->createPoints(-200, 0, this->getPosition(), ccc3(0, 232, 225));
-                        }
-                        else{
-                            _game->createPoints(-mCrystalPoints, 0, this->getPosition(), ccc3(0, 232, 225));
-                            _game->createPoints(-otherDwarf->mCrystalPoints, 0, otherDwarf->getPosition(), ccc3(0, 232, 225));
-                        }
-                        
-                        mCollectedCrystals = 0;
-                        otherDwarf->mCollectedCrystals = 0;
-                        
-                        mCrystalPoints = 0;
-                        otherDwarf->mCrystalPoints = 0;
-                        
-                        UpdateBagIcon();
-                        otherDwarf->UpdateBagIcon();
                     }
-                    else
+                    
+                    //------------------------------------------------------------
+                    
+                    if (otherDwarf->getChildByTag(222))
                     {
-                        //Crash !!!
-                        _disabled = true;
-                        otherDwarf->setDisabled(true);
-                        
-                        createCrash();
-                        
-                        doDwarfBang(_angle);
-                        otherDwarf->doDwarfBang(_angle+M_PI);
-                        
-                        if (otherDwarf->getChildByTag(222))
-                        {
-                            _canPlayAlarm = false;
-                            _alarmWasSet = false;
-                            otherDwarf->getAlarmAnimation()->setVisible(false);
-                        }
-                        
-                        //                _game->lose();
-                        //------------------------
-                        
-                        otherDwarf->setTag(999);//Will skip his pause !!!
-                        this->setTag(999);
-                        
-                        _game->menuSaveMeCallBack(this,otherDwarf,NULL);
-                        
-                        //------------------------
+                        _canPlayAlarm = false;
+                        _alarmWasSet = false;
+                        otherDwarf->getAlarmAnimation()->setVisible(false);
                     }
+                    
+                    otherDwarf->setTag(999);//Will skip his pause !!!
+                    this->setTag(999);
+                    
+                    //Create score off
+                    if(User::getInstance()->mSpecial_17_Mission){
+                        _game->createPoints(-200, 0, this->getPosition(), ccc3(0, 232, 225));
+                    }
+                    else{
+                        _game->createPoints(-mCrystalPoints, 0, this->getPosition(), ccc3(0, 232, 225));
+                        _game->createPoints(-otherDwarf->mCrystalPoints, 0, otherDwarf->getPosition(), ccc3(0, 232, 225));
+                    }
+                    
+                    mCollectedCrystals = 0;
+                    otherDwarf->mCollectedCrystals = 0;
+                    
+                    mCrystalPoints = 0;
+                    otherDwarf->mCrystalPoints = 0;
+                    
+                    UpdateBagIcon();
+                    otherDwarf->UpdateBagIcon();
+                    
                 }
             }
         }
-        
-//        CCARRAY_FOREACH(_game->getActiveTornado(), entry)
-//        {
-//            Wind* otherDwarf = (Wind*)entry;
-//            
-//            //The alamr stuff
-//            if (ccpDistanceSQ(getPosition(), otherDwarf->getPosition())<=powf(RADIUS,3) * GLOBAL_SCALE)
-//            {
-//                aHasAlarm = true;
-//            }
-//            
-//            //The danger !!!
-//            if (ccpDistanceSQ(getPosition(), otherDwarf->getPosition())<=powf(RADIUS + RADIUS, 2) * GLOBAL_SCALE)
-//            {
-//                //Crash !!!
-//                _disabled = true;
-//                //Disable tornado and show the crash dwarf
-//                otherDwarf->co;
-//                
-//                createCrash();
-//                
-//                doDwarfBang(_angle);
-//                otherDwarf->doDwarfBang(_angle+M_PI);
-//                
-//                if (otherDwarf->getChildByTag(222))
-//                {
-//                    _canPlayAlarm = false;
-//                    _alarmWasSet = false;
-//                    otherDwarf->getAlarmAnimation()->setVisible(false);
-//                }
-//                
-//                //                _game->lose();
-//                //------------------------
-//                
-//                otherDwarf->setTag(999);//Will skip his pause !!!
-//                this->setTag(999);
-//                
-//                _game->menuSaveMeCallBack(this,otherDwarf,NULL);
-//                
-//                //------------------------
-//            }
-//        }
     }
     
     //==========================================
@@ -2642,7 +2570,8 @@ void Dwarf::updateDwarfPowerZone()
     {
         float theDistance2 = sqrtf((getPositionX()-_game->mTotem->getPositionX())*(getPositionX()-_game->mTotem->getPositionX()) +
                                    (getPositionY()-_game->mTotem->getPositionY())*(getPositionY()-_game->mTotem->getPositionY()));
-        if(theDistance2 <= 220)
+//        if(theDistance2 <= 220)
+        if(theDistance2 <= _game->mCurrentMission.DEBUG_Electrify_range)
         {
             FireBulletAtTroll(mContainsPowerUp);
             

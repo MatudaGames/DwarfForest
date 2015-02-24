@@ -17,6 +17,14 @@ class GameScene;
 class SpriteAnimation;
 class Effect;
 
+struct QuadActionInfo
+{
+    int tag;
+    int size;
+    int width;
+    int event_type;
+};
+
 struct Quad_Action
 {
     int32_t quad_id; // For what quad is this !!!
@@ -126,6 +134,23 @@ public:
     cocos2d::CCDrawNode* mQuad_3;
     cocos2d::CCDrawNode* mQuad_4;
     
+    /*
+    cocos2d::CCArray* mQuad_1_Nodes;
+    cocos2d::CCArray* mQuad_2_Nodes;
+    cocos2d::CCArray* mQuad_3_Nodes;
+    cocos2d::CCArray* mQuad_4_Nodes;
+    
+    cocos2d::CCPointArray* mQuad_1_NodeData;
+    cocos2d::CCPointArray* mQuad_2_NodeData;
+    cocos2d::CCPointArray* mQuad_3_NodeData;
+    cocos2d::CCPointArray* mQuad_4_NodeData;
+    */
+    
+    std::vector<QuadActionInfo> mQuad_1_Nodes;
+    std::vector<QuadActionInfo> mQuad_2_Nodes;
+    std::vector<QuadActionInfo> mQuad_3_Nodes;
+    std::vector<QuadActionInfo> mQuad_4_Nodes;
+    
     // Pasive magic for totem
     int mPassive_EventID; // What event will this bee?
     int mPassive_Radius; // Whats the radius of this event
@@ -141,6 +166,9 @@ public:
     void UpdateQuadSystem(float delta);
     void CreateSpecialBullet(int theType,int theStartX,int theStartY,int theAngle,int theLife);
     bool collideAtPassive(cocos2d::CCPoint point);
+    
+    void removeQuadAction(int theID,int theSubID);
+    cocos2d::CCDrawNode* addQuadAction(int theID,int theSubID,int theWidth,int theType,int theAngle, int theEventType);
     
 private:
     GameScene* _game;

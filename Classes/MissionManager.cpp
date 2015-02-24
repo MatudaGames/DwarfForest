@@ -5084,6 +5084,10 @@ void MissionManager::OnDownloadedSpecial()
         
         mission->Mission_Totem = false;
         
+        // Debug stuff for totem extras
+        mission->DEBUG_Electrify_range = 220; // The default
+        if(missionDict->valueForKey("DEBUG_Electrify_range")->compare("") != 0) mission->DEBUG_Electrify_range = missionDict->valueForKey("DEBUG_Electrify_range")->intValue();// Updated value if has
+        
         //The dwarf spawn points forced
         cocos2d::CCDictionary* totemDict = (cocos2d::CCDictionary*)missionDict->objectForKey("Totem_Data");
         if(totemDict != NULL)
@@ -5107,6 +5111,8 @@ void MissionManager::OnDownloadedSpecial()
             {
                 aQuadLoop.str("");aQuadLoop.clear();
                 aQuadLoop<<"Quad_"<<i;
+                
+                CCLog("Checking quad loop :%s",aQuadLoop.str().c_str());
                 
                 cocos2d::CCDictionary* quadInfo = (cocos2d::CCDictionary*)totemDict->objectForKey(aQuadLoop.str().c_str());
                 cocos2d::CCDICT_FOREACH(quadInfo,pElement_dummy_sub_point)
