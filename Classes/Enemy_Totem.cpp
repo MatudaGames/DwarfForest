@@ -520,7 +520,7 @@ int Enemy_Totem::collideAtPoint(cocos2d::CCPoint point)
     for(int i = 0; i<mQuad_1_Nodes.size();i++)
     {
         // Do not check shields
-        if(mQuad_1_Nodes[i].event_type == 2) continue;
+        if(mQuad_1_Nodes[i].event_type == 1) continue;
         
         aValue = mQuad_1_Nodes[i].tag;
         aDummy = static_cast<CCDrawNode*>(getChildByTag(aValue));
