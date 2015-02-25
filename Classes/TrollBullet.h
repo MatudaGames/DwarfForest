@@ -54,6 +54,10 @@ public:
     
     float _timeActive; // new stuff for totem bullets with life
     
+    float _distanceActive;
+    int _startX;
+    int _startY;
+    
     float GetAngle();
     void setAngle(float value);
 	

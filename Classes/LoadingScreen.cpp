@@ -418,6 +418,7 @@ void LoadingScreen::AllCompleted()
     
     if(mMissionLoadingCompleted){
         // If all is completed - go fuher
+        CCLog("Did come to what???");
         OnContinueGameInit();
     }
     
@@ -449,16 +450,27 @@ void LoadingScreen::AllCompleted()
 
 void LoadingScreen::OnMissionsLoaded()
 {
+    CCLog("### Downloaded and parsed all Mission info ###");
     mMissionLoadingCompleted = true;
     
-    // Do we have bouth flags ready?
-    if(mResourceLoadingCompleted){
+    // Start with data donwload/parse now
+    User::getInstance()->getItemDataManager().OnDownloadData();
+}
+
+// New steps - downloads shop & other info !!!
+void LoadingScreen::OnItemDataDownloaded()
+{
+    CCLog("### Downloaded and parsed all Items Data ###");
+    mItemDataCompleted = true;
+    
+    if(mResourceLoadingCompleted && mMissionLoadingCompleted){
         OnContinueGameInit();
     }
 }
 
 void LoadingScreen::OnContinueGameInit()
 {
+    CCLog("### All Loading completed - Start game ###");
     // If all is completed - go fuher
     CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);;
     CCTransitionFade* transition = CCTransitionFade::create(0.25f,options,ccBLACK);//CCTransitionSlideInR::create(0.5f, missions);

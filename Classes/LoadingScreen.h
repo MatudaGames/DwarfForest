@@ -53,8 +53,11 @@ public:
     bool mResourceLoadingCompleted;
     bool mMissionLoadingCompleted;
     
+    bool mItemDataCompleted;
+    
     void OnMissionsLoaded();
     void OnContinueGameInit();
+    void OnItemDataDownloaded();
     
     /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -253,6 +253,7 @@
 		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
 		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
 		755DD4FA1A439C8C005E1E0B /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */; };
+		755F89A11A9D02A1006654C3 /* ItemDataManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 755F899F1A9D02A1006654C3 /* ItemDataManager.cpp */; };
 		756605571A7ECCE600AEF6A7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756605561A7ECCE600AEF6A7 /* Images.xcassets */; };
 		7578F6791A5B057000E9700A /* GameItem_PowerUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */; };
 		758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */; };
@@ -893,6 +894,8 @@
 		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
 		755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
 		755DD4F71A439C8C005E1E0B /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
+		755F899F1A9D02A1006654C3 /* ItemDataManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ItemDataManager.cpp; sourceTree = "<group>"; };
+		755F89A01A9D02A1006654C3 /* ItemDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemDataManager.h; sourceTree = "<group>"; };
 		756605561A7ECCE600AEF6A7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DwarfForest/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		7578F6771A5B057000E9700A /* GameItem_PowerUp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameItem_PowerUp.cpp; sourceTree = "<group>"; };
 		7578F6781A5B057000E9700A /* GameItem_PowerUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameItem_PowerUp.h; sourceTree = "<group>"; };
@@ -1698,6 +1701,8 @@
 				75BCB0DE19E92383000C7C65 /* IntroScene.h */,
 				75BCB0DF19E92383000C7C65 /* iOSHelper.cpp */,
 				75BCB0E019E92383000C7C65 /* iOSHelper.h */,
+				755F899F1A9D02A1006654C3 /* ItemDataManager.cpp */,
+				755F89A01A9D02A1006654C3 /* ItemDataManager.h */,
 				75BCB0E119E92383000C7C65 /* JniCalls.cpp */,
 				75BCB0E219E92383000C7C65 /* JniCalls.h */,
 				75BCB0E319E92383000C7C65 /* LevelEndMenu.cpp */,
@@ -2560,6 +2565,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15A3D8FF1682F7D5002FB0C5 /* b2BroadPhase.cpp in Sources */,
+				755F89A11A9D02A1006654C3 /* ItemDataManager.cpp in Sources */,
 				15A3D9001682F7D5002FB0C5 /* b2CollideCircle.cpp in Sources */,
 				75BCB17D19E9238E000C7C65 /* Spider.cpp in Sources */,
 				15A3D9011682F7D5002FB0C5 /* b2CollideEdge.cpp in Sources */,

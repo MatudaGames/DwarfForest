@@ -51,8 +51,12 @@ struct Quad_Action
     
     // Flame sub stuff
     int32_t flame_radius; // Flame radius?
+    int32_t flame_angle; // Flame angle?
     int32_t flame_active_time; // How long flame throewr will be active?
     int32_t flame_rotate_speed; // How fast rotates flame thrower?
+    
+    int32_t flame_start_angle;
+    int32_t flame_end_angle;
     
     float current_time_till_active; // Timer to next action
     float current_time_active; // Timer till will end active action
@@ -108,8 +112,17 @@ public:
     float mRadius;
     
     // New stuff
-    cocos2d::CCLabelTTF* mDebugTimerLabel;
-    std::stringstream mDebugTimerStr;
+    cocos2d::CCLabelTTF* mDebugQuad_1;
+    std::stringstream mDebugQuad_1_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_2;
+    std::stringstream mDebugQuad_2_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_3;
+    std::stringstream mDebugQuad_3_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_4;
+    std::stringstream mDebugQuad_4_Str;
     
     // The quads
     void SetNewMissionStuff(MissionSet totemInfo);

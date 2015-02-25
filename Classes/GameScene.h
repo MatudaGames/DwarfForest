@@ -40,6 +40,9 @@
 
 #include "TimedSpriteAnimation.h"
 
+#define DWARF_SPELL_FREEZER 1
+#define DWARF_SPELL_ELECTRIFY 0
+
 #define MASTER_ACTION_CONFUSE 2
 #define MASTER_ACTION_SPAWN_TRAP 0
 #define MASTER_ACTION_TROLL 3
