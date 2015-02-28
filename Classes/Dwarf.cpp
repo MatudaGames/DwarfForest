@@ -1556,6 +1556,25 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         }
                     }
                 }
+                else if(mContainsPowerUp >= 100) // The spell actions
+                {
+                    if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
+                    {
+                        float theDistance2 = sqrtf((position.x-_game->mTotem->getPositionX())*(position.x-_game->mTotem->getPositionX()) +
+                                                   (position.y-_game->mTotem->getPositionY())*(position.y-_game->mTotem->getPositionY()));
+                        
+                        // Get 1st item from shop?
+                        if(theDistance2<_game->mCurrentMission.DEBUG_Electrify_range)
+                        {
+                            mSnapedToTotem = true;
+                            
+                            addMovePoint(_game->mTotem->getPosition(), position,false);
+                            _touchEnded = true;
+                            connectLine();
+                            vibrate();
+                        }
+                    }
+                }
                 else
                 {
                     // OTher speelllss
@@ -1567,22 +1586,6 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         _touchEnded = true;
                         connectLine();
                         vibrate();
-                    }
-                    
-                    if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
-                    {
-                        float theDistance2 = sqrtf((position.x-_game->mTotem->getPositionX())*(position.x-_game->mTotem->getPositionX()) +
-                                                   (position.y-_game->mTotem->getPositionY())*(position.y-_game->mTotem->getPositionY()));
-                        
-                        if(theDistance2<90)
-                        {
-                            mSnapedToTotem = true;
-                            
-                            addMovePoint(_game->mTotem->getPosition(), position,false);
-                            _touchEnded = true;
-                            connectLine();
-                            vibrate();
-                        }
                     }
                 }
                 
@@ -2574,7 +2577,8 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     }
     else if(mSnapedToTotem)
     {
-        _game->OnAttackHitTotem(ccp(getPositionX(),getPositionY()),1);
+        // New stuff - check by item powa
+        _game->OnAttackHitTotem(ccp(getPositionX(),getPositionY()),mSpellForAttack);
     }
     else
     {
@@ -2628,7 +2632,8 @@ void Dwarf::updateDwarfPowerZone()
         float theDistance2 = sqrtf((getPositionX()-_game->mTotem->getPositionX())*(getPositionX()-_game->mTotem->getPositionX()) +
                                    (getPositionY()-_game->mTotem->getPositionY())*(getPositionY()-_game->mTotem->getPositionY()));
 //        if(theDistance2 <= 220)
-        if(theDistance2 <= _game->mCurrentMission.DEBUG_Electrify_range)
+//        if(theDistance2 <= _game->mCurrentMission.DEBUG_Electrify_range)
+        if(theDistance2 <= mSpellForAttack.range)
         {
             FireBulletAtTroll(mContainsPowerUp);
             
@@ -2764,6 +2769,8 @@ void Dwarf::setPowerButton(int theID)
         removeChild(mPowerUpIcon);
     }
     
+    CCLog("Set spell with id: %i",theID);
+    
     if(theID == DWARF_SPELL_ELECTRIFY)
     {
         mPowerUpIcon = CCSprite::create("button_electro.png");
@@ -2771,6 +2778,11 @@ void Dwarf::setPowerButton(int theID)
     else if (theID == DWARF_SPELL_FREEZER)
     {
         mPowerUpIcon = CCSprite::create("button_freez.png");
+    }
+    else if(theID >= 100) // The spell stuff
+    {
+        mSpellForAttack = User::getInstance()->getItemDataManager().getSpellByID(mContainsPowerUp);
+        mPowerUpIcon = CCSprite::create("button_spell.png");
     }
     
     addChild(mPowerUpIcon,-1);

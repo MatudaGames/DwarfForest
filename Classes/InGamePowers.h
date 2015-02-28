@@ -30,6 +30,9 @@ public:
     // implement the "static node()" method manually
     CREATE_FUNC(InGamePowers);
     
+    SpellInfo mButtonSpell_1;
+    SpellInfo mButtonSpell_2;
+    
     cocos2d::CCMenuItemImage *button_1;
     cocos2d::CCMenuItemImage *button_2;
     cocos2d::CCMenuItemImage *button_3;

@@ -211,6 +211,9 @@ public:
     
     bool mNewMaps;
     
+    std::string mActiveSpells;
+    std::string mBoghtSpells;
+    
     // New struff for stats
     int mCurrentMissionLevel;
 	

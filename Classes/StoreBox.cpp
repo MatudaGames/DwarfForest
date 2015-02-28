@@ -1528,6 +1528,105 @@ void StoreBox::CreateMachineByLevel(int theMachine,int theLevel,bool theCreate)
 
 //================================================================
 
+void StoreBox::OnSpellClick(CCObject* sender)
+{
+    CCMenuItemImage* aButton =(CCMenuItemImage*)sender;
+    int aID = aButton->getTag();
+    
+    CCLog("On clicked button %i",aID);
+    
+    // Check if this button was locked or selected/deselected
+    CCString* state = (CCString*)aButton->getUserObject();
+    CCLog("On clicked state %s",state->getCString());
+    
+//    CCSprite* aSpriteDummy;
+    
+    if(state->compare("Locked") == 0)
+    {
+        // Show popup about buy !!!
+        User::getInstance()->getItemDataManager().onPurchaseItem(SHOP_SPELLS,aID);
+        
+        // Update this button to not selected now !!!
+        /*
+        aSpriteDummy = CCSprite::create("Shop/Button_Select.png");
+        aButton->setNormalImage(aSpriteDummy);
+        
+        aSpriteDummy = CCSprite::create("Shop/Button_Selected.png");
+        aButton->setSelectedImage(aSpriteDummy);
+        */
+        
+        aButton->setUserObject(CCString::create("UnSelected"));
+    }
+    else
+    {
+        // It's unlocked
+        if(state->compare("Selected") == 0)
+        {
+//            aSpriteDummy = CCSprite::create("Shop/Button_Select.png");
+//            aButton->setNormalImage(aSpriteDummy);
+//            aButton->setUserObject(CCString::create("UnSelected"));
+            User::getInstance()->getItemDataManager().onRemoveSelectedItem(SHOP_SPELLS, aID);
+        }
+        else if(state->compare("UnSelected") == 0)
+        {
+//            aSpriteDummy = CCSprite::create("Shop/Button_Selected.png");
+//            aButton->setNormalImage(aSpriteDummy);
+//            aButton->setUserObject(CCString::create("Selected"));
+            User::getInstance()->getItemDataManager().onSetSelectedItem(SHOP_SPELLS, aID);
+        }
+    }
+    
+    CheckSpellButtons();
+}
+
+// The ultimate function to check states of buttons
+void StoreBox::CheckSpellButtons()
+{
+    for(int i=0;i<mBaseShop->getChildrenCount();i++)
+    {
+        CCSprite* aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i);
+        
+        if(aButtonBase != NULL)
+        {
+            CCMenu* aMenuOfBase = (CCMenu*)aButtonBase->getChildByTag(10);
+            CCMenuItemImage* aButton = (CCMenuItemImage*)aMenuOfBase->getChildren()->objectAtIndex(0);
+            
+            std::stringstream button_image_off;
+            std::stringstream button_image_on;
+            std::stringstream button_state;
+            
+            if(User::getInstance()->getItemDataManager().isItemUnlocked(aButton->getTag()))
+            {
+                // Check if it is selected or not
+                if(User::getInstance()->getItemDataManager().isItemActive(aButton->getTag()))
+                {
+                    // Item is active
+                    button_image_off << "Shop/Button_Selected.png";
+                    button_image_on << "Shop/Button_Selected.png";
+                    button_state << "Selected";
+                }
+                else
+                {
+                    button_image_off << "Shop/Button_Select.png";
+                    button_image_on << "Shop/Button_Select.png";
+                    button_state << "UnSelected";
+                }
+            }
+            else
+            {
+                // The locked state buttons
+                button_image_off << "Shop/Button_UnlockNow.png";
+                button_image_on << "Shop/Button_UnlockNow.png";
+                button_state << "Locked";
+            }
+            
+            aButton->setNormalImage(CCSprite::create(button_image_off.str().c_str()));
+            aButton->setSelectedImage(CCSprite::create(button_image_on.str().c_str()));
+            aButton->setUserObject(CCString::create(button_state.str()));
+        }
+    }
+}
+
 void StoreBox::CreateShop()
 {
     mBase->setVisible(false);
@@ -1620,6 +1719,10 @@ void StoreBox::CreateShop()
         
         std::stringstream aDamageTxt;
         aDamageTxt << User::getInstance()->getItemDataManager().mSpellDataVector[i].damage;
+        if(User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra>0)
+        {
+            aDamageTxt << " + " <<User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra << " x " << User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra_multiply;
+        }
         
         aTxt_Damage = CCLabelTTF::create(aDamageTxt.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6);
         aTxt_Damage->setHorizontalAlignment(kCCTextAlignmentLeft);
@@ -1661,20 +1764,49 @@ void StoreBox::CreateShop()
         
         
         //------------------------------------------------------------------
-        // The button [TODO]
+        // Check if this item is bought/unlocked etc !!!
         
-        MenuButton = CCMenuItemImage::create("Shop/Button_UnlockNow.png",
-                                             "Shop/Button_Selected.png",
-                                             this,
-                                             menu_selector(StoreBox::OnFreeStuff));
-        MenuButton->setAnchorPoint(ccp(1,1));
+        std::stringstream button_image_off;
+        std::stringstream button_image_on;
+        std::stringstream button_state;
         
-        if(MenuButton)
+        if(User::getInstance()->getItemDataManager().isItemUnlocked(User::getInstance()->getItemDataManager().mSpellDataVector[i].id))
         {
-            MenuButtons = CCMenu::create(MenuButton, NULL);
-            MenuButtons->setPosition(aBoxBase->getContentSize().width-30,aBoxBase->getContentSize().height-10);
-            aBoxBase->addChild(MenuButtons, 10);
+            // Check if it is selected or not
+            if(User::getInstance()->getItemDataManager().isItemActive(User::getInstance()->getItemDataManager().mSpellDataVector[i].id))
+            {
+                // Item is active
+                button_image_off << "Shop/Button_Selected.png";
+                button_image_on << "Shop/Button_Selected.png";
+                button_state << "Selected";
+            }
+            else
+            {
+                button_image_off << "Shop/Button_Select.png";
+                button_image_on << "Shop/Button_Select.png";
+                button_state << "UnSelected";
+            }
         }
+        else
+        {
+            // The locked state buttons
+            button_image_off << "Shop/Button_UnlockNow.png";
+            button_image_on << "Shop/Button_UnlockNow.png";
+            button_state << "Locked";
+        }
+        
+        MenuButton = CCMenuItemImage::create(button_image_off.str().c_str(),
+                                             button_image_on.str().c_str(),
+                                             this,
+                                             menu_selector(StoreBox::OnSpellClick));
+        MenuButton->setAnchorPoint(ccp(1,1));
+        MenuButton->setTag(User::getInstance()->getItemDataManager().mSpellDataVector[i].id);
+        MenuButton->setUserObject(CCString::create(button_state.str()));
+        
+        MenuButtons = CCMenu::create(MenuButton, NULL);
+        MenuButtons->setTag(10);// The menu button tah
+        MenuButtons->setPosition(aBoxBase->getContentSize().width-30,aBoxBase->getContentSize().height-10);
+        aBoxBase->addChild(MenuButtons, 10);
         
         //------------------------------------------------------------------
         // The Price if not bought

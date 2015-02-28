@@ -62,6 +62,25 @@ std::vector<int> ItemDataManager::SplitString(const std::string s,char delim){
     return elems;
 }
 
+// The split to string stuff
+std::vector<std::string> static &splitString(const std::string &s, char delim, std::vector<std::string> &elems){
+    std::stringstream ss(s);
+    std::string item;
+    std::string resultInt;
+    
+    while (std::getline(ss, item, delim)) {
+        resultInt = item;
+        elems.push_back(resultInt);
+    }
+    return elems;
+}
+
+std::vector<std::string> ItemDataManager::SplitString_VecString(const std::string s,char delim){
+    std::vector<std::string> elems;
+    splitString(s, delim, elems);
+    return elems;
+}
+
 //....................................................................................................
 
 //....................................................................................................
@@ -206,6 +225,9 @@ void ItemDataManager::OnDownloadedData()
                 // Add all the spells to the magic
                 SpellInfo* aSpellInfo = new SpellInfo();
                 
+                // The item id
+                aSpellInfo->id = subDict->valueForKey("ID")->intValue()+100;//All spells have id from 100
+                
                 aSpellInfo->name = aSubPathValue;
                 aSpellInfo->charge = subDict->valueForKey("Charge")->intValue();
                 aSpellInfo->damage = subDict->valueForKey("Damage")->intValue();
@@ -213,6 +235,23 @@ void ItemDataManager::OnDownloadedData()
                 
                 aSpellInfo->price_crystals = subDict->valueForKey("Price_Crystals")->intValue();
                 aSpellInfo->price_diamonds = subDict->valueForKey("Price_Diamonds")->intValue();
+                
+                // The spell unocl stuff
+                if(subDict->valueForKey("UnlockInfo")->compare("") != 0)
+                {
+                    // We have some unlock info
+                    aSpellInfo->unlock_info = subDict->valueForKey("UnlockInfo")->m_sString;
+                }
+                
+                if(subDict->valueForKey("Damage_Extra")->compare("") != 0)
+                {
+                    // We have posion or other spell
+                    std::vector<int> extraDamage = SplitString(subDict->valueForKey("Damage_Extra")->getCString(),',');
+                    
+                    aSpellInfo->damage_extra = extraDamage[0];
+                    aSpellInfo->damage_extra_multiply = extraDamage[1];
+                    aSpellInfo->damage_extra_time = extraDamage[2];
+                }
                 
                 aSpellInfo->range = subDict->valueForKey("Range")->intValue();
                 
@@ -233,6 +272,9 @@ void ItemDataManager::OnDownloadedData()
                 CCLog("aSubPathValue: %s",aSubPathValue.c_str());
                 
                 PowerInfo* aPowerInfo = new PowerInfo();
+                
+                // The item id
+                aPowerInfo->id = subDict->valueForKey("ID")->intValue();
                 
                 aPowerInfo->name = aSubPathValue;
                 aPowerInfo->level_unlock = subDict->valueForKey("Level_Unlock")->intValue();
@@ -308,4 +350,150 @@ void ItemDataManager::menuCloseCallback_mission()
 #endif
     
 }
+
+// The chekers and other nice stuff !!!
+bool ItemDataManager::isItemUnlocked(int theID)
+{
+    // Check if user has bought it or earned
+//    mBoghtSpells
+    
+    std::vector<int> boughtStuff = SplitString(User::getInstance()->mBoghtSpells,',');
+    if(std::find(boughtStuff.begin(), boughtStuff.end(), theID) != boughtStuff.end()){
+        // We found it
+        return true;
+    }
+    
+    // Lets check the level !!!
+    for(int i=0;i<mSpellDataVector.size();i++)
+    {
+        if(mSpellDataVector[i].id == theID)
+        {
+            // Check if user level/mission has unlocked it !!!
+            // TODO
+            
+            /*
+            std::string theUnlockInfo = subDict->valueForKey("UnlockInfo")->m_sString;
+            std::vector<std::string> theSplitInfo = SplitString_VecString(theUnlockInfo,'=');
+            if(theSplitInfo[0] == "mission")
+            {
+                // The mission unlock stuff !!!
+            }
+            
+            return true;
+            */
+        }
+    }
+    
+    return false;
+}
+
+// For item buy functional goes here?
+bool ItemDataManager::isItemActive(int theID)
+{
+    std::vector<int> activeSpells = SplitString(User::getInstance()->mActiveSpells,',');
+    if(std::find(activeSpells.begin(), activeSpells.end(), theID) != activeSpells.end()){
+        return true;
+    }
+    
+    return false;
+}
+
+void ItemDataManager::onSetSelectedItem(int theType, int theID)
+{
+    std::vector<int> activeSpells = SplitString(User::getInstance()->mActiveSpells,',');
+    // Remove the 1st and add the last
+    std::stringstream theSaveData;
+    theSaveData << activeSpells[1] << "," << theID;
+    
+    // Replace current stuff
+    User::getInstance()->mActiveSpells = theSaveData.str();
+    
+    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Active", theSaveData.str().c_str());
+    cocos2d::CCUserDefault::sharedUserDefault()->flush();
+    
+    CCLog("CurrentData of spells active %s",User::getInstance()->mActiveSpells.c_str());
+}
+
+void ItemDataManager::onRemoveSelectedItem(int theType, int theID)
+{
+    std::vector<int> activeSpells = SplitString(User::getInstance()->mActiveSpells,',');
+    
+    // For now only 2 possible to activate :)
+    std::stringstream theSaveData;
+    
+    if(activeSpells[0] == theID)
+    {
+        theSaveData << "0" << "," << activeSpells[1];
+    }
+    else
+    {
+        theSaveData << "0" << "," << activeSpells[0];
+    }
+    
+    // Replace current stuff
+    User::getInstance()->mActiveSpells = theSaveData.str();
+    
+    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Active", theSaveData.str().c_str());
+    cocos2d::CCUserDefault::sharedUserDefault()->flush();
+    
+    CCLog("CurrentData of spells active %s",User::getInstance()->mActiveSpells.c_str());
+}
+
+// theType - what items [spell or powers]
+void ItemDataManager::onPurchaseItem(int theType,int theID)
+{
+    std::stringstream theNewData;
+    theNewData << "," << theID;
+    
+    if(theType == 1)
+    {
+        // The spells
+        User::getInstance()->mBoghtSpells.append(theNewData.str());
+        CCLog("CurrentData of spells bought %s",User::getInstance()->mBoghtSpells.c_str());
+    }
+    else if(theType == 2)
+    {
+        // The powers
+        
+    }
+    
+    // Save it now on device
+    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Bought", User::getInstance()->mBoghtSpells.c_str());
+    cocos2d::CCUserDefault::sharedUserDefault()->flush();
+}
+
+SpellInfo ItemDataManager::getSpellByID(int theID)
+{
+    SpellInfo *aSpell = NULL;
+    
+    for(int i=0;i<mSpellDataVector.size();i++)
+    {
+        if(mSpellDataVector[i].id == theID)
+        {
+            aSpell = &mSpellDataVector[i];
+            break;
+        }
+    }
+    
+    return *aSpell;
+}
+
+std::vector<int> ItemDataManager::getActiveItems()
+{
+    std::vector<int> theReturn = SplitString(User::getInstance()->mActiveSpells,',');
+    std::vector<int> theRealReturn;
+    
+    // Do not add 0
+    for(int i=0;i<theReturn.size();i++)
+    {
+        if(theReturn[i] != 0){
+            theRealReturn.push_back(theReturn[i]);
+        }
+    }
+    
+    return theRealReturn;
+}
+
+
+
 

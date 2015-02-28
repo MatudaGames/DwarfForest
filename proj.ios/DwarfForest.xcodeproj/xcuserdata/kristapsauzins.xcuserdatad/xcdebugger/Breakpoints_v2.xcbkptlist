@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Classes/User.cpp"
-            timestampString = "441498724.491899"
+            filePath = "../Classes/UpgradeScene.cpp"
+            timestampString = "446508476.460751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "User::ResetData()"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "UpgradeScene::init(int theReturnType)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Classes/UpgradeScene.cpp"
-            timestampString = "446508476.460751"
+            filePath = "../Classes/GameScene.cpp"
+            timestampString = "446845461.893946"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "UpgradeScene::init(int theReturnType)"
+            startingLineNumber = "8825"
+            endingLineNumber = "8825"
+            landmarkName = "GameScene::OnDwarfKingSpawnHitGround(CCNode* sender)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

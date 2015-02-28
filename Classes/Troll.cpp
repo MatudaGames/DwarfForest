@@ -1286,8 +1286,9 @@ void Troll::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
     if(_touched){
         
         //Check if can blitz it !!!
+        /*
         _game->mPowerMenu->OnPlayerClickTroll(this);// Do the damage to him
-        
+        */
         
 //        if(_game->CanZipTroll()){
 //            _canMove = false;

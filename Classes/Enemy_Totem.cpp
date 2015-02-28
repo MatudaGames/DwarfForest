@@ -192,7 +192,7 @@ bool Enemy_Totem::init(GameScene* game)
     return true;
 }
 
-void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
+void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,SpellInfo theSpell)
 {
     int aAttackQuadID = 0;
     
@@ -222,7 +222,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
     
     CCLog("Attack comes in quad [%i]",aAttackQuadID);
     
-    float finalDamage = damage;
+    float finalDamage = theSpell.damage;
     
     // Now check if there is not damage shield any !!!
     if(aAttackQuadID == 1)
@@ -235,7 +235,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_1[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_1[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_1[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -252,7 +252,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_2[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_2[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_2[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -269,7 +269,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_3[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_3[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_3[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -286,7 +286,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_4[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_4[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_4[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -296,6 +296,28 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
     
     // Take the damage now
     mNeedHP-=finalDamage;
+    
+    // Check if this is not some poision attack
+    if(theSpell.damage_extra>0)
+    {
+        // Here comes the poision !!!
+        SpellDamage theDamage;
+        
+        theDamage.damage = theSpell.damage_extra;
+        theDamage.times = theSpell.damage_extra_multiply;
+        theDamage.timeToDamage = theSpell.damage_extra_time;
+        theDamage.currentTime = theSpell.damage_extra_time;
+        
+        // Check if has not already poision stuff - otherwise add it !!!
+        _base->setColor(ccGREEN);
+        
+        mExtraDamage.push_back(theDamage);
+    }
+    
+    // Safe check
+    if(mNeedHP<=0){
+        mNeedHP = 0;
+    }
 }
 
 void Enemy_Totem::removeQuadAction(int theID,int theSubID)
@@ -759,12 +781,12 @@ void Enemy_Totem::update(float delta)
     //Constantly checks if has any changes
     if(mCurrentHP != mNeedHP)
     {
-        mCurrentHP -= delta;
+        mCurrentHP -= delta*MAX(mCurrentHP-mNeedHP, 2);
         if(mCurrentHP<=mNeedHP)
         {
             // Check if mission not completed
             mCurrentHP = mNeedHP;
-            if(mCurrentHP == 0)
+            if(mCurrentHP <= 0)
             {
                 // Destroy it
                 if(_game->mCurrentMission.Task_type == MissionType_DestroyTotem)
@@ -778,6 +800,48 @@ void Enemy_Totem::update(float delta)
         mBar_TotemHP->setTextureRect(CCRect(0, 0,
                                                   mBar_TotemHP->getTexture()->getContentSize().width*((float)mCurrentHP / mHP),
                                                   mBar_TotemHP->getTexture()->getContentSize().height));
+    }
+    
+    // Check other damage for totem
+    if(mExtraDamage.size()>0)
+    {
+        for(int i=0;i<mExtraDamage.size();i++)
+        {
+            mExtraDamage[i].currentTime-=delta*_game->getGameSpeed();
+            if(mExtraDamage[i].currentTime<=0)
+            {
+                mExtraDamage[i].times-=1;
+                if(mExtraDamage[i].times>=0)
+                {
+                    // Do it more times
+                    mExtraDamage[i].currentTime = mExtraDamage[i].timeToDamage;
+                    
+                    // Do the damage to it !!!
+                    mNeedHP -= mExtraDamage[i].damage;
+                    if(mNeedHP < 0) mNeedHP = 0;
+                    
+                    // Quick fx - blink
+                    CCBlink* aBlink = CCBlink::create(0.25f, 2);
+                    _base->runAction(aBlink);
+                }
+                else
+                {
+                    mExtraDamage.erase(mExtraDamage.begin()+i);
+                    
+                    // Check if any poision left
+                    if(mExtraDamage.size() == 0)
+                    {
+                        // Remove the poision stuff
+                        _base->setColor(ccc3(255,255,255));
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        
+        // Set some fly poision damage stuff ?
+        
     }
     
     // Lets use the new stuff

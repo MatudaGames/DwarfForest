@@ -94,6 +94,10 @@ public:
     
     void UnlockNow_Stamp(cocos2d::CCObject *sender);
     void Buy_Stamp(cocos2d::CCObject *sender);
+    
+    
+    void OnSpellClick(CCObject* sender);
+    void CheckSpellButtons();
 	
 private:
     bool mDone;

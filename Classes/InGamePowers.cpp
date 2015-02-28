@@ -8,6 +8,8 @@
 
 #include "InGamePowers.h"
 
+#include "User.h"
+
 USING_NS_CC;
 
 InGamePowers::InGamePowers() :
@@ -46,9 +48,70 @@ bool InGamePowers::init()
     
     // The base of button
     
+    
+    //------------------------------------------------------------------------------------------------------------
+    // The new spell stuff !!!
+    
+    std::vector<int> theActiveSpells = User::getInstance()->getItemDataManager().getActiveItems();
+    
+    button_1 = NULL;
+    button_2 = NULL;
+    
+    // Create the 1st button
+    if(theActiveSpells.size()>0)
+    {
+        // Get the real data from spell
+        mButtonSpell_1 = User::getInstance()->getItemDataManager().getSpellByID(theActiveSpells[0]);
+        
+        button_1 = CCMenuItemImage::create(
+                                           mButtonSpell_1.icon_path.c_str(),
+                                           mButtonSpell_1.icon_path.c_str(),
+                                           this,
+                                           menu_selector(InGamePowers::onButton_1));
+        
+        button_1->setOpacity(255);
+    }
+    
+    if(theActiveSpells.size()>1)
+    {
+        mButtonSpell_2 = User::getInstance()->getItemDataManager().getSpellByID(theActiveSpells[1]);
+        
+        button_2 = CCMenuItemImage::create(
+                                           mButtonSpell_2.icon_path.c_str(),
+                                           mButtonSpell_2.icon_path.c_str(),
+                                           this,
+                                           menu_selector(InGamePowers::onButton_2));
+        
+        button_2->setOpacity(128);
+    }
+    
+    // Lets create the menu for buttons
+    CCMenu* mainMenu;
+    
+    if(button_1 != NULL && button_2 == NULL){
+        mainMenu = CCMenu::create(button_1, NULL);
+    }
+    else{
+        mainMenu = CCMenu::create(button_1,button_2, NULL);
+    }
+    
+    mainMenu->alignItemsHorizontallyWithPadding(10);
+    mainMenu->setPosition(ccp(0,20));
+//    mainMenu->setOpacity(0);
+    addChild(mainMenu, 1);
+    
+    
+    OnResetAllVars();
+    
+    return true;
+    
+    //------------------------------------------------------------------------------------------------------------
+    
+    
     //------------------------------------------------------------------------------------------------------------
     //The button place in world
     
+    /*
     mButton_1_Base = CCSprite::create("small_dot_red.png");
     mButton_1_Base->setPosition(ccp(-92,20));
     addChild(mButton_1_Base);
@@ -252,12 +315,14 @@ bool InGamePowers::init()
 //    mGameScene = dynamic_cast<GameScene*>(this->getParent());
     
     OnResetAllVars();
+    */
     
     return true;
 }
 
 void InGamePowers::UpdateButtons()
 {
+    return;
     // Checks for crystal cost and button enable state !!!
     
     // Check if this button is not in progress
@@ -305,10 +370,27 @@ void InGamePowers::onButton_1(CCObject* sender)
 {
     CCLOG("CLick 1 !!!");
     
-//    OnGhoustDwarfs();
-//    OnFreezeTroll();
-//    mGameScene->OnTryToShoot();
+//    mButtonSpell_1
+    mGameScene->mCurrentActiveSpell = 0;
     
+    button_1->setOpacity(255);
+    
+    if(button_2 != NULL){
+        button_2->setOpacity(128);
+    }
+    
+    mGameScene->mCurrentSpellCharge = mButtonSpell_1.charge;
+    
+    float aTotalValue = float(mGameScene->mMasterTroll_Attack) / float(mGameScene->mCurrentSpellCharge);
+//    CCLog("mMasterTroll_Attack:%i / mCurrentSpellCharge:%i = aTotalValue: %f",mGameScene->mMasterTroll_Attack, mGameScene->mCurrentSpellCharge,aTotalValue);
+    if(aTotalValue>1)aTotalValue = 1;
+    mGameScene->mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                               mGameScene-> mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                               mGameScene->mBattleBar_MachinePower->getTexture()->getContentSize().height));
+    
+    mGameScene->UpdateBattleLabel();
+    
+    /*
     if(mButton_1_Progress->getPercentage()!=100){
         return;
     }
@@ -316,15 +398,35 @@ void InGamePowers::onButton_1(CCObject* sender)
         return; // Not enough crystals
     }
     OnStartRecharge(0);
+    */
 }
 
 void InGamePowers::onButton_2(CCObject* sender)
 {
     CCLOG("CLick 2 !!!");
     
-//    OnFreezeTroll();
-//    OnElectroTroll();
+    mGameScene->mCurrentActiveSpell = 1;
     
+    button_1->setOpacity(128);
+    
+    if(button_2 != NULL){
+        button_2->setOpacity(255);
+    }
+    
+    // Update the battle bar forced !!!
+    mGameScene->mCurrentSpellCharge = mButtonSpell_2.charge;
+    
+    float aTotalValue = float(mGameScene->mMasterTroll_Attack) / float(mGameScene->mCurrentSpellCharge);
+//    CCLog("mMasterTroll_Attack:%i / mCurrentSpellCharge:%i = aTotalValue: %f",mGameScene->mMasterTroll_Attack, mGameScene->mCurrentSpellCharge,aTotalValue);
+    if(aTotalValue>1)aTotalValue = 1;
+    mGameScene->mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
+                                                               mGameScene-> mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                               mGameScene->mBattleBar_MachinePower->getTexture()->getContentSize().height));
+    
+    
+    mGameScene->UpdateBattleLabel();
+    
+    /*
     if(mButton_2_Progress->getPercentage()!=100){
         return;
     }
@@ -332,6 +434,7 @@ void InGamePowers::onButton_2(CCObject* sender)
         return; // Not enough crystals
     }
     OnStartRecharge(1);
+    */
 }
 
 void InGamePowers::onButton_3(CCObject* sender)

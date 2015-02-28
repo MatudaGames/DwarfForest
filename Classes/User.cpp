@@ -52,6 +52,11 @@ User::User()
     mSpecialMissionProgress = 0;
     mShowNewPart = false;
     
+    mActiveSpells = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Spells_Active","0,0");
+    mBoghtSpells = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Spells_Bought","");// Nothing bought at start !!!
+    
+    _tutorial_small_4 = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("tutorial_small_4", 0);
+    
     FirstSessionDone = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("userFirstSession", 0);
     
     mCurrentMissionLevel = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("MISSION_LVL", 1);

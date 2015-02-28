@@ -25,6 +25,14 @@ struct QuadActionInfo
     int event_type;
 };
 
+struct SpellDamage
+{
+    int damage;
+    int times;
+    float timeToDamage;
+    float currentTime;
+};
+
 struct Quad_Action
 {
     int32_t quad_id; // For what quad is this !!!
@@ -175,13 +183,15 @@ public:
     std::vector<Quad_Action> mQuad_Vector_4;
     
     // the player actions
-    void AttackFromPlayer(cocos2d::CCPoint position,int damage);
+    void AttackFromPlayer(cocos2d::CCPoint position,SpellInfo theSpell);
     void UpdateQuadSystem(float delta);
     void CreateSpecialBullet(int theType,int theStartX,int theStartY,int theAngle,int theLife);
     bool collideAtPassive(cocos2d::CCPoint point);
     
     void removeQuadAction(int theID,int theSubID);
     cocos2d::CCDrawNode* addQuadAction(int theID,int theSubID,int theWidth,int theType,int theAngle, int theEventType);
+    
+    std::vector<SpellDamage> mExtraDamage;
     
 private:
     GameScene* _game;
