@@ -297,12 +297,12 @@ void SaveMeScene::endGameScreen()
     _pointLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*1.0, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
 	_pointLabel->setString("0");
     _pointLabel->setColor(ccc3(255,246,200));
-    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2));//27
+    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2+3));//27
     aScoreBoard->addChild(_pointLabel);	
     
-    std::stringstream missionPoints;
-    missionPoints << _game->mMasterTroll_Attack;
-    _pointLabel->setString(missionPoints.str().c_str());
+    //std::stringstream missionPoints;
+    //missionPoints << _game->mMasterTroll_Attack;
+    //_pointLabel->setString(missionPoints.str().c_str());
     
     //Add mission status
     CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/New/MISSION-FAILED.png");
