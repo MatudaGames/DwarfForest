@@ -58,7 +58,7 @@
 #define MissionType_DwarfCount 1
 #define MissionType_Combo 2
 
-#define MissionType_Time 3
+#define MissionType_Time 11
 #define MissionType_Mushroom 4
 #define MissionType_TrollEscape 5
 
@@ -67,6 +67,10 @@
 #define MissionType_KillEnemy 7
 
 #define MissionType_DestroyTotem 8
+
+#define MissionType_CrystalCollect 10
+
+#define MissionType_TEST 11
 
 // Activate power up
 #define MissionType_AP_Freezer 200
@@ -245,6 +249,9 @@ public:
     int _mission_AP_GhostDwarfs;
     
     int _mission_SaveDwarfs_Left;
+    int _SaveDwarfsCounter;
+    
+    int _crystal_Point_counter;
     
     bool _mInstantBulletAction; // Will this be a instant bullet
     int mCurrentBulletType;// What type of bullet will fly now
@@ -629,6 +636,10 @@ public:
     
     int mTotalMushroom;
     int mTotalTimeInGame;
+    int mTotalReverseTime;
+    int mTotalMinutes;
+    int mTotalSeconds;
+    int _gameTimeReverse;
     int mTotalEscapesFromTroll;
     
     int mLastSpawnID;
@@ -849,6 +860,7 @@ public:
     
     std::vector<int> _blockedGeneratePoints;
     int _DwarfsSpawned;
+    int mLostDwarfCount;
     
     float _gameSpeed;//For slow down and speed up
     
@@ -1070,6 +1082,14 @@ private:
     void CreateParticleOnShow(CCNode* sender);
     
 	cocos2d::CCLabelTTF* _scoreLabel;
+	cocos2d::CCLabelTTF* _dwarfsLeftLabel;
+    cocos2d::CCLabelTTF* _dwarfsLostLabel;
+    cocos2d::CCLabelTTF* _dwarfsSavedLabel;
+    cocos2d::CCLabelTTF* _crystalsGathered;
+    cocos2d::CCLabelTTF* _dwarfsCrystalsLabel;
+    cocos2d::CCLabelTTF* _timeLabel;
+    cocos2d::CCLabelTTF* _lifesLabel;
+    cocos2d::CCLabelTTF* _pointLabel;
     
     cocos2d::CCSprite* mMissionStatus;
     

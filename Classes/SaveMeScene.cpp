@@ -1,4 +1,5 @@
 #include "SaveMeScene.h"
+#include "AppMacros.h"
 #include "MainMenuScene.h"
 #include "TutorialScene.h"
 #include <SimpleAudioEngine.h>
@@ -6,6 +7,8 @@
 #include "GameScene.h"
 #include "User.h"
 #include "Utils.h"
+
+#define kHUD_Z_Order 200
 
 USING_NS_CC;
 
@@ -276,23 +279,49 @@ void SaveMeScene::endGameScreen()
 	mKautkasScreen = CCLayerColor::create(ccc4(0,0,0,128),mScreenSize.width,mScreenSize.height);
     mKautkasScreen->setVisible(false);
     
+    //Add background
+    CCSprite* aEndScreenBackground1 = CCSprite::create("Interfeiss/endgame_screen/New/Background_1.png");
+    aEndScreenBackground1->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/2));
+    addChild(aEndScreenBackground1,kHUD_Z_Order+1);
+    
+    //Add background2
+    CCSprite* aEndScreenBackground2 = CCSprite::create("Interfeiss/endgame_screen/New/Background_2.png");
+    aEndScreenBackground2->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/2));
+    addChild(aEndScreenBackground2,kHUD_Z_Order+1);
+    
+    //Add Score Board
+    CCSprite* aScoreBoard = CCSprite::create("Interfeiss/endgame_screen/New/Scorebar.png");
+    aScoreBoard->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/2+170));
+    addChild(aScoreBoard,kHUD_Z_Order+1);
+    
+    _pointLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*1.0, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_pointLabel->setString("0");
+    _pointLabel->setColor(ccc3(255,246,200));
+    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2));//27
+    aScoreBoard->addChild(_pointLabel);	
+    
+    std::stringstream missionPoints;
+    missionPoints << _game->mMasterTroll_Attack;
+    _pointLabel->setString(missionPoints.str().c_str());
+    
     //Add mission status
-    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/mission_lost.png");
-    aEndScreen->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/1.2f));
-    addChild(aEndScreen,1);
+    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/New/MISSION-FAILED.png");
+    aEndScreen->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/1.1f));
+    aEndScreen->setScale(GLOBAL_SCALE);
+    addChild(aEndScreen,kHUD_Z_Order+1);
      
 	//Add stars 
-	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    aStar->setPosition(ccp(mKautkasScreen->getContentSize().width/2,mKautkasScreen->getContentSize().height/2));
-    addChild(aStar,1);
+	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    aStar->setPosition(ccp(mKautkasScreen->getContentSize().width/3.2f,mKautkasScreen->getContentSize().height/2-40));//2
+    addChild(aStar,kHUD_Z_Order+1);
     
-    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    bStar->setPosition(ccp(mKautkasScreen->getContentSize().width/6.8f,mKautkasScreen->getContentSize().height/2));
-    addChild(bStar,1);
+    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    bStar->setPosition(ccp(mKautkasScreen->getContentSize().width/1.4f-20,mKautkasScreen->getContentSize().height/2-40));//6,8
+    addChild(bStar,kHUD_Z_Order+1);
     
-    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    cStar->setPosition(ccp(mKautkasScreen->getContentSize().width/1.2f,mKautkasScreen->getContentSize().height/2));
-    addChild(cStar,1);
+    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    cStar->setPosition(ccp(mKautkasScreen->getContentSize().width/2.0f,mKautkasScreen->getContentSize().height/2-40));//1,2
+    addChild(cStar,kHUD_Z_Order+1);
     
     
     // Add 2 buttons clouse and play for now !!!
@@ -300,30 +329,32 @@ void SaveMeScene::endGameScreen()
     // The play button
     
     CCMenuItemImage* MainMenuItem = CCMenuItemImage::create(
-                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
-                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Menu.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Menu.png",
                                                         this,
                                                         menu_selector(SaveMeScene::menuSkipCallback));//menuSkipCallback
     MainMenuItem->setTag(1);//Play the level
-    MainMenuItem->setPosition(ccp(mKautkasScreen->getContentSize().width/1.3,mKautkasScreen->getContentSize().height/12));
+    MainMenuItem->setPosition(ccp(mKautkasScreen->getContentSize().width/2.0-115,mKautkasScreen->getContentSize().height/2-225));
+    MainMenuItem->setScale(GLOBAL_SCALE);
     
     // The clouse button
     CCMenuItemImage* PlayItem = CCMenuItemImage::create(
-                                                        "Interfeiss/endgame_screen/play_btn_small0001.png",
-                                                        "Interfeiss/endgame_screen/play_btn_small0001.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Play.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Play.png",
                                                         this,
                                                         menu_selector(SaveMeScene::playAgain));//menuSaveCallback
-    PlayItem->setTag(2);//Clouse screen
-    PlayItem->setPosition(ccp(mKautkasScreen->getContentSize().width/7,mKautkasScreen->getContentSize().height/12));
+    PlayItem->setTag(2);//Close screen
+    PlayItem->setPosition(ccp(mKautkasScreen->getContentSize().width/2.0+115,mKautkasScreen->getContentSize().height/2-220));
+    PlayItem->setScale(GLOBAL_SCALE);
     
     CCMenu* aButtonMenu = CCMenu::create(MainMenuItem,PlayItem,NULL);
     aButtonMenu->setAnchorPoint(ccp(0,0));
     aButtonMenu->setPosition(ccp(0,0));
-    addChild(aButtonMenu,1);
+    addChild(aButtonMenu,kHUD_Z_Order+1);
     
     
     
-    addChild(mKautkasScreen,1);//Above all
+    addChild(mKautkasScreen,kHUD_Z_Order+1);//Above all
 }
 
 void SaveMeScene::onEnter()

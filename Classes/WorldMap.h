@@ -27,6 +27,8 @@ public:
     // Adds the cool map stuff
     void AddMovingObjects();
     
+    void UpdateStats();
+    
     void CreateLevels();
     
     void OnClickedMission(CCObject* sender);
@@ -48,11 +50,21 @@ public:
     
     void OnPlayerFinishedMove();
     
+    void BuyMoreDwarfs();
+    
     cocos2d::CCMenu* mPlayer;
     cocos2d::CCLabelTTF * taskInfo;
+    cocos2d::CCLabelTTF * dwarfCount;
+    cocos2d::CCLabelTTF * _diamondsLabel;
+    cocos2d::CCLabelTTF * _crystalsLabel;
+    cocos2d::CCLabelBMFont * dwarfPrice;
+    cocos2d::CCLabelTTF * _totemHP;
+    
     int mCurrentMissionID;
     int mLastMissionID;
     int WhatMission;
+    
+    int TESTdwarfCount;
     
     MissionSet mCall;
     

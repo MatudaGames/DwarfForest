@@ -36,14 +36,21 @@ Enemy_Bee* Enemy_Bee::create(GameScene* game)
 }
 
 Enemy_Bee::Enemy_Bee():
-_game(NULL)
+_game(NULL), _animation(NULL), _upAnimation(NULL), _downAnimation(NULL), _shootDownAnimation(NULL), _shootUpAnimation(NULL)
 {
     
 }
 
 Enemy_Bee::~Enemy_Bee()
 {
-    if (_game){_game->release();}
+    if (_game)
+	{
+	_game->release();
+	}
+	if (_upAnimation) _upAnimation->release();
+	if (_downAnimation) _downAnimation->release();
+	if (_shootDownAnimation) _shootDownAnimation->release();
+	if (_shootUpAnimation) _shootUpAnimation->release();
 }
 
 bool Enemy_Bee::init(GameScene* game)
@@ -63,9 +70,12 @@ bool Enemy_Bee::init(GameScene* game)
     
     _allCreated = false;
     
+    beeWillShoot = false;
+    
     _movingToFinish = true;
     _speed = 10;
     _angle = 0;
+    bulletCount = 0;
     _beeIdleBeforeFire = 0;
     bullet_speed = 1;
     
@@ -76,8 +86,29 @@ bool Enemy_Bee::init(GameScene* game)
     mCatchRadar->setVisible(false);
     this->addChild( mCatchRadar ,100);//dnode
     
-    _base = CCSprite::create("beta/bee.png");
-    addChild(_base);
+    //_base = CCSprite::create("beta/bee.png");
+    //addChild(_base);
+    
+    _downAnimation = SpriteAnimation::create("Characters/bee/bee_fly_down.plist");
+	_downAnimation->retain();
+	
+	_upAnimation = SpriteAnimation::create("Characters/bee/bee_fly_up.plist");
+	_upAnimation->retain();
+	
+	_shootDownAnimation = SpriteAnimation::create("Characters/bee/bee_shoot_down.plist");
+	_shootDownAnimation->retain();
+	
+	_shootUpAnimation = SpriteAnimation::create("Characters/bee/bee_shoot_up.plist");
+	_shootUpAnimation->retain();
+	
+	
+	if (GLOBAL_SCALE!=1.0f)
+    {
+		_upAnimation->setScale(GLOBAL_SCALE);
+        _downAnimation->setScale(GLOBAL_SCALE);
+        _shootDownAnimation->setScale(GLOBAL_SCALE);
+        _shootUpAnimation->setScale(GLOBAL_SCALE);
+	}
     
     return true;
 }
@@ -142,13 +173,17 @@ void Enemy_Bee::update(float delta)
                         _game->stopInGameSound("Footsteps");
                         _game->stopInGameSound("troll_walk");
                         _game->stopInGameSound("dwarf_web_stuck",true);
-                        
+                        /*
                         dwarf->setDisabled(true);
                         dwarf->createCrash();
                         dwarf->doDwarfBang(dwarf->_angle);
                         dwarf->setTag(999);//Will skip his pause !!!
-                        
-                        _game->lose();
+                        */
+                        //_game->lose();
+                        //_game->showWinScreen();
+        				dwarf->removeFromSave();
+        				//_allCreated = false;
+        
                         break;
                     }
                 }
@@ -161,21 +196,22 @@ void Enemy_Bee::update(float delta)
     float x = getPositionX();
     float y = getPositionY();
     
-    if(_beeIdleBeforeFire>0){
+    CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
+	
+	    if(_beeIdleBeforeFire>0){
         _beeIdleBeforeFire-=delta;
-        
+        bulletCount--;
         if(_beeIdleBeforeFire<=0){
             mCatchRadar->setVisible(false);
-            
+            setAnimation(_shootDownAnimation);
+            beeWillShoot = true;
             _beeIdleBeforeFire = 0;
             //Fire the bullet !!!
-            CCSprite* aBullet = CCSprite::create("beta/stinger.png");
+            CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis.png");
             aBullet->setPosition(getPosition());
-            
             CCMoveBy* aMoveBy;
-            
-            aBullet->setFlipX(!_base->isFlipX());
-            if(!_base->isFlipX()){
+            aBullet->setFlipX(!_animation->isFlipX());
+            if(!_animation->isFlipX()){
                 aMoveBy = CCMoveBy::create(1.0f,ccp(bullet_speed,0));
             }
             else{
@@ -187,18 +223,22 @@ void Enemy_Bee::update(float delta)
             CCRepeatForever* aRepeat = CCRepeatForever::create(aMoveBy);
             aBullet->runAction(aRepeat);
             
+            aBullet->setRotation(atan2f(point.y, point.x));
+            if(bulletCount>=2)
+			{
             _bulletArr->addObject(aBullet);
             
             _game->addChild(aBullet);
+            //beeWillShoot = false;
+        	}
+        	
+        	CCLog("Play music [bulletCount]:%i",bulletCount);
         }
-        
+
         return;
     }
-    
-    
-    CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
-    
-    if (ccpDistanceSQ(point, getPosition()) <= 800)
+	
+	if (ccpDistanceSQ(point, getPosition()) <= 800)
     {
         if(_moveInCircle){
             if(mMoveClock){
@@ -223,7 +263,7 @@ void Enemy_Bee::update(float delta)
                 _moveValue = -1;
             }
         }
-        
+        bulletCount = 2;
         _beeIdleBeforeFire = 3;
         setAngle(atan2f(_moveTo.y - y, _moveTo.x - x));
         
@@ -257,12 +297,19 @@ void Enemy_Bee::update(float delta)
         setAngle(atan2f(point.y - y, point.x - x));
     }
     
+     mGULGUL = 0;
+	
+    CCPoint point2 = _movePoints->getControlPointAtIndex(mGULGUL);
+   
     CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
                               y + sinf(_angle) * delta * (_speed * _game->getGameSpeed()));
     
     cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
-    
-    
+    /*
+	}
+	return;
+	}
+	*/
     
     /*
     if (ccpDistanceSQ(_moveTo, getPosition()) <= 800)
@@ -340,58 +387,64 @@ void Enemy_Bee::setAngle(float value)
 {
     _angle = wrapTwoPI(value);
     
-    if(_angle>3){
-        if(!_base->isFlipX()){
-            _base->setFlipX(true);
-        }
-    }
-    else{
-        if(_base->isFlipX()){
-            _base->setFlipX(false);
-        }
-    }
+    CCLog("tiek uzskadits lenkis!!!");
+        
+    //if(_angle>0 || _angle<0){
+        //if(!_upAnimation->isFlipX()){
+       //     _upAnimation->setFlipX(true);
+            //setAnimation(_upAnimation);
+       // }
+    //}
+    //else{
+       // if(_upAnimation->isFlipX()){
+          //  _upAnimation->setFlipX(false);
+           // setAnimation(_upAnimation);
+	//	}
+    //}
     
     //Chek to what dir will current sprite fli
-    /*
+    
     if (_angle >= 15.0f * M_PI / 8.0f || _angle < M_PI / 8.0f)
     {
         //right
-        _leftAnimation->setFlipX(true);
-        _leftAnimation->setFlipY(false);
-        setAnimation(_leftAnimation);
+        _downAnimation->setFlipX(false);
+        _downAnimation->setFlipY(false);
+        //aBullet->setFlipX(false);
+        setAnimation(_downAnimation);
     }
     else if (_angle < 3.0f * M_PI / 8.0f)
     {
         //right up
-        _leftUpAnimation->setFlipX(true);
-        _leftUpAnimation->setFlipY(false);
-        setAnimation(_leftUpAnimation);
+        _upAnimation->setFlipX(true);
+        _upAnimation->setFlipY(false);
+        setAnimation(_upAnimation);
     }
     else if (_angle < 5.0f * M_PI / 8.0f)
     {
         //up
         setAnimation(_upAnimation);
+        //aBullet->setFlipX(false);
     }
     else if (_angle < 7.0f * M_PI / 8.0f)
     {
         //left up
-        _leftUpAnimation->setFlipX(false);
-        _leftUpAnimation->setFlipY(false);
-        setAnimation(_leftUpAnimation);
+        _upAnimation->setFlipX(false);
+        _upAnimation->setFlipY(false);
+        setAnimation(_upAnimation);
     }
     else if (_angle < 9.0f * M_PI / 8.0f)
     {
         //left
-        _leftAnimation->setFlipX(false);
-        _leftAnimation->setFlipY(false);
-        setAnimation(_leftAnimation);
+        _downAnimation->setFlipX(true);
+        _downAnimation->setFlipY(false);
+        setAnimation(_downAnimation);
     }
     else if (_angle < 11.0f * M_PI / 8.0f)
     {
         //left down
-        _leftDownAnimation->setFlipX(false);
-        _leftDownAnimation->setFlipY(false);
-        setAnimation(_leftDownAnimation);
+        _downAnimation->setFlipX(true);
+        _downAnimation->setFlipY(false);
+        setAnimation(_downAnimation);
     }
     else if (_angle < 13.0f * M_PI / 8.0f)
     {
@@ -399,20 +452,47 @@ void Enemy_Bee::setAngle(float value)
         setAnimation(_downAnimation);
     }
     else
-    {
+   {
         //right down
-        _leftDownAnimation->setFlipX(true);
-        _leftDownAnimation->setFlipY(false);
-        setAnimation(_leftDownAnimation);
+        _downAnimation->setFlipX(false);
+        _downAnimation->setFlipY(false);
+        setAnimation(_downAnimation);
+   }
+}
+
+void Enemy_Bee::setAnimation(SpriteAnimation* animation)
+{
+    //Glitch Fix!!!
+    if(animation->getOpacity()<128){
+        animation->setOpacity(255);
     }
-    */
+    
+	if (_animation != animation)
+	{
+		if (_animation)
+		{
+			removeChild(_animation);
+		}
+		
+		_animation = animation;
+		
+		if (_animation)
+		{
+			addChild(_animation);
+		}
+        
+        // Forced radar update
+        //_changedAnimation = true;
+	}
 }
 
 void Enemy_Bee::CreateFromMissionParams()
 {
-    _movingToFinish = true;
+	
+    //_movingToFinish = true;
     _moveTo = ccp(_finishX,_finishY);
     _allCreated = true;
+	
 }
 
 void Enemy_Bee::onEnter()
@@ -432,6 +512,7 @@ void Enemy_Bee::onExit()
 // The new stuff
 void Enemy_Bee::SetMissionStuff(MissionTroll theMission)
 {
+	
     //Check if circle then use the circle stuff
     setPosition(ccp(200,200));//Some def value for now !!!
     setAngle(0);
@@ -558,10 +639,12 @@ void Enemy_Bee::SetMissionStuff(MissionTroll theMission)
         
         CCLog("end");
     }
+    
 }
 
 void Enemy_Bee::setRadar(int theRadius,int theWidth)
 {
+	/*
     // No radar for this troll
     if(theRadius == 0 || theWidth == 0) return;
     
@@ -588,6 +671,7 @@ void Enemy_Bee::setRadar(int theRadius,int theWidth)
     //mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
     
     mCatchRadar->setRotation(0);
+    */
 }
 
 

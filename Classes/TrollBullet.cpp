@@ -13,6 +13,8 @@
 #include "Utils.h"
 #include "User.h"
 
+#define kHUD_Z_Order 200
+
 USING_NS_CC;
 using namespace CocosDenshion;
 
@@ -71,7 +73,7 @@ bool TrollBullet::init(GameScene* game,int theType)
     
     //Create the sprite and add some particles :)
     _sprite = CCSprite::create("beta/target.png");
-	addChild(_sprite);
+	addChild(_sprite, kHUD_Z_Order-1);
     
     
 //    CCParticleSystemQuad* p;
@@ -141,7 +143,7 @@ bool TrollBullet::init(GameScene* game,int theType)
     CCParticleSystemQuad* p = CCParticleSystemQuad::create(aaaaa.str().c_str());
     p->setPosition(getPositionX(), getPositionY());
     p->setAutoRemoveOnFinish(true);
-    addChild(p,-1);
+    addChild(p,kHUD_Z_Order-1);
 	
 	return true;
 }
@@ -210,7 +212,7 @@ void TrollBullet::update(float delta)
             CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
             p->setPosition(getPositionX(), getPositionY());
             p->setAutoRemoveOnFinish(true);
-            _game->addChild(p,1000);
+            _game->addChild(p,kHUD_Z_Order-1);
             
             _canMove = false;
         }
@@ -289,7 +291,7 @@ bool TrollBullet::ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
         CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
         p->setPosition(getPositionX(), getPositionY());
         p->setAutoRemoveOnFinish(true);
-        _game->addChild(p,1000);
+        _game->addChild(p,kHUD_Z_Order-1);
         
         return true;
     }

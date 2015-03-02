@@ -42,6 +42,9 @@ public:
     int coneWidth; // konusa platums grādos
     
     cocos2d::CCSprite* _base;
+    cocos2d::CCSprite* aBullet;
+    
+    bool beeWillShoot;
     
     float _beeIdleBeforeFire;
     bool _movingToFinish;
@@ -71,12 +74,17 @@ public:
     bool mMoveClock;
     int mMoveCurrentDir;
     
+    int bulletCount;
+    int mGULGUL;
+    cocos2d::CCLabelTTF* mCC;
+    
     void SetMissionStuff(MissionTroll theMission);
     MissionTroll _missionInfo;
     
     float _timeOnMap;
     
     void setRadar(int theRadius,int theWidth);
+    void setAnimation(SpriteAnimation* animation);
     
     // Not needed for now
 //    virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
@@ -86,4 +94,11 @@ public:
     
 private:
     GameScene* _game;
+    
+    //Animations for bee
+    SpriteAnimation* _upAnimation;
+	SpriteAnimation* _downAnimation;
+	SpriteAnimation* _shootUpAnimation;
+	SpriteAnimation* _shootDownAnimation;
+	SpriteAnimation* _animation;
 };

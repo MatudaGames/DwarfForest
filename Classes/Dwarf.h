@@ -62,6 +62,8 @@ public:
     
     int mContainsPowerUp;
     
+    int mLostDwarfCount;
+    
     cocos2d::CCSprite *mPowerUpIcon;
     
     //--------------------------------------
