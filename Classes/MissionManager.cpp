@@ -5170,6 +5170,7 @@ void MissionManager::OnDownloadedSpecial()
                     theQuadAction.deadzone_radius = 0;
                     theQuadAction.bullet_distance = 0;
                     theQuadAction.bullet_amount = 0;
+                    theQuadAction.flame_angle = 0;
                     theQuadAction.flame_radius = 0;
                     theQuadAction.flame_active_time = 0;
                     theQuadAction.flame_rotate_speed = 0;
@@ -5198,9 +5199,39 @@ void MissionManager::OnDownloadedSpecial()
                         theQuadAction.bullet_amount = quadSubDict->valueForKey("bullet_amount")->intValue();
                         
                         // The flame part
+                        theQuadAction.flame_angle = quadSubDict->valueForKey("flame_angle")->intValue();
                         theQuadAction.flame_radius = quadSubDict->valueForKey("flame_radius")->intValue();
                         theQuadAction.flame_active_time = quadSubDict->valueForKey("flame_active_time")->intValue();
                         theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue();
+                        
+                        //Special stuff for more precise stuff
+                        if(i == 1)
+                        {
+                            theQuadAction.flame_start_angle = -90;
+                            theQuadAction.flame_end_angle = 0;
+                        }
+                        else if(i == 2)
+                        {
+                            theQuadAction.flame_start_angle = 0;
+                            theQuadAction.flame_end_angle = 90;
+                        }
+                        else if(i == 3)
+                        {
+                            theQuadAction.flame_start_angle = 90;
+                            theQuadAction.flame_end_angle = 180;
+                        }
+                        else if(i == 4)
+                        {
+                            theQuadAction.flame_start_angle = 180;
+                            theQuadAction.flame_end_angle = 270;
+                        }
+                        
+                        if(quadSubDict->valueForKey("flame_start_angle")->compare("") != 0) {
+                            theQuadAction.flame_start_angle = quadSubDict->valueForKey("flame_start_angle")->intValue();
+                        }
+                        if(quadSubDict->valueForKey("flame_end_angle")->compare("") != 0) {
+                            theQuadAction.flame_end_angle = quadSubDict->valueForKey("flame_end_angle")->intValue();
+                        }
                     }
                     
                     if(i == 1){

@@ -138,10 +138,61 @@ bool Enemy_Totem::init(GameScene* game)
     mPassive_Zone = CCDrawNode::create();this->addChild( mPassive_Zone );
     mPassive_Zone->setVisible(false);
     
+    // The debug info !!!
+    mDebugQuad_1 = CCLabelTTF::create("-","fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+    mDebugQuad_1->setHorizontalAlignment(kCCTextAlignmentLeft);
+    mDebugQuad_1->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+    mDebugQuad_1->setAnchorPoint(ccp(0,0));
+    
+    mDebugQuad_1->setColor(ccc3(255, 255, 255));
+    mDebugQuad_1->enableShadow(CCSize(3,-3),6,false);
+    
+    mDebugQuad_1->setPosition(ccp(20,10));
+    
+    addChild(mDebugQuad_1,2);
+    
+    mDebugQuad_2 = CCLabelTTF::create("-","fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+    mDebugQuad_2->setHorizontalAlignment(kCCTextAlignmentLeft);
+    mDebugQuad_2->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+    mDebugQuad_2->setAnchorPoint(ccp(0,1));
+    
+    mDebugQuad_2->setColor(ccc3(255, 255, 255));
+    mDebugQuad_2->enableShadow(CCSize(3,-3),6,false);
+    
+    mDebugQuad_2->setPosition(ccp(20,-10));
+    
+    addChild(mDebugQuad_2,2);
+    
+    mDebugQuad_3 = CCLabelTTF::create("-","fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+    mDebugQuad_3->setHorizontalAlignment(kCCTextAlignmentRight);
+    mDebugQuad_3->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+    mDebugQuad_3->setAnchorPoint(ccp(1,1));
+    
+    mDebugQuad_3->setColor(ccc3(255, 255, 255));
+    mDebugQuad_3->enableShadow(CCSize(3,-3),6,false);
+    
+    mDebugQuad_3->setPosition(ccp(-20,-10));
+    
+    addChild(mDebugQuad_3,2);
+    
+    mDebugQuad_4 = CCLabelTTF::create("-","fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+    mDebugQuad_4->setHorizontalAlignment(kCCTextAlignmentRight);
+    mDebugQuad_4->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+    mDebugQuad_4->setAnchorPoint(ccp(1,0));
+    
+    mDebugQuad_4->setColor(ccc3(255, 255, 255));
+    mDebugQuad_4->enableShadow(CCSize(3,-3),6,false);
+    
+    mDebugQuad_4->setPosition(ccp(-20,10));
+    
+    addChild(mDebugQuad_4,2);
+    
+    
+    
     return true;
 }
 
-void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
+void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,SpellInfo theSpell)
 {
     int aAttackQuadID = 0;
     
@@ -171,7 +222,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
     
     CCLog("Attack comes in quad [%i]",aAttackQuadID);
     
-    float finalDamage = damage;
+    float finalDamage = theSpell.damage;
     
     // Now check if there is not damage shield any !!!
     if(aAttackQuadID == 1)
@@ -184,7 +235,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_1[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_1[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_1[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -201,7 +252,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_2[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_2[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_2[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -218,7 +269,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_3[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_3[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_3[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -235,7 +286,7 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
                 if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     //What shield is on?
-                    if(mQuad_Vector_4[i].event_type == 2){ finalDamage = float(damage)*0.5;}// Half damage taken
+                    if(mQuad_Vector_4[i].event_type == 2){ finalDamage = float(theSpell.damage)*0.5;}// Half damage taken
                     else if(mQuad_Vector_4[i].event_type == 1){finalDamage = 0;}// No damage
                     break;
                 }
@@ -245,6 +296,28 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,int damage)
     
     // Take the damage now
     mNeedHP-=finalDamage;
+    
+    // Check if this is not some poision attack
+    if(theSpell.damage_extra>0)
+    {
+        // Here comes the poision !!!
+        SpellDamage theDamage;
+        
+        theDamage.damage = theSpell.damage_extra;
+        theDamage.times = theSpell.damage_extra_multiply;
+        theDamage.timeToDamage = theSpell.damage_extra_time;
+        theDamage.currentTime = theSpell.damage_extra_time;
+        
+        // Check if has not already poision stuff - otherwise add it !!!
+        _base->setColor(ccGREEN);
+        
+        mExtraDamage.push_back(theDamage);
+    }
+    
+    // Safe check
+    if(mNeedHP<=0){
+        mNeedHP = 0;
+    }
 }
 
 void Enemy_Totem::removeQuadAction(int theID,int theSubID)
@@ -708,12 +781,12 @@ void Enemy_Totem::update(float delta)
     //Constantly checks if has any changes
     if(mCurrentHP != mNeedHP)
     {
-        mCurrentHP -= delta;
+        mCurrentHP -= delta*MAX(mCurrentHP-mNeedHP, 2);
         if(mCurrentHP<=mNeedHP)
         {
             // Check if mission not completed
             mCurrentHP = mNeedHP;
-            if(mCurrentHP == 0)
+            if(mCurrentHP <= 0)
             {
                 // Destroy it
                 if(_game->mCurrentMission.Task_type == MissionType_DestroyTotem)
@@ -727,6 +800,48 @@ void Enemy_Totem::update(float delta)
         mBar_TotemHP->setTextureRect(CCRect(0, 0,
                                                   mBar_TotemHP->getTexture()->getContentSize().width*((float)mCurrentHP / mHP),
                                                   mBar_TotemHP->getTexture()->getContentSize().height));
+    }
+    
+    // Check other damage for totem
+    if(mExtraDamage.size()>0)
+    {
+        for(int i=0;i<mExtraDamage.size();i++)
+        {
+            mExtraDamage[i].currentTime-=delta*_game->getGameSpeed();
+            if(mExtraDamage[i].currentTime<=0)
+            {
+                mExtraDamage[i].times-=1;
+                if(mExtraDamage[i].times>=0)
+                {
+                    // Do it more times
+                    mExtraDamage[i].currentTime = mExtraDamage[i].timeToDamage;
+                    
+                    // Do the damage to it !!!
+                    mNeedHP -= mExtraDamage[i].damage;
+                    if(mNeedHP < 0) mNeedHP = 0;
+                    
+                    // Quick fx - blink
+                    CCBlink* aBlink = CCBlink::create(0.25f, 2);
+                    _base->runAction(aBlink);
+                }
+                else
+                {
+                    mExtraDamage.erase(mExtraDamage.begin()+i);
+                    
+                    // Check if any poision left
+                    if(mExtraDamage.size() == 0)
+                    {
+                        // Remove the poision stuff
+                        _base->setColor(ccc3(255,255,255));
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        
+        // Set some fly poision damage stuff ?
+        
     }
     
     // Lets use the new stuff
@@ -868,9 +983,13 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.bullet_distance = totemInfo.TOTEM_QUAD_1[i].bullet_distance;
                 quad_info.bullet_amount = totemInfo.TOTEM_QUAD_1[i].bullet_amount;
                 
+                quad_info.flame_angle = totemInfo.TOTEM_QUAD_1[i].flame_angle;
                 quad_info.flame_radius = totemInfo.TOTEM_QUAD_1[i].flame_radius;
                 quad_info.flame_active_time = totemInfo.TOTEM_QUAD_1[i].flame_active_time;
                 quad_info.flame_rotate_speed = totemInfo.TOTEM_QUAD_1[i].flame_rotate_speed;
+                
+                quad_info.flame_start_angle = totemInfo.TOTEM_QUAD_1[i].flame_start_angle;
+                quad_info.flame_end_angle = totemInfo.TOTEM_QUAD_1[i].flame_end_angle;
             }
             
             mQuad_Vector_1.push_back(quad_info);
@@ -929,9 +1048,13 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.bullet_distance = totemInfo.TOTEM_QUAD_2[i].bullet_distance;
                 quad_info.bullet_amount = totemInfo.TOTEM_QUAD_2[i].bullet_amount;
                 
+                quad_info.flame_angle = totemInfo.TOTEM_QUAD_2[i].flame_angle;
                 quad_info.flame_radius = totemInfo.TOTEM_QUAD_2[i].flame_radius;
                 quad_info.flame_active_time = totemInfo.TOTEM_QUAD_2[i].flame_active_time;
                 quad_info.flame_rotate_speed = totemInfo.TOTEM_QUAD_2[i].flame_rotate_speed;
+                
+                quad_info.flame_start_angle = totemInfo.TOTEM_QUAD_2[i].flame_start_angle;
+                quad_info.flame_end_angle = totemInfo.TOTEM_QUAD_2[i].flame_end_angle;
             }
             
             mQuad_Vector_2.push_back(quad_info);
@@ -990,9 +1113,13 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.bullet_distance = totemInfo.TOTEM_QUAD_3[i].bullet_distance;
                 quad_info.bullet_amount = totemInfo.TOTEM_QUAD_3[i].bullet_amount;
                 
+                quad_info.flame_angle = totemInfo.TOTEM_QUAD_3[i].flame_angle;
                 quad_info.flame_radius = totemInfo.TOTEM_QUAD_3[i].flame_radius;
                 quad_info.flame_active_time = totemInfo.TOTEM_QUAD_3[i].flame_active_time;
                 quad_info.flame_rotate_speed = totemInfo.TOTEM_QUAD_3[i].flame_rotate_speed;
+                
+                quad_info.flame_start_angle = totemInfo.TOTEM_QUAD_3[i].flame_start_angle;
+                quad_info.flame_end_angle = totemInfo.TOTEM_QUAD_3[i].flame_end_angle;
             }
             
             mQuad_Vector_3.push_back(quad_info);
@@ -1051,9 +1178,13 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.bullet_distance = totemInfo.TOTEM_QUAD_4[i].bullet_distance;
                 quad_info.bullet_amount = totemInfo.TOTEM_QUAD_4[i].bullet_amount;
                 
+                quad_info.flame_angle = totemInfo.TOTEM_QUAD_4[i].flame_angle;
                 quad_info.flame_radius = totemInfo.TOTEM_QUAD_4[i].flame_radius;
                 quad_info.flame_active_time = totemInfo.TOTEM_QUAD_4[i].flame_active_time;
                 quad_info.flame_rotate_speed = totemInfo.TOTEM_QUAD_4[i].flame_rotate_speed;
+                
+                quad_info.flame_start_angle = totemInfo.TOTEM_QUAD_4[i].flame_start_angle;
+                quad_info.flame_end_angle = totemInfo.TOTEM_QUAD_4[i].flame_end_angle;
             }
             
             mQuad_Vector_4.push_back(quad_info);
@@ -1073,6 +1204,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
     // The 1st quad
     if(mQuad_Vector_1.size()>0)
     {
+        // CLear debug at start
+        mDebugQuad_1_Str.str("");
+        mDebugQuad_1_Str.clear();
+        
         // Update quad 1
         for(int i=0;i<mQuad_Vector_1.size();i++)
         {
@@ -1082,6 +1217,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     mQuad_Vector_1[i].current_time_active-=delta*_game->getGameSpeed();
+                    
+                    // The debug info
+                    mDebugQuad_1_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_1[i].current_time_active)<<"\n";
+                    
                     if(mQuad_Vector_1[i].current_time_active<=0)
                     {
                         mQuad_Vector_1[i].current_time_active = 0;
@@ -1093,6 +1232,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_1[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    // The debug info
+                    mDebugQuad_1_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_1[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_1[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
@@ -1118,6 +1261,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             {
                 if(mQuad_Vector_1[i].current_time_active>0)
                 {
+                    mDebugQuad_1_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_1[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1153,6 +1298,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_1[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_1_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_1[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_1[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
@@ -1172,6 +1320,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // Updates only if flamethrower is active
                 if(mQuad_Vector_1[i].current_time_active>0)
                 {
+                    mDebugQuad_1_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_1[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1210,6 +1360,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 {
                     // Check when will do something
                     mQuad_Vector_1[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_1_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_1[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_1[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
@@ -1227,7 +1380,7 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         {
                             mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].flame_active_time;
 //                            craeteQuad(1, 100, 3, mQuad_Vector_1[i].flame_radius);
-                            CCDrawNode* aTheNode = addQuadAction(1,i,100,3,mQuad_Vector_1[i].flame_radius,mQuad_Vector_1[i].type);
+                            CCDrawNode* aTheNode = addQuadAction(1,i,mQuad_Vector_1[i].flame_radius,3,mQuad_Vector_1[i].flame_angle,mQuad_Vector_1[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
@@ -1239,10 +1392,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                             
                             // Reset
                             aTheNode->stopAllActions();
-                            aTheNode->setRotation(-45);// Reset rotation to default? or mid?
+                            aTheNode->setRotation(mQuad_Vector_1[i].flame_end_angle);// Reset rotation to default? or mid?
                             
-                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed, (-90+mQuad_Vector_1[i].flame_radius*0.5));
-                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed,mQuad_Vector_1[i].flame_radius*0.5);
+                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed, mQuad_Vector_1[i].flame_start_angle);
+                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_1[i].flame_rotate_speed,mQuad_Vector_1[i].flame_end_angle);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
@@ -1253,11 +1406,16 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 
             }
         }
+        
+        mDebugQuad_1->setString(mDebugQuad_1_Str.str().c_str());
     }
     
     // 2nd quad
     if(mQuad_Vector_2.size()>0)
     {
+        mDebugQuad_2_Str.str("");
+        mDebugQuad_2_Str.clear();
+        
         // Update quad 1
         for(int i=0;i<mQuad_Vector_2.size();i++)
         {
@@ -1267,6 +1425,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     mQuad_Vector_2[i].current_time_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_2_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_2[i].current_time_active)<<"\n";
+                    
                     if(mQuad_Vector_2[i].current_time_active<=0)
                     {
                         mQuad_Vector_2[i].current_time_active = 0;
@@ -1279,6 +1440,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_2[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_2_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_2[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_2[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
@@ -1304,6 +1468,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             {
                 if(mQuad_Vector_2[i].current_time_active>0)
                 {
+                    mDebugQuad_2_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_2[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1339,6 +1505,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_2[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_2_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_2[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_2[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
@@ -1358,6 +1527,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // Updates only if flamethrower is active
                 if(mQuad_Vector_2[i].current_time_active>0)
                 {
+                    
+                    mDebugQuad_2_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_2[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1393,6 +1565,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 {
                     // Check when will do something
                     mQuad_Vector_2[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_2_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_2[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_2[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
@@ -1409,7 +1584,7 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         else if(mQuad_Vector_2[i].event_type == 2)// The flamethrower
                         {
                             mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].flame_active_time;
-                            CCDrawNode* aTheQuadNode = addQuadAction(2,i,100,3,mQuad_Vector_2[i].flame_radius,mQuad_Vector_2[i].type);
+                            CCDrawNode* aTheQuadNode = addQuadAction(2,i,mQuad_Vector_2[i].flame_radius,3,mQuad_Vector_2[i].flame_angle,mQuad_Vector_2[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
@@ -1421,10 +1596,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                             
                             // Reset
                             aTheQuadNode->stopAllActions();
-                            aTheQuadNode->setRotation(90);// Reset rotation to default? or mid?
+                            aTheQuadNode->setRotation(mQuad_Vector_2[i].flame_end_angle);// Reset rotation to default? or mid?
                             
-                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,0);
-                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,90);
+                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,mQuad_Vector_2[i].flame_start_angle);
+                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_2[i].flame_rotate_speed,mQuad_Vector_2[i].flame_end_angle);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
@@ -1435,11 +1610,16 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 
             }
         }
+        
+        mDebugQuad_2->setString(mDebugQuad_2_Str.str().c_str());
     }
     
     // The 3rd quad
     if(mQuad_Vector_3.size()>0)
     {
+        mDebugQuad_3_Str.str("");
+        mDebugQuad_3_Str.clear();
+        
         // Update quad 1
         for(int i=0;i<mQuad_Vector_3.size();i++)
         {
@@ -1449,6 +1629,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     mQuad_Vector_3[i].current_time_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_3_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_3[i].current_time_active)<<"\n";
+                    
                     if(mQuad_Vector_3[i].current_time_active<=0)
                     {
                         mQuad_Vector_3[i].current_time_active = 0;
@@ -1460,6 +1643,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_3[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_3_Str<<"ID["<<i<<"] N:"<<ceil(mQuad_Vector_3[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_3[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
@@ -1485,6 +1671,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             {
                 if(mQuad_Vector_3[i].current_time_active>0)
                 {
+                    mDebugQuad_3_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_3[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1520,6 +1708,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_3[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_3_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_3[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_3[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
@@ -1539,6 +1730,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // Updates only if flamethrower is active
                 if(mQuad_Vector_3[i].current_time_active>0)
                 {
+                    mDebugQuad_3_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_3[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1578,6 +1771,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 {
                     // Check when will do something
                     mQuad_Vector_3[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_3_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_3[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_3[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
@@ -1595,7 +1791,7 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         {
                             mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].flame_active_time;
 //                            craeteQuad(3, 100, 3, mQuad_Vector_3[i].flame_radius);
-                            CCDrawNode* aTheNode = addQuadAction(3,i,100,3,mQuad_Vector_3[i].flame_radius,mQuad_Vector_3[i].type);
+                            CCDrawNode* aTheNode = addQuadAction(3,i,mQuad_Vector_3[i].flame_radius,3,mQuad_Vector_3[i].flame_angle,mQuad_Vector_3[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
@@ -1607,10 +1803,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                             
                             // Reset
                             aTheNode->stopAllActions();
-                            aTheNode->setRotation(180);// Reset rotation to default? or mid?
+                            aTheNode->setRotation(mQuad_Vector_3[i].flame_end_angle);// Reset rotation to default? or mid?
                             
-                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed, 90);
-                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed,180);
+                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed, mQuad_Vector_3[i].flame_start_angle);
+                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_3[i].flame_rotate_speed,mQuad_Vector_3[i].flame_end_angle);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
@@ -1621,11 +1817,16 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 
             }
         }
+        
+        mDebugQuad_3->setString(mDebugQuad_3_Str.str().c_str());
     }
     
     // The 4th quad
     if(mQuad_Vector_4.size()>0)
     {
+        mDebugQuad_4_Str.str("");
+        mDebugQuad_4_Str.clear();
+        
         // Update quad 1
         for(int i=0;i<mQuad_Vector_4.size();i++)
         {
@@ -1635,6 +1836,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     mQuad_Vector_4[i].current_time_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_4_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_4[i].current_time_active)<<"\n";
+                    
                     if(mQuad_Vector_4[i].current_time_active<=0)
                     {
                         mQuad_Vector_4[i].current_time_active = 0;
@@ -1646,6 +1850,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_4[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_4_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_4[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_4[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
@@ -1671,6 +1878,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             {
                 if(mQuad_Vector_4[i].current_time_active>0)
                 {
+                    mDebugQuad_4_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_4[i].current_time_active)<<"\n";
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1706,6 +1915,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 else
                 {
                     mQuad_Vector_4[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_4_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_4[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_4[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
@@ -1725,6 +1937,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // Updates only if flamethrower is active
                 if(mQuad_Vector_4[i].current_time_active>0)
                 {
+                    mDebugQuad_4_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_4[i].current_time_active)<<"\n";
+
+                    
                     // Check if any dwarf near to this radius - remove him
                     for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
                     {
@@ -1763,6 +1978,9 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 {
                     // Check when will do something
                     mQuad_Vector_4[i].current_time_till_active-=delta*_game->getGameSpeed();
+                    
+                    mDebugQuad_4_Str<<"["<<i<<"] N:"<<ceil(mQuad_Vector_4[i].current_time_till_active)<<"\n";
+                    
                     if(mQuad_Vector_4[i].current_time_till_active<=0)
                     {
                         mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
@@ -1780,7 +1998,7 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         {
                             mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].flame_active_time;
 //                            craeteQuad(4, 100, 3, mQuad_Vector_4[i].flame_radius);
-                            CCDrawNode* aTheNode = addQuadAction(4,i,100,3,mQuad_Vector_4[i].flame_radius,mQuad_Vector_4[i].type);
+                            CCDrawNode* aTheNode = addQuadAction(4,i,mQuad_Vector_4[i].flame_radius,3,mQuad_Vector_4[i].flame_angle,mQuad_Vector_4[i].type);
                             
                             for(int p=0;p<5;p++)
                             {
@@ -1792,10 +2010,10 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                             
                             // Reset
                             aTheNode->stopAllActions();
-                            aTheNode->setRotation(270);// Reset rotation to default? or mid?
+                            aTheNode->setRotation(mQuad_Vector_4[i].flame_end_angle);// Reset rotation to default? or mid?
                             
-                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,180);
-                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,270);
+                            CCRotateTo* aRotate = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,mQuad_Vector_4[i].flame_start_angle);
+                            CCRotateTo* aRotateBack = CCRotateTo::create(mQuad_Vector_4[i].flame_rotate_speed,mQuad_Vector_4[i].flame_end_angle);
                             CCSequence* aRotateSeq = CCSequence::create(aRotate,aRotateBack,NULL);
                             CCRepeatForever* aRotateRepeat = CCRepeatForever::create(aRotateSeq);
                             
@@ -1806,6 +2024,8 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 
             }
         }
+        
+        mDebugQuad_4->setString(mDebugQuad_4_Str.str().c_str());
     }
 }
 
@@ -1816,7 +2036,8 @@ void Enemy_Totem::CreateSpecialBullet(int theType,int theStartX,int theStartY,in
     aBullet->_speed = 100;
     aBullet->_speedMax = 100;
     aBullet->_speedAddValue = 0;
-    aBullet->_timeActive = theLife;
+//    aBullet->_timeActive = theLife;
+    aBullet->_distanceActive = theLife;
     aBullet->_angle = theAngle*M_PI/180;//atanhf(30);
     
     _game->addChild(aBullet, 1000);

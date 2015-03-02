@@ -1687,6 +1687,20 @@ void GameScene::CreateGameStartHUD()
     
     mPowerMenu = NULL;
     
+    // Check if any spell is active
+    if(User::getInstance()->getItemDataManager().getActiveItems().size()>0)
+    {
+        // We need to show spell switch
+        mPowerMenu = InGamePowers::create();
+        mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
+        mPowerMenu->mGameScene = this;
+        
+        // For now always set to 1st spell
+        mCurrentSpellCharge = mPowerMenu->mButtonSpell_1.charge;
+        
+        addChild(mPowerMenu,kHUD_Z_Order+1);
+    }
+    
     // Not needed for now !!!
     /*
     mPowerMenu = InGamePowers::create();
@@ -20579,6 +20593,10 @@ void GameScene::IceBlitz()
 //---------------------------------------------------------------
 void GameScene::ResetValues()
 {
+    // By defautl :D
+    mCurrentSpellCharge = 999999;
+    mCurrentActiveSpell = 0;
+    
     mPowerUpSpawnTime = 0;
     
     mWaitForSaveMe = false;
@@ -20786,12 +20804,16 @@ void GameScene::CreateBattleArena()
     mBattleBar_MachineBase = CCSprite::create("small_dot_red.png");
     
     // The new stuff
+    /*
     if(mDwarfCollectMachine){
         mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width/2,60));
     }
     else{
         mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
     }
+    */
+    
+    mBattleBar_MachineBase->setPosition(ccp(aScreenSize.width-60,294));
     
     mBattleBar_MachineBase->setScaleX(0.0f);     //(0.15);
     mBattleBar_MachineBase->setScaleY(0.0f);     //(0.3);
@@ -20889,17 +20911,17 @@ void GameScene::UpdateSmoothBattleBars(float delta)
         {
             if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
             {
-                mMasterTroll_CurrentAttack -= delta*(float)(mCurrentMission.MT_Battle_Attack/2);
+                mMasterTroll_CurrentAttack -= delta*(float)(mCurrentSpellCharge/2);
                 if(mMasterTroll_CurrentAttack<=0) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
             }
             else
             {
-                mMasterTroll_CurrentAttack += delta*(float)(mCurrentMission.MT_Battle_Attack/5);
+                mMasterTroll_CurrentAttack += delta*(float)(mCurrentSpellCharge/5);
                 if(mMasterTroll_CurrentAttack>=mMasterTroll_Attack) mMasterTroll_CurrentAttack = mMasterTroll_Attack;
             }
             
             //Limit to 100 for now !!!
-            float aTotalValue = mMasterTroll_CurrentAttack / mCurrentMission.MT_Battle_Attack;
+            float aTotalValue = mMasterTroll_CurrentAttack / mCurrentSpellCharge;
             if(aTotalValue>1)aTotalValue = 1;
             
             mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,
@@ -20935,7 +20957,7 @@ void GameScene::UpdateBattleLabel()
     
     if(mDwarfKingSpawnItems)
     {
-        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack && mDwarfKingSpawn_Active==false)
+        if(mMasterTroll_Attack>=mCurrentSpellCharge && mDwarfKingSpawn_Active==false)
         {
             // Spawn some object?
             mDwarfKingSpawn_Active = true; // Wait a bit
@@ -20945,73 +20967,93 @@ void GameScene::UpdateBattleLabel()
     }
     else if(mDwarfCollectMachine)
     {
-        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
+//        if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack) // New stuff - dynamic
+        if(mMasterTroll_Attack>=mCurrentSpellCharge)
         {
             // Remove the amount and spawn some item near enterances?
             CCLOG("Create item near cave for troll attack");
             
             // What power will it be?
-            GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,0,mCurrentMission.PowerTimeOnMap);
             
-            // Spawn near cave ???
-            CCPoint spawnSpot;
+            // Spawn the shop active object !!!
             
-            // The offset from cave center
-            int aCaveOff_X = (rand()%50+50);
-            int aCaveOff_Y = (rand()%50+50);
             
-            int aPositionID = rand()%2;
-            if(aPositionID == 0){
-                if(_SpawnOrangeDwarf){
-                    spawnSpot.x = _caveTall->getPositionX();
-                    spawnSpot.y = _caveTall->getPositionY();
+            // Check what types are selected in shop !!!
+            std::vector<int> spellsToSpanw = User::getInstance()->getItemDataManager().getActiveItems();
+            
+            // Do this only if spell is selected in shop
+            if(spellsToSpanw.size() >= 1)
+            {
+                // For now random item choose?
+                
+                // Choose what is active !!!
+                /*
+                int theIndexOfSpell = rand()%spellsToSpanw.size();
+                CCLog("Will spanw spell ID [%i]",spellsToSpanw[theIndexOfSpell]);
+                */
+                
+                GameItem_PowerUp* Bee = GameItem_PowerUp::create(this,spellsToSpanw[mCurrentActiveSpell],mCurrentMission.PowerTimeOnMap);
+                
+                // Spawn near cave ???
+                CCPoint spawnSpot;
+                
+                // The offset from cave center
+                int aCaveOff_X = (rand()%50+50);
+                int aCaveOff_Y = (rand()%50+50);
+                
+                int aPositionID = rand()%2;
+                if(aPositionID == 0){
+                    if(_SpawnOrangeDwarf){
+                        spawnSpot.x = _caveTall->getPositionX();
+                        spawnSpot.y = _caveTall->getPositionY();
+                    }
+                    else
+                    {
+                        spawnSpot.x = _caveFat->getPositionX();
+                        spawnSpot.y = _caveFat->getPositionY();
+                    }
                 }
-                else
-                {
-                    spawnSpot.x = _caveFat->getPositionX();
-                    spawnSpot.y = _caveFat->getPositionY();
+                else{
+                    if(_SpawnBlueDwarf){
+                        spawnSpot.x = _caveFat->getPositionX();
+                        spawnSpot.y = _caveFat->getPositionY();
+                    }
+                    else
+                    {
+                        spawnSpot.x = _caveTall->getPositionX();
+                        spawnSpot.y = _caveTall->getPositionY();
+                    }
                 }
-            }
-            else{
-                if(_SpawnBlueDwarf){
-                    spawnSpot.x = _caveFat->getPositionX();
-                    spawnSpot.y = _caveFat->getPositionY();
+                
+                // Quick stuff for more random
+                int aNegativeOrPositive = rand()%2;
+                if(aNegativeOrPositive == 0){
+                    spawnSpot.x-=aCaveOff_X;
+                    spawnSpot.y-=aCaveOff_Y;
                 }
-                else
-                {
-                    spawnSpot.x = _caveTall->getPositionX();
-                    spawnSpot.y = _caveTall->getPositionY();
+                else{
+                    spawnSpot.x+=aCaveOff_X;
+                    spawnSpot.y+=aCaveOff_Y;
                 }
+                
+                // Puff
+                SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
+                aBlitz->retain();
+                aBlitz->setAnchorPoint(ccp(0.5,0.5));
+                aBlitz->setPosition(spawnSpot);
+                addChild(aBlitz,kPoints_Z_Order);
+                
+                CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+                CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+                CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+                aBlitz->runAction(aSeq1);
+                
+                // The item add
+                Bee->setPosition(spawnSpot);
+                
+                this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
+                _powersOnMap->addObject(Bee);
             }
-            
-            // Quick stuff for more random
-            int aNegativeOrPositive = rand()%2;
-            if(aNegativeOrPositive == 0){
-                spawnSpot.x-=aCaveOff_X;
-                spawnSpot.y-=aCaveOff_Y;
-            }
-            else{
-                spawnSpot.x+=aCaveOff_X;
-                spawnSpot.y+=aCaveOff_Y;
-            }
-            
-            // Puff
-            SpriteAnimation* aBlitz = SpriteAnimation::create("effects/virpulis.plist",false);
-            aBlitz->retain();
-            aBlitz->setAnchorPoint(ccp(0.5,0.5));
-            aBlitz->setPosition(spawnSpot);
-            addChild(aBlitz,kPoints_Z_Order);
-            
-            CCDelayTime* aDelay = CCDelayTime::create(0.5f);
-            CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
-            CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
-            aBlitz->runAction(aSeq1);
-            
-            // The item add
-            Bee->setPosition(spawnSpot);
-            
-            this->addChild(Bee, getSpriteOrderZ(Bee->getPositionY()));
-            _powersOnMap->addObject(Bee);
             
             mMasterTroll_Attack = 0;//Reset to 0
         }
@@ -21150,7 +21192,7 @@ void GameScene::OnTryToShoot()
     addChild(aDummyBullet);
 }
 
-void GameScene::OnAttackHitTotem(cocos2d::CCPoint position,int theDamage)
+void GameScene::OnAttackHitTotem(cocos2d::CCPoint position,SpellInfo theSpell)
 {
     CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
     p->setPosition(ccp(mTotem->getPositionX(),mTotem->getPositionY()));
@@ -21162,7 +21204,7 @@ void GameScene::OnAttackHitTotem(cocos2d::CCPoint position,int theDamage)
 //    float angle = 360-(atan2(y - last_y, x - mTotem->getPositionX()) * 180 / M_PI) ;
     
     // Check if can attack at this pos
-    mTotem->AttackFromPlayer(position,theDamage);
+    mTotem->AttackFromPlayer(position,theSpell);
     
     /*
     if(mTotem->mBubble_ActiveTimeCurrent>0){

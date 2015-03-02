@@ -25,6 +25,14 @@ struct QuadActionInfo
     int event_type;
 };
 
+struct SpellDamage
+{
+    int damage;
+    int times;
+    float timeToDamage;
+    float currentTime;
+};
+
 struct Quad_Action
 {
     int32_t quad_id; // For what quad is this !!!
@@ -51,8 +59,12 @@ struct Quad_Action
     
     // Flame sub stuff
     int32_t flame_radius; // Flame radius?
+    int32_t flame_angle; // Flame angle?
     int32_t flame_active_time; // How long flame throewr will be active?
     int32_t flame_rotate_speed; // How fast rotates flame thrower?
+    
+    int32_t flame_start_angle;
+    int32_t flame_end_angle;
     
     float current_time_till_active; // Timer to next action
     float current_time_active; // Timer till will end active action
@@ -108,8 +120,17 @@ public:
     float mRadius;
     
     // New stuff
-    cocos2d::CCLabelTTF* mDebugTimerLabel;
-    std::stringstream mDebugTimerStr;
+    cocos2d::CCLabelTTF* mDebugQuad_1;
+    std::stringstream mDebugQuad_1_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_2;
+    std::stringstream mDebugQuad_2_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_3;
+    std::stringstream mDebugQuad_3_Str;
+    
+    cocos2d::CCLabelTTF* mDebugQuad_4;
+    std::stringstream mDebugQuad_4_Str;
     
     // The quads
     void SetNewMissionStuff(MissionSet totemInfo);
@@ -162,13 +183,15 @@ public:
     std::vector<Quad_Action> mQuad_Vector_4;
     
     // the player actions
-    void AttackFromPlayer(cocos2d::CCPoint position,int damage);
+    void AttackFromPlayer(cocos2d::CCPoint position,SpellInfo theSpell);
     void UpdateQuadSystem(float delta);
     void CreateSpecialBullet(int theType,int theStartX,int theStartY,int theAngle,int theLife);
     bool collideAtPassive(cocos2d::CCPoint point);
     
     void removeQuadAction(int theID,int theSubID);
     cocos2d::CCDrawNode* addQuadAction(int theID,int theSubID,int theWidth,int theType,int theAngle, int theEventType);
+    
+    std::vector<SpellDamage> mExtraDamage;
     
 private:
     GameScene* _game;

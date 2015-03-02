@@ -40,6 +40,14 @@
 
 #include "TimedSpriteAnimation.h"
 
+#define DWARF_SPELL_FREEZER 1
+#define DWARF_SPELL_ELECTRIFY 0
+
+#define DWARF_SPELL_SHOP_1 101
+#define DWARF_SPELL_SHOP_2 102
+#define DWARF_SPELL_SHOP_3 103
+#define DWARF_SPELL_SHOP_4 104
+
 #define MASTER_ACTION_CONFUSE 2
 #define MASTER_ACTION_SPAWN_TRAP 0
 #define MASTER_ACTION_TROLL 3
@@ -231,7 +239,7 @@ public:
     // Totem stuff
     
     Enemy_Totem* mTotem;
-    void OnAttackHitTotem(cocos2d::CCPoint position,int theDamage);
+    void OnAttackHitTotem(cocos2d::CCPoint position,SpellInfo theSpell);
     
     //------------
     
@@ -273,6 +281,8 @@ public:
     
 //    InGamePowers* mPowerMenu;
     InGamePowers* mPowerMenu;
+    int mCurrentSpellCharge;
+    int mCurrentActiveSpell;
     
     cocos2d::CCPointArray* _movePointsWind;
     

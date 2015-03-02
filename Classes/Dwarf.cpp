@@ -1533,6 +1533,65 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                 mSnapedToMasterTroll = false;
                 mSnapedToTotem = false;
                 
+                // By spell type - can do correct actions only !!!
+                if(mContainsPowerUp == DWARF_SPELL_FREEZER || mContainsPowerUp == DWARF_SPELL_ELECTRIFY) //Freezer and Snap only for enemy trolls
+                {
+                    for (int trollIndex = _game->_trolls->count() - 1; trollIndex >= 0; --trollIndex)
+                    {
+                        Troll* troll = static_cast<Troll*>(_game->_trolls->objectAtIndex(trollIndex));
+                        
+                        //Little update - warning light on gnome !!!
+                        if (troll->isVisible() && troll->getTouchable() && troll->getCanMove())
+                        {
+                            if(ccpDistanceSQ(troll->getPosition(), position) <= FAT_SNAP_TO_CAVE)
+                            {
+                                //Snap to troll
+                                mSnapedTroll = troll;
+                                
+                                addMovePoint(troll->getPosition(), position,false);
+                                _touchEnded = true;
+                                connectLine();
+                                vibrate();
+                                
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if(mContainsPowerUp >= 100) // The spell actions
+                {
+                    if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
+                    {
+                        float theDistance2 = sqrtf((position.x-_game->mTotem->getPositionX())*(position.x-_game->mTotem->getPositionX()) +
+                                                   (position.y-_game->mTotem->getPositionY())*(position.y-_game->mTotem->getPositionY()));
+                        
+                        // Get 1st item from shop?
+                        if(theDistance2<_game->mCurrentMission.DEBUG_Electrify_range)
+                        {
+                            mSnapedToTotem = true;
+                            
+                            addMovePoint(_game->mTotem->getPosition(), position,false);
+                            _touchEnded = true;
+                            connectLine();
+                            vibrate();
+                        }
+                    }
+                }
+                else
+                {
+                    // OTher speelllss
+                    if(ccpDistanceSQ(_game->_MasterTrollBase->getPosition(), position) <= 6000)
+                    {
+                        mSnapedToMasterTroll = true;
+                        
+                        addMovePoint(_game->_MasterTrollBase->getPosition(), position,false);
+                        _touchEnded = true;
+                        connectLine();
+                        vibrate();
+                    }
+                }
+                
+                /*
                 if(_game->mDwarfCollectMachine)
                 {
                     // Check if does not want to attack troll
@@ -1597,6 +1656,7 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         }
                     }
                 }
+                */
             }
 		}
 		else
@@ -2519,7 +2579,8 @@ void Dwarf::OnFireBulletHitTroll(CCNode* sender)
     }
     else if(mSnapedToTotem)
     {
-        _game->OnAttackHitTotem(ccp(getPositionX(),getPositionY()),1);
+        // New stuff - check by item powa
+        _game->OnAttackHitTotem(ccp(getPositionX(),getPositionY()),mSpellForAttack);
     }
     else
     {
@@ -2573,7 +2634,8 @@ void Dwarf::updateDwarfPowerZone()
         float theDistance2 = sqrtf((getPositionX()-_game->mTotem->getPositionX())*(getPositionX()-_game->mTotem->getPositionX()) +
                                    (getPositionY()-_game->mTotem->getPositionY())*(getPositionY()-_game->mTotem->getPositionY()));
 //        if(theDistance2 <= 220)
-        if(theDistance2 <= _game->mCurrentMission.DEBUG_Electrify_range)
+//        if(theDistance2 <= _game->mCurrentMission.DEBUG_Electrify_range)
+        if(theDistance2 <= mSpellForAttack.range)
         {
             FireBulletAtTroll(mContainsPowerUp);
             
@@ -2709,13 +2771,20 @@ void Dwarf::setPowerButton(int theID)
         removeChild(mPowerUpIcon);
     }
     
-    if(theID == 0)
+    CCLog("Set spell with id: %i",theID);
+    
+    if(theID == DWARF_SPELL_ELECTRIFY)
     {
         mPowerUpIcon = CCSprite::create("button_electro.png");
     }
-    else
+    else if (theID == DWARF_SPELL_FREEZER)
     {
         mPowerUpIcon = CCSprite::create("button_freez.png");
+    }
+    else if(theID >= 100) // The spell stuff
+    {
+        mSpellForAttack = User::getInstance()->getItemDataManager().getSpellByID(mContainsPowerUp);
+        mPowerUpIcon = CCSprite::create("button_spell.png");
     }
     
     addChild(mPowerUpIcon,-1);

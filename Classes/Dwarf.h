@@ -10,6 +10,7 @@
 
 #include <cocos2d.h>
 #include <string.h>
+#include "ItemDataManager.h"
 
 class GameScene;
 class Effect;
@@ -47,6 +48,7 @@ public:
 	DwarfType getType() const { return _type; }
     
     // The power button stuff
+    SpellInfo mSpellForAttack;
     
     void setPowerButton(int theID);
     void updateDwarfPowerZone();

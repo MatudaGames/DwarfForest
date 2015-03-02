@@ -6,6 +6,8 @@
 #include "UserStats.h"
 #include "MissionManager.h"
 
+#include "ItemDataManager.h"
+
 class User
 {
 public:
@@ -156,6 +158,8 @@ public:
     
     MissionManager& getMissionManager() { return _missionManager; }
     
+    ItemDataManager& getItemDataManager() {return _itemDataManager; }
+    
     float mDebugSpeed_troll;
     float mDebugSpeed_dwarf;
     
@@ -207,6 +211,9 @@ public:
     
     bool mNewMaps;
     
+    std::string mActiveSpells;
+    std::string mBoghtSpells;
+    
     // New struff for stats
     int mCurrentMissionLevel;
 	
@@ -246,6 +253,8 @@ private:
     WeeklyChallenges _weeklyChallenges;
     
     MissionManager _missionManager;
+    
+    ItemDataManager _itemDataManager;
     
     bool _showFreeStuffPopup;
     bool _showRateGamePopup;

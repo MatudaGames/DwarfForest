@@ -9,6 +9,7 @@
 #pragma once
 
 #include <cocos2d.h>
+#include "ItemDataManager.h"
 
 class GameScene;
 
@@ -31,10 +32,14 @@ public:
     
     bool _needToRemove;
     
+    SpellInfo mSpell;
+    
 private:
     GameScene* _gameScene;
     cocos2d::CCSprite* _mushroomSpriteOn;
     cocos2d::CCSprite* _mushroomSpriteOff;
+    
+    cocos2d::CCClippingNode* _specialNode;
     
     
 };

@@ -138,9 +138,13 @@ struct MissionQuadInfo
     int32_t bullet_amount; // How much bullets can fire?
     
     // Flame sub stuff
+    int32_t flame_angle; // Flame angle?
     int32_t flame_radius; // Flame radius?
     int32_t flame_active_time; // How long flame throewr will be active?
     int32_t flame_rotate_speed; // How fast rotates flame thrower?
+    
+    int32_t flame_start_angle;
+    int32_t flame_end_angle;
 };
 
 struct MissionSet

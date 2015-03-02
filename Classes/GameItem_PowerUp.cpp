@@ -31,7 +31,7 @@ GameItem_PowerUp* GameItem_PowerUp::create(GameScene* gameScene,int theTimeOnMap
 }
 
 GameItem_PowerUp::GameItem_PowerUp():
-    _mushroomSpriteOn(NULL),_mushroomSpriteOff(NULL)
+    _mushroomSpriteOn(NULL),_mushroomSpriteOff(NULL),_specialNode(NULL)
 {
 }
 
@@ -50,22 +50,76 @@ bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap,float realTime
     
     _gameScene = gameScene;
     
-    if(mPowerID == 0)
+//    mSpell = NULL;
+    
+    _mushroomSpriteOff = NULL;
+    _specialNode = NULL;
+    
+    CCLog("Create Spell: %i",mPowerID);
+    
+    // The spells !!!
+    if(mPowerID >= 100)
     {
-        _mushroomSpriteOff = CCSprite::create("button_electro.png");
+        mSpell = User::getInstance()->getItemDataManager().getSpellByID(mPowerID);
+        
+        // Set the spell icon for now as debug?
+//        _mushroomSpriteOff = CCSprite::create(mSpell.icon_path.c_str());
+        
+        CCSprite* aBaseOfSpell = CCSprite::create(mSpell.icon_path.c_str());
+        CCSprite* aMaskOfSpell = CCSprite::create("spell_mask.png");
+        
+        aBaseOfSpell->setContentSize(aMaskOfSpell->getContentSize());
+        
+        _specialNode = CCClippingNode::create(aMaskOfSpell);
+        _specialNode->setAlphaThreshold(0.0f);
+        _specialNode->addChild(aBaseOfSpell);
+        addChild(_specialNode,10);
+        
+        _specialNode->setScaleX(0);
+        _specialNode->setScaleY(0);
+        
+        CCScaleTo* aScaleIn = CCScaleTo::create(0.5f, GLOBAL_SCALE, GLOBAL_SCALE);
+        CCActionInterval* aScaleAct = CCEaseElasticOut::create(aScaleIn,0.5f);
+        CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameItem_PowerUp::onFinishedShowUp));
+        
+        CCSequence* aTotal = CCSequence::create(aScaleAct,func,NULL);
+        _specialNode->runAction(aTotal);
+        
+//        _mushroomSpriteOff = CCSprite::create("button_electro.png");
     }
     else
     {
-        _mushroomSpriteOff = CCSprite::create("button_freez.png");
+        if(mPowerID == 0)
+        {
+            _mushroomSpriteOff = CCSprite::create("button_electro.png");
+        }
+        else
+        {
+            _mushroomSpriteOff = CCSprite::create("button_freez.png");
+        }
+        
+        _mushroomSpriteOff->setOpacity(0);
+        
+        addChild(_mushroomSpriteOff);
+        
+        _mushroomSpriteOff->setScaleX(0);
+        _mushroomSpriteOff->setScaleY(0);
+        
+        CCScaleTo* aScaleIn = CCScaleTo::create(0.5f, GLOBAL_SCALE, GLOBAL_SCALE);
+        CCActionInterval* aScaleAct = CCEaseElasticOut::create(aScaleIn,0.5f);
+        CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameItem_PowerUp::onFinishedShowUp));
+        
+        CCFadeIn* aFadeIn = CCFadeIn::create(0.2f);
+        CCSpawn* aSpawn = CCSpawn::create(aFadeIn,aScaleAct,NULL);
+        
+        CCSequence* aTotal = CCSequence::create(aSpawn,func,NULL);
+        _mushroomSpriteOff->runAction(aTotal);
     }
     
-    _mushroomSpriteOff->setOpacity(0);
-    
-    addChild(_mushroomSpriteOff);
+
     
 //    _mushroomSpriteOff->setAnchorPoint(ccp(0.5,0.5f));
-    _mushroomSpriteOff->setScaleX(0);
-    _mushroomSpriteOff->setScaleY(0);
+
     
     /*
     //Show up the mushroom
@@ -92,15 +146,6 @@ bool GameItem_PowerUp::init(GameScene* gameScene,int theTimeOnMap,float realTime
     _mushroomSpriteOff->setScaleY(0);
     */
     
-    CCScaleTo* aScaleIn = CCScaleTo::create(0.5f, GLOBAL_SCALE, GLOBAL_SCALE);
-    CCActionInterval* aScaleAct = CCEaseElasticOut::create(aScaleIn,0.5f);
-    CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameItem_PowerUp::onFinishedShowUp));
-    
-    CCFadeIn* aFadeIn = CCFadeIn::create(0.2f);
-    CCSpawn* aSpawn = CCSpawn::create(aFadeIn,aScaleAct,NULL);
-    
-    CCSequence* aTotal = CCSequence::create(aSpawn,func,NULL);
-    _mushroomSpriteOff->runAction(aTotal);
     
     //10 sec to collect this bad boy
     //Get power up time?
@@ -121,7 +166,13 @@ void GameItem_PowerUp::createRemove()
     CCActionInterval* aScaleAct = CCEaseElasticIn::create(aScale,0.5f);
     CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(GameItem_PowerUp::onRemove));
     CCSequence* seqfin = CCSequence::create(aScaleAct,func,NULL);
-    _mushroomSpriteOff->runAction(seqfin);
+    
+    if(_specialNode != NULL){
+        _specialNode->runAction(seqfin);
+    }
+    else{
+        _mushroomSpriteOff->runAction(seqfin);
+    }
 }
 
 void GameItem_PowerUp::onRemove()

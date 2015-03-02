@@ -71,6 +71,9 @@ bool TrollBullet::init(GameScene* game,int theType)
     
     _timeActive = 0;
     
+    _startX = -1;
+    _startY = -1;
+    
     //Create the sprite and add some particles :)
     _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite, kHUD_Z_Order-1);
@@ -252,7 +255,28 @@ void TrollBullet::update(float delta)
         if(_timeActive<=0)
         {
             //Disable it - remove
+            _timeActive = -1;
             _isDisabled = true;
+        }
+    }
+    
+    if(_distanceActive>0)
+    {
+        if(_startX == -1 && _startY == -1)
+        {
+            _startX = getPositionX();
+            _startY = getPositionY();
+        }
+        else
+        {
+            // Check when to explode
+            float dwarfDistance = sqrtf((_startX-getPositionX())*(_startX-getPositionX()) +
+                                        (_startY-getPositionY())*(_startY-getPositionY()));
+            if(dwarfDistance>=_distanceActive)
+            {
+                _isDisabled = true;
+                _distanceActive = -1;
+            }
         }
     }
 }
