@@ -1413,12 +1413,12 @@ void GameScene::CreateGameStartHUD()
 	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
    	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
    	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
-    dwarfsLeft->setVisible(true);
+    dwarfsLeft->setVisible(false);
 	addChild(dwarfsLeft, kHUD_Z_Order-1);
 	
 	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
     dwarfsLost->setAnchorPoint(ccp(0, 0.5));
-    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));//530
     dwarfsLost->setVisible(false);
 	addChild(dwarfsLost, kHUD_Z_Order-1);
 	
@@ -1429,7 +1429,7 @@ void GameScene::CreateGameStartHUD()
     
     _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
     _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
-    _dwarfsLeftLabel->setVisible(true);
+    _dwarfsLeftLabel->setVisible(false);
     dwarfsLeft->addChild(_dwarfsLeftLabel);
     
     _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
@@ -1445,7 +1445,7 @@ void GameScene::CreateGameStartHUD()
 		
 	CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
     LifesLeft->setAnchorPoint(ccp(0, 0.5));
-    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,530));
+    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,600));
     LifesLeft->setVisible(true);
 	addChild(LifesLeft, kHUD_Z_Order-1);
 	
@@ -2678,12 +2678,12 @@ bool GameScene::init()
 	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
    	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
    	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
-    dwarfsLeft->setVisible(true);
+    dwarfsLeft->setVisible(false);
 	addChild(dwarfsLeft, kHUD_Z_Order-1);
 	
 	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
     dwarfsLost->setAnchorPoint(ccp(0, 0.5));
-    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));//530
     dwarfsLost->setVisible(false);
 	addChild(dwarfsLost, kHUD_Z_Order-1);
 	
@@ -2694,7 +2694,7 @@ bool GameScene::init()
     
     _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
     _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
-    _dwarfsLeftLabel->setVisible(true);
+    _dwarfsLeftLabel->setVisible(false);
     dwarfsLeft->addChild(_dwarfsLeftLabel);
     
     _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
@@ -2710,7 +2710,7 @@ bool GameScene::init()
 		
 	CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
     LifesLeft->setAnchorPoint(ccp(0, 0.5));
-    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,530));
+    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,600));
     LifesLeft->setVisible(true);
 	addChild(LifesLeft, kHUD_Z_Order-1);
 	
@@ -13983,10 +13983,10 @@ void GameScene::showWinScreen()
     aScoreBoard->setPosition(ccp(mScreenSize.width/2,mScreenSize.height/2+170));
     addChild(aScoreBoard,kHUD_Z_Order+1);
     
-    _pointLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*1.0, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+    _pointLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*1.0, CCSize(320, 155), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
 	_pointLabel->setString("0");
     _pointLabel->setColor(ccc3(255,246,200));
-    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2));//27
+    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2+35));//27
     aScoreBoard->addChild(_pointLabel);
     
     std::stringstream missionPoints;
@@ -14014,31 +14014,31 @@ void GameScene::showWinScreen()
     
     if(_missionCurrentValue>=_mission_star_points_1 && _missionCurrentValue<_mission_star_points_2){
     	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2-40));
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     }
 	if(_missionCurrentValue>=_mission_star_points_2 && _missionCurrentValue<_mission_star_points_3)
     {
     	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2-40));
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     	
     	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2-40));
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.4f-20,mGeneralScreen->getContentSize().height/2-40));
     	addChild(bStarGlow,kHUD_Z_Order+1);
     }
 	if(_missionCurrentValue>=_mission_star_points_3)
     {
     	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2-40));
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     	
     	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2-40));
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.4f-20,mGeneralScreen->getContentSize().height/2-40));
     	addChild(bStarGlow,kHUD_Z_Order+1);
     	
     	CCSprite* cStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
-    	cStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.2f,mGeneralScreen->getContentSize().height/2-40));
+    	cStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(cStarGlow,kHUD_Z_Order+1);
     }
     
@@ -19787,7 +19787,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
         cBullet->setScale(0.7f);
-        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vÁl tuv‚k.,, :D //0.6 pan‚k rezult‚tu
+        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
             
         this->addChild(bBullet, 1000);
         this->addChild(cBullet, 1000);
@@ -19803,7 +19803,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
-        //cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vÁl tuv‚k.,, :D //0.6 pan‚k rezult‚tu
+        //cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
         cBullet->setVisible(false);
             
         //this->addChild(bBullet, 1000);
@@ -19821,7 +19821,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
         //cBullet->setScale(0.7f);
         cBullet->setVisible(false);
-        //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vÁl tuv‚k.,, :D //0.6 pan‚k rezult‚tu
+        //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
             
         //this->addChild(bBullet, 1000);
         this->addChild(cBullet, 1000);
@@ -20179,12 +20179,12 @@ void GameScene::UpdateMasterTroll(float delta)
             }
             else if(aFinalMT_Action == MT_EVENT_TROLL)
             {
-                // PagaidƒÅm
+                // Pagaid‚m
                 SetMasterTrollAction(MASTER_ACTION_TROLL);
             }
             else if(aFinalMT_Action == MT_EVENT_MASS)
             {
-                // PagaidƒÅm
+                // Pagaid‚m
                 SetMasterTrollAction(MASTER_ACTION_CONFUSE);
             }
             else if(aFinalMT_Action == MT_EVENT_CAVEBLOCK)

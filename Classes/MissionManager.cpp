@@ -4693,7 +4693,7 @@ void MissionManager::OnDownloadSpecialMissions()
         
         
         // The test
-        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/p1sejhi3hk9fc2n/DF_Missions_TEST%20%289%29.xml?dl=1");
+        curl_easy_setopt(pCurl,CURLOPT_URL,"https://www.dropbox.com/s/0t58p07139vxieb/DF_Missions_TEST.xml?dl=1");
         if(pFile != NULL)
         {
             curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
