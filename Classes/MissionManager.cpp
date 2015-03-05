@@ -5165,7 +5165,7 @@ void MissionManager::OnDownloadedSpecial()
                         theQuadAction.flame_angle = quadSubDict->valueForKey("flame_angle")->intValue();
                         theQuadAction.flame_radius = quadSubDict->valueForKey("flame_radius")->intValue();
                         theQuadAction.flame_active_time = quadSubDict->valueForKey("flame_active_time")->intValue();
-                        theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue();
+                        theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue()*0.001;
                         
                         //Special stuff for more precise stuff
                         if(i == 1)
@@ -5410,6 +5410,17 @@ void MissionManager::OnDownloadedSpecial()
         
         if(missionDict->valueForKey("ItemSpecial_Prob")->compare("") != 0) mission->PowerTypeProbs = SplitString(missionDict->valueForKey("ItemSpecial_Prob")->getCString(),',');
         else mission->PowerTypeProbs = std::vector<int>(2,50);
+        
+        if(missionDict->valueForKey("ItemPowerups_Prob")->compare("") != 0) mission->PowerupItemsProbs = SplitString(missionDict->valueForKey("ItemPowerups_Prob")->getCString(),',');
+        else {
+            int defaultInts[] = {30,30,40};
+            mission->PowerupItemsProbs.assign(&defaultInts[0],&defaultInts[0]+3);// = { 30,30,403 }; //std::vector<int>(defaultInts, defaultInts + sizeof(defaultInts) / sizeof(int) );
+        }
+        
+        for(int x=0;x<mission->PowerupItemsProbs.size();x++)
+        {
+            CCLog("Value in PowerItem (%i)=[%i]",x,mission->PowerupItemsProbs[x]);
+        }
         
         
         //------------------------------------------------------------------

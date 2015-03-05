@@ -173,7 +173,7 @@ CCScene* GameScene::scene()
 }
 
 GameScene::GameScene():
-	dailyChallengeInfo(NULL), _bullets(NULL),_dwarves(NULL), _trolls(NULL), _crystals(NULL), _effects(NULL), _diamonds(NULL),
+	dailyChallengeInfo(NULL), _bullets(NULL),_dwarves(NULL), _trolls(NULL), _crystals(NULL), _effects(NULL), _diamonds(NULL), mUniversalItems(NULL),
 	_introAnimations(NULL), _scoreLabel(NULL), _cave(NULL), _caveMask(NULL), _mask(NULL),_MasterTroll_IdleAnimation(NULL),_MasterTroll_WinAnimation(NULL),
 	_gameTime(0)
 {
@@ -196,7 +196,9 @@ GameScene::~GameScene()
 	if (_crystals) _crystals->release();
 	if (_effects) _effects->release();
 	if (_diamonds) _diamonds->release();
-    if (_mushrooms) _mushrooms->release();
+    
+    if(mUniversalItems) mUniversalItems->release();
+    
 	if (_introAnimations) _introAnimations->release();
 	if (_caveMask) _caveMask->release();
 	if (_mask) _mask->release();
@@ -1005,9 +1007,20 @@ void GameScene::CreateGameByMission()
     _boostShieldTimer = 0.0f;
     _boostCrystalsTimer = 0.0f;
     _boostExtraPoints = 0;
-    _boostGhostTimer = 0.0f;
+//    _boostGhostTimer = 0.0f;
     _boostNoEnemyTimer = 0.0f;
     _boostFutureSee = 0.0f;
+    
+    //................................................
+    // The new stuff for Items With Powers !!!
+    
+    mPowerItem_GhostsActive = 0;
+    mPowerItem_CrystalDoublerActive = 0;
+    mPowerItem_CrystalDoublerValue = 1;
+    
+//    mPowerItem_CrystalRefiner = 0;//No extra stuff
+    
+    //................................................
     
     //What is this
     _blockedGeneratePoints.clear();
@@ -1051,8 +1064,8 @@ void GameScene::CreateGameByMission()
 	_diamonds = CCArray::create();
 	_diamonds->retain();
     
-    _mushrooms = CCArray::create();
-    _mushrooms->retain();
+    mUniversalItems = CCArray::create();
+    mUniversalItems->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -1868,8 +1881,8 @@ bool GameScene::init()
 	_diamonds = CCArray::create();
 	_diamonds->retain();
     
-    _mushrooms = CCArray::create();
-    _mushrooms->retain();
+    mUniversalItems = CCArray::create();
+    mUniversalItems->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -2529,7 +2542,7 @@ bool GameScene::init()
     _boostShieldTimer = 0.0f;
     _boostCrystalsTimer = 0.0f;
     _boostExtraPoints = 0;
-    _boostGhostTimer = 0.0f;
+//    _boostGhostTimer = 0.0f;
     _boostNoEnemyTimer = 0.0f;
     _boostFutureSee = 0.0f;
     
@@ -4098,7 +4111,7 @@ void GameScene::CreateDebugPanel()
                                                               "DebugStuff/Debug_Mushroom.png",
                                                               "DebugStuff/Debug_Mushroom.png",
                                                               this,
-                                                              menu_selector(GameScene::generateMushroom));
+                                                              NULL);
     debug_button_6->setAnchorPoint(ccp(0,0));
     
     CCMenuItemImage* debug_button_7 = CCMenuItemImage::create(
@@ -4354,6 +4367,7 @@ void GameScene::OnMachineStamp(cocos2d::CCObject *sender)
 //Some actions for machines !!!
 void GameScene::OnMachineGhost(cocos2d::CCObject *sender)
 {
+    /*
     if(mTutorialEnabled)
         return;//for now disabled
     
@@ -4420,6 +4434,7 @@ void GameScene::OnMachineGhost(cocos2d::CCObject *sender)
             User::getInstance()->getMissionManager().CheckSubMission(SUB_ACTIVATE_POWER_GHOST,1);
         }
     }
+    */
 }
 
 //Troll* GameScene::generateTroll(bool theSkip)
@@ -5350,7 +5365,7 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
     
     if(mAttackFunctionalActive)
     {
-        mMasterTroll_Attack+=30;
+        mMasterTroll_Attack+=ATTACK_BAR_DWARF_ENTER_CAVE;
         UpdateBattleLabel();
     }
     
@@ -5569,12 +5584,14 @@ void GameScene::crossFadeBackground(bool theGodMode)
 
 void GameScene::activateGhoustDwarfs(int theX,int theY)
 {
+    /*
     //create somewhere this powerup stuff!!!
     createTextFly("Ghost\ndwarfs", ccp(theX,theY), 1);
     
     _boostGhostTimer = 30;//This should be callculated from level
     
     removeAllEffects();
+    */
 }
 
 void GameScene::activateClearMap(int theX,int theY)
@@ -5655,6 +5672,8 @@ void GameScene::menuPowerupNoEnemiesCallback(cocos2d::CCObject *sender)
 
 void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
 {
+    return;
+    
     //Check how much boosters are active now
     if (_totalActiveBoosters>0 && !_boosterMushroom)
     {
@@ -5702,6 +5721,7 @@ void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
     }
     
     //Where is our button !!!
+    /*
     int aUserLvl = User::getInstance()->getLevel();
     _boostGhostTimer = 30+(floorf(aUserLvl*0.2)*15);//This should be callculated from level
     _boostGhostTimer = 5;
@@ -5714,6 +5734,7 @@ void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
                                 aButton->getPositionY()+aButton->getParent()->getPositionY()+3));
     //Set the progress bar !!!
     addChild(_animation,kHUD_Z_Order+1);
+    */
     
     //////////////////////////
     
@@ -8601,7 +8622,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
         }
         
         //Lets check futher !!!
-        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.ItemProbMultiplier);
+        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+mUniversalItems->count()) * mCurrentMission.ItemProbMultiplier);
         int aRandomResult = rand()%100;
         if(aRandomResult<=aProbToSpawn){
             
@@ -8654,11 +8675,22 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 aRotatedPowerValues.push_back(aRotatedValue);
             }
             
+            // The powerup item check
+            std::vector<int> aPowerItemValues;
+            aRotatedValue = 0;// Use the old stuff
+            for(int i=0;i<mCurrentMission.PowerupItemsProbs.size();i++)
+            {
+                aRotatedValue += mCurrentMission.PowerupItemsProbs[i];
+                aPowerItemValues.push_back(aRotatedValue);
+            }
+            
             // Do the spawn item stuff
             int aShroomNum = 0; // How much need of each stuff to spawn
             int aDiamondNum = 0;
             int aCrystalNum = 0;
             int aPowerUpNum = 0; // The new stuff for power up spawn
+//            int aCrystalPlantNum = 0; // Now we have the crystal plant her too :D
+//            int aCrystalDoublerNum = 0; // Guess what - the crystal doubler is here too :)
             
             for(int i=0;i<aSpawnCrystals;i++)
             {
@@ -8688,6 +8720,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 }
             }
             
+            
             //Now check what can we spawn for each crystal
             int aRandomColorFin = 0;//What type of crystal should spawn
             for(int a=0;a<aSpawnCrystals;a++)
@@ -8695,7 +8728,46 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 //If this is not crystal
                 if(aShroomNum>0){
                     aShroomNum-=1;
-                    generateMushroom(mCurrentMission.ItemTimeOnMap);
+                    
+                    
+                    // PowerUp choose
+                    int aRadomColor = rand()%100;
+                    aRandomColorFin = 0;//Blitz by default
+                    
+                    CCLog("Item power spawn value:%i",aRadomColor);
+                    
+                    for(int c=0;c<aPowerItemValues.size();c++)
+                    {
+                        if(aRadomColor<aPowerItemValues[c]){
+//                            aRandomColorFin = c;
+                            
+                            if(c == 0){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_GHOST)){
+                                    aRandomColorFin = ITEM_GHOST;
+                                }
+                            }
+                            else if(c==1){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_DOUBLER)){
+                                    aRandomColorFin = ITEM_CRYSTAL_DOUBLER;
+                                }
+                            }
+                            else if(c==2){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_PLANT)){
+                                    aRandomColorFin = ITEM_CRYSTAL_PLANT;
+                                }
+                            }
+                            
+                            break;
+                        }
+                    }
+                    
+                    // Do not spawn if has not unlocked
+                    if(aRandomColorFin != 0){
+                        generatePowerItem(aRandomColorFin);
+                    }
+                    
+//                    generateMushroom(mCurrentMission.ItemTimeOnMap);
+                    
                 }
                 else if(aDiamondNum>0){
                     aDiamondNum-=1;
@@ -8804,10 +8876,13 @@ void GameScene::OnDwarfKingSpawnHitGround(CCNode* sender)
     
     if(mDwarfKingItemSpawnID == 0)
     {
+        CCLog("Dwarf King wants to spawn mushroom ghost - HELP !!!");
+        /*
         Mushroom* mushroom = Mushroom::create(this,mCurrentMission.ItemTimeOnMap);
         mushroom->setPosition(mDwarfKingItemSpawnPos);
         addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
         _mushrooms->addObject(mushroom);
+        */
     }
     else if(mDwarfKingItemSpawnID == 1)
     {
@@ -8937,6 +9012,27 @@ void GameScene::GeneratePowerUp(int theType,int theTime)
     _powersOnMap->addObject(Bee);
 }
 
+void GameScene::updateActiveInGamePowers(float delta)
+{
+    if(mPowerItem_GhostsActive>0){
+        mPowerItem_GhostsActive -= delta * _gameSpeed;
+        if(mPowerItem_GhostsActive<=0){
+            mPowerItem_GhostsActive = 0;
+        }
+    }
+    
+    if(mPowerItem_CrystalDoublerActive>0){
+//        CCLog("delta: %f",delta);
+        mPowerItem_CrystalDoublerActive -= delta * _gameSpeed;
+//        CCLog("mPowerItem_CrystalDoublerValue: %f",mPowerItem_CrystalDoublerActive);
+        
+        if(mPowerItem_CrystalDoublerActive<=0){
+            mPowerItem_CrystalDoublerActive = 0;
+            mPowerItem_CrystalDoublerValue = 1;// Reset back to normal value without doubler
+        }
+    }
+}
+
 void GameScene::update(float delta)
 {
     if (_gamePause)
@@ -8985,14 +9081,14 @@ void GameScene::update(float delta)
     }
     
     // Update ghost stuff
-    if (_boostGhostTimer>0)
-    {
-        _boostGhostTimer-=delta;
-        if (_boostGhostTimer<=0)
-        {
-            _boostGhostTimer = 0;
-        }
-    }
+//    if (_boostGhostTimer>0)
+//    {
+//        _boostGhostTimer-=delta;
+//        if (_boostGhostTimer<=0)
+//        {
+//            _boostGhostTimer = 0;
+//        }
+//    }
     
     // The master troll update cycle
     UpdateMasterTroll(delta);
@@ -9013,6 +9109,10 @@ void GameScene::update(float delta)
     if(mTotem != NULL){
         mTotem->update(delta);
     }
+    
+    // The power item updates !!!
+    updateActiveInGamePowers(delta);
+//    updatePlants(delta);
     
     return;
     
@@ -10419,16 +10519,16 @@ void GameScene::update(float delta)
     //========================================
     //Booster update
     
-    if (_boostGhostTimer>0)
-    {
-        _boostGhostTimer-=delta;
-        if (_boostGhostTimer<=0)
-        {
-            disableBooster(kBooster_Ghost);
-            _plantIceFlowerFirst = false;
-        }
-    }
-        
+//    if (_boostGhostTimer>0)
+//    {
+//        _boostGhostTimer-=delta;
+//        if (_boostGhostTimer<=0)
+//        {
+//            disableBooster(kBooster_Ghost);
+//            _plantIceFlowerFirst = false;
+//        }
+//    }
+    
 //    if (mBoost_Shield_Timer>0)
 //    {
 //        mBoost_Shield_Timer-=delta;
@@ -10803,6 +10903,7 @@ void GameScene::update(float delta)
 
 void GameScene::updatePlants(float delta)
 {
+    /*
 //    CCLog("_plantCrystalTime:%f",_plantCrystalTime);
     _plantCrystalTime+=delta*_gameSpeed;
     //Grow faster !!! by 20%
@@ -10821,6 +10922,7 @@ void GameScene::updatePlants(float delta)
         //Start to grow up a plant !!!
         generatePlantCrystal();
     }
+    */
     
     //For now disabled - we will have power machines
     //For first time start to plant somwehere some special plants
@@ -10888,62 +10990,63 @@ void GameScene::generatePlantFuzz()
     this->addChild(plant,getSpriteOrderZ(plant->getPositionY()));
 }
 
+/*
 void GameScene::generatePlantCrystal()
 {
     if (this->getChildByTag(kPlant_Crystal))
         return;//Wait a bit
     
     //The new stuff
-    if(User::getInstance()->mNewMissionBuild){
-        if(User::getInstance()->mNewMissionProgress >= 4){
-            //All ok
-            
-        }
-        else{
-            return;
-        }
-    }
-    else
-    {
-        if(User::getInstance()->getMachine_PlantLvl()<1)
-            return;
-    }
+    
+    if(User::getInstance()->getMachine_PlantLvl()<1)
+        return;
     
     Plant_Crystal_Weed* plant = Plant_Crystal_Weed::create(this);
     CCPoint aPosition = getRandomPointFromBlock(rand()%8);
     plant->setPosition(aPosition.x, aPosition.y);
     plant->setTag(kPlant_Crystal);
     addChild(plant,getSpriteOrderZ(plant->getPositionY()));
+}
+*/
+
+void GameScene::generatePowerItem(int theID)
+{
+    // Universall item generator by item data from xml and saved stuff for user
+    Universal_PowerItem* item = Universal_PowerItem::create(this, theID);
     
-    //===========
+    // ToDo - add some check what was the last stuff
+    /* // This is the reference
+    _mushroomSpawnPositions.clear();
+    for (int i = 0;i<8;i++)
+    {
+        if (i != _mushroomLastSpawnBlockID)
+            _mushroomSpawnPositions.push_back(i);
+    }
+    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
     
-//    PlantCrystal* plant = PlantCrystal::create(this);
-//    plant->setTag(kPlant_Crystal);
-//    
-//    CCPoint aPosition = getRandomPointFromBlock(rand()%8);
-////    CCPoint aPosition = ccp(200,200);
-//    plant->setPosition(aPosition.x, aPosition.y);
+    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
     
-    //////////////////////////////////////////////////////////////////////
-    //Create the possible spawn points,except last one
+    mushroom->setPosition(aPosition);
+    */
     
-//    _mushroomSpawnPositions.clear();
-//    for(int i = 0;i<8;i++)
-//    {
-//        if (i!=mMushroomLastSpawnBlockID)
-//            _mushroomSpawnPositions.push_back(i);
-//    }
-//    mMushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-//    
-//    CCPoint aPosition = getRandomPointFromBlock(mMushroomLastSpawnBlockID);
-//    
-//    mushroom->setPosition(aPosition);
+    // Add to global array where can update it !!!
+    CCPoint aPosition = getRandomPointFromBlock(rand()%8);
+    item->setPosition(aPosition.x, aPosition.y);
+    addChild(item,getSpriteOrderZ(item->getPositionY()));
     
-    //////////////////////////////////////////////////////////////////////
+    if(theID == ITEM_CRYSTAL_PLANT)
+    {
+        // This will spawn one time - so no stuff here
+    }
+    else
+    {
+        mUniversalItems->addObject(item);
+    }
     
-//    this->addChild(plant, getSpriteOrderZ(plant->getPositionY()));
 }
 
+
+// Meeen this is a fucked up mess :D - needs cleaning up
 void GameScene::updateDwarfs(float delta)
 {
 	// update dwarves
@@ -10973,6 +11076,7 @@ void GameScene::updateDwarfs(float delta)
             
             _foundWarning = false;
             
+            /*
             if(mTutorialEnabled)
             {
                 //Set the timer to 1sec to spawn the crystal
@@ -10982,6 +11086,7 @@ void GameScene::updateDwarfs(float delta)
                     mTutorialTimer = 1.0f;
                 }
             }
+            */
             
             /*
             if(mCheckSpecialSpotTouch)
@@ -11476,7 +11581,7 @@ void GameScene::updateDwarfs(float delta)
                 for(int beeIndex = _otherEnemy->count()-1;beeIndex>=0;--beeIndex)
                 {
                     Enemy_Bee* gob = static_cast<Enemy_Bee*>(_otherEnemy->objectAtIndex(beeIndex));
-                    if(gob->isVisible() && getGhostTimer() <= 0)
+                    if(gob->isVisible() && mPowerItem_GhostsActive <= 0)
                     {
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), gob->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
@@ -11605,7 +11710,7 @@ void GameScene::updateDwarfs(float delta)
 					Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
 					
                     //Little update - warning light on gnome !!!
-                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove() && _boostNoEnemyTimer<=0 && getGhostTimer() <= 0)
+                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove() && _boostNoEnemyTimer<=0 && mPowerItem_GhostsActive <= 0)
                     {
                         //Check the warning distance
                         //Check the real stuff here
@@ -11946,10 +12051,22 @@ void GameScene::updateDwarfs(float delta)
                         
                         if(mAttackFunctionalActive)
                         {
-                            if(crystal->_color == CRYSTAL_COLOR_BLUE) mMasterTroll_Attack+=20;
-                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) mMasterTroll_Attack+=15;
-                            else if(crystal->_color == CRYSTAL_COLOR_RED) mMasterTroll_Attack+=30;
-                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW) mMasterTroll_Attack+=50;
+                            if(crystal->_color == CRYSTAL_COLOR_BLUE) {
+//                                mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalDoublerValue; // Old stuff
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_BLUE+(ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) {
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_GREEN+(ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_RED){
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_RED+(ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW){
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_YELLOW+(ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
                             UpdateBattleLabel();
                         }
                         
@@ -12328,55 +12445,35 @@ void GameScene::updateDwarfs(float delta)
     			}
     		}
             
-            if (dwarf)
+            //........................................................................
+            // The new power item check !!!
+            
+            if(dwarf)
             {
-                for (int diamondIndex = _mushrooms->count() - 1; diamondIndex >= 0; --diamondIndex)
+                for(int itemIndex = mUniversalItems->count()-1;itemIndex >= 0; --itemIndex)
                 {
-                    Mushroom* diamond = static_cast<Mushroom*>(_mushrooms->objectAtIndex(diamondIndex));
+                    Universal_PowerItem* itemToCheck = static_cast<Universal_PowerItem*>(mUniversalItems->objectAtIndex(itemIndex));
                     
-                    if (diamond->isVisible() &&
-                        ccpDistanceSQ(dwarf->getPosition(), diamond->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
+                    // If it is not visible - ignore it !!!
+                    if(itemToCheck->isVisible())
                     {
-                        this->removeChild(diamond);
-                        _mushrooms->removeObjectAtIndex(diamondIndex);
-                        
-                        playInGameSound("crystal_pick_up");
-                        
-                        User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
-                        
-                        mTotalMushroom+=1;
-                        CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
-                        
-                        // For now - activate ghost dwarfs
-                        
-                        // Make all dwarfs tansparent
-                        _boostGhostTimer = 10;//Just enable it
-                        
-                        _mission_AP_GhostDwarfs+=1;
-                        CheckMissionByValue(MissionType_AP_GhostDwarfs,_mission_AP_GhostDwarfs);
+                        // Is the dwarf in the range?
+                        if(ccpDistanceSQ(dwarf->getPosition(), itemToCheck->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
+                        {
+                            // Remove it from game - maybe latter add some special FX
+                            itemToCheck->onDwarfPickUp(dwarf);
+                            
+                            // Clean map from it !!!
+                            this->removeChild(itemToCheck);
+                            mUniversalItems->removeObject(itemToCheck);
+                        }
                     }
                 }
-                
-                /*
-                Mushroom* mushroom = static_cast<Mushroom*>(getChildByTag(kMushroom));
-                
-                if (mushroom!=NULL &&
-                   ccpDistanceSQ(dwarf->getPosition(), mushroom->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
-                {
-                    this->removeChild(mushroom);
-                    //Get some random boost !!!
-                    createRandomBoos(dwarf->getPosition());
-                    
-                    playInGameSound("crystal_pick_up");
-                    
-                    User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
-                    
-                    mTotalMushroom+=1;
-                    CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
-                }
-                */
             }
             
+            //........................................................................
+            
+            // Is this dwarf forced to remove from game?
             if (dwarf && dwarf->getForceRemove())
             {
                 CheckForDwarfCancel(dwarf);
@@ -12703,7 +12800,7 @@ void GameScene::updateIntroAnimations(float delta)
 	{
 		IntroAnimation* introAnimation = static_cast<IntroAnimation*>(_introAnimations->objectAtIndex(introAnimationIndex));
 		
-		introAnimation->update(delta);
+        if(introAnimation) introAnimation->update(delta);
 	}
 }
 
@@ -15135,6 +15232,17 @@ void GameScene::generateCrystalSpecial(int theX,int theY)
     _crystals->addObject(crystal);
     crystal->onFinishedIntro();
     */
+    
+    int theCrystalID = rand()%4;
+//    CCLog("Plant will spawn crystal with ID:%i",theCrystalID);
+    
+    Crystal* crystal = Crystal::create(this,theCrystalID,mCurrentMission.ItemTimeOnMap);
+    crystal->setPosition(ccp(theX,theY));
+    
+    addChild(crystal, getSpriteOrderZ(crystal->getPositionY()));
+    _crystals->addObject(crystal);
+    
+    crystal->onFinishedIntro();
 }
 
 void GameScene::removeCrystal(Crystal* crystal)
@@ -15156,84 +15264,6 @@ void GameScene::removeDiamond(Diamond* diamond)
 {
 	this->removeChild(diamond);
 	_diamonds->removeObject(diamond);
-}
-
-void GameScene::generateMushroom(float theTime)
-{
-    Mushroom* mushroom = Mushroom::create(this,theTime);
-    
-    _mushroomSpawnPositions.clear();
-    for (int i = 0;i<8;i++)
-    {
-        if (i != _mushroomLastSpawnBlockID)
-            _mushroomSpawnPositions.push_back(i);
-    }
-    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-    
-    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
-    
-    mushroom->setPosition(aPosition);
-    
-    addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
-    _mushrooms->addObject(mushroom);
-    
-    //---------------------------------------------------------------
-    //The old stuff
-    /*
-//    bool aCanBeActivated = true;
-    int aCanActivateCount = 0;
-    
-    //Check if we can generate mushroom !!!
-    Machine_Ghost* aMachineG = static_cast<Machine_Ghost*>(getChildByTag(1020));
-    if(aMachineG->mCanBeActivated)
-        aCanActivateCount+=1;
-    
-    Machine_Enemies* aMachineE = static_cast<Machine_Enemies*>(getChildByTag(1030));
-    if(aMachineE->mCanBeActivated)
-        aCanActivateCount+=1;
-    
-    if(aCanActivateCount==0)
-    {
-        _mushroomTimer = 5;//Check after 5 sec again !!!
-        return;
-    }
-    
-//    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    
-    Mushroom* mushroom = Mushroom::create(this);
-    mushroom->setTag(kMushroom);
-    
-    //Get some position
-//    CCPoint position = ccp(rand() % ((int)visibleSize.width+40),
-//                           rand() % ((int)visibleSize.height+40));
-//    
-//    while (getMask(position.x, position.y))
-//    {
-//        position = ccp(rand() % ((int)visibleSize.width+40),
-//                       rand() % ((int)visibleSize.height+40));
-//    }
-//    
-//    mushroom->setPosition(position.x,position.y);
-    
-    //////////////////////////////////////////////////////////////////////
-    //Create the possible spawn points,except last one
-    
-    _mushroomSpawnPositions.clear();
-    for (int i = 0;i<8;i++)
-    {
-        if (i != _mushroomLastSpawnBlockID)
-            _mushroomSpawnPositions.push_back(i);
-    }
-    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-    
-    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
-    
-    mushroom->setPosition(aPosition);
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
-    */
 }
 
 void GameScene::generateEffectSpecial(int theX,int theY, int theType)
@@ -20168,6 +20198,14 @@ void GameScene::CreateBattleArena()
     mMasterTroll_CurrentHP = mMasterTroll_HP;
     mMasterTroll_CurrentAttack = mMasterTroll_Attack = 0;
     
+    mPowerItem_CrystalRefiner = 0;
+    if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_REFINERY)){
+        int theLevel = User::getInstance()->getItemDataManager().getPowerItemLevel(ITEM_CRYSTAL_REFINERY);
+        mPowerItem_CrystalRefiner = User::getInstance()->getItemDataManager().getPowerByID(ITEM_CRYSTAL_REFINERY).upgrade_power[theLevel-1];
+//        CCLog("mPowerItem_CrystalRefiner:%f",mPowerItem_CrystalRefiner);
+    }
+    
+    
     // The progress bar !!!
     // Dwarf king or electro machine
     CCSize aScreenSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -20280,6 +20318,8 @@ void GameScene::UpdateSmoothBattleBars(float delta)
     {
         if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
         {
+//            CCLog("mMasterTroll_Attack:%d | mCurrentSpellCharge:%d",mMasterTroll_Attack,mCurrentSpellCharge);
+            
             if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
             {
                 mMasterTroll_CurrentAttack -= delta*(float)(mCurrentSpellCharge/2);

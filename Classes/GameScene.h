@@ -31,6 +31,8 @@
 
 #include "Enemy_Totem.h"
 
+#include "Universal_PowerItem.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -95,6 +97,14 @@
 #define MT_EVENT_MASS 4
 #define MT_EVENT_ICEBLITZ 5
 #define MT_EVENT_CAVEBLOCK 6
+
+// Here are the points that are given by each action
+#define ATTACK_BAR_CRYSTAL_BLUE 20
+#define ATTACK_BAR_CRYSTAL_GREEN 10
+#define ATTACK_BAR_CRYSTAL_RED 30
+#define ATTACK_BAR_CRYSTAL_YELLOW 50
+
+#define ATTACK_BAR_DWARF_ENTER_CAVE 30
 
 
 class IntroAnimation;
@@ -292,6 +302,9 @@ public:
     
     //------------------------------------------
     //The new stuff
+    
+    void generatePowerItem(int theID);
+    
     MissionSet mCurrentMission;
     
     cocos2d::CCSize visibleSize;
@@ -668,7 +681,8 @@ public:
 
 	float getGameSpeed() const { return _gameSpeed; }
 
-	float getGhostTimer() const {return _boostGhostTimer; }
+    // Old stuff - deprecated - all moving to item power data xml reading powa :D
+//	float getGhostTimer() const {return _boostGhostTimer; }
     float getShieldTimer() const { return _boostShieldTimer; }
 	
 	int getBoostExtraPoints() const { return _boostExtraPoints; }
@@ -883,7 +897,7 @@ public:
     cocos2d::CCArray* _crystals;
     cocos2d::CCArray* _effects;
     cocos2d::CCArray* _diamonds;
-    cocos2d::CCArray* _mushrooms;
+//    cocos2d::CCArray* _mushrooms;
     
     void OnCaveBlueOpen();
     void OnCaveBlueClouse();
@@ -894,7 +908,22 @@ public:
     AdvancedAnimation* _caveFat;
     AdvancedAnimation* _caveTall;
     
-    float _boostGhostTimer;
+//    float _boostGhostTimer;
+    
+    //................................................
+    // The new stuff for Items With Powers !!!
+    
+    cocos2d::CCArray* mUniversalItems;
+    
+    float mPowerItem_GhostsActive;
+    float mPowerItem_CrystalDoublerActive;
+    float mPowerItem_CrystalDoublerValue; // If not active = 1, when active 2
+    
+    float mPowerItem_CrystalRefiner; // How much gives each crystal more in procent
+    
+    void updateActiveInGamePowers(float delta);
+    
+    //................................................
     
 private:
     
@@ -1034,8 +1063,8 @@ private:
     std::vector<int> _effectSpawnPositions;
     std::vector<int> _mapSpawnTypes;
     
-    int _mushroomLastSpawnBlockID;
-    std::vector<int> _mushroomSpawnPositions;
+//    int _mushroomLastSpawnBlockID;
+//    std::vector<int> _mushroomSpawnPositions;
     
     int _crystalLastSpawnBlockID;
     std::vector<int> _crystalSpawnPositions;

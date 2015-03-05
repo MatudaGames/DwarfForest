@@ -640,10 +640,9 @@ void Dwarf::update(float delta)
 //    if (mCoolDown>0)
 //        mCoolDown-=delta;
     
-	
     bool aHasAlarm = false;
 	CCObject* entry;
-    if (_game->getGhostTimer() <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
+    if (_game->mPowerItem_GhostsActive <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
     {
         CCARRAY_FOREACH(_game->getDwarves(), entry)
         {
@@ -753,7 +752,7 @@ void Dwarf::update(float delta)
     //==========================================
     //Some booster code part
     
-    if (_game->getGhostTimer() > 0 || _game->getShieldTimer() > 0 || _PoisonTime>0)
+    if (_game->mPowerItem_GhostsActive > 0 || _game->getShieldTimer() > 0 || _PoisonTime>0)
     {
         //Set alpha for now 50%
         if(_animation && _animation->getOpacity()!=220)
