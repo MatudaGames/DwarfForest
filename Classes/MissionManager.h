@@ -315,6 +315,13 @@ struct MissionSet
     int32_t MT_Snipe;
     int32_t MT_Snipe_Delay;
     
+    int32_t Task_DwarfWinCon;
+    int32_t Task_CrystalsWinCon;
+    int32_t Task_SurviveTime;
+    int32_t Task_SurviveLives;
+    
+    int32_t STORE_Booster_DwarfPrice;
+    
     int32_t MT_Event_ForceSpawnEnemy_Time;
     
     int32_t Mission_SaveDwarfs;

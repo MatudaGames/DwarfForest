@@ -37,6 +37,7 @@ private:
     
     cocos2d::CCSize mScreenSize;
     cocos2d::CCLayerColor* mKautkasScreen;
+    cocos2d::CCLabelTTF* _pointLabel;
     
     GameScene *_game;
     

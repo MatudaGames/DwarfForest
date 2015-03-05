@@ -463,7 +463,17 @@ void MissionManager::Donwloaded()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //---------------------------------------------------------------------------------------------------
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+		//For MissionType_TimeUpdate
+		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+		//Some Extra store stuff
+		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
+        
+		//---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
         //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
@@ -2667,6 +2677,15 @@ void MissionManager::AddExtraDownloadedMissions_1()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+        //For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+		//For MissionType_TimeUpdate
+		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+		//Some Extra store stuff
+		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
@@ -3431,6 +3450,15 @@ void MissionManager::AddExtraDownloadedMissions_2()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+		//For MissionType_TimeUpdate
+		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+        //Some Extra store stuff
+		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
@@ -4194,6 +4222,15 @@ void MissionManager::AddExtraDownloadedMissions_3()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+        //For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+		//For MissionType_TimeUpdate
+		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+		//Some Extra store stuff
+		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //
         
         //---------------------------------------------------------------------------------------------------
@@ -5269,6 +5306,15 @@ void MissionManager::OnDownloadedSpecial()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+		//For MissionType_TimeUpdate
+		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+        //Some Extra store stuff
+		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         

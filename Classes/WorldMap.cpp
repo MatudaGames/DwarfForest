@@ -250,14 +250,167 @@ void WorldMap::MissionTaskInditificator(int theID)
 {
 	WhatMission = theID;
 	
+	mCall = User::getInstance()->getMissionManager().GetMissionByID(WhatMission-1);
+
+	TESTdwarfCount = mCall.Mission_SaveDwarfs;
+	
+	CCSprite* aScreenBooster2 = CCSprite::create("WorldMap/NewPregame/BoosterCardDamage.png");
+    aScreenBooster2->setPosition(ccp(mSmallMissionScreen->getContentSize().width/4+80,mSmallMissionScreen->getContentSize().height/3-43));
+    aScreenBooster2->setTag(712);
+    
+    CCSprite* aScreenBooster3 = CCSprite::create("WorldMap/NewPregame/BoosterCardRange.png");
+    aScreenBooster3->setPosition(ccp(mSmallMissionScreen->getContentSize().width/4+270,mSmallMissionScreen->getContentSize().height/3-43));
+    aScreenBooster3->setTag(713);
+    
+    CCSprite* Tootem = CCSprite::create("WorldMap/NewPregame/Totem.png");
+    Tootem->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-375,mSmallMissionScreen->getContentSize().height/1.2-110));
+    Tootem->setTag(717);
+    
+    CCSprite* TaskVariables = CCSprite::create("WorldMap/NewPregame/TXTtotem.png");
+    TaskVariables->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-220,mSmallMissionScreen->getContentSize().height/1.2-110));
+    TaskVariables->setTag(718);
+    
+    CCMenuItemImage* plusOneDamage = CCMenuItemImage::create(
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        this,
+                                                        menu_selector(WorldMap::HideMissionScreen));
+    plusOneDamage->setTag(714);//Play the level
+    plusOneDamage->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-185,mSmallMissionScreen->getContentSize().height/2-200));
+    
+    CCMenuItemImage* plusOneRange = CCMenuItemImage::create(
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        this,
+                                                        menu_selector(WorldMap::HideMissionScreen));
+    plusOneRange->setTag(715);//Play the level
+    plusOneRange->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+5,mSmallMissionScreen->getContentSize().height/2-200));
+	
+	if(mCall.Task_type==6 || mCall.Task_type==8)
+	{
+	mSmallMissionScreen->addChild(aScreenBooster2);
+	mSmallMissionScreen->addChild(aScreenBooster3);
+	CCMenu* aButtonMenuA = CCMenu::create(plusOneDamage,plusOneRange,NULL);
+    aButtonMenuA->setAnchorPoint(ccp(0,0));
+    aButtonMenuA->setPosition(ccp(0,0));
+    aButtonMenuA->setTag(716);
+    mSmallMissionScreen->addChild(aButtonMenuA);
+	}
+	if (mCall.Task_type==1)
+	{
+		taskInfo = CCLabelTTF::create("RESCUE DWARFS","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.8, CCSize(350,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+110,mSmallMissionScreen->getContentSize().height/2.0+345));//160,700
+    	taskInfo->setTag(30004);
+    	taskInfo->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(taskInfo);
+		mSmallMissionScreen->removeChildByTag(712);	
+		mSmallMissionScreen->removeChildByTag(713);	
+	}else if(mCall.Task_type==11){
+		taskInfo = CCLabelTTF::create("SURVIVE","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.8, CCSize(350,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+110,mSmallMissionScreen->getContentSize().height/2.0+345));//160,700
+    	taskInfo->setTag(30004);
+    	taskInfo->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(taskInfo);
+	}else if(mCall.Task_type==6){
+		taskInfo = CCLabelTTF::create("DEFEAT MASTER TROLL","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.8, CCSize(550,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+215,mSmallMissionScreen->getContentSize().height/2.0+345));//160,700
+    	taskInfo->setTag(30004);
+    	taskInfo->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(taskInfo);		
+	}
+	else if (mCall.Task_type==8){
+		taskInfo = CCLabelTTF::create("DESTROY TOTEM","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.8, CCSize(350,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+110,mSmallMissionScreen->getContentSize().height/2.0+345));//160,700
+    	taskInfo->setTag(30004);
+    	taskInfo->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(taskInfo);
+    	
+    	_totemHP = CCLabelTTF::create("","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	_totemHP->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-125,mSmallMissionScreen->getContentSize().height/1.2+15));//160,700
+		_totemHP->setTag(30009);
+    	_totemHP->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(_totemHP);
+		
+    	std::stringstream _totemHPReal;
+    	_totemHPReal<<int(mCall.TOTEM_HP);
+    	_totemHP->setString(_totemHPReal.str().c_str());
+    	
+    	mSmallMissionScreen->addChild(Tootem);
+    	mSmallMissionScreen->addChild(TaskVariables);		
+	}else if (mCall.Task_type==10){
+		taskInfo = CCLabelTTF::create("Gather Crystals","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.8, CCSize(550,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	taskInfo->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+215,mSmallMissionScreen->getContentSize().height/2.0+355));//160,700
+    	taskInfo->setTag(30004);
+    	taskInfo->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(taskInfo);	
+		mSmallMissionScreen->removeChildByTag(712);		
+		mSmallMissionScreen->removeChildByTag(713);	
+	}
+	
+	if(mCall.Mission_SaveDwarfs)
+	{
+		dwarfCount = CCLabelTTF::create("","PowerButtons/PB_Font.fnt", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	dwarfCount->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-190,mSmallMissionScreen->getContentSize().height/2.0+37));//160,700
+    	dwarfCount->setTag(30005);
+    	dwarfCount->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(dwarfCount);	
+    	
+    	std::stringstream dwarfCountReal;
+    	dwarfCountReal<<int(mCall.Mission_SaveDwarfs);
+    	dwarfCount->setString(dwarfCountReal.str().c_str());
+    	
+    	CCMenuItemImage* plusOne = CCMenuItemImage::create(
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        "WorldMap/NewPregame/ButtonPlusOne.png",
+                                                        this,
+                                                        menu_selector(WorldMap::BuyMoreDwarfs));
+    	plusOne->setTag(1);//Play the level
+    	plusOne->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-377,mSmallMissionScreen->getContentSize().height/2-200));
+    
+    	CCMenu* aButtonMenu2 = CCMenu::create(plusOne,NULL);
+    	aButtonMenu2->setAnchorPoint(ccp(0,0));
+    	aButtonMenu2->setPosition(ccp(0,0));
+    	mSmallMissionScreen->addChild(aButtonMenu2);
+    
+     	dwarfPrice =CCLabelBMFont::create("50", "PowerButtons/PB_Font.fnt",150, kCCTextAlignmentCenter);
+   	 	dwarfPrice->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-325,mSmallMissionScreen->getContentSize().height/2-200));
+    	//dwarfPrice->setColor(ccc3(36,102,102));
+    	dwarfPrice->setWidth(10);
+    	dwarfPrice->setTag(30006);
+    	mSmallMissionScreen->addChild(dwarfPrice);	
+    	
+    	std::stringstream dwarfPriceReal;
+    	dwarfPriceReal<<int(mCall.STORE_Booster_DwarfPrice);
+    	dwarfPrice->setString(dwarfPriceReal.str().c_str());
+    
+	}
+	
+		_diamondsLabel = CCLabelTTF::create("Game", "fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(90, 55), kCCTextAlignmentRight, kCCVerticalTextAlignmentBottom);
+		_diamondsLabel->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+234,mSmallMissionScreen->getContentSize().height/2+95));
+		_diamondsLabel->setString(toString(User::getInstance()->getDiamonds()).c_str());
+    	_diamondsLabel->setColor(ccc3(255,246,200));
+    	_diamondsLabel->setTag(30007);
+    	mSmallMissionScreen->addChild(_diamondsLabel);	
+    	
+    	_crystalsLabel = CCLabelTTF::create("Game", "fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(90, 55), kCCTextAlignmentRight, kCCVerticalTextAlignmentBottom);
+		_crystalsLabel->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+234,mSmallMissionScreen->getContentSize().height/2+175));
+		_crystalsLabel->setString(toString(User::getInstance()->getCrystals()).c_str());
+    	_crystalsLabel->setColor(ccc3(255,246,200));
+    	_crystalsLabel->setTag(30008);
+    	mSmallMissionScreen->addChild(_crystalsLabel);	
+    	
+	
 	if(WhatMission == 1)//Identificate what mission number we need
 	{
+		//mCall = User::getInstance()->getMissionManager().GetMissionByID(0);
+		//mCall.Task_type
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M1.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-    	/*
+    	
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(0);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -269,19 +422,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+	
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);		
+    	mSmallMissionScreen->addChild(missionTask);
+			*/		
 	}else if(WhatMission == 2)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M2.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	/*
+    	
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(1);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -294,19 +449,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
 		//removeChildByTag(30004);
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);				
+    	mSmallMissionScreen->addChild(missionTask);	
+		*/			
 	}else if(WhatMission == 3)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M3.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	/*
+    	
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(2);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -318,19 +475,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);				
+    	mSmallMissionScreen->addChild(missionTask);	
+		*/			
 	}else if(WhatMission == 4)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M4.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-    	/*
+    	
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(3);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -355,19 +514,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);				
+    	mSmallMissionScreen->addChild(missionTask);			
+		*/	
 	}else if(WhatMission == 5)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M5.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);	
-    	/*
+    	
     	mCall = User::getInstance()->getMissionManager().GetMissionByID(4);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -392,19 +553,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);			
+    	mSmallMissionScreen->addChild(missionTask);
+		*/			
 	}else if(WhatMission == 6)
 	{
+			/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M6.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-		/*
+	
 		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -429,19 +592,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);					
+    	mSmallMissionScreen->addChild(missionTask);		
+		*/			
     }else if(WhatMission == 7)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M7.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-		/*
+		
 		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -466,19 +631,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);				
+    	mSmallMissionScreen->addChild(missionTask);	
+		*/			
     }else if(WhatMission == 8)
 	{
+			/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M8.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-		/*
+	
 		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -503,19 +670,21 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);					
+    	mSmallMissionScreen->addChild(missionTask);	
+		*/				
     }else if(WhatMission == 9)
 	{
+		/*
 		CCSprite* missionNumber = CCSprite::create("WorldMap/mission_number/M9.png");
     	missionNumber->setPosition(ccp(595,570));//550,480
     	missionNumber->setTag(30002);
     	missionNumber->setScale(0.5);
     	mSmallMissionScreen->addChild(missionNumber);
-		/*
+		
 		mCall = User::getInstance()->getMissionManager().GetMissionByID(5);
  		int minCrystalCount = mCall.Star_1;
 		
@@ -540,12 +709,90 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream taskInfoCount;
     	taskInfoCount<<"Collect "<<int(minCrystalCount)<<" green Crystals";
     	taskInfo->setString(taskInfoCount.str().c_str());
-		*/
+		
 		CCSprite* missionTask = CCSprite::create("WorldMap/mission_number/defeat_master_troll.png");
     	missionTask->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0+120,mSmallMissionScreen->getContentSize().height/2.0+120));//550,480
     	missionTask->setTag(30004);
-    	mSmallMissionScreen->addChild(missionTask);					
+    	mSmallMissionScreen->addChild(missionTask);	
+		*/				
     }
+}
+
+void WorldMap::BuyMoreDwarfs()
+{
+	CCLog("Works so far!!!");
+	
+	int aPrice = mCall.STORE_Booster_DwarfPrice;
+	
+	int aDidUseDiamonds = User::getInstance()->canUseDiamonds(aPrice);//BOOSTER_1_PRICE
+        if(aDidUseDiamonds<0)
+        {
+            //Show popup that no money
+            return;
+        }else{
+        	if(aPrice <=0)
+        	{
+        	}else{
+        	//mCall = User::getInstance()->getMissionManager().GetMissionByID(WhatMission+1);
+			if(WhatMission == 1)//Identificate what mission number we need
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(0);
+			mCall.Mission_SaveDwarfs;
+			}else if(WhatMission == 2)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(1);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 3)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(2);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 4)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(3);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 5)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(4);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 6)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(5);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 7)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(6);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 8)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(7);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 9)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(8);
+			mCall.Mission_SaveDwarfs;	
+			}else if(WhatMission == 10)
+			{
+			//mCall = User::getInstance()->getMissionManager().AddDwarfs(9);
+			mCall.Mission_SaveDwarfs;	
+			}
+			
+        	}
+		}
+	
+	
+	UpdateStats();
+	
+}
+
+void WorldMap::UpdateStats()
+{
+	std::stringstream _diamondsLabelReal;
+    _diamondsLabelReal<<int(User::getInstance()->getDiamonds());
+    _diamondsLabel->setString(_diamondsLabelReal.str().c_str());
+    
+    std::stringstream dwarfCountReal;
+    dwarfCountReal<<int(mCall.Mission_SaveDwarfs);
+    dwarfCount->setString(dwarfCountReal.str().c_str());
 }
 
 void WorldMap::CreatePlayer()
@@ -664,7 +911,7 @@ void WorldMap::PrepeareSmallMissionScreen()
     mSmallMissionScreen->setVisible(false);
     
     //Add the screen
-    CCSprite* aScreenPlay = CCSprite::create("WorldMap/pre_screen.png");
+    CCSprite* aScreenPlay = CCSprite::create("WorldMap/NewPregame/Background.png");
     aScreenPlay->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2,mSmallMissionScreen->getContentSize().height/2));
     mSmallMissionScreen->addChild(aScreenPlay);
     
@@ -672,12 +919,12 @@ void WorldMap::PrepeareSmallMissionScreen()
     
     // The play button
     CCMenuItemImage* playItem = CCMenuItemImage::create(
-                                                        "Interfeiss/main_menu/play_btn0001.png",
-                                                        "Interfeiss/main_menu/play_btn0002.png",
+                                                        "WorldMap/NewPregame/ButtonPlay.png",
+                                                        "WorldMap/NewPregame/ButtonPlay.png",
                                                         this,
                                                         menu_selector(WorldMap::HideMissionScreen));
     playItem->setTag(1);//Play the level
-    playItem->setPosition(ccp(aScreenPlay->getContentSize().width/2,0));
+    playItem->setPosition(ccp(aScreenPlay->getContentSize().width/2.0+300,aScreenPlay->getContentSize().height/6));
     
     // The clouse button
     CCMenuItemImage* clouseItem = CCMenuItemImage::create(
@@ -686,21 +933,74 @@ void WorldMap::PrepeareSmallMissionScreen()
                                                         this,
                                                         menu_selector(WorldMap::HideMissionScreen));
     clouseItem->setTag(2);//Clouse screen
-    clouseItem->setPosition(ccp(aScreenPlay->getContentSize().width,aScreenPlay->getContentSize().height));
+    clouseItem->setPosition(ccp(aScreenPlay->getContentSize().width-30,aScreenPlay->getContentSize().height-30));
     
-    CCMenu* aButtonMenu = CCMenu::create(playItem,clouseItem,NULL);
+    CCMenuItemImage* upgradeItem = CCMenuItemImage::create(
+                                                        "WorldMap/NewPregame/ButtonUpgrades.png",
+                                                        "WorldMap/NewPregame/ButtonUpgrades.png",
+                                                        this,
+                                                        menu_selector(WorldMap::HideMissionScreen));
+    upgradeItem->setTag(1);//Play the level
+    upgradeItem->setPosition(ccp(aScreenPlay->getContentSize().width/2.0+300,aScreenPlay->getContentSize().height/3));
+    
+    CCSprite* MissionTask = CCSprite::create("WorldMap/NewPregame/TXTMissionTask.png");
+    MissionTask->setPosition(ccp(aScreenPlay->getContentSize().width/4,aScreenPlay->getContentSize().height+18));
+    mSmallMissionScreen->addChild(MissionTask);
+    
+    CCSprite* aScreenPlay2 = CCSprite::create("WorldMap/NewPregame/Background2.png");
+    aScreenPlay2->setPosition(ccp(aScreenPlay->getContentSize().width/2.0-140,aScreenPlay->getContentSize().height/1.2));
+    mSmallMissionScreen->addChild(aScreenPlay2);
+    
+    CCSprite* aScreenBooster = CCSprite::create("WorldMap/NewPregame/BoosterCardDwarfs.png");
+    aScreenBooster->setPosition(ccp(aScreenPlay->getContentSize().width/6.0-24,aScreenPlay->getContentSize().height/3));
+    mSmallMissionScreen->addChild(aScreenBooster);
+    
+    CCSprite* aNeedle = CCSprite::create("WorldMap/NewPregame/boostersneedle.png");
+    aNeedle->setFlipX(true);
+    aNeedle->setPosition(ccp(aScreenPlay->getContentSize().width/6.0-10,aScreenPlay->getContentSize().height/2+60));
+    mSmallMissionScreen->addChild(aNeedle);
+    
+    CCSprite* aNeedle2 = CCSprite::create("WorldMap/NewPregame/boostersneedle.png");
+    aNeedle2->setFlipX(false);
+    aNeedle2->setPosition(ccp(aScreenPlay->getContentSize().width/6.0+350,aScreenPlay->getContentSize().height/2+60));
+    mSmallMissionScreen->addChild(aNeedle2);
+    
+    CCSprite* Boosters = CCSprite::create("WorldMap/NewPregame/TXTBoosters.png");
+    Boosters->setPosition(ccp(aScreenPlay->getContentSize().width/6.0+170,aScreenPlay->getContentSize().height/2+60));
+    mSmallMissionScreen->addChild(Boosters);
+    
+    CCSprite* CurrencyCrystals = CCSprite::create("WorldMap/NewPregame/CurrencyCrystals.png");
+    CurrencyCrystals->setPosition(ccp(aScreenPlay->getContentSize().width/2+240,aScreenPlay->getContentSize().height/1.1));
+    mSmallMissionScreen->addChild(CurrencyCrystals);
+    
+    CCSprite* CurrencyDiamonds = CCSprite::create("WorldMap/NewPregame/CurrencyDiamonds.png");
+    CurrencyDiamonds->setPosition(ccp(aScreenPlay->getContentSize().width/2+231,aScreenPlay->getContentSize().height/1.3));
+    mSmallMissionScreen->addChild(CurrencyDiamonds);
+    
+    CCMenu* aButtonMenu = CCMenu::create(playItem,clouseItem,upgradeItem,NULL);
     aButtonMenu->setAnchorPoint(ccp(0,0));
     aButtonMenu->setPosition(ccp(0,0));
     aScreenPlay->addChild(aButtonMenu, 1);
-    
     
     addChild(mSmallMissionScreen,1);//Above all
 }
 
 void WorldMap::ShowMissionScreen(int theID)
 {
+	mSmallMissionScreen->removeChildByTag(30009);
+	mSmallMissionScreen->removeChildByTag(30008);
+	mSmallMissionScreen->removeChildByTag(30007);
+	mSmallMissionScreen->removeChildByTag(30006);
+	mSmallMissionScreen->removeChildByTag(30005);
 	mSmallMissionScreen->removeChildByTag(30004);
     mSmallMissionScreen->removeChildByTag(30002);
+    mSmallMissionScreen->removeChildByTag(712);
+    mSmallMissionScreen->removeChildByTag(713);
+    mSmallMissionScreen->removeChildByTag(714);
+    mSmallMissionScreen->removeChildByTag(715);
+    mSmallMissionScreen->removeChildByTag(716);
+    mSmallMissionScreen->removeChildByTag(717);
+    mSmallMissionScreen->removeChildByTag(718);
     //removeChildByTag(67881);
     mCurrentMissionID = theID;
     MissionTaskInditificator(mCurrentMissionID);
@@ -712,8 +1012,20 @@ void WorldMap::HideMissionScreen(CCObject * pSender)
     CCMenuItem* pMenuItem = (CCMenuItem *)(pSender);
     int tag = (int)pMenuItem->getTag();
     
+    mSmallMissionScreen->removeChildByTag(30009);
+    mSmallMissionScreen->removeChildByTag(30008);
+    mSmallMissionScreen->removeChildByTag(30007);
+    mSmallMissionScreen->removeChildByTag(30006);
+    mSmallMissionScreen->removeChildByTag(30005);
     mSmallMissionScreen->removeChildByTag(30004);
     mSmallMissionScreen->removeChildByTag(30002);
+    mSmallMissionScreen->removeChildByTag(712);
+    mSmallMissionScreen->removeChildByTag(713);
+    mSmallMissionScreen->removeChildByTag(714);
+    mSmallMissionScreen->removeChildByTag(715);
+    mSmallMissionScreen->removeChildByTag(716);
+    mSmallMissionScreen->removeChildByTag(717);
+    mSmallMissionScreen->removeChildByTag(718);
     mSmallMissionScreen->setVisible(false);
     
     if(tag == 1){

@@ -70,6 +70,7 @@ bool Web::init(GameScene* gameScene)
     if (GLOBAL_SCALE!=1.0f)
     {
         _startAnimation->setScale(GLOBAL_SCALE);
+        _growAnimation->setScale(GLOBAL_SCALE);
     }
     
     _startAnimation->setPosition(ccp(12,14));

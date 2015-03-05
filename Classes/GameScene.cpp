@@ -175,7 +175,7 @@ CCScene* GameScene::scene()
 GameScene::GameScene():
 	dailyChallengeInfo(NULL), _bullets(NULL),_dwarves(NULL), _trolls(NULL), _crystals(NULL), _effects(NULL), _diamonds(NULL), mUniversalItems(NULL),
 	_introAnimations(NULL), _scoreLabel(NULL), _cave(NULL), _caveMask(NULL), _mask(NULL),_MasterTroll_IdleAnimation(NULL),_MasterTroll_WinAnimation(NULL),
-	_gameTime(0)
+	_gameTime(0), _gameTimeReverse(0)
 {
 	
     
@@ -926,6 +926,8 @@ void GameScene::CreateGameByMission()
     
     _DwarfsSpawned = 0;
     
+	mLostDwarfCount = 0;
+    
     //For 1st dwarf too
     mSpecialCrystalSpawnTimer = 4;
     mCanSpawnExtraCrystal = false;
@@ -936,7 +938,12 @@ void GameScene::CreateGameByMission()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    if(mCurrentMission.Task_type == 11){
+    _gameTime = mCurrentMission.Task_SurviveTime;	
+    }else{
     _gameTime = 0;
+	}
+    _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
     _currentMinSpwanedTime = 0;//For the first meteorite - some random value above 20sec?
@@ -1262,6 +1269,34 @@ void GameScene::CreateGameStartHUD()
 	_pointsLabel->setString("0");
     _pointsLabel->setColor(ccc3(255,246,200));
     
+    _dwarfsLeftLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_dwarfsLeftLabel->setString("0");
+    _dwarfsLeftLabel->setColor(ccc3(255,246,200));
+    
+    _dwarfsSavedLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_dwarfsSavedLabel->setString("0");
+    _dwarfsSavedLabel->setColor(ccc3(255,246,200));
+    
+    _dwarfsLostLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_dwarfsLostLabel->setString("0");
+    _dwarfsLostLabel->setColor(ccc3(255,246,200));
+    
+    _dwarfsCrystalsLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_dwarfsCrystalsLabel->setString("0");
+    _dwarfsCrystalsLabel->setColor(ccc3(255,246,200));
+    
+    _timeLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_timeLabel->setString("0");
+    _timeLabel->setColor(ccc3(255,246,200));
+    
+    _lifesLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_lifesLabel->setString("0");
+    _lifesLabel->setColor(ccc3(255,246,200));
+    
+    _crystalsGathered = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_crystalsGathered->setString("0");
+    _crystalsGathered->setColor(ccc3(255,246,200));
+    
     
     // The HUD back
     CCSprite* pointsBack = CCSprite::create("Interfeiss/in_game/crystal_count.png");
@@ -1287,12 +1322,198 @@ void GameScene::CreateGameStartHUD()
     CCSprite* pointsTotalBack = CCSprite::create("Interfeiss/in_game/score.png");
     pointsTotalBack->setAnchorPoint(ccp(0, 0.5));
     pointsTotalBack->cocos2d::CCNode::setPosition(-pointsTotalBack->getContentSize().width, visibleSize.height-54);
-    addChild(pointsTotalBack, kHUD_Z_Order-1);
+    pointsTotalBack->setVisible(false);
+	addChild(pointsTotalBack, kHUD_Z_Order-1);
+	
+	if(mCurrentMission.Task_type == 3)
+	{
+			/*
+		CCSprite* TimeLeft = CCSprite::create("Interfeiss/in_game/UI/TimeLeft.png");
+   		TimeLeft->setAnchorPoint(ccp(0, 0.5));
+   		TimeLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    	TimeLeft->setVisible(true);
+		addChild(TimeLeft, kHUD_Z_Order+1);
+		*/
+		CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   		dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   		dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    	dwarfsLeft->setVisible(true);
+		addChild(dwarfsLeft, kHUD_Z_Order-1);
+		/*
+		CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
+    	LifesLeft->setAnchorPoint(ccp(0, 0.5));
+    	LifesLeft->cocos2d::CCNode::setPosition(ccp(0,530));
+    	LifesLeft->setVisible(true);
+		addChild(LifesLeft, kHUD_Z_Order-1);
+		*/
+		//_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+        //_dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+        //_dwarfsLeftLabel->setVisible(true);
+        //dwarfsLeft->addChild(_dwarfsLeftLabel);
+	}
+	
+	if(mCurrentMission.Task_type == 8 || mCurrentMission.Task_type == 6)
+	{
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+    dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);	
+	
+	_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+	}
+	 if(mCurrentMission.Task_type == 1)
+	{ 
+	CCSprite* dwarfsSaved = CCSprite::create("Interfeiss/in_game/UI/DwarfsSaved.png");
+   	dwarfsSaved->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsSaved->cocos2d::CCNode::setPosition(ccp(0,670));
+    dwarfsSaved->setVisible(true);
+	addChild(dwarfsSaved, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+	
+	_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+	
+	_dwarfsSavedLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsSavedLabel->setPosition(ccp(dwarfsSaved->getContentSize().width/2+20,dwarfsSaved->getContentSize().height/2+9));//27
+    _dwarfsSavedLabel->setVisible(true);
+    dwarfsSaved->addChild(_dwarfsSavedLabel);
+	}
+	if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
+	{
+	if(mCurrentMission.Task_type == 11)
+	{
+    //_gameTime = mCurrentMission.Task_SurviveTime;
+		
+	CCSprite* CrystalsGathered = CCSprite::create("Interfeiss/in_game/UI/CrystalsGathered.png");
+   	CrystalsGathered->setAnchorPoint(ccp(0, 0.5));
+   	CrystalsGathered->cocos2d::CCNode::setPosition(ccp(0,670));
+    CrystalsGathered->setVisible(false);
+	addChild(CrystalsGathered, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(false);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));//530
+    dwarfsLost->setVisible(false);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(false);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+    
+    _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(false);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+    
+    _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsCrystalsLabel->setPosition(ccp(CrystalsGathered->getContentSize().width/2+20,CrystalsGathered->getContentSize().height/2+9));//27
+    _dwarfsCrystalsLabel->setVisible(false);
+    CrystalsGathered->addChild(_dwarfsCrystalsLabel);
+    
+    CCSprite* TimeLeft = CCSprite::create("Interfeiss/in_game/UI/TimeLeft.png");
+   	TimeLeft->setAnchorPoint(ccp(0, 0.5));
+   	TimeLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    TimeLeft->setVisible(true);
+	addChild(TimeLeft, kHUD_Z_Order-1);
+		
+	CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
+    LifesLeft->setAnchorPoint(ccp(0, 0.5));
+    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    LifesLeft->setVisible(true);
+	addChild(LifesLeft, kHUD_Z_Order-1);
+	
+	_timeLabel->setAnchorPoint(ccp(0.5,0.5));
+    _timeLabel->setPosition(ccp(TimeLeft->getContentSize().width/2+20,TimeLeft->getContentSize().height/2+9));//27
+    _timeLabel->setVisible(true);
+    TimeLeft->addChild(_timeLabel);
+    
+    _lifesLabel->setAnchorPoint(ccp(0.5,0.5));
+    _lifesLabel->setPosition(ccp(LifesLeft->getContentSize().width/2+20,LifesLeft->getContentSize().height/2+9));//27
+    _lifesLabel->setVisible(true);
+    LifesLeft->addChild(_lifesLabel);
+	}else{
+	
+	CCSprite* CrystalsGathered = CCSprite::create("Interfeiss/in_game/UI/CrystalsGathered.png");
+   	CrystalsGathered->setAnchorPoint(ccp(0, 0.5));
+   	CrystalsGathered->cocos2d::CCNode::setPosition(ccp(0,670));
+    CrystalsGathered->setVisible(true);
+	addChild(CrystalsGathered, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order+1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+    
+    _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+    
+    _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsCrystalsLabel->setPosition(ccp(CrystalsGathered->getContentSize().width/2+20,CrystalsGathered->getContentSize().height/2+9));//27
+    _dwarfsCrystalsLabel->setVisible(true);
+    CrystalsGathered->addChild(_dwarfsCrystalsLabel);
+		} 
+	}
     
     _pointsLabel->setAnchorPoint(ccp(0.5,0.5));
     _pointsLabel->setPosition(ccp(pointsTotalBack->getContentSize().width/2-8,pointsTotalBack->getContentSize().height/2+9));//27
+    _pointsLabel->setVisible(false);
     pointsTotalBack->addChild(_pointsLabel);
     pointsTotalBack->setTag(90003);
+    
     
     //---------------------------------------------------------------------------------------------------
     //The pause and speed up button
@@ -1366,6 +1587,17 @@ void GameScene::CreateGameStartHUD()
     
     _pointsLabel->setString(theComboParticle.str().c_str());
     
+		if(mCurrentMission.Task_type == MissionType_DwarfSave)
+		{
+	    std::stringstream theDwarfsLeft;
+        theDwarfsLeft << _mission_SaveDwarfs_Left;
+        _dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
+		}else{
+		std::stringstream theDwarfsLeft;
+        theDwarfsLeft << _SaveDwarfsCounter;
+        _dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
+        }
+    
     //-----------------------------------------------------------------
     //Create the ultra combo bar !!!
     
@@ -1374,9 +1606,11 @@ void GameScene::CreateGameStartHUD()
     aBaseProgress->setPosition(ccp(94,_screenSize.height-86));
     aBaseProgress->setScaleX(0.25);
     aBaseProgress->setScaleY(0.6);
+    aBaseProgress->setVisible(false);
     
     CCSprite* aDummy = CCSprite::create("Interfeiss/challenges/daily/progress_days.png");
     aDummy->setPosition(ccp(-10,0));
+    aDummy->setVisible(false);
     aBaseProgress->addChild(aDummy);
     
     int aOneStep = aDummy->getContentSize().width/4;
@@ -1385,38 +1619,45 @@ void GameScene::CreateGameStartHUD()
     _mission_progress_bar_1->setScaleX(0.25);
     _mission_progress_bar_1->setAnchorPoint(ccp(0,0.5f));
     _mission_progress_bar_1->setPosition(ccp(aDummy->getPositionX()-aDummy->getContentSize().width/2+6,aDummy->getPositionY()));
-    aBaseProgress->addChild(_mission_progress_bar_1);
+    _mission_progress_bar_1->setVisible(false);
+	aBaseProgress->addChild(_mission_progress_bar_1);
     
     _mission_progress_bar_2 = CCSprite::create("Interfeiss/challenges/daily/progress_days_fill.png");
     _mission_progress_bar_2->setAnchorPoint(ccp(0,0.5f));
     _mission_progress_bar_2->setScaleX(0.25);
     _mission_progress_bar_2->setPosition(ccp(aDummy->getPositionX()-aDummy->getContentSize().width/2+6+aOneStep,aDummy->getPositionY()));
-    aBaseProgress->addChild(_mission_progress_bar_2);
+    _mission_progress_bar_2->setVisible(false);
+	aBaseProgress->addChild(_mission_progress_bar_2);
     
     _mission_progress_bar_3 = CCSprite::create("Interfeiss/challenges/daily/progress_days_fill.png");
     _mission_progress_bar_3->setAnchorPoint(ccp(0,0.5f));
     _mission_progress_bar_3->setScaleX(0.25);
     _mission_progress_bar_3->setPosition(ccp(aDummy->getPositionX()-aDummy->getContentSize().width/2+6+aOneStep*2,aDummy->getPositionY()));
-    aBaseProgress->addChild(_mission_progress_bar_3);
+    _mission_progress_bar_3->setVisible(false);
+	aBaseProgress->addChild(_mission_progress_bar_3);
     
     _mission_progress_bar_4 = CCSprite::create("Interfeiss/challenges/daily/progress_days_fill.png");
     _mission_progress_bar_4->setAnchorPoint(ccp(0,0.5f));
     _mission_progress_bar_4->setScaleX(0.23);
     _mission_progress_bar_4->setPosition(ccp(aDummy->getPositionX()-aDummy->getContentSize().width/2+6+aOneStep*3,aDummy->getPositionY()));
-    aBaseProgress->addChild(_mission_progress_bar_4);
+    _mission_progress_bar_4->setVisible(false);
+	aBaseProgress->addChild(_mission_progress_bar_4);
     
     
     
     CCSprite* aDummySpe = CCSprite::create("Interfeiss/challenges/daily/seperator_days.png");
     aDummySpe->setPosition(ccp(-aOneStep,0));
+    aDummySpe->setVisible(false);
     aBaseProgress->addChild(aDummySpe);
     
     aDummySpe = CCSprite::create("Interfeiss/challenges/daily/seperator_days.png");
     aDummySpe->setPosition(ccp(0,0));
+    aDummySpe->setVisible(false);
     aBaseProgress->addChild(aDummySpe);
     
     aDummySpe = CCSprite::create("Interfeiss/challenges/daily/seperator_days.png");
     aDummySpe->setPosition(ccp(aOneStep,0));
+    aDummySpe->setVisible(false);
     aBaseProgress->addChild(aDummySpe);
     
     
@@ -1428,6 +1669,7 @@ void GameScene::CreateGameStartHUD()
     _mission_star_1->setOpacity(80);
     _mission_star_1->setScaleX(2.2);
     _mission_star_1->setScaleY(1.0);
+    _mission_star_1->setVisible(false);
     aBaseProgress->addChild(_mission_star_1,kHUD_Z_Order+1);
     
     _mission_star_2 = CCSprite::create("new_mission/zvaigzne_final.png");
@@ -1435,6 +1677,7 @@ void GameScene::CreateGameStartHUD()
     _mission_star_2->setOpacity(80);
     _mission_star_2->setScaleX(2.2);
     _mission_star_2->setScaleY(1.0);
+    _mission_star_2->setVisible(false);
     aBaseProgress->addChild(_mission_star_2,kHUD_Z_Order+1);
     
     _mission_star_3 = CCSprite::create("new_mission/zvaigzne_final.png");
@@ -1442,6 +1685,7 @@ void GameScene::CreateGameStartHUD()
     _mission_star_3->setOpacity(80);
     _mission_star_3->setScaleX(2.2);
     _mission_star_3->setScaleY(1.0);
+    _mission_star_3->setVisible(false);
     aBaseProgress->addChild(_mission_star_3,kHUD_Z_Order+1);
     
     
@@ -1761,7 +2005,12 @@ bool GameScene::init()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    if(mCurrentMission.Task_type == 11){
+    _gameTime = mCurrentMission.Task_SurviveTime;	
+    }else{
     _gameTime = 0;
+	}
+    _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
     _currentMinSpwanedTime = 0;//For the first meteorite - some random value above 20sec?
@@ -1915,6 +2164,10 @@ bool GameScene::init()
 //    _pointsLabel->setAnchorPoint(ccp(0.5,0.5));
 //	_pointsLabel->setPosition(ccp(visibleSize.width/2,visibleSize.height - 29));//27
 //	this->addChild(_pointsLabel, kHUD_Z_Order+1);
+
+	_dwarfsLeftLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(120, 55), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_dwarfsLeftLabel->setString("0");
+    _dwarfsLeftLabel->setColor(ccc3(255,246,200));
     
     //-----------------------------------
     //Some debug stuff !!!
@@ -2336,6 +2589,189 @@ bool GameScene::init()
     addChild(pointsTotalBack, kHUD_Z_Order-1);
     
     _pointsLabel->setAnchorPoint(ccp(0.5,0.5));
+    
+    if(mCurrentMission.Task_type == 3)
+	{
+		/*
+		CCSprite* TimeLeft = CCSprite::create("Interfeiss/in_game/UI/TimeLeft.png");
+   		TimeLeft->setAnchorPoint(ccp(0, 0.5));
+   		TimeLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    	TimeLeft->setVisible(true);
+		addChild(TimeLeft, kHUD_Z_Order+1);
+		*/
+		CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   		dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   		dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    	dwarfsLeft->setVisible(true);
+		addChild(dwarfsLeft, kHUD_Z_Order-1);
+		/*
+		CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
+    	LifesLeft->setAnchorPoint(ccp(0, 0.5));
+    	LifesLeft->cocos2d::CCNode::setPosition(ccp(0,530));
+    	LifesLeft->setVisible(true);
+		addChild(LifesLeft, kHUD_Z_Order-1);
+		*/
+		//_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+        //_dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+        //_dwarfsLeftLabel->setVisible(true);
+        //dwarfsLeft->addChild(_dwarfsLeftLabel);
+	}
+	
+	if(mCurrentMission.Task_type == 8 || mCurrentMission.Task_type == 6)
+	{
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+    dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);	
+	
+	_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+	}
+	 if(mCurrentMission.Task_type == 1)
+	{ 
+	CCSprite* dwarfsSaved = CCSprite::create("Interfeiss/in_game/UI/DwarfsSaved.png");
+   	dwarfsSaved->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsSaved->cocos2d::CCNode::setPosition(ccp(0,670));
+    dwarfsSaved->setVisible(true);
+	addChild(dwarfsSaved, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+	
+	_dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+	
+	_dwarfsSavedLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsSavedLabel->setPosition(ccp(dwarfsSaved->getContentSize().width/2+20,dwarfsSaved->getContentSize().height/2+9));//27
+    _dwarfsSavedLabel->setVisible(true);
+    dwarfsSaved->addChild(_dwarfsSavedLabel);
+	}
+	 if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
+	{
+	if(mCurrentMission.Task_type == 11)
+	{
+	//_gameTime = mCurrentMission.Task_SurviveTime;
+		
+		CCSprite* CrystalsGathered = CCSprite::create("Interfeiss/in_game/UI/CrystalsGathered.png");
+   	CrystalsGathered->setAnchorPoint(ccp(0, 0.5));
+   	CrystalsGathered->cocos2d::CCNode::setPosition(ccp(0,670));
+    CrystalsGathered->setVisible(false);
+	addChild(CrystalsGathered, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(false);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));//530
+    dwarfsLost->setVisible(false);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(false);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+    
+    _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(false);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+    
+    _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsCrystalsLabel->setPosition(ccp(CrystalsGathered->getContentSize().width/2+20,CrystalsGathered->getContentSize().height/2+9));//27
+    _dwarfsCrystalsLabel->setVisible(false);
+    CrystalsGathered->addChild(_dwarfsCrystalsLabel);
+    
+    CCSprite* TimeLeft = CCSprite::create("Interfeiss/in_game/UI/TimeLeft.png");
+   	TimeLeft->setAnchorPoint(ccp(0, 0.5));
+   	TimeLeft->cocos2d::CCNode::setPosition(ccp(0,670));
+    TimeLeft->setVisible(true);
+	addChild(TimeLeft, kHUD_Z_Order-1);
+		
+	CCSprite* LifesLeft = CCSprite::create("Interfeiss/in_game/UI/LifesLeft.png");
+    LifesLeft->setAnchorPoint(ccp(0, 0.5));
+    LifesLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    LifesLeft->setVisible(true);
+	addChild(LifesLeft, kHUD_Z_Order-1);
+	
+	_timeLabel->setAnchorPoint(ccp(0.5,0.5));
+    _timeLabel->setPosition(ccp(TimeLeft->getContentSize().width/2+20,TimeLeft->getContentSize().height/2+9));//27
+    _timeLabel->setVisible(true);
+    TimeLeft->addChild(_timeLabel);
+    
+    _lifesLabel->setAnchorPoint(ccp(0.5,0.5));
+    _lifesLabel->setPosition(ccp(LifesLeft->getContentSize().width/2+20,LifesLeft->getContentSize().height/2+9));//27
+    _lifesLabel->setVisible(true);
+    LifesLeft->addChild(_lifesLabel);
+	}else{
+	
+	CCSprite* CrystalsGathered = CCSprite::create("Interfeiss/in_game/UI/CrystalsGathered.png");
+   	CrystalsGathered->setAnchorPoint(ccp(0, 0.5));
+   	CrystalsGathered->cocos2d::CCNode::setPosition(ccp(0,670));
+    CrystalsGathered->setVisible(true);
+	addChild(CrystalsGathered, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLeft = CCSprite::create("Interfeiss/in_game/UI/TaskDwarfCount.png");
+   	dwarfsLeft->setAnchorPoint(ccp(0, 0.5));
+   	dwarfsLeft->cocos2d::CCNode::setPosition(ccp(0,600));
+    dwarfsLeft->setVisible(true);
+	addChild(dwarfsLeft, kHUD_Z_Order-1);
+	
+	CCSprite* dwarfsLost = CCSprite::create("Interfeiss/in_game/UI/DwarfsLost.png");
+    dwarfsLost->setAnchorPoint(ccp(0, 0.5));
+    dwarfsLost->cocos2d::CCNode::setPosition(ccp(0,530));
+    dwarfsLost->setVisible(true);
+	addChild(dwarfsLost, kHUD_Z_Order-1);
+	
+	_dwarfsLostLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLostLabel->setPosition(ccp(dwarfsLost->getContentSize().width/2+20,dwarfsLost->getContentSize().height/2+9));//27
+    _dwarfsLostLabel->setVisible(true);
+    dwarfsLost->addChild(_dwarfsLostLabel);
+    
+    _dwarfsLeftLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsLeftLabel->setPosition(ccp(dwarfsLeft->getContentSize().width/2+20,dwarfsLeft->getContentSize().height/2+9));//27
+    _dwarfsLeftLabel->setVisible(true);
+    dwarfsLeft->addChild(_dwarfsLeftLabel);
+    
+    _dwarfsCrystalsLabel->setAnchorPoint(ccp(0.5,0.5));
+    _dwarfsCrystalsLabel->setPosition(ccp(CrystalsGathered->getContentSize().width/2+20,CrystalsGathered->getContentSize().height/2+9));//27
+    _dwarfsCrystalsLabel->setVisible(true);
+    CrystalsGathered->addChild(_dwarfsCrystalsLabel);
+		} 
+	}
     
 //    if(User::getInstance()->mNewMissionBuild){
 //        _pointsLabel->setPosition(ccp(_screenSize.width/2,_screenSize.height/2+50));//27
@@ -4864,6 +5300,8 @@ void GameScene::OnMasterHitGround(CCNode* sender)
     {
         if(sender->getTag() == 7001)
         {
+        	if(mBattleBar_TrollBase != NULL)
+	        {
             //Show the hp bar
             CCDelayTime* aDelay = CCDelayTime::create(0.2f);
             CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
@@ -4873,9 +5311,15 @@ void GameScene::OnMasterHitGround(CCNode* sender)
             
             CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterTrollBase->getChildByTag(70003));
             p->setDuration(1.0f);
+        	}else{
+        	CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterTrollBase->getChildByTag(70003));
+            p->setDuration(1.0f);	
+        	}
         }
         else if(sender->getTag() == 7002)
         {
+        	if(mBattleBar_MachineBase != NULL)
+            {
             // The machine progress bar
             CCDelayTime* aDelay = CCDelayTime::create(0.2f);
             CCScaleTo* aScaleAction = CCScaleTo::create(0.3f, 0.15f, 0.3f);
@@ -4885,6 +5329,10 @@ void GameScene::OnMasterHitGround(CCNode* sender)
             
             CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterDwarfBase->getChildByTag(70003));
             p->setDuration(1.0f);
+        	}else{
+        	CCParticleSystemQuad* p = static_cast<CCParticleSystemQuad*>(_MasterDwarfBase->getChildByTag(70003));
+            p->setDuration(1.0f);
+        	}
         }
     }
 
@@ -6287,7 +6735,9 @@ void GameScene::onSaveFromPause()
     //Update subtask
     User::getInstance()->getMissionManager().CheckSubMission(SUB_USE_SAVE_ME,1);
     
-    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DestroyTotem
+	|| mCurrentMission.Task_type == MissionType_DwarfCount || mCurrentMission.Task_type == MissionType_CrystalCollect
+	|| mCurrentMission.Task_type == MissionType_TEST)
     {
         // Give extra 5 dwarfs
         _mission_SaveDwarfs_Left = 5;
@@ -7745,6 +8195,7 @@ void GameScene::OnTutorialStepCompleted(int theStep)
             
             //Reset the game timer !!! and count 2 sec, then spawn trolls with crystals !!!
             _gameTime = 0.0f;
+            _gameTimeReverse = 0.0f;
             
             break;
         }
@@ -8244,6 +8695,7 @@ void GameScene::OnTutorialStepCompleted(int theStep)
             mTutorialEnabled = false;
             
             _gameTime = 0;
+            _gameTimeReverse = 0;
             
             //Save this !!!
             //            User::sh
@@ -8265,6 +8717,7 @@ void GameScene::OnTutorialStepCompleted(int theStep)
             mTutorialEnabled = false;
             
             _gameTime = 0;
+            _gameTimeReverse = 0;
             
             //Save this !!!
 //            User::sh
@@ -9038,7 +9491,13 @@ void GameScene::update(float delta)
     if (_gamePause)
         return;//Wait a bit
     
-    _gameTime += delta * _gameSpeed;
+    if(mCurrentMission.Task_type == MissionType_TEST)
+	{
+		_gameTime -= delta * _gameSpeed;
+    }else{
+    	_gameTime += delta * _gameSpeed;
+    	_gameTimeReverse -= delta * _gameSpeed;
+    }
     
     //Clean page for this !!!
     updateTrolls(delta);
@@ -9074,10 +9533,20 @@ void GameScene::update(float delta)
     
     if(mCurrentMission.Task_type){
         //Update by seconds
-        if(mTotalTimeInGame != roundf(_gameTime)){
+        mCurrentMission.Task_SurviveTime-=delta*_gameSpeed;
+        
+        
+		if(mTotalTimeInGame != roundf(_gameTime)){
             mTotalTimeInGame = roundf(_gameTime);
+            mTotalReverseTime = roundf(_gameTimeReverse);
+            mTotalMinutes = mTotalTimeInGame / 60;
+			mTotalSeconds = mTotalTimeInGame % 60;
             CheckMissionByValue(MissionType_Time,mTotalTimeInGame);
+            CheckMissionByValue(MissionType_TEST,mTotalReverseTime);
+            CheckMissionByValue(MissionType_TEST,mTotalMinutes);
+            CheckMissionByValue(MissionType_TEST,mTotalSeconds);
         }
+        
     }
     
     // Update ghost stuff
@@ -9179,7 +9648,13 @@ void GameScene::update(float delta)
     //-------------------------------
     
 	//update game time
-	_gameTime += delta * _gameSpeed;
+	if(mCurrentMission.Task_type == MissionType_TEST)
+	{
+		_gameTime -= delta * _gameSpeed;
+    }else{
+    	_gameTime += delta * _gameSpeed;
+    	_gameTimeReverse -= delta * _gameSpeed;
+    }
     
     mNoDwarfEneterCave+=delta;
     
@@ -9364,6 +9839,7 @@ void GameScene::update(float delta)
                     pauseSchedulerAndActionsRecursive(this,false);
                     
                     _gameTime = 0.0f;//Reset time
+                    _gameTimeReverse = 0.0f;
                     //Make screen black and show draw hand !!!
                     OnTutorialStepCompleted(5);//Spawn some crystal and troll
                 }
@@ -11320,7 +11796,14 @@ void GameScene::updateDwarfs(float delta)
                     CheckMissionByValue(MissionType_DwarfCount,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     CheckMissionByValue(MissionType_DwarfSave,mTotalBlueDwarfs+mTotalOrangeDwarfs);
                     
-                    
+                    if(mCurrentMission.Task_type ==MissionType_DwarfCount)
+                    {
+                    	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
+                    	{
+                    		showWinScreen();
+                    	}
+                    }
+                
                     if(mAttackFunctionalActive)
                     {
                         if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
@@ -11401,6 +11884,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if (ccpDistanceSQ(dwarf->getPosition(), cavePosition) <= (CAVE_DISTANCE_TALL * CAVE_DISTANCE_TALL)*GLOBAL_SCALE &&
 					dwarf->getIsConnectedToCave())
+					
                 {
                     if(_caveTall->mClouseAnim!=true){
                         _caveTall->mOpenAnim = false;
@@ -11500,6 +11984,23 @@ void GameScene::updateDwarfs(float delta)
                     p->setPosition(cavePosition.x, cavePosition.y+20);
                     p->setAutoRemoveOnFinish(true);
                     addChild(p,kPoints_Z_Order-1);
+                    
+                    if(mCurrentMission.Task_type ==MissionType_DwarfCount)
+                    {
+                    	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
+                    	{
+                    		showWinScreen();
+                    	}else if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+                    		 lose();
+                    	}
+                    }
+                    
+                    if(mCurrentMission.Task_type ==MissionType_DestroyTotem || mCurrentMission.Task_type ==MissionType_CrystalCollect)
+                    {
+                    	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+                    		 lose();
+                    	}
+                    }
                     
                     if(mAttackFunctionalActive)
                     {
@@ -11983,6 +12484,13 @@ void GameScene::updateDwarfs(float delta)
                             User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_CRYSTALS_SAME_DWARF,dwarf->mCollectedCrystals);
                         }
                         
+                        if(mCurrentMission.Task_type == MissionType_CrystalCollect)
+                        {
+                        	std::stringstream theCrystalsMT_Timer;
+                            theCrystalsMT_Timer<<mMasterTroll_Attack<<" Crystals";
+                            _dwarfsCrystalsLabel->setString(theCrystalsMT_Timer.str().c_str());
+                        }
+                        
                         //Crystal check for missions
                         if(mCurrentMission.Task_type == MissionType_Crystal_Blue && crystal->_color == CRYSTAL_COLOR_BLUE){
                             mTotalBlue_Crystals+=1;
@@ -12048,6 +12556,13 @@ void GameScene::updateDwarfs(float delta)
                         
                         //----------------------------------------------------------------
                         // New stuff
+                        if(mCurrentMission.Task_type == MissionType_CrystalCollect)
+                        {
+                        	if(crystal->_color == CRYSTAL_COLOR_BLUE) _crystal_Point_counter+=20;
+                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) _crystal_Point_counter+=15;
+                            else if(crystal->_color == CRYSTAL_COLOR_RED) _crystal_Point_counter+=30;
+                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW) _crystal_Point_counter+=50;
+                        }
                         
                         if(mAttackFunctionalActive)
                         {
@@ -12068,6 +12583,14 @@ void GameScene::updateDwarfs(float delta)
                                 mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_YELLOW+(ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
                             }
                             UpdateBattleLabel();
+                        }
+                        
+                        if(mCurrentMission.Task_type == MissionType_CrystalCollect)//Collect crystals to win a mission.
+						{
+							if(_crystal_Point_counter>=mCurrentMission.Task_CrystalsWinCon)
+							{
+								showWinScreen();
+							}
                         }
                         
                         //----------------------------------------------------------------
@@ -12314,6 +12837,74 @@ void GameScene::updateDwarfs(float delta)
 			
 			if (dwarf)
 			{
+				if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DwarfCount 
+			 	|| mCurrentMission.Task_type == MissionType_DestroyTotem || mCurrentMission.Task_type == MissionType_CrystalCollect
+				|| mCurrentMission.Task_type == MissionType_Time)
+				{
+				std::stringstream theDwarfsLeft;
+            	theDwarfsLeft << _mission_SaveDwarfs_Left;
+            	_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
+            	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+                    lose();
+                }
+				}else{
+				std::stringstream theDwarfsLeft;
+            	theDwarfsLeft << _SaveDwarfsCounter;
+            	_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
+            	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+                    lose();
+                }
+                }
+                
+                if(mCurrentMission.Task_type == MissionType_TEST)
+				{
+					if(mCurrentMission.Task_SurviveLives <=0)
+					{
+						lose();
+					}else if(_gameTime <= 0){
+						showWinScreen();
+					}
+					std::stringstream theDwarfsLeft;
+            		theDwarfsLeft << _SaveDwarfsCounter;
+            		_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
+            		
+    
+            		std::stringstream TimeLeft;
+            		if(mTotalSeconds<10){
+            		TimeLeft << mTotalMinutes << ":0" << mTotalSeconds;
+            		}else{
+            		TimeLeft << mTotalMinutes << ":" << mTotalSeconds;
+            		}
+            		_timeLabel->setString(TimeLeft.str().c_str());
+            		
+            		std::stringstream LivesLeft;
+            		LivesLeft << mCurrentMission.Task_SurviveLives;
+            		_lifesLabel->setString(LivesLeft.str().c_str());
+            		
+				}
+                
+				if(mCurrentMission.Task_type == MissionType_DwarfCount)
+				{
+                std::stringstream theDwarfsSaved;
+            	theDwarfsSaved << (mTotalBlueDwarfs+mTotalOrangeDwarfs) <<"/"<<mCurrentMission.Task_DwarfWinCon;
+            	_dwarfsSavedLabel->setString(theDwarfsSaved.str().c_str());
+            	}
+            	
+            	if(mCurrentMission.Task_type == MissionType_CrystalCollect)
+                {
+            	std::stringstream theCrystalsGathered;
+            	theCrystalsGathered << _crystal_Point_counter <<"/"<<mCurrentMission.Task_CrystalsWinCon;
+            	_dwarfsCrystalsLabel->setString(theCrystalsGathered.str().c_str()); 
+                }
+            	
+            	if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DwarfCount 
+			 	|| mCurrentMission.Task_type == MissionType_DestroyTotem || mCurrentMission.Task_type == MissionType_CrystalCollect)
+            	{
+            	std::stringstream theDwarfsLost;
+            	theDwarfsLost << mLostDwarfCount;
+            	_dwarfsLostLabel->setString(theDwarfsLost.str().c_str());
+            	}
+            	
 				EnemyLineCount = mCurrentMission._EnemyLines;
 				mtSnipe = mCurrentMission.MT_Snipe;
 				mtSnipeDelay = mCurrentMission.MT_Snipe_Delay;
@@ -12548,7 +13139,7 @@ void GameScene::UpdateDwarfSaveLabel()
     
     //Update timer
     std::stringstream theMT_Timer;
-    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left;
+    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left<<"/"<<_mission_dwarfs_spawned;
     
     mDwarfSaveCounter->setString(theMT_Timer.str().c_str());
 }
@@ -13465,7 +14056,7 @@ void GameScene::showWinScreen()
     
     CCLayerColor* back = CCLayerColor::create(ccc4(0,0,0,200), visibleSize.width, visibleSize.height);
     back->setTag(928);
-    addChild(back,kHUD_Z_Order-1);
+    //addChild(back,kHUD_Z_Order-1);
     
     SimpleAudioEngine::sharedEngine()->stopAllEffects();
     
@@ -13474,51 +14065,77 @@ void GameScene::showWinScreen()
 	mGeneralScreen = CCLayerColor::create(ccc4(0,0,0,128),mScreenSize.width,mScreenSize.height);
     mGeneralScreen->setVisible(false);
     
+    //Add background
+    CCSprite* aEndScreenBackground1 = CCSprite::create("Interfeiss/endgame_screen/New/Background_1.png");
+    aEndScreenBackground1->setPosition(ccp(mScreenSize.width/2,mScreenSize.height/2));
+    addChild(aEndScreenBackground1,kHUD_Z_Order+1);
+    
+    //Add background2
+    CCSprite* aEndScreenBackground2 = CCSprite::create("Interfeiss/endgame_screen/New/Background_2.png");
+    aEndScreenBackground2->setPosition(ccp(mScreenSize.width/2,mScreenSize.height/2));
+    addChild(aEndScreenBackground2,kHUD_Z_Order+1);
+    
+    //Add Score Board
+    CCSprite* aScoreBoard = CCSprite::create("Interfeiss/endgame_screen/New/Scorebar.png");
+    aScoreBoard->setPosition(ccp(mScreenSize.width/2,mScreenSize.height/2+170));
+    addChild(aScoreBoard,kHUD_Z_Order+1);
+    
+    _pointLabel = CCLabelTTF::create("Game", FONT_SKRANJI, TITLE_FONT_SIZE*1.0, CCSize(320, 155), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	_pointLabel->setString("0");
+    _pointLabel->setColor(ccc3(255,246,200));
+    _pointLabel->setPosition(ccp(aScoreBoard->getContentSize().width/2,aScoreBoard->getContentSize().height/2+35));//27
+    aScoreBoard->addChild(_pointLabel);
+    
+    std::stringstream missionPoints;
+    missionPoints << mMasterTroll_Attack;
+    _pointLabel->setString(missionPoints.str().c_str());
+    
     //Add mission status
-    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/mission_completed.png");
-    aEndScreen->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/1.2f));
+    CCSprite* aEndScreen = CCSprite::create("Interfeiss/endgame_screen/New/MISSION-ACCOMPLISHED.png");
+    aEndScreen->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/1.1f));
+    aEndScreen->setScale(GLOBAL_SCALE);
     addChild(aEndScreen,kHUD_Z_Order+1);
      
 	//Add stars 
-	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    aStar->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+	CCSprite* aStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    aStar->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));//2
     addChild(aStar,kHUD_Z_Order+1);
     
-    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    bStar->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    CCSprite* bStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    bStar->setPosition(ccp(mGeneralScreen->getContentSize().width/1.4f-20,mGeneralScreen->getContentSize().height/2-40));//6,8
     addChild(bStar,kHUD_Z_Order+1);
     
-    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/star_gold_off.png");
-    cStar->setPosition(ccp(mGeneralScreen->getContentSize().width/1.2f,mGeneralScreen->getContentSize().height/2));
+    CCSprite* cStar = CCSprite::create("Interfeiss/endgame_screen/New/Star_Off.png");
+    cStar->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0f,mGeneralScreen->getContentSize().height/2-40));//1,2
     addChild(cStar,kHUD_Z_Order+1);
     
     if(_missionCurrentValue>=_mission_star_points_1 && _missionCurrentValue<_mission_star_points_2){
-    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     }
 	if(_missionCurrentValue>=_mission_star_points_2 && _missionCurrentValue<_mission_star_points_3)
     {
-    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     	
-    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.4f-20,mGeneralScreen->getContentSize().height/2-40));
     	addChild(bStarGlow,kHUD_Z_Order+1);
     }
 	if(_missionCurrentValue>=_mission_star_points_3)
     {
-    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/6.8f,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* aStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	aStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/3.2f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(aStarGlow,kHUD_Z_Order+1);
     	
-    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* bStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	bStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.4f-20,mGeneralScreen->getContentSize().height/2-40));
     	addChild(bStarGlow,kHUD_Z_Order+1);
     	
-    	CCSprite* cStarGlow = CCSprite::create("Interfeiss/endgame_screen/star_gold_on.png");
-    	cStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/1.2f,mGeneralScreen->getContentSize().height/2));
+    	CCSprite* cStarGlow = CCSprite::create("Interfeiss/endgame_screen/New/Star_On.png");
+    	cStarGlow->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0f,mGeneralScreen->getContentSize().height/2-40));
     	addChild(cStarGlow,kHUD_Z_Order+1);
     }
     
@@ -13528,12 +14145,13 @@ void GameScene::showWinScreen()
     // The play button
     
     CCMenuItemImage* MainMenuItem = CCMenuItemImage::create(
-                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
-                                                        "Interfeiss/endgame_screen/main_menu_btn.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Menu.png",
+                                                        "Interfeiss/endgame_screen/New/Button_Menu.png",
                                                         this,
                                                         menu_selector(GameScene::OnExitWithNewMission));//menuSkipCallback
     MainMenuItem->setTag(1);
-    MainMenuItem->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0,mGeneralScreen->getContentSize().height/12));
+    MainMenuItem->setPosition(ccp(mGeneralScreen->getContentSize().width/2.0,mGeneralScreen->getContentSize().height/2-225));
+    MainMenuItem->setScale(GLOBAL_SCALE);
     
     CCMenu* aButtonMenu = CCMenu::create(MainMenuItem, NULL);
     aButtonMenu->setAnchorPoint(ccp(0,0));
@@ -14043,11 +14661,13 @@ void GameScene::generateDwarfMission(bool theInstant)
     }
     
     // Safe check
-    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DwarfCount || 
+	   mCurrentMission.Task_type == MissionType_DestroyTotem || mCurrentMission.Task_type == MissionType_CrystalCollect
+	   || mCurrentMission.Task_type == MissionType_Time || mCurrentMission.Task_type == MissionType_TEST)
     {
         if(_mission_SaveDwarfs_Left<=0){
             // Check if dwarfs on map are 0
-            if(_dwarves->count() <= 0 && _missionCurrentValue<_mission_star_points_1)
+            if(_dwarves->count()+1 <= 0 && _missionCurrentValue<_mission_star_points_1)
             {
                 if(getChildByTag(5544) != NULL){
                     return;// Do not come here !!!
@@ -14150,11 +14770,14 @@ void GameScene::generateDwarfMission(bool theInstant)
     
     Dwarf* dwarf = Dwarf::create(this,theType);
     
-    if(mCurrentMission.Task_type == MissionType_DwarfSave)
+    if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DestroyTotem || 
+	mCurrentMission.Task_type == MissionType_CrystalCollect || mCurrentMission.Task_type == MissionType_DwarfCount)
     {
         _mission_SaveDwarfs_Left-=1;
         // Check if limit is not too low ?
         UpdateDwarfSaveLabel();
+    }else{
+    	_SaveDwarfsCounter-=1;
     }
     
     if(theType == DWARF_TYPE_FAT){
@@ -18790,7 +19413,8 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
             //Update it and check stars
             std::stringstream theResult;
             //Special check for time mission and other magic if needed
-            if(theType == MissionType_Time){
+            /*
+			if(theType == MissionType_Time){
                 theResult << _missionCurrentValue <<"/"<<_mission_star_points_3;//Convert it to time
             }
             else{
@@ -18798,7 +19422,7 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
             }
             
             _pointsLabel->setString(theResult.str().c_str());
-            
+            */
             //---------------------------------------------------------------
             //Check the stars update
             
@@ -19193,7 +19817,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
         cBullet->setScale(0.7f);
-        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
             
         this->addChild(bBullet, 1000);
         this->addChild(cBullet, 1000);
@@ -19209,7 +19833,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
-        //cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+        //cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
         cBullet->setVisible(false);
             
         //this->addChild(bBullet, 1000);
@@ -19227,7 +19851,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
         //cBullet->setScale(0.7f);
         cBullet->setVisible(false);
-        //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 vçl tuvâk.,, :D //0.6 panâk rezultâtu
+        //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
             
         //this->addChild(bBullet, 1000);
         this->addChild(cBullet, 1000);
@@ -19585,12 +20209,12 @@ void GameScene::UpdateMasterTroll(float delta)
             }
             else if(aFinalMT_Action == MT_EVENT_TROLL)
             {
-                // PagaidÄm
+                // Pagaidâm
                 SetMasterTrollAction(MASTER_ACTION_TROLL);
             }
             else if(aFinalMT_Action == MT_EVENT_MASS)
             {
-                // PagaidÄm
+                // Pagaidâm
                 SetMasterTrollAction(MASTER_ACTION_CONFUSE);
             }
             else if(aFinalMT_Action == MT_EVENT_CAVEBLOCK)
@@ -20012,6 +20636,9 @@ void GameScene::ResetValues()
     mTotalMushroom = 0;
     
     _mission_SaveDwarfs_Left = 0;
+    _SaveDwarfsCounter = 0;
+    
+    _crystal_Point_counter = 0;
     
     mTotalGreen_Crystals = 0;
     mTotalBlue_Crystals = 0;
@@ -20020,6 +20647,7 @@ void GameScene::ResetValues()
     
     mTotalMushroom = 0;
     mTotalTimeInGame = 0;
+    mTotalReverseTime = 0;
     mTotalEscapesFromTroll = 0;
     
     mLastSpawnID = -1;
@@ -20159,12 +20787,13 @@ void GameScene::ResetValues()
     
     if(mCurrentMission.Mission_SaveDwarfs>0){
         _mission_SaveDwarfs_Left = mCurrentMission.Mission_SaveDwarfs;
+        _SaveDwarfsCounter = mCurrentMission.Mission_SaveDwarfs;
         
-        /* // not for release
+         // not for release
         mDwarfSaveCounter = CCLabelTTF::create("10/0 | 4/0",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(300,240), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
         mDwarfSaveCounter->setPosition(ccp(160,450));
-        addChild(mDwarfSaveCounter,kHUD_Z_Order+1);
-        */
+        addChild(mDwarfSaveCounter,kHUD_Z_Order-1);
+        
     }
     
     UpdateDwarfSaveLabel();
@@ -20192,7 +20821,7 @@ void GameScene::CreateBattleArena()
     // The debug info for now
     mExtraCrystalCounter = CCLabelTTF::create("0 Crystals",FONT_SKRANJI, TITLE_FONT_SIZE*0.5, CCSize(240,240), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
     mExtraCrystalCounter->setPosition(ccp(500,800));
-    addChild(mExtraCrystalCounter,kHUD_Z_Order+1);
+    addChild(mExtraCrystalCounter,kHUD_Z_Order-1);
     
     // Set the current HP
     mMasterTroll_CurrentHP = mMasterTroll_HP;
@@ -20227,7 +20856,7 @@ void GameScene::CreateBattleArena()
     mBattleBar_MachineBase->setScaleX(0.0f);     //(0.15);
     mBattleBar_MachineBase->setScaleY(0.0f);     //(0.3);
     
-    addChild(mBattleBar_MachineBase,kHUD_Z_Order+1);
+    addChild(mBattleBar_MachineBase,kHUD_Z_Order-1);
     
     CCSprite* aDummy = CCSprite::create("Interfeiss/challenges/daily/progress_days.png");
     mBattleBar_MachineBase->addChild(aDummy);
@@ -20253,7 +20882,7 @@ void GameScene::CreateBattleArena()
     mBattleBar_TrollBase->setScaleX(0.0f);     //(0.15);
     mBattleBar_TrollBase->setScaleY(0.0f);     //(0.3);
     
-    addChild(mBattleBar_TrollBase,kHUD_Z_Order+1);
+    addChild(mBattleBar_TrollBase,kHUD_Z_Order-1);
     
     // The background of bar
     aDummy = CCSprite::create("Interfeiss/challenges/daily/progress_days.png");
@@ -20344,6 +20973,8 @@ void GameScene::UpdateSmoothBattleBars(float delta)
 
 void GameScene::UpdateBattleLabel()
 {
+	if(mBattleBar_TrollBase != NULL)
+	{
     if(mBattleBar_TrollHP == NULL || mBattleBar_MachinePower == NULL){
         return;
     }
@@ -20467,7 +21098,7 @@ void GameScene::UpdateBattleLabel()
             mMasterTroll_Attack = 0;//Reset to 0
         }
     }
-    
+	}
     // Check if attack is not above shoot !!!
     /* // Now the shoot will be manualy by player !!!
     if(mMasterTroll_Attack>=mCurrentMission.MT_Battle_Attack)
