@@ -952,7 +952,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.event_type = totemInfo.TOTEM_QUAD_1[i].event_type;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
@@ -967,7 +967,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.deadzone_radius = totemInfo.TOTEM_QUAD_1[i].deadzone_radius;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
@@ -1017,7 +1017,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.event_type = totemInfo.TOTEM_QUAD_2[i].event_type;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
@@ -1032,7 +1032,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.deadzone_radius = totemInfo.TOTEM_QUAD_2[i].deadzone_radius;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
@@ -1082,7 +1082,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.event_type = totemInfo.TOTEM_QUAD_3[i].event_type;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
@@ -1097,7 +1097,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.deadzone_radius = totemInfo.TOTEM_QUAD_3[i].deadzone_radius;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
@@ -1147,7 +1147,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.event_type = totemInfo.TOTEM_QUAD_4[i].event_type;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 2)
@@ -1162,7 +1162,7 @@ void Enemy_Totem::SetNewMissionStuff(MissionSet totemInfo)
                 quad_info.deadzone_radius = totemInfo.TOTEM_QUAD_4[i].deadzone_radius;
                 
                 // The timer for activation
-                quad_info.current_time_till_active = quad_info.active_time;// Start from 0
+                quad_info.current_time_till_active = quad_info.activate_time;// Start from 0
                 quad_info.current_time_active = 0;//quad_info.activate_time;// Start from 0
             }
             else if(quad_info.type == 3)
@@ -1214,7 +1214,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             // Check the shields
             if(mQuad_Vector_1[i].type == 1)
             {
-                if(mQuad_Vector_1[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_1[i].current_time_active>0 && mQuad_Vector_1[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_1_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                }
+                else if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     mQuad_Vector_1[i].current_time_active-=delta*_game->getGameSpeed();
                     
@@ -1238,7 +1243,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_1[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_1[i].activate_time == 0){
+                            mQuad_Vector_1[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
+                        }
+                        
                         // Enable shield
                         mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].active_time;
                         if(mQuad_Vector_1[i].event_type == 1)
@@ -1259,7 +1271,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             }
             else if(mQuad_Vector_1[i].type == 2) // The deadzone stuff
             {
-                if(mQuad_Vector_1[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_1[i].current_time_active>0 && mQuad_Vector_1[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_1_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 1)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     mDebugQuad_1_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_1[i].current_time_active)<<"\n";
                     
@@ -1303,7 +1343,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_1[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_1[i].activate_time == 0){
+                            mQuad_Vector_1[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
                         // Enable deadzone
                         mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].active_time;
                         
@@ -1318,7 +1366,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // The creazy bullets and stuff like that
                 
                 // Updates only if flamethrower is active
-                if(mQuad_Vector_1[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_1[i].current_time_active>0 && mQuad_Vector_1[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_1_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 1)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_1[i].current_time_active>0)
                 {
                     mDebugQuad_1_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_1[i].current_time_active)<<"\n";
                     
@@ -1378,6 +1454,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         }
                         else if(mQuad_Vector_1[i].event_type == 2)// The flamethrower
                         {
+                            // Check special case when enabled ultimate time !!!
+                            if(mQuad_Vector_1[i].activate_time == 0){
+                                mQuad_Vector_1[i].current_time_till_active = -1;// Ultimate flag
+                            }
+                            else{
+                                mQuad_Vector_1[i].current_time_till_active = mQuad_Vector_1[i].activate_time; // Reset back timer
+                            }
+                            
                             mQuad_Vector_1[i].current_time_active = mQuad_Vector_1[i].flame_active_time;
 //                            craeteQuad(1, 100, 3, mQuad_Vector_1[i].flame_radius);
                             CCDrawNode* aTheNode = addQuadAction(1,i,mQuad_Vector_1[i].flame_radius,3,mQuad_Vector_1[i].flame_angle,mQuad_Vector_1[i].type);
@@ -1422,7 +1506,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             // Check the shields
             if(mQuad_Vector_2[i].type == 1)
             {
-                if(mQuad_Vector_2[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_2[i].current_time_active>0 && mQuad_Vector_2[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_2_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                }
+                else if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     mQuad_Vector_2[i].current_time_active-=delta*_game->getGameSpeed();
                     
@@ -1445,7 +1534,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_2[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_2[i].activate_time == 0){
+                            mQuad_Vector_2[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
                         // Enable shield
                         mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].active_time;
                         if(mQuad_Vector_2[i].event_type == 1)
@@ -1466,7 +1563,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             }
             else if(mQuad_Vector_2[i].type == 2) // The deadzone stuff
             {
-                if(mQuad_Vector_2[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_2[i].current_time_active>0 && mQuad_Vector_2[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_2_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 2)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     mDebugQuad_2_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_2[i].current_time_active)<<"\n";
                     
@@ -1510,7 +1635,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_2[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_2[i].activate_time == 0){
+                            mQuad_Vector_2[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
                         // Enable deadzone
                         mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].active_time;
                         
@@ -1525,7 +1658,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // The creazy bullets and stuff like that
                 
                 // Updates only if flamethrower is active
-                if(mQuad_Vector_2[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_2[i].current_time_active>0 && mQuad_Vector_2[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_2_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 2)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_2[i].current_time_active>0)
                 {
                     
                     mDebugQuad_2_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_2[i].current_time_active)<<"\n";
@@ -1583,6 +1744,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         }
                         else if(mQuad_Vector_2[i].event_type == 2)// The flamethrower
                         {
+                            // Check special case when enabled ultimate time !!!
+                            if(mQuad_Vector_2[i].activate_time == 0){
+                                mQuad_Vector_2[i].current_time_till_active = -1;// Ultimate flag
+                            }
+                            else{
+                                mQuad_Vector_2[i].current_time_till_active = mQuad_Vector_2[i].activate_time; // Reset back timer
+                            }
+                            
                             mQuad_Vector_2[i].current_time_active = mQuad_Vector_2[i].flame_active_time;
                             CCDrawNode* aTheQuadNode = addQuadAction(2,i,mQuad_Vector_2[i].flame_radius,3,mQuad_Vector_2[i].flame_angle,mQuad_Vector_2[i].type);
                             
@@ -1626,7 +1795,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             // Check the shields
             if(mQuad_Vector_3[i].type == 1)
             {
-                if(mQuad_Vector_3[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_3[i].current_time_active>0 && mQuad_Vector_3[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_3_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                }
+                else if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     mQuad_Vector_3[i].current_time_active-=delta*_game->getGameSpeed();
                     
@@ -1648,7 +1822,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_3[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_3[i].activate_time == 0){
+                            mQuad_Vector_3[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
                         // Enable shield
                         mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].active_time;
                         if(mQuad_Vector_3[i].event_type == 1)
@@ -1669,7 +1851,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             }
             else if(mQuad_Vector_3[i].type == 2) // The deadzone stuff
             {
-                if(mQuad_Vector_3[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_3[i].current_time_active>0 && mQuad_Vector_3[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_3_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 3)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     mDebugQuad_3_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_3[i].current_time_active)<<"\n";
                     
@@ -1713,7 +1923,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_3[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_3[i].activate_time == 0){
+                            mQuad_Vector_3[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
                         // Enable deadzone
                         mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].active_time;
                         
@@ -1728,7 +1946,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // The creazy bullets and stuff like that
                 
                 // Updates only if flamethrower is active
-                if(mQuad_Vector_3[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_3[i].current_time_active>0 && mQuad_Vector_3[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_3_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 3)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_3[i].current_time_active>0)
                 {
                     mDebugQuad_3_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_3[i].current_time_active)<<"\n";
                     
@@ -1789,6 +2035,14 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         }
                         else if(mQuad_Vector_3[i].event_type == 2)// The flamethrower
                         {
+                            // Check special case when enabled ultimate time !!!
+                            if(mQuad_Vector_3[i].activate_time == 0){
+                                mQuad_Vector_3[i].current_time_till_active = -1;// Ultimate flag
+                            }
+                            else{
+                                mQuad_Vector_3[i].current_time_till_active = mQuad_Vector_3[i].activate_time; // Reset back timer
+                            }
+                            
                             mQuad_Vector_3[i].current_time_active = mQuad_Vector_3[i].flame_active_time;
 //                            craeteQuad(3, 100, 3, mQuad_Vector_3[i].flame_radius);
                             CCDrawNode* aTheNode = addQuadAction(3,i,mQuad_Vector_3[i].flame_radius,3,mQuad_Vector_3[i].flame_angle,mQuad_Vector_3[i].type);
@@ -1833,7 +2087,12 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             // Check the shields
             if(mQuad_Vector_4[i].type == 1)
             {
-                if(mQuad_Vector_4[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_4[i].current_time_active>0 && mQuad_Vector_4[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_4_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                }
+                else if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     mQuad_Vector_4[i].current_time_active-=delta*_game->getGameSpeed();
                     
@@ -1855,7 +2114,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_4[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_4[i].activate_time == 0){
+                            mQuad_Vector_4[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
                         // Enable shield
                         mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].active_time;
                         if(mQuad_Vector_4[i].event_type == 1)
@@ -1876,7 +2143,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
             }
             else if(mQuad_Vector_4[i].type == 2) // The deadzone stuff
             {
-                if(mQuad_Vector_4[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_4[i].current_time_active>0 && mQuad_Vector_4[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_4_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 4)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     mDebugQuad_4_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_4[i].current_time_active)<<"\n";
                     
@@ -1920,7 +2215,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                     
                     if(mQuad_Vector_4[i].current_time_till_active<=0)
                     {
-                        mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
+                        // Check special case when enabled ultimate time !!!
+                        if(mQuad_Vector_4[i].activate_time == 0){
+                            mQuad_Vector_4[i].current_time_till_active = -1;// Ultimate flag
+                        }
+                        else{
+                            mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
+                        }
+                        
+//                        mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
                         // Enable deadzone
                         mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].active_time;
                         
@@ -1935,7 +2238,35 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                 // The creazy bullets and stuff like that
                 
                 // Updates only if flamethrower is active
-                if(mQuad_Vector_4[i].current_time_active>0)
+                // Special always enabled case
+                if(mQuad_Vector_4[i].current_time_active>0 && mQuad_Vector_4[i].current_time_till_active == -1)
+                {
+                    mDebugQuad_4_Str<<"["<<i<<"] A: ALWAYS"<<"\n";
+                    
+                    // Check if any dwarf near to this radius - remove him
+                    for (int dwarfIndex = _game->_dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
+                    {
+                        Dwarf* dwarf = static_cast<Dwarf*>(_game->_dwarves->objectAtIndex(dwarfIndex));
+                        
+                        if(dwarf != NULL && dwarf->_dwarfIsRemoving == false)// Check for current quad damage
+                        {
+                            if(collideAtPoint(dwarf->getPosition()) == 4)
+                            {
+                                dwarf->_dwarfIsRemoving = true;
+                                // Game over for dwarf - burn or do other damage !!
+                                
+                                // Add particle for FX
+                                CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/BurnFx.plist");
+                                p->setPosition(dwarf->getPosition());
+                                p->setAutoRemoveOnFinish(true);
+                                _game->addChild(p);
+                                
+                                dwarf->removeFromSave();
+                            }
+                        }
+                    }
+                }
+                else if(mQuad_Vector_4[i].current_time_active>0)
                 {
                     mDebugQuad_4_Str<<"["<<i<<"] A:"<<ceil(mQuad_Vector_4[i].current_time_active)<<"\n";
 
@@ -1996,7 +2327,15 @@ void Enemy_Totem::UpdateQuadSystem(float delta)
                         }
                         else if(mQuad_Vector_4[i].event_type == 2)// The flamethrower
                         {
-                            mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].flame_active_time;
+                            // Check special case when enabled ultimate time !!!
+                            if(mQuad_Vector_4[i].activate_time == 0){
+                                mQuad_Vector_4[i].current_time_till_active = -1;// Ultimate flag
+                            }
+                            else{
+                                mQuad_Vector_4[i].current_time_till_active = mQuad_Vector_4[i].activate_time; // Reset back timer
+                            }
+                            
+//                            mQuad_Vector_4[i].current_time_active = mQuad_Vector_4[i].flame_active_time;
 //                            craeteQuad(4, 100, 3, mQuad_Vector_4[i].flame_radius);
                             CCDrawNode* aTheNode = addQuadAction(4,i,mQuad_Vector_4[i].flame_radius,3,mQuad_Vector_4[i].flame_angle,mQuad_Vector_4[i].type);
                             

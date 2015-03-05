@@ -5291,6 +5291,7 @@ void MissionManager::OnDownloadedSpecial()
         mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
         mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
+        if(missionDict->valueForKey("SpellForcedSpots")->compare("") != 0) mission->SpellSpawnPoints = SplitString(missionDict->valueForKey("SpellForcedSpots")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
         

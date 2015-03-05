@@ -360,6 +360,8 @@ struct MissionSet
     int32_t Task_SurviveTime;
     int32_t Task_SurviveLives;
     
+    std::vector<int> SpellSpawnPoints;// Correct forced places for spawn spells
+    
     int32_t STORE_Booster_DwarfPrice;
     
 };

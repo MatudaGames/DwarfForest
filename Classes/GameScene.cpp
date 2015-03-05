@@ -21052,43 +21052,55 @@ void GameScene::UpdateBattleLabel()
                 // Spawn near cave ???
                 CCPoint spawnSpot;
                 
-                // The offset from cave center
-                int aCaveOff_X = (rand()%50+50);
-                int aCaveOff_Y = (rand()%50+50);
-                
-                int aPositionID = rand()%2;
-                if(aPositionID == 0){
-                    if(_SpawnOrangeDwarf){
-                        spawnSpot.x = _caveTall->getPositionX();
-                        spawnSpot.y = _caveTall->getPositionY();
-                    }
-                    else
-                    {
-                        spawnSpot.x = _caveFat->getPositionX();
-                        spawnSpot.y = _caveFat->getPositionY();
-                    }
+                // Check if mission does not have some precise cords for spawn !!!
+                if(mCurrentMission.SpellSpawnPoints.size()>0)
+                {
+                    // Do the forced stuff
+                    int theSpawnRandomSpot = rand()%(mCurrentMission.SpellSpawnPoints.size()/2);
+                    spawnSpot.x = mCurrentMission.SpellSpawnPoints[theSpawnRandomSpot*2];
+                    spawnSpot.y = mCurrentMission.SpellSpawnPoints[theSpawnRandomSpot*2+1];
                 }
-                else{
-                    if(_SpawnBlueDwarf){
-                        spawnSpot.x = _caveFat->getPositionX();
-                        spawnSpot.y = _caveFat->getPositionY();
+                else
+                {
+                    // The offset from cave center
+                    int aCaveOff_X = (rand()%50+50);
+                    int aCaveOff_Y = (rand()%50+50);
+                    
+                    int aPositionID = rand()%2;
+                    if(aPositionID == 0){
+                        if(_SpawnOrangeDwarf){
+                            spawnSpot.x = _caveTall->getPositionX();
+                            spawnSpot.y = _caveTall->getPositionY();
+                        }
+                        else
+                        {
+                            spawnSpot.x = _caveFat->getPositionX();
+                            spawnSpot.y = _caveFat->getPositionY();
+                        }
                     }
-                    else
-                    {
-                        spawnSpot.x = _caveTall->getPositionX();
-                        spawnSpot.y = _caveTall->getPositionY();
+                    else{
+                        if(_SpawnBlueDwarf){
+                            spawnSpot.x = _caveFat->getPositionX();
+                            spawnSpot.y = _caveFat->getPositionY();
+                        }
+                        else
+                        {
+                            spawnSpot.x = _caveTall->getPositionX();
+                            spawnSpot.y = _caveTall->getPositionY();
+                        }
                     }
-                }
-                
-                // Quick stuff for more random
-                int aNegativeOrPositive = rand()%2;
-                if(aNegativeOrPositive == 0){
-                    spawnSpot.x-=aCaveOff_X;
-                    spawnSpot.y-=aCaveOff_Y;
-                }
-                else{
-                    spawnSpot.x+=aCaveOff_X;
-                    spawnSpot.y+=aCaveOff_Y;
+                    
+                    // Quick stuff for more random
+                    int aNegativeOrPositive = rand()%2;
+                    if(aNegativeOrPositive == 0){
+                        spawnSpot.x-=aCaveOff_X;
+                        spawnSpot.y-=aCaveOff_Y;
+                    }
+                    else{
+                        spawnSpot.x+=aCaveOff_X;
+                        spawnSpot.y+=aCaveOff_Y;
+                    }
+
                 }
                 
                 // Puff
