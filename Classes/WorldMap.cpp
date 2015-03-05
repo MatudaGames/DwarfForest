@@ -251,6 +251,8 @@ void WorldMap::MissionTaskInditificator(int theID)
 	WhatMission = theID;
 	
 	mCall = User::getInstance()->getMissionManager().GetMissionByID(WhatMission-1);
+    
+    
 
 	TESTdwarfCount = mCall.Mission_SaveDwarfs;
 	
@@ -721,8 +723,8 @@ void WorldMap::MissionTaskInditificator(int theID)
 void WorldMap::BuyMoreDwarfs()
 {
 	CCLog("Works so far!!!");
-	
-	int aPrice = mCall.STORE_Booster_DwarfPrice;
+    
+    int aPrice = mCall.STORE_Booster_DwarfPrice;
 	
 	int aDidUseDiamonds = User::getInstance()->canUseDiamonds(aPrice);//BOOSTER_1_PRICE
         if(aDidUseDiamonds<0)

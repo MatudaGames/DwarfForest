@@ -96,7 +96,7 @@ void Mushroom::createRemove()
 
 void Mushroom::onRemove()
 {
-    _gameScene->_mushrooms->removeObject(this);
+//    _gameScene->_mushrooms->removeObject(this);
     _gameScene->removeNode(this);
 }
 

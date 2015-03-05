@@ -886,6 +886,10 @@ public:
     int _DwarfsSpawned;
     int mLostDwarfCount;
     
+    // New parametrs for game [used by missions]
+    int mTask_SurviveLives;     // The new parametr for missions with lives !!!
+    float mTask_SurviveTime;    // Task_SurviveTime
+    
     float _gameSpeed;//For slow down and speed up
     
     void OnIncreaseDwarfSpeed();

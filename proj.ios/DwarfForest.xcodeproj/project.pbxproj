@@ -247,6 +247,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		751332461AA4E4F3004669B8 /* Universal_PowerItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */; };
 		752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752F54391A02D248007A817F /* AdvancedAnimation.cpp */; };
 		753502BF1A89308000758EC8 /* Enemy_Totem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753502BD1A89308000758EC8 /* Enemy_Totem.cpp */; };
 		754A47891A152F4900F48C5C /* Enemy_Bee.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754A47871A152F4900F48C5C /* Enemy_Bee.cpp */; };
@@ -885,6 +886,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		37C62C0718E156AE00D16FC4 /* ExtensionExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionExport.h; sourceTree = "<group>"; };
+		751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Universal_PowerItem.cpp; sourceTree = "<group>"; };
+		751332451AA4E4F3004669B8 /* Universal_PowerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Universal_PowerItem.h; sourceTree = "<group>"; };
 		752F54391A02D248007A817F /* AdvancedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedAnimation.cpp; sourceTree = "<group>"; };
 		752F543A1A02D248007A817F /* AdvancedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAnimation.h; sourceTree = "<group>"; };
 		753502BD1A89308000758EC8 /* Enemy_Totem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Totem.cpp; sourceTree = "<group>"; };
@@ -1638,6 +1641,8 @@
 				75BCB0A419E9236F000C7C65 /* CCShake.cpp */,
 				75BCB0A519E9236F000C7C65 /* CCShake.h */,
 				75BCB0A619E9236F000C7C65 /* ChallengesScene.cpp */,
+				751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */,
+				751332451AA4E4F3004669B8 /* Universal_PowerItem.h */,
 				75BCB0A719E9236F000C7C65 /* ChallengesScene.h */,
 				75BCB0A819E9236F000C7C65 /* Crystal.cpp */,
 				75BCB0A919E9236F000C7C65 /* Crystal.h */,
@@ -2660,6 +2665,7 @@
 				15A3D9981682F7F9002FB0C5 /* cpDampedRotarySpring.c in Sources */,
 				15A3D9991682F7F9002FB0C5 /* cpDampedSpring.c in Sources */,
 				75BCB0FA19E92383000C7C65 /* FreeStuffPopup.cpp in Sources */,
+				751332461AA4E4F3004669B8 /* Universal_PowerItem.cpp in Sources */,
 				15C0B552196D412F007F909D /* CCActionTimelineCache.cpp in Sources */,
 				15A3D99A1682F7F9002FB0C5 /* cpGearJoint.c in Sources */,
 				15C0B569196D412F007F909D /* CCComAttribute.cpp in Sources */,

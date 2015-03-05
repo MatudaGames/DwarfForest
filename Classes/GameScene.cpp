@@ -938,11 +938,13 @@ void GameScene::CreateGameByMission()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    
     if(mCurrentMission.Task_type == 11){
-    _gameTime = mCurrentMission.Task_SurviveTime;	
+        _gameTime = mCurrentMission.Task_SurviveTime;
     }else{
-    _gameTime = 0;
+        _gameTime = 0;
 	}
+    
     _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
@@ -2005,11 +2007,14 @@ bool GameScene::init()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    
     if(mCurrentMission.Task_type == 11){
-    _gameTime = mCurrentMission.Task_SurviveTime;	
+        _gameTime = mCurrentMission.Task_SurviveTime;
     }else{
-    _gameTime = 0;
+        _gameTime = 0;
 	}
+    
+    
     _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
@@ -2676,7 +2681,7 @@ bool GameScene::init()
     _dwarfsSavedLabel->setVisible(true);
     dwarfsSaved->addChild(_dwarfsSavedLabel);
 	}
-	 if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
+    if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
 	{
 	if(mCurrentMission.Task_type == 11)
 	{
@@ -9531,10 +9536,9 @@ void GameScene::update(float delta)
         }
     }
     
-    if(mCurrentMission.Task_type){
+    if(mCurrentMission.Task_type == MissionType_TEST){
         //Update by seconds
-        mCurrentMission.Task_SurviveTime-=delta*_gameSpeed;
-        
+        mTask_SurviveTime -= delta*_gameSpeed; //mCurrentMission.Task_SurviveTime-=delta*_gameSpeed;
         
 		if(mTotalTimeInGame != roundf(_gameTime)){
             mTotalTimeInGame = roundf(_gameTime);
@@ -11798,10 +11802,12 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type ==MissionType_DwarfCount)
                     {
+                        
                     	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
                     	{
                     		showWinScreen();
                     	}
+                        
                     }
                 
                     if(mAttackFunctionalActive)
@@ -11987,12 +11993,14 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type ==MissionType_DwarfCount)
                     {
+                        
                     	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
                     	{
                     		showWinScreen();
                     	}else if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
                     		 lose();
                     	}
+                        
                     }
                     
                     if(mCurrentMission.Task_type ==MissionType_DestroyTotem || mCurrentMission.Task_type ==MissionType_CrystalCollect)
@@ -12587,10 +12595,12 @@ void GameScene::updateDwarfs(float delta)
                         
                         if(mCurrentMission.Task_type == MissionType_CrystalCollect)//Collect crystals to win a mission.
 						{
+                            
 							if(_crystal_Point_counter>=mCurrentMission.Task_CrystalsWinCon)
 							{
 								showWinScreen();
 							}
+                            
                         }
                         
                         //----------------------------------------------------------------
@@ -12858,12 +12868,13 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_TEST)
 				{
-					if(mCurrentMission.Task_SurviveLives <=0)
+                    if(mTask_SurviveLives <= 0) //if(mCurrentMission.Task_SurviveLives <=0)
 					{
 						lose();
 					}else if(_gameTime <= 0){
 						showWinScreen();
 					}
+                    
 					std::stringstream theDwarfsLeft;
             		theDwarfsLeft << _SaveDwarfsCounter;
             		_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
@@ -12878,23 +12889,27 @@ void GameScene::updateDwarfs(float delta)
             		_timeLabel->setString(TimeLeft.str().c_str());
             		
             		std::stringstream LivesLeft;
-            		LivesLeft << mCurrentMission.Task_SurviveLives;
+                    LivesLeft << mTask_SurviveLives; // LivesLeft << mCurrentMission.Task_SurviveLives;
             		_lifesLabel->setString(LivesLeft.str().c_str());
             		
 				}
                 
 				if(mCurrentMission.Task_type == MissionType_DwarfCount)
 				{
-                std::stringstream theDwarfsSaved;
-            	theDwarfsSaved << (mTotalBlueDwarfs+mTotalOrangeDwarfs) <<"/"<<mCurrentMission.Task_DwarfWinCon;
-            	_dwarfsSavedLabel->setString(theDwarfsSaved.str().c_str());
+                    
+                    std::stringstream theDwarfsSaved;
+                    theDwarfsSaved << (mTotalBlueDwarfs+mTotalOrangeDwarfs) <<"/"<<mCurrentMission.Task_DwarfWinCon;
+                    _dwarfsSavedLabel->setString(theDwarfsSaved.str().c_str());
+                    
             	}
             	
             	if(mCurrentMission.Task_type == MissionType_CrystalCollect)
                 {
-            	std::stringstream theCrystalsGathered;
-            	theCrystalsGathered << _crystal_Point_counter <<"/"<<mCurrentMission.Task_CrystalsWinCon;
-            	_dwarfsCrystalsLabel->setString(theCrystalsGathered.str().c_str()); 
+                    
+                    std::stringstream theCrystalsGathered;
+                    theCrystalsGathered << _crystal_Point_counter <<"/"<<mCurrentMission.Task_CrystalsWinCon;
+                    _dwarfsCrystalsLabel->setString(theCrystalsGathered.str().c_str());
+                    
                 }
             	
             	if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DwarfCount 

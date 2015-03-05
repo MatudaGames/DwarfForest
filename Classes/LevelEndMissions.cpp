@@ -733,6 +733,7 @@ void LevelEndMissions::CheckIfCompletedMission()
     //Check if something was unlocked
     
     //Check what to unlock
+    /* // Old and deprecated
     if(mCompletedMission.unlock_type == UNLOCK_TESLA_MACHINE)
     {
         //Check if this machine is not unlocked already !!!
@@ -750,6 +751,7 @@ void LevelEndMissions::CheckIfCompletedMission()
         if(User::getInstance()->getMachine_PlantLvl()<1)
             User::getInstance()->setMachine_PlantLvl(1);
     }
+    */
     
     //----------------------------------------------------------------------
     

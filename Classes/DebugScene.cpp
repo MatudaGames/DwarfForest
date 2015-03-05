@@ -409,6 +409,7 @@ void DebugScene::RemoveStart_3_extra()
 
 void DebugScene::upgradeMachineClear()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_StampLvl();
     if(aMachineLvl<5)
     {
@@ -420,10 +421,12 @@ void DebugScene::upgradeMachineClear()
     {
         PopUp::create(this, "Clear Map Machine has MAX LEVEL", NULL, false);
     }
+    */
 }
 
 void DebugScene::downgradeMachineClear()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_StampLvl();
     if(aMachineLvl>0)
     {
@@ -435,11 +438,13 @@ void DebugScene::downgradeMachineClear()
     {
         PopUp::create(this, "Clear Map Machine has MIN LEVEL", NULL, false);
     }
+    */
 }
 
 //Another machine
 void DebugScene::upgradeMachineGhost()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_GhostLvl();
     if(aMachineLvl<5)
     {
@@ -451,10 +456,12 @@ void DebugScene::upgradeMachineGhost()
     {
         PopUp::create(this, "Ghost Map Machine has MAX LEVEL", NULL, false);
     }
+    */
 }
 
 void DebugScene::downgradeMachineGhost()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_GhostLvl();
     if(aMachineLvl>0)
     {
@@ -466,11 +473,13 @@ void DebugScene::downgradeMachineGhost()
     {
         PopUp::create(this, "Ghost Map Machine has MIN LEVEL", NULL, false);
     }
+    */
 }
 
 //Another machine
 void DebugScene::upgradeMachineEnemies()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_EnemiesLvl();
     if(aMachineLvl<5)
     {
@@ -482,10 +491,12 @@ void DebugScene::upgradeMachineEnemies()
     {
         PopUp::create(this, "Ghost Map Machine has MAX LEVEL", NULL, false);
     }
+    */
 }
 
 void DebugScene::downgradeMachineEnemies()
 {
+    /*
     int aMachineLvl =User::getInstance()->getMachine_EnemiesLvl();
     if(aMachineLvl>0)
     {
@@ -497,6 +508,7 @@ void DebugScene::downgradeMachineEnemies()
     {
         PopUp::create(this, "Enemie Map Machine has MIN LEVEL", NULL, false);
     }
+    */
 }
 
 

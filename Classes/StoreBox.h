@@ -11,6 +11,18 @@
 #include <cocos2d.h>
 #include "Utils.h"
 
+#define BUTTON_ACTION 10
+#define BUTTON_ICON 30
+#define ICON_LOCKED 20
+
+#define POWER_DESC 40
+
+#define UPGRADE_STAR 100
+
+#define ITEM_PRICE_AMOUNT 101
+#define ITEM_PRICE_TEXT 102
+#define ITEM_PRICE_ICON 103
+
 class StoreBox: public cocos2d::CCLayer
 {
 public:
@@ -97,7 +109,12 @@ public:
     
     
     void OnSpellClick(CCObject* sender);
-    void CheckSpellButtons();
+    void OnPowerUpClick(CCObject* sender);
+    void CheckSpellButtons(bool OnlySpells, bool OnlyPowers);
+    
+    std::vector<std::string> SplitString_VecString(const std::string s,char delim);
+    
+    int mCurrentSelectedButtonIndex;
 	
 private:
     bool mDone;

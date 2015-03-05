@@ -60,8 +60,10 @@ bool Machine_Enemies::init(GameScene* gameScene)
     setTag(121212122);
     
     //Check in what state is this machine now !!!
-    mUpgradeLevel = User::getInstance()->getMachine_EnemiesLvl();
+//    mUpgradeLevel = User::getInstance()->getMachine_EnemiesLvl();
 //    mUpgradeLevel = 1;
+    
+    mUpgradeLevel = 0;
     
     if(User::getInstance()->mSpecial_12_Mission && gameScene)
     {

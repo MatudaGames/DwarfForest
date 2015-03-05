@@ -985,7 +985,7 @@ void Dwarf::removeFromSave()
 void Dwarf::setForceRemove()
 {
 	_game->mLostDwarfCount+=1;
-	_game->mCurrentMission.Task_SurviveLives-=1;
+    _game->mTask_SurviveLives -= 1; //	_game->mCurrentMission.Task_SurviveLives-=1;
     _forceRemove = true;
 }
 

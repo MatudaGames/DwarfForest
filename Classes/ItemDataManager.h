@@ -31,7 +31,7 @@ struct SpellInfo
     int range;
     int id;
     
-    // The new stuff for possions
+    
     int damage_extra;
     int damage_extra_time;
     int damage_extra_multiply;
@@ -46,16 +46,25 @@ struct SpellInfo
 
 struct PowerInfo
 {
+    std::string text_locked;
+    std::string text_unlocked;
+    std::string text_upgrade;
+    
     std::string name;
     int id;
     
     std::string icon_path;
     
-    std::vector<int> level_cost;
+    bool icon_change; // Will the icon change on upgrade?
+    
+    std::vector<std::string> level_cost;
     int level_unlock;
     
-    // If want in shop some order - use this
-    int order_index;
+    std::vector<int> upgrade_power;// How much gives extra seconds,procents etc on each level
+    
+    int max_upgrades;
+    
+    int order_index; // If want in shop some order - use this
 };
 
 class ItemDataManager
@@ -77,6 +86,10 @@ public:
     void CreateNoInternet();
     void menuCloseCallback_mission();
     
+    bool isPowerItemUnlocked(int theID);
+    int getPowerItemLevel(int theID);
+    void upgradePowerItem(int theID);
+    
     bool isItemUnlocked(int theID);
     bool isItemActive(int theID);
     void onPurchaseItem(int theType,int theID);
@@ -85,6 +98,7 @@ public:
     
     std::vector<int> getActiveItems();
     SpellInfo getSpellByID(int theID);
+    PowerInfo getPowerByID(int theID);
     
     // If want to redownload for debug
     bool mReDownload;
