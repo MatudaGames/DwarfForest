@@ -29,54 +29,6 @@
             timestampString = "447280845.083668"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "8911"
-            endingLineNumber = "8911"
-            landmarkName = "GameScene::UpdateDwarfSpawn(float delta)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/GameScene.cpp"
-            timestampString = "447280845.083668"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "8890"
-            endingLineNumber = "8890"
-            landmarkName = "GameScene::CreateSpawnLine()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/GameScene.cpp"
-            timestampString = "447280845.083668"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14046"
-            endingLineNumber = "14046"
-            landmarkName = "GameScene::createPoints(int amount,int theBonus,cocos2d::CCPoint thePos,cocos2d::ccColor3B theColor,bool crystalPoint)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/GameScene.cpp"
-            timestampString = "447280845.083668"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "14661"
             endingLineNumber = "14661"
             landmarkName = "GameScene::generateGoblin(int theX,int theY,float theRadius)"
@@ -180,22 +132,6 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/GameScene.cpp"
-            timestampString = "447280845.083668"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "8933"
-            endingLineNumber = "8933"
-            landmarkName = "GameScene::UpdateDwarfSpawn(float delta)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
@@ -275,7 +211,7 @@
                   symbolName = "MissionManager::AddExtraDownloadedMissions_1()"
                   moduleName = "DwarfForest"
                   urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "447281816.04238"
+                  timestampString = "447285472.143285"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "2400"
@@ -289,7 +225,7 @@
                   symbolName = "MissionManager::AddExtraDownloadedMissions_1()"
                   moduleName = "DwarfForest"
                   urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "447281816.042518"
+                  timestampString = "447285472.143418"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "2400"
