@@ -4662,7 +4662,7 @@ void MissionManager::OnDownloadSpecialMissions()
             curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
             curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
             curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
-            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 30);                  //Setting the timeout
             curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
             curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
             curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);

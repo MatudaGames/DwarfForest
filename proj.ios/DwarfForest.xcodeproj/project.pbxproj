@@ -250,6 +250,8 @@
 		751332461AA4E4F3004669B8 /* Universal_PowerItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */; };
 		752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752F54391A02D248007A817F /* AdvancedAnimation.cpp */; };
 		753502BF1A89308000758EC8 /* Enemy_Totem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753502BD1A89308000758EC8 /* Enemy_Totem.cpp */; };
+		753D4A721AAA493400B7F0F7 /* MasterTroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753D4A701AAA493400B7F0F7 /* MasterTroll.cpp */; };
+		753D4A751AAA4BC800B7F0F7 /* MasterDwarf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753D4A731AAA4BC800B7F0F7 /* MasterDwarf.cpp */; };
 		754A47891A152F4900F48C5C /* Enemy_Bee.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 754A47871A152F4900F48C5C /* Enemy_Bee.cpp */; };
 		755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 755DD4F41A439C8C005E1E0B /* HockeySDK.framework */; };
 		755DD4F91A439C8C005E1E0B /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 755DD4F61A439C8C005E1E0B /* HockeySDK.xcconfig */; };
@@ -892,6 +894,10 @@
 		752F543A1A02D248007A817F /* AdvancedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAnimation.h; sourceTree = "<group>"; };
 		753502BD1A89308000758EC8 /* Enemy_Totem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Totem.cpp; sourceTree = "<group>"; };
 		753502BE1A89308000758EC8 /* Enemy_Totem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy_Totem.h; sourceTree = "<group>"; };
+		753D4A701AAA493400B7F0F7 /* MasterTroll.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterTroll.cpp; sourceTree = "<group>"; };
+		753D4A711AAA493400B7F0F7 /* MasterTroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterTroll.h; sourceTree = "<group>"; };
+		753D4A731AAA4BC800B7F0F7 /* MasterDwarf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MasterDwarf.cpp; sourceTree = "<group>"; };
+		753D4A741AAA4BC800B7F0F7 /* MasterDwarf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDwarf.h; sourceTree = "<group>"; };
 		754A47871A152F4900F48C5C /* Enemy_Bee.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Bee.cpp; sourceTree = "<group>"; };
 		754A47881A152F4900F48C5C /* Enemy_Bee.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy_Bee.h; sourceTree = "<group>"; };
 		755DD4F41A439C8C005E1E0B /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
@@ -1641,8 +1647,6 @@
 				75BCB0A419E9236F000C7C65 /* CCShake.cpp */,
 				75BCB0A519E9236F000C7C65 /* CCShake.h */,
 				75BCB0A619E9236F000C7C65 /* ChallengesScene.cpp */,
-				751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */,
-				751332451AA4E4F3004669B8 /* Universal_PowerItem.h */,
 				75BCB0A719E9236F000C7C65 /* ChallengesScene.h */,
 				75BCB0A819E9236F000C7C65 /* Crystal.cpp */,
 				75BCB0A919E9236F000C7C65 /* Crystal.h */,
@@ -1736,6 +1740,10 @@
 				75BCB11819E9238D000C7C65 /* Machine_Stamp.h */,
 				75BCB11919E9238D000C7C65 /* MainMenuScene.cpp */,
 				75BCB11A19E9238D000C7C65 /* MainMenuScene.h */,
+				753D4A731AAA4BC800B7F0F7 /* MasterDwarf.cpp */,
+				753D4A741AAA4BC800B7F0F7 /* MasterDwarf.h */,
+				753D4A701AAA493400B7F0F7 /* MasterTroll.cpp */,
+				753D4A711AAA493400B7F0F7 /* MasterTroll.h */,
 				75BCB11B19E9238D000C7C65 /* MissionManager.cpp */,
 				75BCB11C19E9238D000C7C65 /* MissionManager.h */,
 				75BCB11D19E9238D000C7C65 /* MissionScene.cpp */,
@@ -1796,6 +1804,8 @@
 				75BCB15219E9238D000C7C65 /* TrollIntro.h */,
 				75BCB15319E9238D000C7C65 /* TutorialScene.cpp */,
 				75BCB15419E9238D000C7C65 /* TutorialScene.h */,
+				751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */,
+				751332451AA4E4F3004669B8 /* Universal_PowerItem.h */,
 				75BCB15519E9238D000C7C65 /* UpgradeScene.cpp */,
 				75BCB15619E9238D000C7C65 /* UpgradeScene.h */,
 				75BCB15719E9238D000C7C65 /* User.cpp */,
@@ -2669,6 +2679,7 @@
 				15C0B552196D412F007F909D /* CCActionTimelineCache.cpp in Sources */,
 				15A3D99A1682F7F9002FB0C5 /* cpGearJoint.c in Sources */,
 				15C0B569196D412F007F909D /* CCComAttribute.cpp in Sources */,
+				753D4A751AAA4BC800B7F0F7 /* MasterDwarf.cpp in Sources */,
 				15A3D99B1682F7F9002FB0C5 /* cpGrooveJoint.c in Sources */,
 				15C0B57C196D412F007F909D /* UILabelAtlas.cpp in Sources */,
 				15A3D99C1682F7F9002FB0C5 /* cpPinJoint.c in Sources */,
@@ -2812,6 +2823,7 @@
 				75BCB18719E9238E000C7C65 /* TimedSpriteAnimation.cpp in Sources */,
 				15A3DA571682F826002FB0C5 /* CCEditBoxImplIOS.mm in Sources */,
 				15A3DA591682F826002FB0C5 /* CCScrollView.cpp in Sources */,
+				753D4A721AAA493400B7F0F7 /* MasterTroll.cpp in Sources */,
 				75BCB0F719E92383000C7C65 /* EffectIntro.cpp in Sources */,
 				15A3DA5A1682F826002FB0C5 /* CCSorting.cpp in Sources */,
 				15A3DA5B1682F826002FB0C5 /* CCTableView.cpp in Sources */,

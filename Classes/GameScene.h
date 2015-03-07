@@ -33,6 +33,8 @@
 
 #include "Universal_PowerItem.h"
 
+#include "MasterTroll.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -548,8 +550,10 @@ public:
     void OnExitWithNewMission();
     
     //The new fellas
-    cocos2d::CCSprite* _MasterTrollBase;
+//    cocos2d::CCSprite* _MasterTrollBase;
     cocos2d::CCSprite* _MasterDwarfBase;
+    
+    MasterTroll* _MasterTrollBase;
     
     void UpdateTestStuff(float delta);
     
@@ -923,6 +927,8 @@ public:
     
     AdvancedAnimation* _caveFat;
     AdvancedAnimation* _caveTall;
+    
+    void CreateTheRealTrollAction(cocos2d::CCObject *sender);
     
 //    float _boostGhostTimer;
     

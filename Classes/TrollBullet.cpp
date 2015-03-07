@@ -44,7 +44,7 @@ TrollBullet* TrollBullet::create(GameScene* game,int theType)
 }
 
 TrollBullet::TrollBullet():
-_game(NULL)
+_game(NULL),_animation(NULL)
 {
 	
 }
@@ -54,6 +54,8 @@ TrollBullet::~TrollBullet()
 	if (_game){
         _game->release();
     }
+    
+    if (_animation) _animation->release();
 }
 
 bool TrollBullet::init(GameScene* game,int theType)
@@ -75,13 +77,15 @@ bool TrollBullet::init(GameScene* game,int theType)
     _startY = -1;
     
     //Create the sprite and add some particles :)
+    /*
     _sprite = CCSprite::create("beta/target.png");
 	addChild(_sprite, kHUD_Z_Order-1);
+    */
     
     
 //    CCParticleSystemQuad* p;
 //    "Particles/bullet_part_red.plist"
-    
+    /*
     std::stringstream aaaaa;
     
     if(theType == MASTER_ACTION_BULLET_ICE)
@@ -121,10 +125,18 @@ bool TrollBullet::init(GameScene* game,int theType)
         aaaaa<<"Particles/bullet_part_red.plist";
     }
     
+    //Add the particle
+    CCLog("aaaaa: %s",aaaaa.str().c_str());
+    CCParticleSystemQuad* p = CCParticleSystemQuad::create(aaaaa.str().c_str());
+    p->setPosition(getPositionX(), getPositionY());
+    p->setAutoRemoveOnFinish(true);
+    addChild(p,kHUD_Z_Order-1);
+    */
     
-	
-	_game = game;
-	_game->retain();
+    timeToStartFly = 1.0f;
+    
+    _game = game;
+    _game->retain();
     _game->playInGameSound("troll_intro");
     
     _angle = 0;
@@ -135,18 +147,14 @@ bool TrollBullet::init(GameScene* game,int theType)
     _touched = false;
     _touchable = true;
     
-    //Add the particle
+    // The new style for bullets?
+    _animation = SpriteAnimation::create("Characters/master_troll/mt_bullet.plist");
+    _animation->retain();
+    _animation->setOpacity(0);
+    addChild(_animation);
     
-    // Change by the FX/Type correct
-//    _type
-    
-    // Check what bullet is this !!!
-    CCLog("aaaaa: %s",aaaaa.str().c_str());
-//    CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_part_red.plist");
-    CCParticleSystemQuad* p = CCParticleSystemQuad::create(aaaaa.str().c_str());
-    p->setPosition(getPositionX(), getPositionY());
-    p->setAutoRemoveOnFinish(true);
-    addChild(p,kHUD_Z_Order-1);
+    CCFadeIn* aFadeIn = CCFadeIn::create(1.0f);
+    _animation->runAction(aFadeIn);
 	
 	return true;
 }
@@ -187,6 +195,11 @@ void TrollBullet::update(float delta)
     
     if(!_canMove){
         return;//Wait for start move allow !!!
+    }
+    
+    if(timeToStartFly>0){
+        timeToStartFly-=delta;
+        return;
     }
     
     float x = getPositionX();
