@@ -2707,7 +2707,7 @@ void MissionScene::OnShowNextSpecialMission()
             }
             
             //Activate tesla - set in game active
-            User::getInstance()->setMachine_EnemiesLvl(1);
+//            User::getInstance()->setMachine_EnemiesLvl(1);
         }
         
         aMissionID+=1;

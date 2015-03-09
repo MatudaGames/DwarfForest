@@ -78,7 +78,7 @@ bool Machine_Ghost::init(GameScene* gameScene)
     }
     
     //Check in what state is this machine now !!!
-    mUpgradeLevel = User::getInstance()->getMachine_GhostLvl();
+//    mUpgradeLevel = User::getInstance()->getMachine_GhostLvl();
     
     if(mUpgradeLevel<1)
     {
@@ -190,6 +190,8 @@ void Machine_Ghost::ClearOldParts()
 
 void Machine_Ghost::CreateMachineByLevel(int theLevel)
 {
+    theLevel = 1;
+    
     ClearOldParts();
     
     mLevel = theLevel;

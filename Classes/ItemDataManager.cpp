@@ -107,7 +107,7 @@ void ItemDataManager::OnDownloadData()
             curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
             curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
             curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
-            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 30);                  //Setting the timeout
             curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
             curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
             curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
@@ -274,11 +274,26 @@ void ItemDataManager::OnDownloadedData()
                 PowerInfo* aPowerInfo = new PowerInfo();
                 
                 // The item id
-                aPowerInfo->id = subDict->valueForKey("ID")->intValue();
+                aPowerInfo->id = subDict->valueForKey("ID")->intValue()+1000;
+                
+                aPowerInfo->upgrade_power = SplitString(subDict->valueForKey("Upgrade_Info")->getCString(),',');
                 
                 aPowerInfo->name = aSubPathValue;
                 aPowerInfo->level_unlock = subDict->valueForKey("Level_Unlock")->intValue();
-                aPowerInfo->level_cost = SplitString(subDict->valueForKey("Level_Cost")->getCString(),',');
+                aPowerInfo->level_cost = SplitString_VecString(subDict->valueForKey("Level_Cost")->getCString(),',');
+                aPowerInfo->max_upgrades = aPowerInfo->level_cost.size();
+                
+                aPowerInfo->text_locked = subDict->valueForKey("Text_Locked")->m_sString;
+                aPowerInfo->text_unlocked = subDict->valueForKey("Text_UnLocked")->m_sString;
+                aPowerInfo->text_upgrade = subDict->valueForKey("Text_Upgrade")->m_sString;
+                
+                // The universal stuff
+                aPowerInfo->icon_change = false;
+                if(subDict->valueForKey("Icon_Change")->compare("") != 0) {
+                    aPowerInfo->icon_change = subDict->valueForKey("Icon_Change")->boolValue();
+                }
+                
+                aPowerInfo->icon_path = subDict->valueForKey("Icon_Path")->m_sString;
                 
                 mPowerDataVector.push_back(*aPowerInfo);
             }
@@ -349,6 +364,83 @@ void ItemDataManager::menuCloseCallback_mission()
     exit(0);
 #endif
     
+}
+
+// The power info/finfo
+bool ItemDataManager::isPowerItemUnlocked(int theID)
+{
+    CCLog("mBoghtPowers: %s",User::getInstance()->mBoghtPowers.c_str());
+    
+    std::vector<int> boughtStuff = SplitString(User::getInstance()->mBoghtPowers,',');
+    if(std::find(boughtStuff.begin(), boughtStuff.end(), theID) != boughtStuff.end()){
+        // We found it
+        return true;
+    }
+    
+    // TODO - check levels
+    
+    return false;
+}
+
+int ItemDataManager::getPowerItemLevel(int theID)
+{
+    std::vector<std::string> boughtStuff = SplitString_VecString(User::getInstance()->mPowerInfo,',');
+    
+    for(int i=0;i<boughtStuff.size();i++)
+    {
+        //Sub split it more
+        std::vector<int> subPowa = SplitString(boughtStuff[i],'=');
+        if(subPowa.size()>0)
+        {
+            if(subPowa[0] == theID){
+                return subPowa[1];
+            }
+        }
+    }
+    
+    return 1;// As default
+}
+
+void ItemDataManager::upgradePowerItem(int theID)
+{
+    std::stringstream theSaveData;
+    std::vector<std::string> boughtStuff = SplitString_VecString(User::getInstance()->mPowerInfo,',');
+    
+    CCLog("Save data before power upgrade: %s",User::getInstance()->mPowerInfo.c_str());
+    
+    bool didFindItemForUpgrade = false;
+    
+    for(int i=0;i<boughtStuff.size();i++)
+    {
+        //Sub split it more
+        std::vector<int> subPowa = SplitString(boughtStuff[i],'=');
+        if(subPowa.size()>0)
+        {
+            if(subPowa[0] == theID){
+                subPowa[1] += 1;
+                didFindItemForUpgrade = true;
+            }
+            
+            theSaveData << subPowa[0] << "=" << subPowa[1] << ",";
+        }
+    }
+    
+    // Add new stuff
+    if(didFindItemForUpgrade == false)
+    {
+        theSaveData<<theID<<"=2,";
+        User::getInstance()->mPowerInfo.append(theSaveData.str().c_str());
+    }
+    else
+    {
+        User::getInstance()->mPowerInfo = theSaveData.str().c_str();
+    }
+    
+    // Save data to local stuff
+    CCLog("Will save data about power: %s",theSaveData.str().c_str());
+    
+    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Powers_Info", theSaveData.str().c_str());
+    cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
 
 // The chekers and other nice stuff !!!
@@ -445,20 +537,25 @@ void ItemDataManager::onPurchaseItem(int theType,int theID)
     std::stringstream theNewData;
     theNewData << "," << theID;
     
-    if(theType == 1)
+    if(theType == SHOP_SPELLS)
     {
         // The spells
         User::getInstance()->mBoghtSpells.append(theNewData.str());
         CCLog("CurrentData of spells bought %s",User::getInstance()->mBoghtSpells.c_str());
+        
+        cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Bought", User::getInstance()->mBoghtSpells.c_str());
     }
-    else if(theType == 2)
+    else if(theType == SHOP_POWERS)
     {
         // The powers
+        User::getInstance()->mBoghtPowers.append(theNewData.str());
+        CCLog("CurrentData of powers bought %s",User::getInstance()->mBoghtPowers.c_str());
         
+        cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Powers_Bought", User::getInstance()->mBoghtPowers.c_str());
     }
     
     // Save it now on device
-    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Bought", User::getInstance()->mBoghtSpells.c_str());
+//    cocos2d::CCUserDefault::sharedUserDefault()->setStringForKey("Spells_Bought", User::getInstance()->mBoghtSpells.c_str());
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
 
@@ -476,6 +573,22 @@ SpellInfo ItemDataManager::getSpellByID(int theID)
     }
     
     return *aSpell;
+}
+
+PowerInfo ItemDataManager::getPowerByID(int theID)
+{
+    PowerInfo *aPower = NULL;
+    
+    for(int i=0;i<mPowerDataVector.size();i++)
+    {
+        if(mPowerDataVector[i].id == theID)
+        {
+            aPower = &mPowerDataVector[i];
+            break;
+        }
+    }
+    
+    return *aPower;
 }
 
 std::vector<int> ItemDataManager::getActiveItems()

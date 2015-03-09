@@ -18,6 +18,25 @@
 
 USING_NS_CC;
 
+// The split to string stuff
+std::vector<std::string> static &splitString(const std::string &s, char delim, std::vector<std::string> &elems){
+    std::stringstream ss(s);
+    std::string item;
+    std::string resultInt;
+    
+    while (std::getline(ss, item, delim)) {
+        resultInt = item;
+        elems.push_back(resultInt);
+    }
+    return elems;
+}
+
+std::vector<std::string> StoreBox::SplitString_VecString(const std::string s,char delim){
+    std::vector<std::string> elems;
+    splitString(s, delim, elems);
+    return elems;
+}
+
 CCScene* StoreBox::scene(CCRect size,CCRect zone)
 {
     // 'scene' is an autorelease object
@@ -58,6 +77,8 @@ bool StoreBox::init(CCRect size,CCRect zone)
     {
         return false;
     }
+    
+    mCurrentSelectedButtonIndex = 0;
     
     mLayer_2X = 0;
     
@@ -166,6 +187,7 @@ void StoreBox::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
     //Disable all button clicks if was active
     if(mBase->isVisible())
     {
+        /*
         if(User::getInstance()->getMachine_EnemiesLvl()>0)
             ChangeButtonState(3,2);
         else
@@ -185,8 +207,29 @@ void StoreBox::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
             ChangeButtonState(4,2);
         else
             ChangeButtonState(4,1);
+        */
         
 //        CCLog("mBase->getPositionY():%f",mBase->getPositionY());
+        
+        if(mBase->getPositionY()<mMinScroll_Shop_Y)
+        {
+            aPosY = mMinScroll_Shop_Y;
+            aNeedToMove = true;
+        }
+        else if(mBase->getPositionY()>mMaxScroll_Shop_Y)
+        {
+            aPosY = mMaxScroll_Shop_Y;
+            aNeedToMove = true;
+        }
+        
+        if(aNeedToMove)
+        {
+            CCMoveTo* aMove1 = CCMoveTo::create(0.5f,ccp(mBase->getPositionX(),aPosY));
+            CCEaseBackOut* aEase1 = CCEaseBackOut::create(aMove1);
+            mBase->runAction(aEase1);
+        }
+        
+        /*
         if(mBase->getPositionY()<mMinScrollY)
         {
             aPosY = mMinScrollY;
@@ -204,6 +247,7 @@ void StoreBox::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
             CCEaseBackOut* aEase1 = CCEaseBackOut::create(aMove1);
             mBase->runAction(aEase1);
         }
+        */
     }
     else if(mBaseShop->isVisible())
     {
@@ -221,7 +265,7 @@ void StoreBox::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
         
         if(aNeedToMove)
         {
-            CCMoveTo* aMove1 = CCMoveTo::create(0.5f,ccp(mBase->getPositionX(),aPosY));
+            CCMoveTo* aMove1 = CCMoveTo::create(0.5f,ccp(mBaseShop->getPositionX(),aPosY));
             CCEaseBackOut* aEase1 = CCEaseBackOut::create(aMove1);
             mBaseShop->runAction(aEase1);
         }
@@ -242,7 +286,7 @@ void StoreBox::ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
         
         if(aNeedToMove)
         {
-            CCMoveTo* aMove1 = CCMoveTo::create(0.5f,ccp(mBase->getPositionX(),aPosY));
+            CCMoveTo* aMove1 = CCMoveTo::create(0.5f,ccp(mBaseFreeStuff->getPositionX(),aPosY));
             CCEaseBackOut* aEase1 = CCEaseBackOut::create(aMove1);
             mBaseFreeStuff->runAction(aEase1);
         }
@@ -293,10 +337,14 @@ void StoreBox::CreateUpgrades()
     mBaseFreeStuff->setVisible(false);
     mBaseShop->setVisible(false);
     
+    // Reset values
+    mCurrentSelectedButtonIndex = -1;
+    
     //Create the menu buttons too!!!
     if(mUpgradesCreated)
     {
         mBase->setVisible(true);
+        CheckSpellButtons(true,true);
         return;
     }
     
@@ -304,6 +352,484 @@ void StoreBox::CreateUpgrades()
     
     mUpgradesCreated = true;
     
+    // Add the new shop here !!!
+    
+    //Add some elements
+    int aX = 20;
+    int aY = 450;
+    int aSpaceY = 10;
+    
+    // Now here comes the magic for rading from xml
+    CCSprite* aHeader = CCSprite::create("Interfeiss/store/FRESH/shop/title_combo_deals.png");
+    aHeader->setPosition(ccp(aX,aY+90));
+    mBase->addChild(aHeader,1);
+    
+    int aTotalSpellTabItems = User::getInstance()->getItemDataManager().mSpellDataVector.size();
+    CCLog("Total Spell Tab Itmes: %i",aTotalSpellTabItems);
+    
+    int aTotalPowerTabItems = User::getInstance()->getItemDataManager().mPowerDataVector.size();
+    CCLog("Total Power Tab Itmes: %i",aTotalPowerTabItems);
+    
+    CCSprite* aBoxBase;
+    CCLabelTTF* aTxtHeader = NULL;
+    
+    CCLabelTTF* aTxtPowerDesc = NULL;
+    
+    CCSprite* aIcon;
+    CCSprite* aLockIcon;
+    
+    CCSprite* aHeaderIcon;
+    
+    // Special magic
+    CCSprite* aIconDamage;
+    CCSprite* aIconRange;
+    CCLabelTTF* aTxt_Damage = NULL;
+    CCLabelTTF* aTxt_Range = NULL;
+    
+    CCLabelTTF* aTxt_Price = NULL;
+    CCLabelTTF* aTxt_PriceAmount = NULL;
+    CCSprite* aPriceIcon;
+    
+    CCMenuItemImage* MenuButton;
+    CCMenu* MenuButtons;
+    
+    CCSprite* aDummyStar;
+    
+    int aGlobalMidOffestX = 40;
+    
+    int aScrollOffsetY = 20;
+    mMaxScroll_Shop_Y = 0;
+    
+    //........................................................................
+    // Create the powerups before spells !!!
+    
+    aY = 420;
+    
+    for(int i = 0;i<aTotalPowerTabItems;i++)
+    {
+        aBoxBase = CCSprite::create("Shop/panel_upgrades.png");
+        aBoxBase->setPosition(ccp(aX,aY));
+        aBoxBase->setTag(i+1000);
+        mBase->addChild(aBoxBase);
+        aY-=aBoxBase->getContentSize().height+aSpaceY;
+        
+        // Update how far can scroll
+        if(aY<=0) mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+        
+        //------------------------------------------------------------------
+        // The Header
+        
+        aTxtHeader = CCLabelTTF::create(User::getInstance()->getItemDataManager().mPowerDataVector[i].name.c_str(),
+                                        "fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6);
+        aTxtHeader->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxtHeader->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxtHeader->setPosition(ccp(aBoxBase->getContentSize().width/2,aBoxBase->getContentSize().height-24));
+        aTxtHeader->setColor(ccc3(84, 71, 52));
+        aBoxBase->addChild(aTxtHeader);
+        
+        // Add the side icons
+        aHeaderIcon = CCSprite::create("Shop/text_deco.png");
+        aHeaderIcon->setPosition(ccp(aTxtHeader->getPositionX()-aTxtHeader->getContentSize().width/2-50,aTxtHeader->getPositionY()));
+        aBoxBase->addChild(aHeaderIcon);
+        
+        aHeaderIcon = CCSprite::create("Shop/text_deco.png");
+        aHeaderIcon->setFlipX(true);
+        aHeaderIcon->setPosition(ccp(aTxtHeader->getPositionX()+aTxtHeader->getContentSize().width/2+50,aTxtHeader->getPositionY()));
+        aBoxBase->addChild(aHeaderIcon);
+        
+        //----
+        // The Level
+        bool aPowerItemUnLocked = User::getInstance()->getItemDataManager().isPowerItemUnlocked(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        int aPowerItemLevel = User::getInstance()->getItemDataManager().getPowerItemLevel(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        
+        CCLog("aPowerItemUnLocked: %i",aPowerItemUnLocked);
+        CCLog("aPowerItemLevel: %i",aPowerItemLevel);
+        
+        //------------------------------------------------------------------
+        // The icon?
+        
+        // Get the correct icon by upgrade etc
+        std::stringstream power_icon;
+        if(User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_change)
+        {
+            power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path << aPowerItemLevel <<".png";
+        }
+        else
+        {
+            power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path;
+        }
+        
+        aIcon = CCSprite::create(power_icon.str().c_str());
+        aIcon->setTag(BUTTON_ICON);
+        aIcon->setPosition(ccp(50+aIcon->getContentSize().width/2,aBoxBase->getContentSize().height/2));
+        aBoxBase->addChild(aIcon);
+        
+        // Do we need to add above icon?
+        if(aPowerItemUnLocked == false)
+        {
+            aLockIcon = CCSprite::create("Shop/locked.png");
+            aLockIcon->setTag(ICON_LOCKED);
+            aLockIcon->setPosition(ccp(aIcon->getContentSize().width/2,aIcon->getContentSize().height/2));
+            aIcon->addChild(aLockIcon);
+        }
+        
+        //------------------------------------------------------------------
+        // The text for power
+        std::string theDesc;
+        float fontSize;
+        
+        int aUpgradeIndexCheck = aPowerItemLevel;
+        
+        if(aPowerItemUnLocked == false)
+        {
+            aUpgradeIndexCheck -= 1; //Take 1st cost
+            fontSize = TITLE_FONT_SIZE*0.7;
+            theDesc = User::getInstance()->getItemDataManager().mPowerDataVector[i].text_locked;
+        }
+        else
+        {
+            fontSize = TITLE_FONT_SIZE*0.5;
+            theDesc = User::getInstance()->getItemDataManager().mPowerDataVector[i].text_unlocked;
+        }
+        
+        aTxtPowerDesc = CCLabelTTF::create(theDesc.c_str(),"fonts/Marker Felt.ttf",fontSize);
+        aTxtPowerDesc->setTag(POWER_DESC);
+        aTxtPowerDesc->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxtPowerDesc->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxtPowerDesc->setPosition(ccp(aBoxBase->getContentSize().width/2+50,aBoxBase->getContentSize().height/2));
+        aTxtPowerDesc->setColor(ccc3(84, 71, 52));
+        aBoxBase->addChild(aTxtPowerDesc);
+        
+        // TODO check if not max upgraded !!!
+        
+        // The Price for unlock/buy?
+        int aMaxUpgrades = User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades;
+        
+        // The safe check
+        if(aUpgradeIndexCheck>=aMaxUpgrades){
+            aUpgradeIndexCheck = aMaxUpgrades-1;
+        }
+        
+        std::string theCostInfo = User::getInstance()->getItemDataManager().mPowerDataVector[i].level_cost[aUpgradeIndexCheck];
+        std::vector<std::string> theCostVector = SplitString_VecString(theCostInfo,'=');
+        std::stringstream buy_text;
+        
+        if(aPowerItemUnLocked == false){
+            buy_text << "Unlock now for:";
+        }
+        else{
+            buy_text << "Upgrade cost:";
+        }
+        
+        // Set the texts
+        aTxt_PriceAmount = CCLabelTTF::create(theCostVector[1].c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_PriceAmount->setAnchorPoint(ccp(0,0.5f));
+        aTxt_Price = CCLabelTTF::create(buy_text.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_Price->setAnchorPoint(ccp(0,0.5f));
+        
+        // Set the cost icon
+        if(theCostVector[0].compare("D") == 0){
+            // The diamonds
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/diamond_upgrade.png");
+        }
+        else{
+            // Crystal cost
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/crystal_upgrade.png");
+        }
+        
+        aPriceIcon->setAnchorPoint(ccp(0,0.5f));
+        
+        aBoxBase->addChild(aTxt_PriceAmount);
+        aBoxBase->addChild(aTxt_Price);
+        aBoxBase->addChild(aPriceIcon);
+        
+        // Set some tags for thease action memebers
+        aTxt_PriceAmount->setTag(ITEM_PRICE_AMOUNT);
+        aTxt_Price->setTag(ITEM_PRICE_TEXT);
+        aPriceIcon->setTag(ITEM_PRICE_ICON);
+        
+        // Now align the elements
+        aTxt_Price->setPosition(ccp(160,40));
+        aTxt_PriceAmount->setPosition(ccp(aTxt_Price->getPositionX()+aTxt_Price->getTextureRect().size.width+10,40));
+        aPriceIcon->setPosition(ccp(aTxt_PriceAmount->getPositionX()+aTxt_PriceAmount->getTextureRect().size.width+10,40));
+        
+        //------------------------------------------------------------------
+        // The stars !!!
+        if(aPowerItemUnLocked == true)
+        {
+            int aStartY = 125;
+            // Check how far is unlocked !!!
+            for(int s=0;s<User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades;s++)
+            {
+                // Whats the current upgrade level?
+                if(s>=aPowerItemLevel){
+                    aDummyStar = CCSprite::create("Shop/star_empty.png");
+                }
+                else{
+                    aDummyStar = CCSprite::create("Shop/star_full.png");
+                }
+                
+                aDummyStar->setScale(1.25f);
+                
+                aDummyStar->setPosition(ccp(aBoxBase->getContentSize().width/2-(aDummyStar->getContentSize().width*User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades)/2+(s*(aDummyStar->getContentSize().width+10)),aStartY));
+                aDummyStar->setTag(UPGRADE_STAR+s);
+                aBoxBase->addChild(aDummyStar);
+            }
+        }
+        
+        //------------------------------------------------------------------
+        // Buttons?
+        std::stringstream button_image_off;
+        std::stringstream button_image_on;
+        std::stringstream button_state;
+        
+        if(aPowerItemUnLocked == false)
+        {
+            // It's locked
+            button_image_off << "Shop/Button_Unlock_1.png";
+            button_image_on << "Shop/Button_Unlock_2.png";
+            button_state << "Locked";
+        }
+        else
+        {
+            // Check if can upgrade more !!!
+            button_image_off << "Shop/Button_Upgrade_1.png";
+            button_image_on << "Shop/Button_Upgrade_2.png";
+            button_state << "Upgrade";
+        }
+        
+        MenuButton = CCMenuItemImage::create(button_image_off.str().c_str(),
+                                             button_image_on.str().c_str(),
+                                             this,
+                                             menu_selector(StoreBox::OnPowerUpClick));
+        MenuButton->setAnchorPoint(ccp(1,0));
+        MenuButton->setTag(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        MenuButton->setUserObject(CCString::create(button_state.str()));
+        
+        MenuButtons = CCMenu::create(MenuButton, NULL);
+        MenuButtons->setTag(BUTTON_ACTION);// The menu button tah
+        MenuButtons->setPosition(aBoxBase->getContentSize().width-30,10);
+        aBoxBase->addChild(MenuButtons, 10);
+        
+        // The special stuff check
+        if(aPowerItemLevel >= aMaxUpgrades){
+            MenuButtons->setVisible(false);// Stop it - hide this button !!!
+            // Hide the price stuff
+            aPriceIcon->setVisible(false);
+            aTxt_Price->setVisible(false);
+            aTxt_PriceAmount->setVisible(false);
+        }
+        
+        //------------------------------------------------------------------
+        
+    }
+    
+    //........................................................................
+    // The next header
+    
+    aHeader = CCSprite::create("Shop/title_spells.png");
+    aHeader->setPosition(ccp(aX,aY+66));
+    mBase->addChild(aHeader,1);
+    
+    aY-=20;
+    //    mMaxScroll_Shop_Y-=160;
+    
+    //........................................................................
+    
+    for(int i = 0;i<aTotalSpellTabItems;i++)
+    {
+        //------------------------------------------------------------------
+        // The Base
+        aBoxBase = CCSprite::create("Shop/panel_shop.png");
+        aBoxBase->setPosition(ccp(aX,aY));
+        aBoxBase->setTag(i+100);//The spell Taging
+        mBase->addChild(aBoxBase);
+        aY-=aBoxBase->getContentSize().height+aSpaceY;
+        
+        // Update how far can scroll
+        //        if(i>5)
+        //        {
+        //            mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+        //        }
+        if(aY<=0) mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+        
+        //------------------------------------------------------------------
+        // The Header
+        
+        aTxtHeader = CCLabelTTF::create(User::getInstance()->getItemDataManager().mSpellDataVector[i].name.c_str(),
+                                        "fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6,CCSize(420,40),kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
+        aTxtHeader->setPosition(ccp(aBoxBase->getContentSize().width/2-aGlobalMidOffestX,aBoxBase->getContentSize().height-24));
+        aTxtHeader->setColor(ccc3(84, 71, 52));
+        aBoxBase->addChild(aTxtHeader);
+        
+        //------------------------------------------------------------------
+        // The Icon
+        
+        aIcon = CCSprite::create(User::getInstance()->getItemDataManager().mSpellDataVector[i].icon_path.c_str());
+        aIcon->setTag(BUTTON_ICON);
+        aIcon->setPosition(ccp(50+aIcon->getContentSize().width/2,aBoxBase->getContentSize().height/2));
+        aBoxBase->addChild(aIcon);
+        
+        //------------------------------------------------------------------
+        // The Stats
+        
+        aIconDamage = CCSprite::create("Shop/Icon_0002_Sword.png");
+        aIconDamage->setAnchorPoint(ccp(0,0.5f));
+        aIconRange = CCSprite::create("Shop/Icon_0001_Range.png");
+        aIconRange->setAnchorPoint(ccp(0,0.5f));
+        
+        std::stringstream aDamageTxt;
+        aDamageTxt << User::getInstance()->getItemDataManager().mSpellDataVector[i].damage;
+        if(User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra>0)
+        {
+            aDamageTxt << " + " <<User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra << " x " << User::getInstance()->getItemDataManager().mSpellDataVector[i].damage_extra_multiply;
+        }
+        
+        aTxt_Damage = CCLabelTTF::create(aDamageTxt.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6);
+        aTxt_Damage->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxt_Damage->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxt_Damage->setAnchorPoint(ccp(0,0.5f));
+        
+        std::stringstream aRangeTxt;
+        aRangeTxt << User::getInstance()->getItemDataManager().mSpellDataVector[i].range;
+        
+        aTxt_Range = CCLabelTTF::create(aRangeTxt.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6);
+        aTxt_Range->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxt_Range->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxt_Range->setAnchorPoint(ccp(0,0.5f));
+        
+        aBoxBase->addChild(aTxt_Damage);
+        aBoxBase->addChild(aTxt_Range);
+        aBoxBase->addChild(aIconDamage);
+        aBoxBase->addChild(aIconRange);
+        
+        // Position all stuff dynamic by text and icon size !!!
+        int iconText_Space = 10;
+        int statsToStats_Space = 20;
+        int statsY = 30;
+        
+        int aTotalStatsWidth = aIconDamage->getContentSize().width + iconText_Space + aTxt_Damage->getTextureRect().size.width + statsToStats_Space + aIconRange->getContentSize().width + iconText_Space + aTxt_Range->getTextureRect().size.width;
+        
+        int aStartStatsX = aBoxBase->getContentSize().width/2 - aTotalStatsWidth/2-aGlobalMidOffestX;
+        
+        aIconDamage->setPosition(ccp(aStartStatsX,statsY));
+        aStartStatsX+=aIconDamage->getContentSize().width+iconText_Space;
+        
+        aTxt_Damage->setPosition(ccp(aStartStatsX,statsY));
+        aStartStatsX+=aTxt_Damage->getTextureRect().size.width+statsToStats_Space;
+        
+        aIconRange->setPosition(ccp(aStartStatsX,statsY));
+        aStartStatsX+=aIconRange->getContentSize().width+iconText_Space;
+        
+        aTxt_Range->setPosition(ccp(aStartStatsX,statsY));
+        
+        
+        //------------------------------------------------------------------
+        // Check if this item is bought/unlocked etc !!!
+        
+        std::stringstream button_image_off;
+        std::stringstream button_image_on;
+        std::stringstream button_state;
+        
+        if(User::getInstance()->getItemDataManager().isItemUnlocked(User::getInstance()->getItemDataManager().mSpellDataVector[i].id))
+        {
+            // Check if it is selected or not
+            if(User::getInstance()->getItemDataManager().isItemActive(User::getInstance()->getItemDataManager().mSpellDataVector[i].id))
+            {
+                // Item is active
+                button_image_off << "Shop/Button_Selected.png";
+                button_image_on << "Shop/Button_Selected.png";
+                button_state << "Selected";
+            }
+            else
+            {
+                button_image_off << "Shop/Button_Select.png";
+                button_image_on << "Shop/Button_Select.png";
+                button_state << "UnSelected";
+            }
+        }
+        else
+        {
+            // The locked state buttons
+            button_image_off << "Shop/Button_Unlock_1.png";
+            button_image_on << "Shop/Button_Unlock_2.png";
+            button_state << "Locked";
+            
+            // Do we need to add above icon?
+            aLockIcon = CCSprite::create("Shop/locked.png");
+            aLockIcon->setTag(20);
+            aLockIcon->setPosition(ccp(aIcon->getContentSize().width/2,aIcon->getContentSize().height/2));
+            aIcon->addChild(aLockIcon);
+        }
+        
+        MenuButton = CCMenuItemImage::create(button_image_off.str().c_str(),
+                                             button_image_on.str().c_str(),
+                                             this,
+                                             menu_selector(StoreBox::OnSpellClick));
+        MenuButton->setAnchorPoint(ccp(1,1));
+        MenuButton->setTag(User::getInstance()->getItemDataManager().mSpellDataVector[i].id);
+        MenuButton->setUserObject(CCString::create(button_state.str()));
+        
+        MenuButtons = CCMenu::create(MenuButton, NULL);
+        MenuButtons->setTag(BUTTON_ACTION);// The menu button tah
+        MenuButtons->setPosition(aBoxBase->getContentSize().width-30,aBoxBase->getContentSize().height-10);
+        aBoxBase->addChild(MenuButtons, 10);
+        
+        //------------------------------------------------------------------
+        // The Price if not bought
+        aTxt_Price = CCLabelTTF::create("Cost:","fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_Price->setHorizontalAlignment(kCCTextAlignmentRight);
+        aTxt_Price->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxt_Price->setAnchorPoint(ccp(1,0.5f));
+        aTxt_Price->setColor(ccc3(84, 71, 52));
+        
+        std::stringstream aPriceValue;
+        // Check what price is this !!!
+        if(User::getInstance()->getItemDataManager().mSpellDataVector[i].price_crystals>0)
+        {
+            aPriceValue << User::getInstance()->getItemDataManager().mSpellDataVector[i].price_crystals;
+            
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/crystal_upgrade.png");
+            aPriceIcon->setAnchorPoint(ccp(1,0.5f));
+        }
+        else
+        {
+            aPriceValue << User::getInstance()->getItemDataManager().mSpellDataVector[i].price_diamonds;
+            
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/diamond_upgrade.png");
+            aPriceIcon->setAnchorPoint(ccp(1,0.5f));
+        }
+        
+        aTxt_PriceAmount = CCLabelTTF::create(aPriceValue.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_PriceAmount->setHorizontalAlignment(kCCTextAlignmentRight);
+        aTxt_PriceAmount->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxt_PriceAmount->setAnchorPoint(ccp(1,0.5f));
+        
+        aBoxBase->addChild(aTxt_PriceAmount);
+        aBoxBase->addChild(aTxt_Price);
+        aBoxBase->addChild(aPriceIcon);
+        
+        // Now align
+        iconText_Space = 6;
+        statsY = 30;
+        
+        aStartStatsX = aBoxBase->getContentSize().width - 30;
+        
+        aPriceIcon->setPosition(ccp(aStartStatsX,statsY));
+        aStartStatsX-=aPriceIcon->getContentSize().width+iconText_Space;
+        
+        aTxt_PriceAmount->setPosition(ccp(aStartStatsX,statsY));
+        aStartStatsX-=aTxt_PriceAmount->getTextureRect().size.width;
+        
+        aTxt_Price->setPosition(ccp(aStartStatsX,statsY));
+        
+        
+    }
+    
+    // Set the max scroll down
+    mMaxScroll_Shop_Y -= aScrollOffsetY;
+    
+    /*
     int aX = 20;
     int aY = 540;
     int aSpaceY = 10;
@@ -825,6 +1351,7 @@ void StoreBox::CreateUpgrades()
     CreateMachineByLevel(1,User::getInstance()->getMachine_PlantLvl(),true);//Get from user stuff
     
     aIndex++;
+    */
 //    aY-=aBoxBase->getContentSize().height+aSpaceY;
     
     //------------------------------------------------------------
@@ -840,6 +1367,7 @@ void StoreBox::UnlockNow_Stamp(cocos2d::CCObject *sender)
 
 void StoreBox::Buy_Stamp(cocos2d::CCObject *sender)
 {
+    /*
     AnalyticX::flurryLogEvent("Menu Upgrades: Buy Stamp");
     
     //Try to buy it !!!
@@ -889,6 +1417,7 @@ void StoreBox::Buy_Stamp(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_StampLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -905,6 +1434,7 @@ void StoreBox::UnlockNow_Ghost(cocos2d::CCObject *sender)
 
 void StoreBox::Buy_Ghost(cocos2d::CCObject *sender)
 {
+    /*
     AnalyticX::flurryLogEvent("Menu Upgrades: Buy Ghost");
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_GhostLvl();
@@ -952,6 +1482,7 @@ void StoreBox::Buy_Ghost(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_GhostLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -972,6 +1503,7 @@ void StoreBox::Buy_Electro(cocos2d::CCObject *sender)
 {
     AnalyticX::flurryLogEvent("Menu Upgrades: Buy Blitz");
     
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_EnemiesLvl();
     int aPrice = 35;
@@ -1017,6 +1549,7 @@ void StoreBox::Buy_Electro(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_EnemiesLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -1036,6 +1569,7 @@ void StoreBox::Buy_Plant(cocos2d::CCObject *sender)
 {
     AnalyticX::flurryLogEvent("Menu Upgrades: Buy Plants");
     
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_PlantLvl();
     int aPrice = 35;
@@ -1079,6 +1613,7 @@ void StoreBox::Buy_Plant(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_PlantLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -1088,6 +1623,7 @@ void StoreBox::Buy_Plant(cocos2d::CCObject *sender)
 
 void StoreBox::ChangeButtonState(int theButton,int theState)
 {
+    /*
     CCMenu* aMenuButton = NULL;
     CCTextFieldTTF* aTextField = NULL;
     CCSprite* aBG = NULL;
@@ -1386,6 +1922,7 @@ void StoreBox::ChangeButtonState(int theButton,int theState)
             }
         }
     }
+    */
 }
 
 void StoreBox::CreateMachineByLevel(int theMachine,int theLevel,bool theCreate)
@@ -1527,34 +2064,67 @@ void StoreBox::CreateMachineByLevel(int theMachine,int theLevel,bool theCreate)
 }
 
 //================================================================
+//================================================================
 
-void StoreBox::OnSpellClick(CCObject* sender)
+void StoreBox::OnPowerUpClick(CCObject* sender)
 {
     CCMenuItemImage* aButton =(CCMenuItemImage*)sender;
     int aID = aButton->getTag();
     
-    CCLog("On clicked button %i",aID);
+    mCurrentSelectedButtonIndex = aID;
     
     // Check if this button was locked or selected/deselected
     CCString* state = (CCString*)aButton->getUserObject();
-    CCLog("On clicked state %s",state->getCString());
     
-//    CCSprite* aSpriteDummy;
+    // Clicked 1st time and want to unlock
+    if(state->compare("Locked") == 0)
+    {
+        // Show popup about buy !!!
+        aButton->setUserObject(CCString::create("Buy_Unlock"));
+    }
+    else if(state->compare("Buy_Unlock") == 0)
+    {
+        // Check if has the monet for it :)
+        // TODO
+        User::getInstance()->getItemDataManager().onPurchaseItem(SHOP_POWERS,aID);
+        
+        // Bought? show that can upgrade
+        aButton->setUserObject(CCString::create("Upgrade"));
+    }
+    else if(state->compare("Upgrade") == 0)
+    {
+        // Buy this upgrade
+        aButton->setUserObject(CCString::create("Buy_Upgrade"));
+    }
+    else if(state->compare("Buy_Upgrade") == 0)
+    {
+        // Check if has the monet for it :)
+        // TODO
+        
+        User::getInstance()->getItemDataManager().upgradePowerItem(aID);
+        
+        // Set back to normal
+        aButton->setUserObject(CCString::create("Upgrade"));
+    }
+    
+    CheckSpellButtons(false,true);
+}
+
+void StoreBox::OnSpellClick(CCObject* sender)
+{
+    // Deselect power item if had selected
+    mCurrentSelectedButtonIndex = -1;
+    
+    CCMenuItemImage* aButton =(CCMenuItemImage*)sender;
+    int aID = aButton->getTag();
+    
+    // Check if this button was locked or selected/deselected
+    CCString* state = (CCString*)aButton->getUserObject();
     
     if(state->compare("Locked") == 0)
     {
         // Show popup about buy !!!
         User::getInstance()->getItemDataManager().onPurchaseItem(SHOP_SPELLS,aID);
-        
-        // Update this button to not selected now !!!
-        /*
-        aSpriteDummy = CCSprite::create("Shop/Button_Select.png");
-        aButton->setNormalImage(aSpriteDummy);
-        
-        aSpriteDummy = CCSprite::create("Shop/Button_Selected.png");
-        aButton->setSelectedImage(aSpriteDummy);
-        */
-        
         aButton->setUserObject(CCString::create("UnSelected"));
     }
     else
@@ -1562,41 +2132,294 @@ void StoreBox::OnSpellClick(CCObject* sender)
         // It's unlocked
         if(state->compare("Selected") == 0)
         {
-//            aSpriteDummy = CCSprite::create("Shop/Button_Select.png");
-//            aButton->setNormalImage(aSpriteDummy);
-//            aButton->setUserObject(CCString::create("UnSelected"));
             User::getInstance()->getItemDataManager().onRemoveSelectedItem(SHOP_SPELLS, aID);
         }
         else if(state->compare("UnSelected") == 0)
         {
-//            aSpriteDummy = CCSprite::create("Shop/Button_Selected.png");
-//            aButton->setNormalImage(aSpriteDummy);
-//            aButton->setUserObject(CCString::create("Selected"));
             User::getInstance()->getItemDataManager().onSetSelectedItem(SHOP_SPELLS, aID);
         }
     }
     
-    CheckSpellButtons();
+    CheckSpellButtons(true,false);
 }
 
 // The ultimate function to check states of buttons
-void StoreBox::CheckSpellButtons()
+void StoreBox::CheckSpellButtons(bool OnlySpells, bool OnlyPowers)
 {
+    CCSprite* aButtonBase;
+    CCSprite* aButtonIcon;
+    CCLabelTTF* aDescText;
+    
+    std::stringstream button_image_off;
+    std::stringstream button_image_on;
+    std::stringstream button_state;
+    std::stringstream power_desc;
+    
+    CCSprite* aItemPriceIcon;
+    CCLabelTTF* aItemPriceText;
+    CCLabelTTF* aItemPriceAmount;
+    
+    float fontSize;
+    
     for(int i=0;i<mBaseShop->getChildrenCount();i++)
     {
-        CCSprite* aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i);
+        //..................................................................
+        // The powerup part !!!
+            
+        aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i+1000); // The powerup tag 1000
         
-        if(aButtonBase != NULL)
+        if(aButtonBase != NULL && OnlyPowers == true)
         {
-            CCMenu* aMenuOfBase = (CCMenu*)aButtonBase->getChildByTag(10);
+            CCLog("We have powerup to update");
+            
+            button_image_off.str("");button_image_off.clear();
+            button_image_on.str("");button_image_on.clear();
+            button_state.str("");button_state.clear();
+            power_desc.str(""),power_desc.clear();
+            
+            aButtonIcon = (CCSprite*)aButtonBase->getChildByTag(BUTTON_ICON);
+            
+            CCMenu* aMenuOfBase = (CCMenu*)aButtonBase->getChildByTag(BUTTON_ACTION);
             CCMenuItemImage* aButton = (CCMenuItemImage*)aMenuOfBase->getChildren()->objectAtIndex(0);
             
-            std::stringstream button_image_off;
-            std::stringstream button_image_on;
-            std::stringstream button_state;
+            aItemPriceIcon = (CCSprite*)aButtonBase->getChildByTag(ITEM_PRICE_ICON);
+            aItemPriceText = (CCLabelTTF*)aButtonBase->getChildByTag(ITEM_PRICE_TEXT);
+            aItemPriceAmount = (CCLabelTTF*)aButtonBase->getChildByTag(ITEM_PRICE_AMOUNT);
+            
+            aDescText = (CCLabelTTF*)aButtonBase->getChildByTag(POWER_DESC);
+            // Set the text by button
+            
+            // Do something by state
+            CCString* state = (CCString*)aButton->getUserObject();
+            
+            CCLog("mCurrentSelectedButtonIndex: %i | aButton->getTag(): %i",mCurrentSelectedButtonIndex,aButton->getTag());
+            CCLog("state: %s",state->m_sString.c_str());
+            
+            fontSize = TITLE_FONT_SIZE*0.6;
+            
+            bool checkStars = false;
+            
+            int theItemLevel = User::getInstance()->getItemDataManager().getPowerItemLevel(aButton->getTag());
+            int theMaxUpgrades = User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).max_upgrades;
+            
+            if(mCurrentSelectedButtonIndex != aButton->getTag())
+            {
+                // if this button had some state - move to prev state
+                if(state->compare("Buy_Unlock") == 0){
+                    
+                    button_image_off << "Shop/Button_Unlock_1.png";
+                    button_image_on << "Shop/Button_Unlock_2.png";
+                    button_state << "Locked";
+                    
+                    fontSize = TITLE_FONT_SIZE*0.6;
+                    power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_locked;
+                }
+                else if(state->compare("Buy_Upgrade") == 0){
+                    
+                    button_image_off << "Shop/Button_Upgrade_1.png";
+                    button_image_on << "Shop/Button_Upgrade_2.png";
+                    button_state << "Upgrade";
+                    
+                    checkStars = true;
+                    fontSize = TITLE_FONT_SIZE*0.4;
+                    power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_upgrade;
+                }
+                else
+                {
+                    // Default stuff
+                    if(state->compare("Locked") == 0)
+                    {
+                        // It's locked
+                        button_image_off << "Shop/Button_Unlock_1.png";
+                        button_image_on << "Shop/Button_Unlock_2.png";
+                        
+                        fontSize = TITLE_FONT_SIZE*0.6;
+                        power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_locked;
+                    }
+                    else if(state->compare("Upgrade") == 0)
+                    {
+                        // Check if can upgrade more !!!
+                        if(theItemLevel >= theMaxUpgrades){
+                            aButton->setVisible(false);// Stop it - hide this button !!!
+                            // Hide the price stuff
+                            aItemPriceIcon->setVisible(false);
+                            aItemPriceText->setVisible(false);
+                            aItemPriceAmount->setVisible(false);
+                        }
+                        
+                        button_image_off << "Shop/Button_Upgrade_1.png";
+                        button_image_on << "Shop/Button_Upgrade_2.png";
+                        
+                        checkStars = true;
+                        fontSize = TITLE_FONT_SIZE*0.4;
+                        power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_unlocked;
+                    }
+                    
+                    button_state << state->m_sString;
+                }
+            }
+            else
+            {
+                if(state->compare("Buy_Unlock") == 0 || state->compare("Buy_Upgrade") == 0)
+                {
+                    // Show the buy button !!!
+                    button_image_off << "Shop/Button_Buy_1.png";
+                    button_image_on << "Shop/Button_Buy_2.png";
+                    
+                    fontSize = TITLE_FONT_SIZE*0.4;
+                    if(state->compare("Buy_Upgrade") == 0){
+                        power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_upgrade;
+                    }
+                    else{
+                        power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_unlocked;
+                    }
+                }
+                else if(state->compare("Locked") == 0)
+                {
+                    button_image_off << "Shop/Button_Unlock_1.png";
+                    button_image_on << "Shop/Button_Unlock_2.png";
+                    
+                    fontSize = TITLE_FONT_SIZE*0.6;
+                    power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_locked;
+                }
+                else if(state->compare("Upgrade") == 0)
+                {
+                    // Remove the lock icon if had
+                    if(aButtonIcon->getChildByTag(ICON_LOCKED) != NULL){
+                        aButtonIcon->removeChildByTag(ICON_LOCKED);
+                    }
+                    
+                    button_image_off << "Shop/Button_Upgrade_1.png";
+                    button_image_on << "Shop/Button_Upgrade_2.png";
+                    
+                    checkStars = true;
+                    fontSize = TITLE_FONT_SIZE*0.4;
+                    power_desc << User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).text_unlocked;
+                    
+                    // Hide all if max upgrade !!!
+                    if(theItemLevel >= theMaxUpgrades){
+                        aButton->setVisible(false);// Stop it - hide this button !!!
+                        // Hide the price stuff
+                        aItemPriceIcon->setVisible(false);
+                        aItemPriceText->setVisible(false);
+                        aItemPriceAmount->setVisible(false);
+                    }
+                }
+                
+                button_state << state->m_sString;
+            }
+            
+            if(checkStars)
+            {
+                CCSprite* aDummyStar;
+                
+                for(int s=0;s<theMaxUpgrades;s++)
+                {
+                    aDummyStar = (CCSprite*)aButton->getChildByTag(UPGRADE_STAR+s);
+                    if(aDummyStar != NULL)
+                    {
+                        // Change to needed?
+                        if(theItemLevel>=s){
+                            aDummyStar->setTexture(CCSprite::create("Shop/star_empty.png")->getTexture());
+                        }
+                        else{
+                            aDummyStar->setTexture(CCSprite::create("Shop/star_full.png")->getTexture());
+                        }
+                    }
+                    else
+                    {
+                        int aStartY = 125;
+                        // Create the star missing
+                        if(s>=theItemLevel){
+                            aDummyStar = CCSprite::create("Shop/star_empty.png");
+                        }
+                        else{
+                            aDummyStar = CCSprite::create("Shop/star_full.png");
+                        }
+                        
+                        aDummyStar->setScale(1.25f);
+                        
+                        aDummyStar->setPosition(ccp(aButtonBase->getContentSize().width/2-(aDummyStar->getContentSize().width*theMaxUpgrades)/2+(s*(aDummyStar->getContentSize().width+10)),aStartY));
+                        aDummyStar->setTag(UPGRADE_STAR+s);
+                        aButtonBase->addChild(aDummyStar);
+                    }
+                }
+                
+                // Check the icon too
+                std::stringstream power_icon;
+                if(User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).icon_change){
+                    power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path << theItemLevel <<".png";
+                }
+                else{
+                    power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path;
+                }
+                
+                aButtonIcon->setTexture(CCSprite::create(power_icon.str().c_str())->getTexture());
+                
+                //--------
+                
+                // The Price for unlock/buy?
+                if(theItemLevel<theMaxUpgrades)
+                {
+                    std::string theCostInfo = User::getInstance()->getItemDataManager().getPowerByID(aButton->getTag()).level_cost[theItemLevel];
+                    std::vector<std::string> theCostVector = SplitString_VecString(theCostInfo,'=');
+                    std::stringstream buy_text;
+                    
+                    buy_text << "Upgrade cost:";
+                    
+                    // Set the cost icon
+                    if(theCostVector[0].compare("D") == 0){
+                        // The diamonds
+                        aItemPriceIcon->setTexture(CCSprite::create("Interfeiss/upgrade_screen/diamond_upgrade.png")->getTexture());
+                    }
+                    else{
+                        // Crystal cost
+                        aItemPriceIcon->setTexture(CCSprite::create("Interfeiss/upgrade_screen/crystal_upgrade.png")->getTexture());
+                    }
+                    
+                    aItemPriceAmount->setString(theCostVector[1].c_str());
+                    aItemPriceText->setString(buy_text.str().c_str());
+                    
+                    // Now align the elements
+                    aItemPriceText->setPosition(ccp(160,40));
+                    aItemPriceAmount->setPosition(ccp(aItemPriceText->getPositionX()+aItemPriceText->getTextureRect().size.width+10,40));
+                    aItemPriceIcon->setPosition(ccp(aItemPriceAmount->getPositionX()+aItemPriceAmount->getTextureRect().size.width+10,40));
+                }
+                
+                //........
+            }
+            
+            aDescText->setString(power_desc.str().c_str());
+            aDescText->setFontSize(fontSize);
+            
+            aButton->setNormalImage(CCSprite::create(button_image_off.str().c_str()));
+            aButton->setSelectedImage(CCSprite::create(button_image_on.str().c_str()));
+            aButton->setUserObject(CCString::create(button_state.str()));
+        }
+        
+        //..................................................................
+        // The spell part !!!
+        
+        aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i+100); // The spell tag 100
+        
+        if(aButtonBase != NULL && OnlySpells == true)
+        {
+            aButtonIcon = (CCSprite*)aButtonBase->getChildByTag(BUTTON_ICON);
+            
+            CCMenu* aMenuOfBase = (CCMenu*)aButtonBase->getChildByTag(BUTTON_ACTION);
+            CCMenuItemImage* aButton = (CCMenuItemImage*)aMenuOfBase->getChildren()->objectAtIndex(0);
+            
+            button_image_off.str("");button_image_off.clear();
+            button_image_on.str("");button_image_on.clear();
+            button_state.str("");button_state.clear();
             
             if(User::getInstance()->getItemDataManager().isItemUnlocked(aButton->getTag()))
             {
+                // Remove the lock icon if had
+                if(aButtonIcon->getChildByTag(ICON_LOCKED) != NULL){
+                    aButtonIcon->removeChildByTag(ICON_LOCKED);
+                }
+                
                 // Check if it is selected or not
                 if(User::getInstance()->getItemDataManager().isItemActive(aButton->getTag()))
                 {
@@ -1615,8 +2438,8 @@ void StoreBox::CheckSpellButtons()
             else
             {
                 // The locked state buttons
-                button_image_off << "Shop/Button_UnlockNow.png";
-                button_image_on << "Shop/Button_UnlockNow.png";
+                button_image_off << "Shop/Button_Unlock_1.png";
+                button_image_on << "Shop/Button_Unlock_2.png";
                 button_state << "Locked";
             }
             
@@ -1624,6 +2447,8 @@ void StoreBox::CheckSpellButtons()
             aButton->setSelectedImage(CCSprite::create(button_image_on.str().c_str()));
             aButton->setUserObject(CCString::create(button_state.str()));
         }
+        
+        //..................................................................
     }
 }
 
@@ -1633,15 +2458,20 @@ void StoreBox::CreateShop()
     mBaseFreeStuff->setVisible(false);
     mBaseShop->setVisible(false);
     
+    // Reset values
+    mCurrentSelectedButtonIndex = -1;
+    
     if(mShopCreated)
     {
         mBaseShop->setVisible(true);
+        CheckSpellButtons(true,true);
         return;
     }
     
     mShopCreated = true;
     mBaseShop->setVisible(true);
     
+    /*
     //Add some elements
     int aX = 20;
     int aY = 450;
@@ -1655,9 +2485,18 @@ void StoreBox::CreateShop()
     int aTotalSpellTabItems = User::getInstance()->getItemDataManager().mSpellDataVector.size();
     CCLog("Total Spell Tab Itmes: %i",aTotalSpellTabItems);
     
+    int aTotalPowerTabItems = User::getInstance()->getItemDataManager().mPowerDataVector.size();
+    CCLog("Total Power Tab Itmes: %i",aTotalPowerTabItems);
+    
     CCSprite* aBoxBase;
     CCLabelTTF* aTxtHeader = NULL;
+    
+    CCLabelTTF* aTxtPowerDesc = NULL;
+    
     CCSprite* aIcon;
+    CCSprite* aLockIcon;
+    
+    CCSprite* aHeaderIcon;
     
     // Special magic
     CCSprite* aIconDamage;
@@ -1672,26 +2511,265 @@ void StoreBox::CreateShop()
     CCMenuItemImage* MenuButton;
     CCMenu* MenuButtons;
     
+    CCSprite* aDummyStar;
+    
     int aGlobalMidOffestX = 40;
     
     int aScrollOffsetY = 20;
     mMaxScroll_Shop_Y = 0;
     
-    for(int i = 0;i<aTotalSpellTabItems;i++)
+    //........................................................................
+    // Create the powerups before spells !!!
+    
+    aY = 420;
+    
+    for(int i = 0;i<aTotalPowerTabItems;i++)
     {
-        //------------------------------------------------------------------
-        // The Base
-        aBoxBase = CCSprite::create("Interfeiss/store/FRESH/shop/panel_shop.png");
+        aBoxBase = CCSprite::create("Shop/panel_upgrades.png");
         aBoxBase->setPosition(ccp(aX,aY));
-        aBoxBase->setTag(i);
+        aBoxBase->setTag(i+1000);
         mBaseShop->addChild(aBoxBase);
         aY-=aBoxBase->getContentSize().height+aSpaceY;
         
         // Update how far can scroll
-        if(i>5)
+        if(aY<=0) mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+        
+        //------------------------------------------------------------------
+        // The Header
+        
+        aTxtHeader = CCLabelTTF::create(User::getInstance()->getItemDataManager().mPowerDataVector[i].name.c_str(),
+                                        "fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.6);
+        aTxtHeader->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxtHeader->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxtHeader->setPosition(ccp(aBoxBase->getContentSize().width/2,aBoxBase->getContentSize().height-24));
+        aTxtHeader->setColor(ccc3(84, 71, 52));
+        aBoxBase->addChild(aTxtHeader);
+        
+        // Add the side icons
+        aHeaderIcon = CCSprite::create("Shop/text_deco.png");
+        aHeaderIcon->setPosition(ccp(aTxtHeader->getPositionX()-aTxtHeader->getContentSize().width/2-50,aTxtHeader->getPositionY()));
+        aBoxBase->addChild(aHeaderIcon);
+        
+        aHeaderIcon = CCSprite::create("Shop/text_deco.png");
+        aHeaderIcon->setFlipX(true);
+        aHeaderIcon->setPosition(ccp(aTxtHeader->getPositionX()+aTxtHeader->getContentSize().width/2+50,aTxtHeader->getPositionY()));
+        aBoxBase->addChild(aHeaderIcon);
+        
+        //----
+        // The Level
+        bool aPowerItemUnLocked = User::getInstance()->getItemDataManager().isPowerItemUnlocked(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        int aPowerItemLevel = User::getInstance()->getItemDataManager().getPowerItemLevel(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        
+        CCLog("aPowerItemUnLocked: %i",aPowerItemUnLocked);
+        CCLog("aPowerItemLevel: %i",aPowerItemLevel);
+        
+        //------------------------------------------------------------------
+        // The icon?
+        
+        // Get the correct icon by upgrade etc
+        std::stringstream power_icon;
+        if(User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_change)
         {
-            mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+            power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path << aPowerItemLevel <<".png";
         }
+        else
+        {
+            power_icon << User::getInstance()->getItemDataManager().mPowerDataVector[i].icon_path;
+        }
+        
+        aIcon = CCSprite::create(power_icon.str().c_str());
+        aIcon->setTag(BUTTON_ICON);
+        aIcon->setPosition(ccp(50+aIcon->getContentSize().width/2,aBoxBase->getContentSize().height/2));
+        aBoxBase->addChild(aIcon);
+        
+        // Do we need to add above icon?
+        if(aPowerItemUnLocked == false)
+        {
+            aLockIcon = CCSprite::create("Shop/locked.png");
+            aLockIcon->setTag(ICON_LOCKED);
+            aLockIcon->setPosition(ccp(aIcon->getContentSize().width/2,aIcon->getContentSize().height/2));
+            aIcon->addChild(aLockIcon);
+        }
+        
+        //------------------------------------------------------------------
+        // The text for power
+        std::string theDesc;
+        float fontSize;
+        
+        int aUpgradeIndexCheck = aPowerItemLevel;
+        
+        if(aPowerItemUnLocked == false)
+        {
+            aUpgradeIndexCheck -= 1; //Take 1st cost
+            fontSize = TITLE_FONT_SIZE*0.7;
+            theDesc = User::getInstance()->getItemDataManager().mPowerDataVector[i].text_locked;
+        }
+        else
+        {
+            fontSize = TITLE_FONT_SIZE*0.5;
+            theDesc = User::getInstance()->getItemDataManager().mPowerDataVector[i].text_unlocked;
+        }
+        
+        aTxtPowerDesc = CCLabelTTF::create(theDesc.c_str(),"fonts/Marker Felt.ttf",fontSize);
+        aTxtPowerDesc->setTag(POWER_DESC);
+        aTxtPowerDesc->setHorizontalAlignment(kCCTextAlignmentLeft);
+        aTxtPowerDesc->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+        aTxtPowerDesc->setPosition(ccp(aBoxBase->getContentSize().width/2+50,aBoxBase->getContentSize().height/2));
+        aTxtPowerDesc->setColor(ccc3(84, 71, 52));
+        aBoxBase->addChild(aTxtPowerDesc);
+        
+        // TODO check if not max upgraded !!!
+        
+        // The Price for unlock/buy?
+        int aMaxUpgrades = User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades;
+        
+        // The safe check
+        if(aUpgradeIndexCheck>=aMaxUpgrades){
+            aUpgradeIndexCheck = aMaxUpgrades-1;
+        }
+        
+        std::string theCostInfo = User::getInstance()->getItemDataManager().mPowerDataVector[i].level_cost[aUpgradeIndexCheck];
+        std::vector<std::string> theCostVector = SplitString_VecString(theCostInfo,'=');
+        std::stringstream buy_text;
+        
+        if(aPowerItemUnLocked == false){
+            buy_text << "Unlock now for:";
+        }
+        else{
+            buy_text << "Upgrade cost:";
+        }
+        
+        // Set the texts
+        aTxt_PriceAmount = CCLabelTTF::create(theCostVector[1].c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_PriceAmount->setAnchorPoint(ccp(0,0.5f));
+        aTxt_Price = CCLabelTTF::create(buy_text.str().c_str(),"fonts/Marker Felt.ttf",TITLE_FONT_SIZE*0.5);
+        aTxt_Price->setAnchorPoint(ccp(0,0.5f));
+        
+        // Set the cost icon
+        if(theCostVector[0].compare("D") == 0){
+            // The diamonds
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/diamond_upgrade.png");
+        }
+        else{
+            // Crystal cost
+            aPriceIcon = CCSprite::create("Interfeiss/upgrade_screen/crystal_upgrade.png");
+        }
+        
+        aPriceIcon->setAnchorPoint(ccp(0,0.5f));
+        
+        aBoxBase->addChild(aTxt_PriceAmount);
+        aBoxBase->addChild(aTxt_Price);
+        aBoxBase->addChild(aPriceIcon);
+        
+        // Set some tags for thease action memebers
+        aTxt_PriceAmount->setTag(ITEM_PRICE_AMOUNT);
+        aTxt_Price->setTag(ITEM_PRICE_TEXT);
+        aPriceIcon->setTag(ITEM_PRICE_ICON);
+        
+        // Now align the elements
+        aTxt_Price->setPosition(ccp(160,40));
+        aTxt_PriceAmount->setPosition(ccp(aTxt_Price->getPositionX()+aTxt_Price->getTextureRect().size.width+10,40));
+        aPriceIcon->setPosition(ccp(aTxt_PriceAmount->getPositionX()+aTxt_PriceAmount->getTextureRect().size.width+10,40));
+        
+        //------------------------------------------------------------------
+        // The stars !!!
+        if(aPowerItemUnLocked == true)
+        {
+            int aStartY = 125;
+            // Check how far is unlocked !!!
+            for(int s=0;s<User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades;s++)
+            {
+                // Whats the current upgrade level?
+                if(s>=aPowerItemLevel){
+                    aDummyStar = CCSprite::create("Shop/star_empty.png");
+                }
+                else{
+                    aDummyStar = CCSprite::create("Shop/star_full.png");
+                }
+                
+                aDummyStar->setScale(1.25f);
+                
+                aDummyStar->setPosition(ccp(aBoxBase->getContentSize().width/2-(aDummyStar->getContentSize().width*User::getInstance()->getItemDataManager().mPowerDataVector[i].max_upgrades)/2+(s*(aDummyStar->getContentSize().width+10)),aStartY));
+                aDummyStar->setTag(UPGRADE_STAR+s);
+                aBoxBase->addChild(aDummyStar);
+            }
+        }
+        
+        //------------------------------------------------------------------
+        // Buttons?
+        std::stringstream button_image_off;
+        std::stringstream button_image_on;
+        std::stringstream button_state;
+        
+        if(aPowerItemUnLocked == false)
+        {
+            // It's locked
+            button_image_off << "Shop/Button_Unlock_1.png";
+            button_image_on << "Shop/Button_Unlock_2.png";
+            button_state << "Locked";
+        }
+        else
+        {
+            // Check if can upgrade more !!!
+            button_image_off << "Shop/Button_Upgrade_1.png";
+            button_image_on << "Shop/Button_Upgrade_2.png";
+            button_state << "Upgrade";
+        }
+        
+        MenuButton = CCMenuItemImage::create(button_image_off.str().c_str(),
+                                             button_image_on.str().c_str(),
+                                             this,
+                                             menu_selector(StoreBox::OnPowerUpClick));
+        MenuButton->setAnchorPoint(ccp(1,0));
+        MenuButton->setTag(User::getInstance()->getItemDataManager().mPowerDataVector[i].id);
+        MenuButton->setUserObject(CCString::create(button_state.str()));
+        
+        MenuButtons = CCMenu::create(MenuButton, NULL);
+        MenuButtons->setTag(BUTTON_ACTION);// The menu button tah
+        MenuButtons->setPosition(aBoxBase->getContentSize().width-30,10);
+        aBoxBase->addChild(MenuButtons, 10);
+        
+        // The special stuff check
+        if(aPowerItemLevel >= aMaxUpgrades){
+            MenuButtons->setVisible(false);// Stop it - hide this button !!!
+            // Hide the price stuff
+            aPriceIcon->setVisible(false);
+            aTxt_Price->setVisible(false);
+            aTxt_PriceAmount->setVisible(false);
+        }
+        
+        //------------------------------------------------------------------
+        
+    }
+    
+    //........................................................................
+    // The next header
+    
+    aHeader = CCSprite::create("Shop/title_spells.png");
+    aHeader->setPosition(ccp(aX,aY+66));
+    mBaseShop->addChild(aHeader,1);
+    
+    aY-=20;
+//    mMaxScroll_Shop_Y-=160;
+    
+    //........................................................................
+    
+    for(int i = 0;i<aTotalSpellTabItems;i++)
+    {
+        //------------------------------------------------------------------
+        // The Base
+        aBoxBase = CCSprite::create("Shop/panel_shop.png");
+        aBoxBase->setPosition(ccp(aX,aY));
+        aBoxBase->setTag(i+100);//The spell Taging
+        mBaseShop->addChild(aBoxBase);
+        aY-=aBoxBase->getContentSize().height+aSpaceY;
+        
+        // Update how far can scroll
+//        if(i>5)
+//        {
+//            mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
+//        }
+        if(aY<=0) mMaxScroll_Shop_Y+=aBoxBase->getContentSize().height;
         
         //------------------------------------------------------------------
         // The Header
@@ -1706,6 +2784,7 @@ void StoreBox::CreateShop()
         // The Icon
         
         aIcon = CCSprite::create(User::getInstance()->getItemDataManager().mSpellDataVector[i].icon_path.c_str());
+        aIcon->setTag(BUTTON_ICON);
         aIcon->setPosition(ccp(50+aIcon->getContentSize().width/2,aBoxBase->getContentSize().height/2));
         aBoxBase->addChild(aIcon);
         
@@ -1790,9 +2869,15 @@ void StoreBox::CreateShop()
         else
         {
             // The locked state buttons
-            button_image_off << "Shop/Button_UnlockNow.png";
-            button_image_on << "Shop/Button_UnlockNow.png";
+            button_image_off << "Shop/Button_Unlock_1.png";
+            button_image_on << "Shop/Button_Unlock_2.png";
             button_state << "Locked";
+            
+            // Do we need to add above icon?
+            aLockIcon = CCSprite::create("Shop/locked.png");
+            aLockIcon->setTag(20);
+            aLockIcon->setPosition(ccp(aIcon->getContentSize().width/2,aIcon->getContentSize().height/2));
+            aIcon->addChild(aLockIcon);
         }
         
         MenuButton = CCMenuItemImage::create(button_image_off.str().c_str(),
@@ -1804,7 +2889,7 @@ void StoreBox::CreateShop()
         MenuButton->setUserObject(CCString::create(button_state.str()));
         
         MenuButtons = CCMenu::create(MenuButton, NULL);
-        MenuButtons->setTag(10);// The menu button tah
+        MenuButtons->setTag(BUTTON_ACTION);// The menu button tah
         MenuButtons->setPosition(aBoxBase->getContentSize().width-30,aBoxBase->getContentSize().height-10);
         aBoxBase->addChild(MenuButtons, 10);
         
@@ -1861,8 +2946,13 @@ void StoreBox::CreateShop()
     
     // Set the max scroll down
     mMaxScroll_Shop_Y -= aScrollOffsetY;
-
-    /*
+    */
+    
+    //Add some elements
+    int aX = 20;
+    int aY = 450;
+    int aSpaceY = 10;
+    
     CCSprite* aBoxBase;
     
     CCSprite* aHeader = CCSprite::create("Interfeiss/store/FRESH/shop/title_combo_deals.png");
@@ -2431,7 +3521,6 @@ void StoreBox::CreateShop()
         aIcon = NULL;
         MenuButton = NULL;
     }
-    */
 }
 
 void StoreBox::CreateFreeStuff()

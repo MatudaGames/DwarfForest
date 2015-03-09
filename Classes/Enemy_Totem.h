@@ -61,7 +61,7 @@ struct Quad_Action
     int32_t flame_radius; // Flame radius?
     int32_t flame_angle; // Flame angle?
     int32_t flame_active_time; // How long flame throewr will be active?
-    int32_t flame_rotate_speed; // How fast rotates flame thrower?
+    float flame_rotate_speed; // How fast rotates flame thrower?
     
     int32_t flame_start_angle;
     int32_t flame_end_angle;

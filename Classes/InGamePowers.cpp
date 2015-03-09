@@ -758,7 +758,7 @@ void InGamePowers::OnRemoveTrollIndicators()
 void InGamePowers::OnGhoustDwarfs()
 {
     // Make all dwarfs tansparent
-    mGameScene->_boostGhostTimer = 10;//Just enable it
+//    mGameScene->_boostGhostTimer = 10;//Just enable it
     
     mGameScene->_mission_AP_GhostDwarfs+=1;
     mGameScene->CheckMissionByValue(MissionType_AP_GhostDwarfs,mGameScene->_mission_AP_GhostDwarfs);

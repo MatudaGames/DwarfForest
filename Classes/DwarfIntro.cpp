@@ -59,6 +59,7 @@ bool DwarfIntro::init(GameScene* game, Dwarf* dwarf)
 	addChild(_introLight);
 	_introLight->setOpacity(0.0f);
 	
+    /*
 //	schedule(schedule_selector(IntroAnimation::finished), 3.0f, 1, 0.0f);
     if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission || User::getInstance()->mSpecial_18_Mission
        || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission
@@ -81,6 +82,17 @@ bool DwarfIntro::init(GameScene* game, Dwarf* dwarf)
         {
             schedule(schedule_selector(DwarfIntro::onFinshed), 3.0f, 1, 0.0f);
         }
+    }
+    */
+    
+    if(game->_gameTime<60 && game->_gameTime>3 && game->_dwarves->count()-1<=0)
+    {
+        //Instatnt spawn
+        schedule(schedule_selector(DwarfIntro::onFinshed), 0.0f, 1, 0.0f);
+    }
+    else
+    {
+        schedule(schedule_selector(DwarfIntro::onFinshed), 3.0f, 1, 0.0f);
     }
 	
 	return true;

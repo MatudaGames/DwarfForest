@@ -640,10 +640,9 @@ void Dwarf::update(float delta)
 //    if (mCoolDown>0)
 //        mCoolDown-=delta;
     
-	
     bool aHasAlarm = false;
 	CCObject* entry;
-    if (_game->getGhostTimer() <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
+    if (_game->mPowerItem_GhostsActive <=0 && _game->getShieldTimer() <= 0 && !_forceRemove)//If booster is active they cant colide
     {
         CCARRAY_FOREACH(_game->getDwarves(), entry)
         {
@@ -753,7 +752,7 @@ void Dwarf::update(float delta)
     //==========================================
     //Some booster code part
     
-    if (_game->getGhostTimer() > 0 || _game->getShieldTimer() > 0 || _PoisonTime>0)
+    if (_game->mPowerItem_GhostsActive > 0 || _game->getShieldTimer() > 0 || _PoisonTime>0)
     {
         //Set alpha for now 50%
         if(_animation && _animation->getOpacity()!=220)
@@ -986,7 +985,7 @@ void Dwarf::removeFromSave()
 void Dwarf::setForceRemove()
 {
 	_game->mLostDwarfCount+=1;
-	_game->mCurrentMission.Task_SurviveLives-=1;
+    _game->mTask_SurviveLives -= 1; //	_game->mCurrentMission.Task_SurviveLives-=1;
     _forceRemove = true;
 }
 
@@ -1558,10 +1557,12 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                         }
                     }
                 }
-                else if(mContainsPowerUp >= 100) // The spell actions
+                else
                 {
-                    if(_game->mTotem != NULL && mSnapedToMasterTroll == false)
+                    // Can attack MT or totem !!!
+                    if(_game->mTotem != NULL)
                     {
+                        // We can attack totem - check player finger drag !!!
                         float theDistance2 = sqrtf((position.x-_game->mTotem->getPositionX())*(position.x-_game->mTotem->getPositionX()) +
                                                    (position.y-_game->mTotem->getPositionY())*(position.y-_game->mTotem->getPositionY()));
                         
@@ -1576,18 +1577,26 @@ void Dwarf::ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event)
                             vibrate();
                         }
                     }
-                }
-                else
-                {
-                    // OTher speelllss
-                    if(ccpDistanceSQ(_game->_MasterTrollBase->getPosition(), position) <= 6000)
+                    
+                    // We can attack MT - check !!
+                    if(_game->mMasterTroll_HP>0)
                     {
-                        mSnapedToMasterTroll = true;
+                        // OTher speelllss
+                        float theDistance2 = sqrtf((position.x-_game->_MasterTrollBase->getPositionX())*(position.x-_game->_MasterTrollBase->getPositionX()) +
+                                                   (position.y-_game->_MasterTrollBase->getPositionY())*(position.y-_game->_MasterTrollBase->getPositionY()));
                         
-                        addMovePoint(_game->_MasterTrollBase->getPosition(), position,false);
-                        _touchEnded = true;
-                        connectLine();
-                        vibrate();
+//                        CCLog("The dist to troll %f",theDistance2);
+                        
+//                        if(ccpDistanceSQ(_game->_MasterTrollBase->getPosition(), position) <= 6000)
+                        if(theDistance2<110)
+                        {
+                            mSnapedToMasterTroll = true;
+                            
+                            addMovePoint(_game->_MasterTrollBase->getPosition(), position,false);
+                            _touchEnded = true;
+                            connectLine();
+                            vibrate();
+                        }
                     }
                 }
                 

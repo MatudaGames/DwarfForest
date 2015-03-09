@@ -67,7 +67,7 @@ bool Plant_Crystal_Weed::init(GameScene* gameScene)
     
     float aRealDelay = 4.5f;
     
-    mLevel = User::getInstance()->getMachine_PlantLvl();
+//    mLevel = User::getInstance()->getMachine_PlantLvl();
     
     if(User::getInstance()->mNewMissionBuild){
         mLevel = 3;

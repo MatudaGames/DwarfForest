@@ -68,6 +68,7 @@ public:
     void addScore_Multi(uint32_t score_lvl);
     void setScore_Multi(uint32_t score_lvl);
     
+    /*
     uint32_t getMachine_StampLvl()    { return machine_stamp_lvl; }
     void addMachine_StampLvl(uint32_t machine_stamp_lvl);
     void setMachine_StampLvl(uint32_t level);
@@ -83,6 +84,7 @@ public:
     uint32_t getMachine_PlantLvl()    { return machine_plants_lvl; }
     void addMachine_PlantLvl(uint32_t machine_plants_lvl);
     void setMachine_PlantLvl(uint32_t level);
+    */
     
     uint32_t getSpeedMode()    { return speedUp_Enabled; }
     void setSpeedMode(uint32_t speedUp_Enabled);
@@ -211,8 +213,12 @@ public:
     
     bool mNewMaps;
     
+    // The new stuff for data management in game power stuff magic - wohooo :D
     std::string mActiveSpells;
     std::string mBoghtSpells;
+    
+    std::string mPowerInfo;
+    std::string mBoghtPowers;
     
     // New struff for stats
     int mCurrentMissionLevel;
@@ -227,10 +233,12 @@ private:
     uint32_t _diamonds;
     uint32_t _crystals;
     
+    /*
     uint32_t machine_stamp_lvl;
     uint32_t machine_ghost_lvl;
     uint32_t machine_enemies_lvl;
     uint32_t machine_plants_lvl;
+    */
     
     uint32_t score_multi_lvl;
     

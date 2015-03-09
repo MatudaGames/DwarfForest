@@ -58,7 +58,11 @@ public:
     CrystalColor _color;
 	
 private:
-	
+	// Not the best spot, but for now as time is money :D
+    int SMALL_CRYSTAL_SCORE;
+    int MEDIUM_CRYSTAL_SCORE;
+    int BIG_CRYSTAL_SCORE;
+    int XXL_CRYSTAL_SCORE;
 	
 	GameScene* _gameScene;
     

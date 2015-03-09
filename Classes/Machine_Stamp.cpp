@@ -63,7 +63,8 @@ bool Machine_Stamp::init(GameScene* gameScene)
     mCanBeActivated = false;
     
     //Check in what state is this machine now !!!
-    mUpgradeLevel = User::getInstance()->getMachine_StampLvl();
+//    mUpgradeLevel = User::getInstance()->getMachine_StampLvl();
+    mUpgradeLevel = 0;
     
     if(mUpgradeLevel<1)
     {

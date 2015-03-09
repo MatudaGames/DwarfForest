@@ -12,6 +12,7 @@
 #include "Dwarf.h"
 
 class GameScene;
+class SpriteAnimation;
 
 class TrollBullet: public cocos2d::CCNode, public cocos2d::CCTargetedTouchDelegate
 {
@@ -60,6 +61,10 @@ public:
     
     float GetAngle();
     void setAngle(float value);
+    
+    float timeToStartFly;
+    SpriteAnimation* _animation;
+    
 	
 private:
 	GameScene* _game;

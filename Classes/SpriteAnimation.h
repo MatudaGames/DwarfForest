@@ -30,9 +30,11 @@ public:
     
     bool _paused;
     
-private:
-	cocos2d::CCAction* _action;
+    cocos2d::CCAction* _action;
     cocos2d::CCAction* _action_reverse;
     
+private:
+
+    int nothing;
     
 };

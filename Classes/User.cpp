@@ -52,8 +52,18 @@ User::User()
     mSpecialMissionProgress = 0;
     mShowNewPart = false;
     
+    //......................................................................
+    // The new stuff !!!
+    
     mActiveSpells = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Spells_Active","0,0");
     mBoghtSpells = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Spells_Bought","");// Nothing bought at start !!!
+    
+    // The Powers
+    mBoghtPowers = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Powers_Bought","");
+    mPowerInfo = cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey("Powers_Info","");//On what level is what power !!!
+    
+    //......................................................................
+    
     
     _tutorial_small_4 = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("tutorial_small_4", 0);
     
@@ -72,11 +82,6 @@ User::User()
     
     _showFreeStuffPopup = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("showFreeStuffPopup", 1);
     _showRateGamePopup = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("showRateGamePopup", 1);
-    
-    machine_stamp_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineStampLevel", 0);
-    machine_enemies_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineEnemiesLevel", 0);
-    machine_ghost_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineGhostLevel", 0);
-    machine_plants_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machinePlantLevel", 0);
     
     speedUp_Enabled = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("debug_speedOn", 1);
     speedUp_StartMin_1 = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("debug_speedStartMin_1", 2);
@@ -114,6 +119,13 @@ User::User()
     mFeedBackGiven = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("feedback_beta",0);
     
     mEasterActive = false;
+    
+    // The not needed stuff anymore !!!
+//    machine_stamp_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineStampLevel", 0);
+//    machine_enemies_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineEnemiesLevel", 0);
+//    machine_ghost_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machineGhostLevel", 0);
+//    machine_plants_lvl = cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("machinePlantLevel", 0);
+
     
 //    if(mSpecialMissionBuild){
 //        cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("ActiveMission", 9);
@@ -190,6 +202,7 @@ void User::ResetData()
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("showRateGamePopup", 1);
     _showRateGamePopup = 1;
     
+    /*
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("machineStampLevel", 0);
     machine_stamp_lvl = 0;
     
@@ -201,6 +214,7 @@ void User::ResetData()
     
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("machinePlantLevel", 0);
     machine_plants_lvl = 0;
+    */
     
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("debug_speedOn", 1);
     speedUp_Enabled = 1;
@@ -400,6 +414,7 @@ void User::increaseLevel()
     
     _level++;
     
+    /*
     if(_level>2 && machine_enemies_lvl==0)
     {
         //Unlock the tesla if not done already !!!
@@ -421,6 +436,7 @@ void User::increaseLevel()
         machine_plants_lvl+=1;
         setMachine_PlantLvl(machine_plants_lvl);
     }
+    */
     
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("userLevel", _level);
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
@@ -432,10 +448,12 @@ uint32_t User::getPossibleUgrades()
 //    int aDiamonds = getDiamonds();
     
     //Now check if we can update anything or unlock???
+    /*
     int aNoEnemieLvL = getMachine_EnemiesLvl();
     int aGhostLvl = getMachine_GhostLvl();
     int aPlantLvl = getMachine_PlantLvl();
     int aStampLvl = getMachine_StampLvl();
+    */
     
     int aPriceToUpgrade = 0;
     int aPossibleUpgrades = 0;
@@ -445,6 +463,7 @@ uint32_t User::getPossibleUgrades()
     int aStartDiamonds = getDiamonds();
     
     //Lets check the no enemies stuff
+    /*
     if(aNoEnemieLvL>0 && aNoEnemieLvL<6)
     {
         for(int i=1;i<5;i++)
@@ -535,7 +554,7 @@ uint32_t User::getPossibleUgrades()
             }
         }
     }
-    
+    */
     
     
     //The old functional for read all possible stuff
@@ -752,6 +771,7 @@ void User::addTimesPlayed()
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
 
+/*
 void User::addMachine_StampLvl(uint32_t level)
 {
     machine_stamp_lvl += level;
@@ -765,6 +785,7 @@ void User::setMachine_StampLvl(uint32_t level)
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("machineStampLevel", machine_stamp_lvl);
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
+*/
 
 void User::addScore_Multi(uint32_t score_lvl)
 {
@@ -782,6 +803,7 @@ void User::setScore_Multi(uint32_t score_lvl)
 
 //
 
+/*
 void User::addMachine_PlantLvl(uint32_t level)
 {
     machine_plants_lvl += level;
@@ -817,12 +839,14 @@ void User::addMachine_EnemiesLvl(uint32_t level)
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
 
+
 void User::setMachine_EnemiesLvl(uint32_t level)
 {
     machine_enemies_lvl = level;
     cocos2d::CCUserDefault::sharedUserDefault()->setIntegerForKey("machineEnemiesLevel", machine_enemies_lvl);
     cocos2d::CCUserDefault::sharedUserDefault()->flush();
 }
+ */
 
 //////----------
 

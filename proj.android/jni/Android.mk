@@ -98,6 +98,9 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/PanZoomLayer.cpp \
                    ../../Classes/WorldMap.cpp \
                    ../../Classes/Enemy_Totem.cpp \
+                   ../../Classes/Universal_PowerItem.cpp \
+                   ../../Classes/ItemDataManager.cpp \
+                   ../../Classes/MasterTroll.cpp \
                    ../../Classes/HelloWorldScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

@@ -125,6 +125,7 @@ bool UpgradeScene::init(int theReturnType)
     //-----------------------------------------------
     //The buttons !!!
     mPlantButtonState = 1;//Unlock state
+    /*
     if(User::getInstance()->getMachine_PlantLvl()>0)
         mPlantButtonState = 2;
     
@@ -567,7 +568,7 @@ bool UpgradeScene::init(int theReturnType)
     CCMenu* backMenu = CCMenu::create(backButton, NULL);
     this->addChild(backMenu, 1);
     backMenu->setPosition(0, 0);
-    
+    */
     return true;
 }
 
@@ -603,6 +604,7 @@ void UpgradeScene::UnlockNow_Plant(cocos2d::CCObject *sender)
 
 void UpgradeScene::Buy_Plant(cocos2d::CCObject *sender)
 {
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_PlantLvl();
     int aPrice = 35;
@@ -646,6 +648,7 @@ void UpgradeScene::Buy_Plant(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_PlantLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -662,6 +665,7 @@ void UpgradeScene::UnlockNow_Ghost(cocos2d::CCObject *sender)
 
 void UpgradeScene::Buy_Ghost(cocos2d::CCObject *sender)
 {
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_GhostLvl();
     int aPrice = 50;
@@ -708,7 +712,7 @@ void UpgradeScene::Buy_Ghost(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_GhostLvl(1);
         }
     }
-    
+    */
     UpdateStats();
     
     //Flips button to buy or unlock
@@ -724,6 +728,7 @@ void UpgradeScene::UnlockNow_Electro(cocos2d::CCObject *sender)
 
 void UpgradeScene::Buy_Electro(cocos2d::CCObject *sender)
 {
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_EnemiesLvl();
     int aPrice = 35;
@@ -769,6 +774,7 @@ void UpgradeScene::Buy_Electro(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_EnemiesLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -785,6 +791,7 @@ void UpgradeScene::UnlockNow_Stamp(cocos2d::CCObject *sender)
 
 void UpgradeScene::Buy_Stamp(cocos2d::CCObject *sender)
 {
+    /*
     //Try to buy it !!!
     int aLevel = User::getInstance()->getMachine_StampLvl();
     int aPrice = 50;
@@ -832,6 +839,7 @@ void UpgradeScene::Buy_Stamp(cocos2d::CCObject *sender)
             User::getInstance()->addMachine_StampLvl(1);
         }
     }
+    */
     
     UpdateStats();
     
@@ -855,6 +863,7 @@ void UpgradeScene::ChangeButtonState(int theButton,int theState)
     std::stringstream theDesc;
     std::stringstream theUnlockLevel;
     
+    /*
     if(theButton == 1)
     {
         aBG = static_cast<CCSprite*>(getChildByTag(100));//Get the old one
@@ -1131,7 +1140,7 @@ void UpgradeScene::ChangeButtonState(int theButton,int theState)
         }
     }
     
-    
+    */
 }
 
 void UpgradeScene::CreateMachineByLevel(int theMachine,int theLevel,bool theCreate)

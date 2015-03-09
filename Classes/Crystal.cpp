@@ -14,10 +14,15 @@
 
 USING_NS_CC;
 
-const unsigned int SMALL_CRYSTAL_SCORE = 10;
-const unsigned int MEDIUM_CRYSTAL_SCORE = 20;
-const unsigned int BIG_CRYSTAL_SCORE = 30;
-const unsigned int XXL_CRYSTAL_SCORE = 50;
+//const unsigned int SMALL_CRYSTAL_SCORE = 10;
+//const unsigned int MEDIUM_CRYSTAL_SCORE = 20;
+//const unsigned int BIG_CRYSTAL_SCORE = 30;
+//const unsigned int XXL_CRYSTAL_SCORE = 50;
+
+#define SMALL_CRYSTAL_SCORE_DEFAULT 10
+#define MEDIUM_CRYSTAL_SCORE_DEFAULT 20
+#define BIG_CRYSTAL_SCORE_DEFAULT 30
+#define XXL_CRYSTAL_SCORE_DEFAULT 50
 
 Crystal* Crystal::create(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
 {
@@ -52,6 +57,23 @@ bool Crystal::init(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
 	{
 		return false;
 	}
+    
+    // Update crystal amount by game item stuff
+    if(gameScene->mPowerItem_CrystalRefiner>0)
+    {
+        // New values !!!
+        SMALL_CRYSTAL_SCORE = SMALL_CRYSTAL_SCORE_DEFAULT+(SMALL_CRYSTAL_SCORE_DEFAULT*gameScene->mPowerItem_CrystalRefiner/100);
+        MEDIUM_CRYSTAL_SCORE = MEDIUM_CRYSTAL_SCORE_DEFAULT+(MEDIUM_CRYSTAL_SCORE_DEFAULT*gameScene->mPowerItem_CrystalRefiner/100);
+        BIG_CRYSTAL_SCORE = BIG_CRYSTAL_SCORE_DEFAULT+(BIG_CRYSTAL_SCORE_DEFAULT*gameScene->mPowerItem_CrystalRefiner/100);
+        XXL_CRYSTAL_SCORE = XXL_CRYSTAL_SCORE_DEFAULT+(XXL_CRYSTAL_SCORE_DEFAULT*gameScene->mPowerItem_CrystalRefiner/100);
+    }
+    else
+    {
+        SMALL_CRYSTAL_SCORE = SMALL_CRYSTAL_SCORE_DEFAULT;
+        MEDIUM_CRYSTAL_SCORE = MEDIUM_CRYSTAL_SCORE_DEFAULT;
+        BIG_CRYSTAL_SCORE = BIG_CRYSTAL_SCORE_DEFAULT;
+        XXL_CRYSTAL_SCORE = XXL_CRYSTAL_SCORE_DEFAULT;
+    }
 	
 	_color = static_cast<CrystalColor>(rand() % CRYSTAL_COLOR_COUNT);
     
@@ -337,6 +359,8 @@ void Crystal::expire()
 void Crystal::pickUp(Dwarf* dwarf,int aMulti)
 {
     CCParticleSystemQuad* p;
+    
+    //TODO add mPowerItem_CrystalDoublerValue ???
     
     switch (_color)
 	{

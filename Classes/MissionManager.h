@@ -141,7 +141,7 @@ struct MissionQuadInfo
     int32_t flame_angle; // Flame angle?
     int32_t flame_radius; // Flame radius?
     int32_t flame_active_time; // How long flame throewr will be active?
-    int32_t flame_rotate_speed; // How fast rotates flame thrower?
+    float flame_rotate_speed; // How fast rotates flame thrower?
     
     int32_t flame_start_angle;
     int32_t flame_end_angle;
@@ -261,6 +261,7 @@ struct MissionSet
     std::vector<int> CrystalColProbs;
     std::vector<int> ItemTypeProbs;
     std::vector<int> PowerTypeProbs;
+    std::vector<int> PowerupItemsProbs;
     
     // The test stuff
     float SpawnBee;
@@ -314,13 +315,6 @@ struct MissionSet
     int32_t MT_Snipe;
     int32_t MT_Snipe_Delay;
     
-    int32_t Task_DwarfWinCon;
-    int32_t Task_CrystalsWinCon;
-    int32_t Task_SurviveTime;
-    int32_t Task_SurviveLives;
-    
-    int32_t STORE_Booster_DwarfPrice;
-    
     int32_t MT_Event_ForceSpawnEnemy_Time;
     
     int32_t Mission_SaveDwarfs;
@@ -365,6 +359,15 @@ struct MissionSet
     */
     
     int32_t DEBUG_Electrify_range;// At what distance fires bullet to totem
+    
+    int32_t Task_DwarfWinCon;
+    int32_t Task_CrystalsWinCon;
+    int32_t Task_SurviveTime;
+    int32_t Task_SurviveLives;
+    
+    std::vector<int> SpellSpawnPoints;// Correct forced places for spawn spells
+    
+    int32_t STORE_Booster_DwarfPrice;
     
 };
 

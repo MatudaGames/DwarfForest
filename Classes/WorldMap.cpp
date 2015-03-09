@@ -58,7 +58,9 @@ bool WorldMap::init()
     
     // Init the world map cords
 //    std::string positions = "35,296,118,308,203,278,208,203,128,173,76,120,111,52,218,43,310,78,360,147";
-    std::string positions =   "70,592,236,616,406,556,416,406,256,346,152,240,222,104,436,86,620,156,720,294";
+    std::string positions =   "70,592,236,616,406,556,416,406,256,346,152,240,222,104,436,86,620,156,720,294,770,580,844,764,1040,886,1316,846,1536,690,1348,500,1476,298,1814,232,1922,504,1826,720,1690,904";
+    // Summer map 70,592,236,616,406,556,416,406,256,346,152,240,222,104,436,86,620,156,720,294
+    // Winter map 770,580,844,764,1040,886,1316,846,1536,690,1348,500,1476,298,1814,232,1922,504,1826,720,1690,904
     mWorldNodeCords = SplitString(positions,',');
     
     map_base = CCSprite::create( "button_freez.png" );
@@ -189,8 +191,10 @@ void WorldMap::CreateLevels()
     CCMenuItemImage *dummyItem;
     CCArray*array = CCArray::create();
     
+    int aTotalMapNodes = mWorldNodeCords.size()/2;
+    
     // Create all the levels
-    for(int i=0;i<10;i++)
+    for(int i=0;i<aTotalMapNodes;i++)
     {
         //Add button above?
         dummyItem = CCMenuItemImage::create("WorldMap/level_spot.png",
@@ -249,6 +253,8 @@ void WorldMap::MissionTaskInditificator(int theID)
 	WhatMission = theID;
 	
 	mCall = User::getInstance()->getMissionManager().GetMissionByID(WhatMission-1);
+    
+    
 
 	TESTdwarfCount = mCall.Mission_SaveDwarfs;
 	
@@ -754,8 +760,8 @@ void WorldMap::ResetStats()
 void WorldMap::BuyMoreDwarfs()
 {
 	CCLog("Works so far!!!");
-	
-	int aPrice = mCall.STORE_Booster_DwarfPrice;
+    
+    int aPrice = mCall.STORE_Booster_DwarfPrice;
 	
 	int aDidUseDiamonds = User::getInstance()->canUseDiamonds(aPrice);//BOOSTER_1_PRICE
         if(aDidUseDiamonds<0)

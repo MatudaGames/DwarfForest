@@ -173,7 +173,7 @@ CCScene* GameScene::scene()
 }
 
 GameScene::GameScene():
-	dailyChallengeInfo(NULL), _bullets(NULL),_dwarves(NULL), _trolls(NULL), _crystals(NULL), _effects(NULL), _diamonds(NULL),
+	dailyChallengeInfo(NULL), _bullets(NULL),_dwarves(NULL), _trolls(NULL), _crystals(NULL), _effects(NULL), _diamonds(NULL), mUniversalItems(NULL),
 	_introAnimations(NULL), _scoreLabel(NULL), _cave(NULL), _caveMask(NULL), _mask(NULL),_MasterTroll_IdleAnimation(NULL),_MasterTroll_WinAnimation(NULL),
 	_gameTime(0), _gameTimeReverse(0)
 {
@@ -196,7 +196,9 @@ GameScene::~GameScene()
 	if (_crystals) _crystals->release();
 	if (_effects) _effects->release();
 	if (_diamonds) _diamonds->release();
-    if (_mushrooms) _mushrooms->release();
+    
+    if(mUniversalItems) mUniversalItems->release();
+    
 	if (_introAnimations) _introAnimations->release();
 	if (_caveMask) _caveMask->release();
 	if (_mask) _mask->release();
@@ -936,11 +938,13 @@ void GameScene::CreateGameByMission()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    
     if(mCurrentMission.Task_type == 11){
-    _gameTime = mCurrentMission.Task_SurviveTime;	
+        _gameTime = mCurrentMission.Task_SurviveTime;
     }else{
-    _gameTime = 0;
+        _gameTime = 0;
 	}
+    
     _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
@@ -1012,9 +1016,20 @@ void GameScene::CreateGameByMission()
     _boostShieldTimer = 0.0f;
     _boostCrystalsTimer = 0.0f;
     _boostExtraPoints = 0;
-    _boostGhostTimer = 0.0f;
+//    _boostGhostTimer = 0.0f;
     _boostNoEnemyTimer = 0.0f;
     _boostFutureSee = 0.0f;
+    
+    //................................................
+    // The new stuff for Items With Powers !!!
+    
+    mPowerItem_GhostsActive = 0;
+    mPowerItem_CrystalDoublerActive = 0;
+    mPowerItem_CrystalDoublerValue = 1;
+    
+//    mPowerItem_CrystalRefiner = 0;//No extra stuff
+    
+    //................................................
     
     //What is this
     _blockedGeneratePoints.clear();
@@ -1058,8 +1073,8 @@ void GameScene::CreateGameByMission()
 	_diamonds = CCArray::create();
 	_diamonds->retain();
     
-    _mushrooms = CCArray::create();
-    _mushrooms->retain();
+    mUniversalItems = CCArray::create();
+    mUniversalItems->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -1992,11 +2007,14 @@ bool GameScene::init()
     _plantSunFlowerFirst = false;
     _plantFuzzFlowerFirst = false;
     
+    
     if(mCurrentMission.Task_type == 11){
-    _gameTime = mCurrentMission.Task_SurviveTime;	
+        _gameTime = mCurrentMission.Task_SurviveTime;
     }else{
-    _gameTime = 0;
+        _gameTime = 0;
 	}
+    
+    
     _gameTimeReverse = 0;
     _actionTrollSpawnTime = -1;
     
@@ -2117,8 +2135,8 @@ bool GameScene::init()
 	_diamonds = CCArray::create();
 	_diamonds->retain();
     
-    _mushrooms = CCArray::create();
-    _mushrooms->retain();
+    mUniversalItems = CCArray::create();
+    mUniversalItems->retain();
 	
 	_introAnimations = CCArray::create();
 	_introAnimations->retain();
@@ -2663,7 +2681,7 @@ bool GameScene::init()
     _dwarfsSavedLabel->setVisible(true);
     dwarfsSaved->addChild(_dwarfsSavedLabel);
 	}
-	 if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
+    if(mCurrentMission.Task_type == 10 || mCurrentMission.Task_type == 11)
 	{
 	if(mCurrentMission.Task_type == 11)
 	{
@@ -2965,7 +2983,7 @@ bool GameScene::init()
     _boostShieldTimer = 0.0f;
     _boostCrystalsTimer = 0.0f;
     _boostExtraPoints = 0;
-    _boostGhostTimer = 0.0f;
+//    _boostGhostTimer = 0.0f;
     _boostNoEnemyTimer = 0.0f;
     _boostFutureSee = 0.0f;
     
@@ -4536,7 +4554,7 @@ void GameScene::CreateDebugPanel()
                                                               "DebugStuff/Debug_Mushroom.png",
                                                               "DebugStuff/Debug_Mushroom.png",
                                                               this,
-                                                              menu_selector(GameScene::generateMushroom));
+                                                              NULL);
     debug_button_6->setAnchorPoint(ccp(0,0));
     
     CCMenuItemImage* debug_button_7 = CCMenuItemImage::create(
@@ -4792,6 +4810,7 @@ void GameScene::OnMachineStamp(cocos2d::CCObject *sender)
 //Some actions for machines !!!
 void GameScene::OnMachineGhost(cocos2d::CCObject *sender)
 {
+    /*
     if(mTutorialEnabled)
         return;//for now disabled
     
@@ -4858,6 +4877,7 @@ void GameScene::OnMachineGhost(cocos2d::CCObject *sender)
             User::getInstance()->getMissionManager().CheckSubMission(SUB_ACTIVATE_POWER_GHOST,1);
         }
     }
+    */
 }
 
 //Troll* GameScene::generateTroll(bool theSkip)
@@ -5221,10 +5241,18 @@ void GameScene::CreateMasterTrollEnter()
 // The new masters troll and dwarf spawn
 void GameScene::CreateMasters()
 {
+    // Here comes the new stuff !!!
+    _MasterTrollBase = MasterTroll::create(this); //(this);
+    _MasterTrollBase->setTag(7001);
+    _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
+    addChild(_MasterTrollBase);
+    
+    /*
     _MasterTrollBase = CCSprite::create("mastertroll_placeholder.png");
     _MasterTrollBase->setTag(7001);
     _MasterTrollBase->setPosition(ccp(100,visibleSize.height+200));//Fall from top !!!
     addChild(_MasterTrollBase);
+    */
     
     // Check what do we need to create her [dwarfking_placeholder] NewPowerMachine.png
     _MasterDwarfBase = CCSprite::create("dwarfking_placeholder.png");
@@ -5800,7 +5828,7 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
     
     if(mAttackFunctionalActive)
     {
-        mMasterTroll_Attack+=30;
+        mMasterTroll_Attack+=ATTACK_BAR_DWARF_ENTER_CAVE;
         UpdateBattleLabel();
     }
     
@@ -6019,12 +6047,14 @@ void GameScene::crossFadeBackground(bool theGodMode)
 
 void GameScene::activateGhoustDwarfs(int theX,int theY)
 {
+    /*
     //create somewhere this powerup stuff!!!
     createTextFly("Ghost\ndwarfs", ccp(theX,theY), 1);
     
     _boostGhostTimer = 30;//This should be callculated from level
     
     removeAllEffects();
+    */
 }
 
 void GameScene::activateClearMap(int theX,int theY)
@@ -6105,6 +6135,8 @@ void GameScene::menuPowerupNoEnemiesCallback(cocos2d::CCObject *sender)
 
 void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
 {
+    return;
+    
     //Check how much boosters are active now
     if (_totalActiveBoosters>0 && !_boosterMushroom)
     {
@@ -6152,6 +6184,7 @@ void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
     }
     
     //Where is our button !!!
+    /*
     int aUserLvl = User::getInstance()->getLevel();
     _boostGhostTimer = 30+(floorf(aUserLvl*0.2)*15);//This should be callculated from level
     _boostGhostTimer = 5;
@@ -6164,6 +6197,7 @@ void GameScene::menuPowerupSlowPlayCallback(cocos2d::CCObject *sender)
                                 aButton->getPositionY()+aButton->getParent()->getPositionY()+3));
     //Set the progress bar !!!
     addChild(_animation,kHUD_Z_Order+1);
+    */
     
     //////////////////////////
     
@@ -6769,11 +6803,6 @@ void GameScene::menuFastModeCallback(cocos2d::CCObject *sender)
         _gameSpeed = GAME_SPEED_NORMAL;
         return;
     }
-    
-//    SetMasterTrollAction(8);
-//    CreateTrollIndicator(2);
-//    SetMasterTrollAction(7);
-//    return;
     
     if(mTutorialEnabled)
         return;//for now disabled
@@ -9056,7 +9085,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
         }
         
         //Lets check futher !!!
-        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+_mushrooms->count()) * mCurrentMission.ItemProbMultiplier);
+        int aProbToSpawn = 100 - ((_crystals->count()+_diamonds->count()+mUniversalItems->count()) * mCurrentMission.ItemProbMultiplier);
         int aRandomResult = rand()%100;
         if(aRandomResult<=aProbToSpawn){
             
@@ -9109,11 +9138,22 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 aRotatedPowerValues.push_back(aRotatedValue);
             }
             
+            // The powerup item check
+            std::vector<int> aPowerItemValues;
+            aRotatedValue = 0;// Use the old stuff
+            for(int i=0;i<mCurrentMission.PowerupItemsProbs.size();i++)
+            {
+                aRotatedValue += mCurrentMission.PowerupItemsProbs[i];
+                aPowerItemValues.push_back(aRotatedValue);
+            }
+            
             // Do the spawn item stuff
             int aShroomNum = 0; // How much need of each stuff to spawn
             int aDiamondNum = 0;
             int aCrystalNum = 0;
             int aPowerUpNum = 0; // The new stuff for power up spawn
+//            int aCrystalPlantNum = 0; // Now we have the crystal plant her too :D
+//            int aCrystalDoublerNum = 0; // Guess what - the crystal doubler is here too :)
             
             for(int i=0;i<aSpawnCrystals;i++)
             {
@@ -9143,6 +9183,7 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 }
             }
             
+            
             //Now check what can we spawn for each crystal
             int aRandomColorFin = 0;//What type of crystal should spawn
             for(int a=0;a<aSpawnCrystals;a++)
@@ -9150,7 +9191,46 @@ void GameScene::UpdateCrystalSpawn(float delta)
                 //If this is not crystal
                 if(aShroomNum>0){
                     aShroomNum-=1;
-                    generateMushroom(mCurrentMission.ItemTimeOnMap);
+                    
+                    
+                    // PowerUp choose
+                    int aRadomColor = rand()%100;
+                    aRandomColorFin = 0;//Blitz by default
+                    
+                    CCLog("Item power spawn value:%i",aRadomColor);
+                    
+                    for(int c=0;c<aPowerItemValues.size();c++)
+                    {
+                        if(aRadomColor<aPowerItemValues[c]){
+//                            aRandomColorFin = c;
+                            
+                            if(c == 0){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_GHOST)){
+                                    aRandomColorFin = ITEM_GHOST;
+                                }
+                            }
+                            else if(c==1){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_DOUBLER)){
+                                    aRandomColorFin = ITEM_CRYSTAL_DOUBLER;
+                                }
+                            }
+                            else if(c==2){
+                                if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_PLANT)){
+                                    aRandomColorFin = ITEM_CRYSTAL_PLANT;
+                                }
+                            }
+                            
+                            break;
+                        }
+                    }
+                    
+                    // Do not spawn if has not unlocked
+                    if(aRandomColorFin != 0){
+                        generatePowerItem(aRandomColorFin);
+                    }
+                    
+//                    generateMushroom(mCurrentMission.ItemTimeOnMap);
+                    
                 }
                 else if(aDiamondNum>0){
                     aDiamondNum-=1;
@@ -9259,10 +9339,13 @@ void GameScene::OnDwarfKingSpawnHitGround(CCNode* sender)
     
     if(mDwarfKingItemSpawnID == 0)
     {
+        CCLog("Dwarf King wants to spawn mushroom ghost - HELP !!!");
+        /*
         Mushroom* mushroom = Mushroom::create(this,mCurrentMission.ItemTimeOnMap);
         mushroom->setPosition(mDwarfKingItemSpawnPos);
         addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
         _mushrooms->addObject(mushroom);
+        */
     }
     else if(mDwarfKingItemSpawnID == 1)
     {
@@ -9392,6 +9475,27 @@ void GameScene::GeneratePowerUp(int theType,int theTime)
     _powersOnMap->addObject(Bee);
 }
 
+void GameScene::updateActiveInGamePowers(float delta)
+{
+    if(mPowerItem_GhostsActive>0){
+        mPowerItem_GhostsActive -= delta * _gameSpeed;
+        if(mPowerItem_GhostsActive<=0){
+            mPowerItem_GhostsActive = 0;
+        }
+    }
+    
+    if(mPowerItem_CrystalDoublerActive>0){
+//        CCLog("delta: %f",delta);
+        mPowerItem_CrystalDoublerActive -= delta * _gameSpeed;
+//        CCLog("mPowerItem_CrystalDoublerValue: %f",mPowerItem_CrystalDoublerActive);
+        
+        if(mPowerItem_CrystalDoublerActive<=0){
+            mPowerItem_CrystalDoublerActive = 0;
+            mPowerItem_CrystalDoublerValue = 1;// Reset back to normal value without doubler
+        }
+    }
+}
+
 void GameScene::update(float delta)
 {
     if (_gamePause)
@@ -9437,10 +9541,9 @@ void GameScene::update(float delta)
         }
     }
     
-    if(mCurrentMission.Task_type){
+    if(mCurrentMission.Task_type == MissionType_TEST){
         //Update by seconds
-        mCurrentMission.Task_SurviveTime-=delta*_gameSpeed;
-        
+        mTask_SurviveTime -= delta*_gameSpeed; //mCurrentMission.Task_SurviveTime-=delta*_gameSpeed;
         
 		if(mTotalTimeInGame != roundf(_gameTime)){
             mTotalTimeInGame = roundf(_gameTime);
@@ -9455,22 +9558,13 @@ void GameScene::update(float delta)
         
     }
     
-    // Update ghost stuff
-    if (_boostGhostTimer>0)
-    {
-        _boostGhostTimer-=delta;
-        if (_boostGhostTimer<=0)
-        {
-            _boostGhostTimer = 0;
-        }
-    }
-    
     // The master troll update cycle
     UpdateMasterTroll(delta);
     
     // The test enemies and other stuff
     UpdateTestStuff(delta);
     
+    /* // For now disabled !!!
     if(mDwarfMachineProtect)
     {
         mAttackDwarfMachineTimer+=delta;
@@ -9479,1808 +9573,20 @@ void GameScene::update(float delta)
             OnTryToShoot_ToDwarf();
         }
     }
+    */
     
     // Totem stuff - update if available
     if(mTotem != NULL){
         mTotem->update(delta);
     }
     
-    return;
-    
-    
-    
-    /*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if(mFmodEnabled)
-        updateSound(delta);
-#endif
-    */
-    
-    if (_gamePause)
-        return;//Wait a bit
-//    CCLog("delta: %f",delta);
-    
-    if(mFadeOutMusic)
-    {
-        //Wtf !!!
-        if(mFadeInMusic)
-            mFadeInMusic = false;
-        
-        mBackMusicVolume-=delta;
-        
-        if(mBackMusicVolume<0)
-            mBackMusicVolume = 0;
-        
-        SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(mBackMusicVolume);
-        
-        if(mBackMusicVolume==0)
-            OnFinishedMusicFadeOut();
-    }
-    
-    if(mFadeInMusic)
-    {
-        mBackMusicVolume+=delta;
-        if(mBackMusicVolume>=0.8)
-        {
-            mBackMusicVolume = 0.8f;
-            mFadeInMusic = false;
-        }
-        
-        SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(mBackMusicVolume);
-    }
-    
-    //-------------------------------
-    // Check the combo sound play !!!
-    
-    if(mComboPlayDelayTimer>0)
-    {
-        mComboPlayDelayTimer-=delta;
-        if(mComboPlayDelayTimer<=0)
-        {
-            //Play now the sound !!!
-            mComboPlayDelayTimer = 0;
-            
-//            if(mComboSound_1.str().length()>0)
-//                SimpleAudioEngine::sharedEngine()->playEffect(mComboSound_1.str().c_str(),false);
-            if(mComboSound_2.str().length()>0)
-                SimpleAudioEngine::sharedEngine()->playEffect(mComboSound_2.str().c_str(),false);
-        }
-    }
-    
-    //-------------------------------
-    
-	//update game time
-	if(mCurrentMission.Task_type == MissionType_TEST)
-	{
-		_gameTime -= delta * _gameSpeed;
-    }else{
-    	_gameTime += delta * _gameSpeed;
-    	_gameTimeReverse -= delta * _gameSpeed;
-    }
-    
-    mNoDwarfEneterCave+=delta;
-    
-    mTimeNotCollectedCrystal += delta;
-    mTimeToCheckAgainNoCrystal += delta;
-    
-    if(mTimeToCheckAgainNoCrystal>=30)
-    {
-        mTimeToCheckAgainNoCrystal = 0.0f;
-        User::getInstance()->getMissionManager().CheckSubMission(SUB_NO_CRYSTAL_COLLECT,int(mTimeNotCollectedCrystal));
-    }
-        
-    
-    if (_gameSlowTimer>0)
-    {
-        _gameSlowTimer-=delta;
-    }
-    else if (_gameSpeed<GAME_SPEED_NORMAL)
-    {
-        _gameSlowTimer = 0;
-        _gameSpeed = GAME_SPEED_NORMAL;
-    }
-    
-    //Debug safe checker
-    _dwarfTimer+=delta;
-    
-    updateDwarfs(delta);
-	updateTrolls(delta);
-	updateCrystals(delta);
-	updateIntroAnimations(delta);
-    
-    UpdateBullets(delta);
-	
-	//generate new objects
-    double minutes = _gameTime / 60.0;
-    
-    //For now disabled as we will use different system !!!
-    if(!mTutorialEnabled)
-    {
-//        ChangeMap
-        mTimeToChangeSeason-=delta;
-        if(mTimeToChangeSeason<=0)
-        {
-            //Change map after 1min
-            mTimeToChangeSeason = 60;
-            ChangeMap(0);//Goes in cycle
-        }
-    }
-    /*
-    if(!mTutorialEnabled)
-    {
-        if(mMapDangerCooldown>0)
-        {
-            //Wait for co
-            mMapDangerCooldown-=delta;
-            if(mMapDangerCooldown<=0)
-                mMapDangerCooldown = 0;
-        }
-        else
-        {
-            mMapDangerTimer+=delta*_gameSpeed;
-            if(mMapDangerTimer>=mMapDangerTimerReq)
-            {
-                mMapDangerTimerReq = (rand()%45)+45;
-                mMapDangerTimer = 0;
-                
-                if(mRainActive || mTornadoActive || _effects->count()>0)
-                {
-                    //Cooldown
-                    mMapDangerCooldown = 15;
-                    
-                    //Stop all other effects
-                    StartRain(true);
-                    StartTornado(true);
-                }
-                else
-                {
-                    //Stop all other effects
-                    StartRain(true);
-                    StartTornado(true);
-                    
-                    //What will be active now? 1st time all pec kartas :D
-                    if(mFirstTimeMap && mMapDangerType<4)
-                    {
-                        mMapDangerType+=1;
-                        if(mMapDangerType>=4)
-                        {
-                            mFirstTimeMap = false;
-                        }
-                    }
-                    else
-                    {
-                        mMapDangerType = (rand()%3)+1;
-                        
-                        _mapSpawnTypes.clear();
-                        for (int i = 1; i<4; i++)
-                        {
-                            if (i != mLastMapDangerType)
-                                _mapSpawnTypes.push_back(i);
-                        }
-                        mMapDangerType = _mapSpawnTypes[rand()%_mapSpawnTypes.size()];
-                    }
-                    
-                    if(mMapDangerType == 2)
-                        StartRain(false);
-                    else if(mMapDangerType == 3)
-                        StartTornado(false);
-                    
-                    generateEffect();
-                    
-                    mLastMapDangerType = mMapDangerType;
-                }
-            }
-        }
-    }
-    */
-    
-    //===============================
-    //COMBO
-    
-//    if(mComboTimer_DwarfEnter>0)
-//    {
-//        mComboTimer_DwarfEnter-=delta;
-//        if(mComboTimer_DwarfEnter<=0)
-//        {
-//            mComboTimer_DwarfEnter = 0;
-//            mCombo_DwarfEnter = 1;
-//        }
-//    }
-//    
-//    if(mComboTimer_CollectCrystal>0)
-//    {
-//        mComboTimer_CollectCrystal-=delta;
-//        if(mComboTimer_CollectCrystal<=0)
-//        {
-//            mComboTimer_CollectCrystal = 0;
-//            mCombo_CollectCrystals = 1;
-//        }
-//    }
-    
-    //Disabled
-    if(mTotalComboTimer>0)
-    {
-        mTotalComboTimer-=delta*_gameSpeed;
-        if(mTotalComboTimer<=0)
-        {
-            mTotalComboTimer = 0;
-            mTotalCombo = 1;
-        }
-    }
-    
-    //===============================
-    
-    if(mTutorialEnabled)
-    {
-        if(mTutorialStep<1)
-            OnTutorialStepCompleted(1);
-        
-        if(mTutorialStep == 1)
-        {
-            //Spawn 2 dwarfs in correct positions
-            
-            //Freeze the game after 2sec - make screen dark
-            if(_gameTime>=7.0f)
-            {
-                _gamePause = true;
-                pauseSchedulerAndActionsRecursive(this,false);
-                
-                _gameTime = 0.0f;//Reset time
-                //Make screen black and show draw hand !!!
-                OnTutorialStepCompleted(2);
-            }
-        }
-        else if(mTutorialStep<10)
-        {
-            if(mTutorialStep == 4)
-            {
-                //Start to count 2sec and spawn something new !!!
-                if(_gameTime>=2.0f)
-                {
-                    _gamePause = true;
-                    pauseSchedulerAndActionsRecursive(this,false);
-                    
-                    _gameTime = 0.0f;//Reset time
-                    _gameTimeReverse = 0.0f;
-                    //Make screen black and show draw hand !!!
-                    OnTutorialStepCompleted(5);//Spawn some crystal and troll
-                }
-            }
-        }
-        else if(mTutorialStep == 10)
-        {
-            //Genere
-            OnTutorialStepCompleted(10);
-        }
-        else if(mTutorialStep == 11)
-        {
-            if(mTutorialTimerSet)
-                 mTutorialTimer-=delta;
-            
-            if(mTutorialTimer<0 && mTutorialTimer!=-1)
-            {
-                OnTutorialStepCompleted(11);
-                mTutorialTimer = -1;
-                mTutorialTimerSet = false;
-            }
-        }
-        else if(mTutorialStep == 15)
-        {
-            if(_dwarves->count()==0)
-            {
-                OnTutorialStepCompleted(20);//finish for now
-            }
-            
-        }
-        else if(mTutorialStep == 20)
-        {
-            //Create the dwartf
-            OnTutorialStepCompleted(20);
-        }
-        else if(mTutorialStep == 22)
-        {
-            if(mTutorialTimerSet)
-                mTutorialTimer-=delta;
-            
-            if(mTutorialTimer<0 && mTutorialTimer!=-1)
-            {
-                OnTutorialStepCompleted(22);
-                mTutorialTimer = -1;
-                mTutorialTimerSet = false;
-            }
-        }
-        else if(mTutorialStep == 23)
-        {
-            if(mTutorialTimerSet)
-                mTutorialTimer-=delta;
-            
-            if(mTutorialTimer<0 && mTutorialTimer!=-1)
-            {
-                OnTutorialStepCompleted(23);
-                mTutorialTimer = -1;
-                mTutorialTimerSet = false;
-            }
-        }
-        else if(mTutorialStep == 30)
-        {
-            //Start the 3 part
-            OnTutorialStepCompleted(30);
-        }
-        else if(mTutorialStep == 31)
-        {
-            if(mTutorialTimerSet)
-                mTutorialTimer-=delta;
-            
-            if(mTutorialTimer<0 && mTutorialTimer!=-1)
-            {
-                mTutorialTimer = -1;
-                mTutorialTimerSet = false;
-                OnTutorialStepCompleted(31);
-            }
-        }
-        else if(mTutorialStep == 32)
-        {
-            if(mTutorialTimerSet)
-                mTutorialTimer-=delta;
-            
-            if(mTutorialTimer<0 && mTutorialTimer!=-1)
-            {
-                OnTutorialStepCompleted(32);
-                mTutorialTimer = -1;
-                mTutorialTimerSet = false;
-            }
-        }
-        else
-        {
-            if(_dwarves->count()==0 && mTutorialStep<10)
-            {
-                OnTutorialStepCompleted(10);//finish for now
-            }
-            
-            else if(_dwarves->count()==0 && mTutorialStep<20)
-            {
-                OnTutorialStepCompleted(20);//finish for now
-            }
-            else if(_dwarves->count()==0 && mTutorialStep == 25)
-            {
-                //Remove the effect what is on map
-                Effect* effect = static_cast<Effect*>(_effects->objectAtIndex(0));
-                //                removeEffect(effect);
-                
-                this->removeChild(effect);
-                _effects->removeObjectAtIndex(0);
-                
-                OnTutorialStepCompleted(30);//25
-            }
-//            else if(_dwarves->count()==0 && mTutorialStep<30)
-//            {
-//                OnTutorialStepCompleted(30);//finish for now
-//            }
-            
-//            if(_dwarves->count()==0 && mTutorialStep == 25)
-//            {
-//                //Remove the effect what is on map
-//                Effect* effect = static_cast<Effect*>(_effects->objectAtIndex(0));
-////                removeEffect(effect);
-//                
-//                this->removeChild(effect);
-//                _effects->removeObjectAtIndex(0);
-//                
-//                OnTutorialStepCompleted(25);
-//            }
-        }
-        
-        UpdateTutorialStuff();
-        
-        return;//Do the tutorial stuff
-    }
-    
-    if(mShowTutorialCompleted>0)
-    {
-        mShowTutorialCompleted-=delta;
-        if(mShowTutorialCompleted<1)
-        {
-            mShowTutorialCompleted = -1;
-            CreateCompleted();
-        }
-    }
-    
-//    if(mDebugFormulas)
-//    {
-//        CCLabelTTF* aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(20005));
-//        
-//        std::stringstream ss;
-//        ss << minutes << _gameTime;
-//        
-//        aLabelDebug->setString(ss.c_str());
-//    }
-	
-	// generate dwarfs
-	//3x^0.5
-    
-    //For now disabled
-//    mMinDwarfCountInTime = _gameTime/18;//How much dwarfs should be in game !!!
-    
-//	double dwarfProbability = 3.0 * pow(minutes, 0.5);
-//	
-//	double dwarfRandom = mod(rand(), 60.0 * 1000.0) / 1000.0;
-//	
-//	if (dwarfRandom < dwarfProbability * delta)
-//	{
-//		generateDwarf();
-//	}
-    
-    
-    if(User::getInstance()->mNewMissionBuild)
-    {
-        
-    }
-    else
-    {
-        /*
-        if(mSpecialCrystalSpawnTimer>0)
-        {
-            mSpecialCrystalSpawnTimer-=delta;
-            if(mSpecialCrystalSpawnTimer<=0)
-            {
-                if(!mTutorialEnabled)
-                {
-                    if(_gameTime<EXTRA_CRYSTAL_SPAWN)
-                    {
-                        if(_dwarves->count()>_crystals->count())
-                        {
-                            mSpecialCrystalSpawnTimer = 1.0f;
-                            generateCrystal(true);
-                        }
-                    }
-                    else
-                    {
-                        generateCrystal(true);
-                    }
-                }
-                else
-                {
-                    mSpecialCrystalSpawnTimer = -1;
-                    generateCrystal(true);
-                }
-            }
-        }
-        */
-        
-        //---------------------------------------------------------------
-        // A bit different generate formula
-        
-        if(!_generatedExtraStartDwarf)
-        {
-            if(_gameTime>=6.0f)
-            {
-                _generatedExtraStartDwarf = true;
-                generateDwarf();
-            }
-        }
-        
-        //Special stuff!!!
-        if(floor(minutes)>2000)
-        {
-            int aDwarfCount = 1;
-            //Special stuff
-            if(_gameTime<30)
-            {
-                //Spawn like normal by one !!!
-                aDwarfCount = 1;
-            }
-            else
-            {
-                if(_gameTime<60)
-                    aDwarfCount = 2;
-                else if(_gameTime<100)
-                    aDwarfCount = 3;
-                else
-                    aDwarfCount = 2;
-            }
-            
-            if (_dwarves->count()<aDwarfCount)
-            {
-                generateDwarf();
-            }
-        }
-        else
-        {
-            if(_dwarfCurrentSpawnMinute != floor(minutes))
-            {
-                _dwarfCurrentSpawnMinute = floor(minutes);
-                _dwarfCurrentActiveTime = -1;
-                _dwarfCurrentTime = 0;
-                
-                _dwarfSpawnTimes.clear();
-                
-                //Check for patern stuff
-                std::vector<int> _dwarfSpawnData1;
-                std::vector<int> _dwarfSpawnData2;
-                
-                if(_dwarfCurrentSpawnMinute == 0)
-                {
-                    _dwarfSpawnData1.push_back(4);
-                    _dwarfSpawnData1.push_back(3);
-                    
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_dwarfCurrentSpawnMinute == 1)
-                {
-                    _dwarfSpawnData1.push_back(2);
-                    _dwarfSpawnData1.push_back(4);
-                    _dwarfSpawnData1.push_back(2);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_dwarfCurrentSpawnMinute == 2)
-                {
-                    _dwarfSpawnData1.push_back(4);
-                    _dwarfSpawnData1.push_back(4);
-                    
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_dwarfCurrentSpawnMinute == 3)
-                {
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(3);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_dwarfCurrentSpawnMinute == 4)
-                {
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(2);
-                    _dwarfSpawnData1.push_back(1);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_dwarfCurrentSpawnMinute >= 5)
-                {
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(3);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                
-                if(!mPaternFormulas)
-                {
-                    float aRandomTime = 0;
-                    float aLastTime = 0;
-                    int aPossibleTimes = floor(7.0 * pow(minutes, 0.25));
-                    if(mDebugInfoVisible)
-                    {
-                        CCLabelTTF* aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(10005));
-                        aLabelDebug->setString(toString(aPossibleTimes).c_str());
-                        
-                        int aMin = minutes;
-                        aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(10006));
-                        aLabelDebug->setString(toString(aMin).c_str());
-                    }
-                    //--------------------------------
-                    
-                    if(aPossibleTimes>0)
-                    {
-                        int aStartTime = floor(60/aPossibleTimes);
-                        for(int i=0;i<aPossibleTimes;i++)
-                        {
-                            if(aStartTime<=0)
-                                aRandomTime = rand()%aStartTime+aStartTime;
-                            else
-                                aRandomTime = (rand()%1)*0.1+aStartTime;
-                            
-                            aLastTime+=aRandomTime;
-                            if(_dwarfCurrentActiveTime==-1)
-                                _dwarfCurrentActiveTime = aLastTime;
-                            else
-                                _dwarfSpawnTimes.push_back(aLastTime);
-                        }
-                    }
-                }
-                else
-                {
-                    int aSteps = _dwarfSpawnData1.size();
-                    
-                    int aTimeInterval = 45;
-                    int aTotalDwarfs = 8;
-                    int aStartTime = 0;//floor(aTimeInterval/aTotalDwarfs);
-                    int aTotalTimeAdd = 0;
-                    
-                    //                int aExtraParam = 0;
-                    
-                    for(int x=0;x<aSteps;x++)
-                    {
-                        //Get the detailed info
-                        if(x>0)
-                            aTimeInterval = _dwarfSpawnData2[x]-_dwarfSpawnData2[x-1];
-                        else
-                            aTimeInterval = _dwarfSpawnData2[x];
-                        
-                        aTotalDwarfs = _dwarfSpawnData1[x];
-                        if(aTotalDwarfs==0)
-                            continue;
-                        
-                        aStartTime = floor(aTimeInterval/aTotalDwarfs);
-                        if(aStartTime<=0)
-                            continue;
-                        
-                        if(x>0)
-                            aTotalTimeAdd=_dwarfSpawnData2[x]-aTimeInterval;
-                        
-                        for(int i=0;i<aTotalDwarfs;i++)
-                        {
-                            if(aStartTime*0.5>0)
-                                aTotalTimeAdd+=rand()%aStartTime*0.5+aStartTime*0.5+1;
-                            else
-                                aTotalTimeAdd+=rand()%aStartTime;
-                            
-                            if(_dwarfCurrentActiveTime==-1)
-                                _dwarfCurrentActiveTime = aTotalTimeAdd;
-                            else
-                                _dwarfSpawnTimes.push_back(aTotalTimeAdd);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _dwarfCurrentTime += delta * _gameSpeed;
-                
-                if(_dwarfCurrentTime>=_dwarfCurrentActiveTime)
-                {
-                    //Spawn effect and get the next !!!
-                    if(_dwarfSpawnTimes.size()>0)
-                    {
-                        _dwarfCurrentActiveTime = _dwarfSpawnTimes[0];
-                        _dwarfSpawnTimes.erase(_dwarfSpawnTimes.begin(),_dwarfSpawnTimes.begin()+1);
-                    }
-                    else
-                    {
-                        _dwarfCurrentActiveTime = 1000;//Never come here again
-                    }
-                    //Create the troll long awaited
-                    generateDwarf();
-                }
-            }
-        }
-        
-        //---------------------------------------------------------------
-    }
-    
-    
-	// generate trolls
-	//2x^0.2
-//	double trollProbability = 2.0 * pow(minutes, 0.2);
-//	
-//	double trollRandom = mod(rand(), 60.0 * 1000.0) / 1000.0;
-//	
-//	if (trollRandom < trollProbability * delta)
-//	{
-//		generateTroll();
-//	}
-    
-    //---------------------------------------------------------------
-    // A bit different generate formula
-    
-    if (_trollCurrentSpawnMinute != floor(minutes))
-    {
-        _trollCurrentSpawnMinute = floor(minutes);
-        _trollCurrentActiveTime = -1;
-        _trollCurrentTime = 0;
-        
-        _trollSpawnTimes.clear();
-        
-//        bool aDisableFormula = true;
-        if(mPaternFormulas)
-        {
-            std::vector<int> _dwarfSpawnData1;
-            std::vector<int> _dwarfSpawnData2;
-            
-            if(_trollCurrentSpawnMinute == 0)
-            {
-                _dwarfSpawnData1.push_back(2);
-                _dwarfSpawnData1.push_back(0);
-                
-                _dwarfSpawnData2.push_back(45);
-                _dwarfSpawnData2.push_back(60);
-            }
-            else if(_trollCurrentSpawnMinute == 1)
-            {
-                _dwarfSpawnData1.push_back(0);
-                _dwarfSpawnData1.push_back(1);
-                _dwarfSpawnData1.push_back(1);
-                
-                _dwarfSpawnData2.push_back(15);
-                _dwarfSpawnData2.push_back(45);
-                _dwarfSpawnData2.push_back(60);
-            }
-            else if(_trollCurrentSpawnMinute == 2)
-            {
-                _dwarfSpawnData1.push_back(2);
-                
-                _dwarfSpawnData2.push_back(60);
-            }
-            else if(_trollCurrentSpawnMinute == 3)
-            {
-                _dwarfSpawnData1.push_back(2);
-                
-                _dwarfSpawnData2.push_back(60);
-            }
-            else if(_trollCurrentSpawnMinute == 4)
-            {
-                _dwarfSpawnData1.push_back(3);
-                
-                _dwarfSpawnData2.push_back(60);
-            }
-            else if(_trollCurrentSpawnMinute >= 5)
-            {
-                _dwarfSpawnData1.push_back(3);
-                _dwarfSpawnData1.push_back(0);
-                _dwarfSpawnData1.push_back(0);
-                
-                _dwarfSpawnData2.push_back(30);
-                _dwarfSpawnData2.push_back(45);
-                _dwarfSpawnData2.push_back(60);
-            }
-            
-            int aSteps = _dwarfSpawnData1.size();
-            
-            int aTimeInterval = 45;
-            int aTotalDwarfs = 8;
-            int aStartTime = 0;//floor(aTimeInterval/aTotalDwarfs);
-            int aTotalTimeAdd = 0;
-            
-            for(int x=0;x<aSteps;x++)
-            {
-                //Get the detailed info
-                if(x>0)
-                    aTimeInterval = _dwarfSpawnData2[x]-_dwarfSpawnData2[x-1];
-                else
-                    aTimeInterval = _dwarfSpawnData2[x];
-                
-                aTotalDwarfs = _dwarfSpawnData1[x];
-                if(aTotalDwarfs==0)
-                    continue;
-                
-                aStartTime = floor(aTimeInterval/aTotalDwarfs);
-                if(aStartTime<=0)
-                    continue;
-                
-                if(x>0)
-                    aTotalTimeAdd=_dwarfSpawnData2[x]-aTimeInterval;
-                
-                for(int i=0;i<aTotalDwarfs;i++)
-                {
-                    if(aStartTime*0.5>0)
-                        aTotalTimeAdd+=rand()%aStartTime*0.5+aStartTime*0.5+1;
-                    else
-                        aTotalTimeAdd+=rand()%aStartTime;
-                    
-                    if(_trollCurrentActiveTime==-1)
-                        _trollCurrentActiveTime = aTotalTimeAdd;
-                    else
-                        _trollSpawnTimes.push_back(aTotalTimeAdd);
-                }
-            }
-        }
-        else
-        {
-            int aRandomTime = 0;
-            int aLastTime = 0;
-            int aPossibleTimes = floor(2 * pow(minutes, 0.45));
-            //        if (aPossibleTimes>MAX_TROLLS)
-            //            aPossibleTimes = MAX_TROLLS;
-            
-            if (aPossibleTimes>0)
-            {
-                int aStartTime = floor(60/aPossibleTimes);
-                for(int i=0;i<aPossibleTimes;i++)
-                {
-                    aRandomTime = rand()%aStartTime+aStartTime;
-                    aLastTime+=aRandomTime;
-                    if (_trollCurrentActiveTime==-1)
-                        _trollCurrentActiveTime = aLastTime;
-                    else
-                        _trollSpawnTimes.push_back(aLastTime);
-                }
-            }
-        }
-    }
-    else
-    {
-        _trollCurrentTime += delta * _gameSpeed;
-        
-        if (_trollCurrentTime>=_trollCurrentActiveTime)
-        {
-            //Spawn effect and get the next !!!
-            if (_trollSpawnTimes.size()>0)
-            {
-                _trollCurrentActiveTime = _trollSpawnTimes[0];
-                _trollSpawnTimes.erase(_trollSpawnTimes.begin(),_trollSpawnTimes.begin()+1);
-            }
-            else
-            {
-                _trollCurrentActiveTime = 1000;//Never come here again
-            }
-            //Create the troll long awaited
-            
-            if(User::getInstance()->mSpecial_10_Mission || User::getInstance()->mSpecial_13_Mission || User::getInstance()->mSpecial_14_Mission
-               || User::getInstance()->mNewMissionBuild)
-            {
-                //Nope
-                
-            }
-            else
-            {
-                generateTroll();
-            }
-        }
-    }
-    
-    if(_SpawnSpecialTrolls>0)
-    {
-        _SpawnSpecialTrolls-=delta*_gameSpeed;
-        if(_SpawnSpecialTrolls<=0)
-        {
-            if(User::getInstance()->mSpecial_18_Mission || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission
-               || User::getInstance()->mSpecial_21_Mission || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission)
-            {
-                //Check if this troll is active
-                bool aFoundTroll1 = false;
-                bool aFoundTroll2 = false;
-                
-                for (int effectIndex = _trolls->count() - 1; effectIndex >= 0; --effectIndex)
-                {
-                    Troll* trollIn = static_cast<Troll*>(_trolls->objectAtIndex(effectIndex));
-                    if (trollIn != NULL)
-                    {
-                        if(trollIn->mDrawLineID==33131){
-                            aFoundTroll1 = true;
-                        }
-                        else if(trollIn->mDrawLineID==33132){
-                            aFoundTroll2 = true;
-                        }
-                    }
-                }
-                
-                if(aFoundTroll1==false){
-                    generateTrollMission(_screenSize.width/2,_screenSize.height-180,1.6,false,true,
-                                         ccp(240,_screenSize.height-180),ccp(_screenSize.width-240,_screenSize.height-180),1);
-                }
-                if(aFoundTroll2==false){
-                    //Check if can do that
-                    if(User::getInstance()->mSpecial_21_Mission){
-                        //Do nothing - only 1 troll allowed
-                    }
-                    else{
-                        generateTrollMission(_screenSize.width/2,160,1.6,false,true,
-                                             ccp(240,160),ccp(_screenSize.width-240,160),2);
-                    }
-                }
-            }
-            //Check what need to spawn
-            else if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission)
-            {
-                SetMasterTrollAction(1);
-                
-                //The troll spawn
-                if(_DwarfsSpawned>=10)
-                {
-                    generateTrollMission(_screenSize.width/2,160,1.6,false,true,
-                                         ccp(240,160),ccp(_screenSize.width-240,160),2);
-                }
-                else if(_DwarfsSpawned>=20)
-                {
-                    generateTrollMission(240,_screenSize.height/2,1.6,false,true,ccp(240,_screenSize.height-100),ccp(240,100),3);
-                }
-                else if(_DwarfsSpawned>=30)
-                {
-                    generateTrollMission(_screenSize.width-240,_screenSize.height/2,1.6,false,true,
-                                         ccp(_screenSize.width-240,_screenSize.height-100),ccp(_screenSize.width-240,100),4);
-                }
-                else if(_DwarfsSpawned>=40)
-                {
-                    generateTrollMission(_screenSize.width/2,200,0,true,false,CCPointZero,CCPointZero,5);
-                }
-            }
-            else
-            {
-                //The special stuff
-                generateTrollMission(240,_screenSize.height/2,1.6,false,true,ccp(240,_screenSize.height-100),ccp(240,100),-1);
-                generateTrollMission(_screenSize.width-240,_screenSize.height/2,4.7,false,true,
-                                     ccp(_screenSize.width-240,100),ccp(_screenSize.width-240,_screenSize.height-100),-1);
-                generateTrollMission(_screenSize.width/2,200,0,true,false,CCPointZero,CCPointZero,-1);
-            }
-            
-//            generateTrollMission(240,_screenSize.height/2-160,M_PI,false,false,CCPointZero,CCPointZero);
-//            generateTrollMission(_screenSize.width-240,_screenSize.height/2+160,0,false,false,CCPointZero,CCPointZero);
-        }
-    }
-    
-    if(_boostNoEnemyTimer>0)
-    {
-        //Some special effect !!!
-        _actionTrollSpawn+=delta*_gameSpeed;
-        if(_actionTrollSpawnTime == -1)
-        {
-            _actionTrollSpawnTime = _boostNoEnemyTimer/2;
-        }
-        
-        if(_actionTrollSpawn>=_actionTrollSpawnTime)
-        {
-            _actionTrollSpawn = 0;
-            
-            if(_SpawnSpecialTrolls>0){
-                
-            }
-            else
-            {
-                if(User::getInstance()->mNewMissionBuild == false){
-                    generateTroll(true);
-                }
-            }
-        }
-    }
-    
-    //---------------------------------------------------------------
-	
-	// generate chrystals
-	//2x^0.5
-//	double chrystalProbability = 2.0 * pow(minutes, 0.5);
-//	
-//	double chrystalRandom = mod(rand(), 60.0 * 1000.0) / 1000.0;
-//	
-//	if (chrystalRandom < chrystalProbability * delta)
-//	{
-//		generateCrystal();
-//	}
-	
-    //---------------------------------------------------------------
-    // A bit different crystal generate formula
-    
-    if(User::getInstance()->mNewMissionBuild)
-    {
-        //Different crystal spawn mode
-        
-    }
-    else
-    {
-        if (_crystalCurrentSpawnMinute != floor(minutes))
-        {
-            _crystalCurrentSpawnMinute = floor(minutes);
-            _crystalCurrentActiveTime = -1;
-            _crystalCurrentTime = 0;
-            
-            _crystalSpawnTimes.clear();
-            
-            //        bool aDisableFormula = true;
-            if(mPaternFormulas)
-            {
-                std::vector<int> _dwarfSpawnData1;
-                std::vector<int> _dwarfSpawnData2;
-                
-                if(_crystalCurrentSpawnMinute == 0)
-                {
-                    _dwarfSpawnData1.push_back(4);
-                    
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_crystalCurrentSpawnMinute == 1)
-                {
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(2);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_crystalCurrentSpawnMinute == 2)
-                {
-                    _dwarfSpawnData1.push_back(5);
-                    
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_crystalCurrentSpawnMinute == 3)
-                {
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(2);
-                    _dwarfSpawnData1.push_back(2);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_crystalCurrentSpawnMinute == 4)
-                {
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(3);
-                    _dwarfSpawnData1.push_back(3);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_crystalCurrentSpawnMinute >= 5)
-                {
-                    _dwarfSpawnData1.push_back(5);
-                    
-                    _dwarfSpawnData2.push_back(60);
-                }
-                
-                int aSteps = _dwarfSpawnData1.size();
-                
-                int aTimeInterval = 45;
-                int aTotalDwarfs = 8;
-                int aStartTime = 0;//floor(aTimeInterval/aTotalDwarfs);
-                int aTotalTimeAdd = 0;
-                
-                for(int x=0;x<aSteps;x++)
-                {
-                    //Get the detailed info
-                    if(x>0)
-                        aTimeInterval = _dwarfSpawnData2[x]-_dwarfSpawnData2[x-1];
-                    else
-                        aTimeInterval = _dwarfSpawnData2[x];
-                    
-                    aTotalDwarfs = _dwarfSpawnData1[x];
-                    if(aTotalDwarfs==0)
-                        continue;
-                    
-                    aStartTime = floor(aTimeInterval/aTotalDwarfs);
-                    if(aStartTime<=0)
-                        continue;
-                    
-                    if(x>0)
-                        aTotalTimeAdd=_dwarfSpawnData2[x]-aTimeInterval;
-                    
-                    for(int i=0;i<aTotalDwarfs;i++)
-                    {
-                        if(aStartTime*0.5>0)
-                            aTotalTimeAdd+=rand()%aStartTime*0.5+aStartTime*0.5+1;
-                        else
-                            aTotalTimeAdd+=rand()%aStartTime;
-                        
-                        if(_crystalCurrentActiveTime==-1)
-                            _crystalCurrentActiveTime = aTotalTimeAdd;
-                        else
-                            _crystalSpawnTimes.push_back(aTotalTimeAdd);
-                    }
-                }
-            }
-            else
-            {
-                int aRandomTime = 0;
-                int aLastTime = 0;
-                int aPossibleTimes = floor(4.0 * pow(minutes, 0.25));
-                //        if (aPossibleTimes>MAX_CRYSTALS)
-                //            aPossibleTimes = MAX_CRYSTALS;
-                if (aPossibleTimes>0)
-                {
-                    int aStartTime = floor(60/aPossibleTimes);
-                    for(int i=0;i<aPossibleTimes;i++)
-                    {
-                        aRandomTime = rand()%aStartTime+aStartTime;
-                        aLastTime+=aRandomTime;
-                        if (_crystalCurrentActiveTime==-1)
-                            _crystalCurrentActiveTime = aLastTime;
-                        else
-                            _crystalSpawnTimes.push_back(aLastTime);
-                    }
-                }
-            }
-        }
-        else
-        {
-            _crystalCurrentTime += delta * _gameSpeed;
-            
-            if (_crystalCurrentTime>=_crystalCurrentActiveTime)
-            {
-                //Spawn effect and get the next !!!
-                if (_crystalSpawnTimes.size()>0)
-                {
-                    _crystalCurrentActiveTime = _crystalSpawnTimes[0];
-                    _crystalSpawnTimes.erase(_crystalSpawnTimes.begin(),_crystalSpawnTimes.begin()+1);
-                }
-                else
-                {
-                    _crystalCurrentActiveTime = 1000;//Never come here again
-                }
-                //Create the troll long awaited
-                
-                /*
-                if(_gameTime>=EXTRA_CRYSTAL_SPAWN)
-                    generateCrystal(false);
-                */
-            }
-        }
-        
-        //---------------------------------------------------------------
-    }
-    
-	// generate diamonds
-	//1/5
-//	double diamondProbability = 1 / 5;
-//	
-//	double diamondRandom = mod(rand(), 60.0 * 1000.0) / 1000.0;
-//	
-//	if (diamondRandom < diamondProbability * delta)
-//	{
-//		generateDiamond();
-//	}
-    // updated diamonds - 1 diamond in 5 min
-    _diamondTimer+=delta * _gameSpeed;
-    if (_diamondTimer>=DIAMOND_SPAWN_TIME)
-    {
-        _diamondTimer = 0;//Start again
-//        generateDiamond();
-    }
-	
-	// generate effect
-	//2x^0.2
-//	double effectProbability = 2.0 * pow(minutes, 0.2);//Current min max times can spawn
-//    CCLog("effectProbability:%f || time in game%f",effectProbability,minutes);
-    
-    if(User::getInstance()->mNewMissionBuild == false)
-    {
-        if (_currentMinForSpawn != floor(minutes))
-        {
-            _currentMinSpwanedTime = 0;//Start again from 0
-            //Reupdate the spawn timers !!!
-            _currentMinForSpawn = floor(minutes);
-            //Set the spawn times in this minute - so that does all the needed stuff in this minute !!!
-            _effectSpawnTimes.clear();
-            
-            //How to make nice random !!!
-            _effectActiveSpawnTime = -1;
-            
-            //        bool aDisableFormula = true;
-            if(mPaternFormulas)
-            {
-                std::vector<int> _dwarfSpawnData1;
-                std::vector<int> _dwarfSpawnData2;
-                
-                if(_currentMinForSpawn == 0)
-                {
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(0);
-                    
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_currentMinForSpawn == 1)
-                {
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(1);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_currentMinForSpawn == 2)
-                {
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(1);
-                    
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_currentMinForSpawn == 3)
-                {
-                    _dwarfSpawnData1.push_back(2);
-                    
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_currentMinForSpawn == 4)
-                {
-                    _dwarfSpawnData1.push_back(2);
-                    
-                    _dwarfSpawnData2.push_back(60);
-                }
-                else if(_currentMinForSpawn >= 5)
-                {
-                    _dwarfSpawnData1.push_back(0);
-                    _dwarfSpawnData1.push_back(1);
-                    _dwarfSpawnData1.push_back(2);
-                    _dwarfSpawnData1.push_back(0);
-                    
-                    _dwarfSpawnData2.push_back(15);
-                    _dwarfSpawnData2.push_back(30);
-                    _dwarfSpawnData2.push_back(45);
-                    _dwarfSpawnData2.push_back(60);
-                }
-                
-                int aSteps = _dwarfSpawnData1.size();
-                
-                int aTimeInterval = 45;
-                int aTotalDwarfs = 8;
-                int aStartTime = 0;//floor(aTimeInterval/aTotalDwarfs);
-                int aTotalTimeAdd = 0;
-                
-                for(int x=0;x<aSteps;x++)
-                {
-                    //Get the detailed info
-                    if(x>0)
-                        aTimeInterval = _dwarfSpawnData2[x]-_dwarfSpawnData2[x-1];
-                    else
-                        aTimeInterval = _dwarfSpawnData2[x];
-                    
-                    aTotalDwarfs = _dwarfSpawnData1[x];
-                    if(aTotalDwarfs==0)
-                        continue;
-                    
-                    aStartTime = floor(aTimeInterval/aTotalDwarfs);
-                    if(aStartTime<=0)
-                        continue;
-                    
-                    if(x>0)
-                        aTotalTimeAdd=_dwarfSpawnData2[x]-aTimeInterval;
-                    
-                    for(int i=0;i<aTotalDwarfs;i++)
-                    {
-                        if(aStartTime*0.5>0)
-                            aTotalTimeAdd+=rand()%aStartTime*0.5+aStartTime*0.5+1;
-                        else
-                            aTotalTimeAdd+=rand()%aStartTime;
-                        
-                        if(_effectActiveSpawnTime==-1)
-                            _effectActiveSpawnTime = aTotalTimeAdd;
-                        else
-                            _effectSpawnTimes.push_back(aTotalTimeAdd);
-                        
-                        //                    CCLog("Effect will spawn at %d",aTotalTimeAdd);
-                    }
-                }
-            }
-            else
-            {
-                int aRandomTime = 0;
-                int aLastTime = 0;
-                int aPossibleTimes = floor(2.0 * pow(minutes, 0.45));//How much in this minute will we spawn!
-                //        if (aPossibleTimes>MAX_EFFECTS)
-                //            aPossibleTimes = MAX_EFFECTS;
-                if (aPossibleTimes>0)
-                {
-                    int aStartTime = floor(60/aPossibleTimes);
-                    for(int i=0;i<aPossibleTimes;i++)
-                    {
-                        aRandomTime = rand()%aStartTime+aStartTime;
-                        aLastTime+=aRandomTime;
-                        if (_effectActiveSpawnTime==-1)
-                            _effectActiveSpawnTime = aLastTime;
-                        else
-                            _effectSpawnTimes.push_back(aLastTime);
-                    }
-                }
-            }
-        }
-        else
-        {
-            _currentMinSpwanedTime += delta * _gameSpeed;
-            
-            if (_currentMinSpwanedTime>=_effectActiveSpawnTime)
-            {
-                //            CCLog("_currentMinSpwanedTime %f _effectActiveSpawnTime:%d",_currentMinSpwanedTime,_effectActiveSpawnTime);
-                //Spawn effect and get the next !!!
-                if (_effectSpawnTimes.size()>0)
-                {
-                    _effectActiveSpawnTime = _effectSpawnTimes[0];
-                    _effectSpawnTimes.erase(_effectSpawnTimes.begin(),_effectSpawnTimes.begin()+1);
-                    
-                    
-                }
-                else
-                {
-                    _effectActiveSpawnTime = 1000;//Never come here again
-                }
-                
-                
-                
-                //Create the effect long awaited
-                generateEffect();
-            }
-        }
-    }
-    
-    //Check when will spawn the effect in this minute !!!
-    
-    //Callculate how many times can spawn in this min !!
-    
-//	double effectRandom = mod(rand(), 60.0 * 1000.0) / 1000.0;
-//	
-//	if (effectRandom < effectProbability * delta)
-//	{
-//        generateEffect();
-//	}
-    //////////////////////
-    // New meteorite formula
-    
-//    mEffectTime+=delta * gameSpeed;
-    
-    
-    //////////////////////
-	
-	// if there are no dwarves on scene
-//	if (_dwarves->count() == 0 || _dwarves->count() < mMinDwarfCountInTime)
-    
-    //Use the old functional
-//    if (_dwarves->count() == 0 && floor(minutes)>=2)
-//    if (_dwarves->count() == 0)
-//	{
-//        generateDwarf();
-//        //Generate some crystal too !!!
-//        
-////        if(_crystals->count()<2)
-////            generateCrystal();
-//	}
-    if(User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission){
-        if (_dwarves->count() < 3){
-            generateDwarf();
-        }
-    }
-    else if(User::getInstance()->mSpecial_21_Mission){
-        if(_dwarves->count()<2){
-            generateDwarf();
-        }
-        
-        if(_goblins->count()<1){
-            //Choose from what spot will come in !!!
-            int aRandomSpot = rand()%_genearetPoints.size();
-            GeneratePoint gobSpawn = _genearetPoints[aRandomSpot];
-            
-            generateGoblin(gobSpawn.x,gobSpawn.y,gobSpawn.angle);
-        }
-    }
-    else if(User::getInstance()->mSpecial_22_Mission){
-        if(_gameTime>180 && _hidras->count()<2 && _hidras->count()>0){
-            //Spawn other hidra
-            generateHidra(_screenSize.width/2+200,450,0);
-        }
-        else if(_hidras->count()<1)
-        {
-            //Generate the 1st hidra
-            generateHidra(_screenSize.width/2+200,200,0);
-        }
-    }
-    else if(User::getInstance()->mSpecial_23_Mission){
-        //3 spawn points
-        
-    }
-    else{
-        if (_dwarves->count() == 0){
-            generateDwarf();
-        }
-    }
-	
-	// TODO: remove
-//	if (_trolls->count() == 0)
-//	{
-//		generateTroll();
-//	}
-//	
-//	if (_crystals->count() == 0)
-//	{
-//		generateCrystal();
-//	}
-//	
-//	if (_effects->count() == 0)
-//	{
-//		generateEffect();
-//	}
-//	
-//	if (_diamonds->count() == 0)
-//	{
-//		generateDiamond();
-//	}
-    
-    //========================================
-    //Booster update
-    
-    if (_boostGhostTimer>0)
-    {
-        _boostGhostTimer-=delta;
-        if (_boostGhostTimer<=0)
-        {
-            disableBooster(kBooster_Ghost);
-            _plantIceFlowerFirst = false;
-        }
-    }
-        
-//    if (mBoost_Shield_Timer>0)
-//    {
-//        mBoost_Shield_Timer-=delta;
-//        if (mBoost_Shield_Timer<=0)
-//            disableBooster(kBooster_Shield);
-//    }
-    
-    if (_boostFutureSee>0)
-    {
-        _boostFutureSee-=delta;
-        
-        if (_boostFutureSee<=0)
-        {
-            _boostFutureSee = 0;
-            disableBooster(kBooster_FutureSee);
-        }
-    }
-    
-    if (_boostCrystalsTimer>0)
-    {
-        _boostCrystalsTimer-=delta;
-        if (_boostCrystalsTimer<=0)
-        {
-            _boostExtraPoints = 0;
-            disableBooster(kBooster_Crystals);
-        }
-    }
-    
-    if (_boostNoEnemyTimer>0)
-    {
-        _boostNoEnemyTimer-=delta;
-        if (_boostNoEnemyTimer<=0)
-        {
-            _plantSunFlowerFirst = false;//Create again the plant
-            disableBooster(kBooster_NoEnemy);
-//          crossFadeBackground(false);
-            
-            _SpawnSpecialTrolls = 10;
-        }
-    }
-    
-    if (_mushroomTimer>0)
-    {
-        _mushroomTimer-=delta;
-        if (_mushroomTimer<=0)
-        {
-            _mushroomTimer = MUSHROOM_WAIT;
-//            generateMushroom();
-        }
-    }
-    
-    //========================================
-    
-    
-    //New stuff - plants stuff !!!
-    //Check if enabled
-    updatePlants(delta);
-    
-    if(User::getInstance()->mSpecial_16_Mission || User::getInstance()->mSpecial_17_Mission || User::getInstance()->mSpecial_18_Mission
-       || User::getInstance()->mSpecial_19_Mission || User::getInstance()->mSpecial_20_Mission || User::getInstance()->mSpecial_21_Mission
-       || User::getInstance()->mSpecial_22_Mission || User::getInstance()->mSpecial_23_Mission)
-    {
-        //We have mission 16 active !!!
-        /*
-        _mission_dwarf_spawn_timer-=delta;
-        if(_mission_dwarf_spawn_timer<=0)
-        {
-            //new stuff
-            int aWillSpawn = 0;
-            bool spawnDwarf = true;
-            
-            if(_dwarves->count()<3)
-            {
-                _mission_dwarf_spawn_timer = (rand()%2)+2;
-            }
-            else if(_dwarves->count() == 3)
-            {
-                aWillSpawn = rand()%10;
-                
-                if(aWillSpawn<4){
-                    _mission_dwarf_spawn_timer = (rand()%3)+8;
-                }
-                else{
-                    spawnDwarf = false;
-                    _mission_dwarf_spawn_timer = (rand()%2)+2;
-                }
-            }
-            else
-            {
-                aWillSpawn = rand()%10;
-                
-                if(aWillSpawn<2){
-                    _mission_dwarf_spawn_timer = (rand()%3)+8;
-                }
-                else{
-                    spawnDwarf = false;
-                    _mission_dwarf_spawn_timer = (rand()%2)+2;
-                }
-            }
-            
-            if(spawnDwarf){
-                generateDwarf();
-            }
-        }
-        */
-        
-        //---------------------------------
-        
-        if(_dwarfCurrentSpawnMinute != floor(minutes))
-        {
-            _dwarfCurrentSpawnMinute = floor(minutes);
-            _dwarfCurrentActiveTime = -1;
-            _dwarfCurrentTime = 0;
-            
-            _dwarfSpawnTimes.clear();
-            
-            float aRandomTime = 0;
-            float aLastTime = 0;
-            int aPossibleTimes = floor(7.0 * pow(minutes, 0.25));
-            if(mDebugInfoVisible)
-            {
-                CCLabelTTF* aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(10005));
-                aLabelDebug->setString(toString(aPossibleTimes).c_str());
-                
-                int aMin = minutes;
-                aLabelDebug = static_cast<CCLabelTTF*>(getChildByTag(10006));
-                aLabelDebug->setString(toString(aMin).c_str());
-            }
-            //--------------------------------
-            
-            if(aPossibleTimes>0)
-            {
-                int aStartTime = floor(60/aPossibleTimes);
-                for(int i=0;i<aPossibleTimes;i++)
-                {
-                    if(aStartTime<=0)
-                        aRandomTime = rand()%aStartTime+aStartTime;
-                    else
-                        aRandomTime = (rand()%1)*0.1+aStartTime;
-                    
-                    aLastTime+=aRandomTime;
-                    if(_dwarfCurrentActiveTime==-1)
-                        _dwarfCurrentActiveTime = aLastTime;
-                    else
-                        _dwarfSpawnTimes.push_back(aLastTime);
-                }
-            }
-        }
-        else
-        {
-            _dwarfCurrentTime += delta * _gameSpeed;
-            
-            if(_dwarfCurrentTime>=_dwarfCurrentActiveTime)
-            {
-                //Spawn effect and get the next !!!
-                if(_dwarfSpawnTimes.size()>0)
-                {
-                    _dwarfCurrentActiveTime = _dwarfSpawnTimes[0];
-                    _dwarfSpawnTimes.erase(_dwarfSpawnTimes.begin(),_dwarfSpawnTimes.begin()+1);
-                }
-                else
-                {
-                    _dwarfCurrentActiveTime = 1000;//Never come here again
-                }
-                //Create the troll long awaited
-                generateDwarf();
-            }
-        }
-        
-        //=================================
-        
-        /*
-        _mission_crystal_spawn_timer-=delta;
-        if(_mission_crystal_spawn_timer<=0)
-        {
-            _mission_crystal_spawn_timer = 4;
-            
-            generateCrystal(false);
-        }
-        */
-        
-        _mission_effect_spawn_timer-=delta;
-        if(_mission_effect_spawn_timer<=0)
-        {
-            _mission_effect_spawn_timer = (rand()%4)+10;
-            
-            if(_mission_allowed_effect == -1){
-                //Nothing to spawn
-            }
-            else{
-                //Check how many traps we have in map
-//                generateEffect();
-                SetMasterTrollAction(6);
-            }
-        }
-        
-        //Update the troll actions
-        mTrollTimer+=delta;
-        
-        if(mTrollTimer>180){
-            //Spawn some trap !!!
-            mTrollTimer = 0;
-            SetMasterTrollAction(6);
-        }
-        
-        //How much bullets will fly around
-        mTrollBulletTimer-=delta;
-        if(mTrollBulletTimer<=0)
-        {
-            if(_gameTime<60){
-                mTrollBulletTimer = (rand()%6)+6;
-            }
-            else{
-                mTrollBulletTimer = (rand()%10)+10;
-            }
-            
-            SetMasterTrollAction(8);
-        }
-        
-        if(User::getInstance()->mSpecial_17_Mission){
-            
-            mTrollFreeze+=delta;
-            
-            if(mTrollFreeze>=mTrollFreezeDwarfTime){
-                
-                mTrollFreezeDwarfTime = (rand()%16)+14;
-                mTrollFreeze = 0;
-                
-                SetMasterTrollAction(7);
-            }
-        }
-        
-        
-    }
-    else if(User::getInstance()->mNewMissionBuild)
-    {
-        //Update the dwarf and crystal spawn here !!!
-        _mission_dwarf_spawn_timer-=delta;
-        if(_mission_dwarf_spawn_timer<=0)
-        {
-            //new stuff
-            int aWillSpawn = 0;
-            bool spawnDwarf = true;
-            
-            //The special stuff
-            if(User::getInstance()->mNewMissionProgress<3)
-            {
-                if(_dwarves->count()<3)
-                {
-                    _mission_dwarf_spawn_timer = (rand()%3)+8;
-                }
-                else if(_dwarves->count() == 3)
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<4){
-                        _mission_dwarf_spawn_timer = (rand()%3)+8;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-                else
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<2){
-                        _mission_dwarf_spawn_timer = (rand()%3)+8;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-            }
-            else if(User::getInstance()->mNewMissionProgress<5)
-            {
-                if(_dwarves->count()<4)
-                {
-                    _mission_dwarf_spawn_timer = (rand()%4)+5;
-                }
-                else if(_dwarves->count() == 4)
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<4){
-                        _mission_dwarf_spawn_timer = (rand()%4)+5;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-                else
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<2){
-                        _mission_dwarf_spawn_timer = (rand()%4)+5;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-            }
-            else
-            {
-                if(_dwarves->count()<4)
-                {
-                    _mission_dwarf_spawn_timer = (rand()%3)+3;
-                }
-                else if(_dwarves->count() == 4)
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<4){
-                        _mission_dwarf_spawn_timer = (rand()%3)+3;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-                else
-                {
-                    aWillSpawn = rand()%10;
-                    
-                    if(aWillSpawn<2){
-                        _mission_dwarf_spawn_timer = (rand()%3)+3;
-                    }
-                    else{
-                        spawnDwarf = false;
-                        _mission_dwarf_spawn_timer = (rand()%2)+2;
-                    }
-                }
-            }
-            
-
-            
-            if(spawnDwarf){
-                generateDwarf();
-            }
-        }
-        
-        /*
-        _mission_crystal_spawn_timer-=delta;
-        if(_mission_crystal_spawn_timer<=0)
-        {
-            _mission_crystal_spawn_timer = 4;
-            
-            generateCrystal(false);
-        }
-        */
-        
-        _mission_effect_spawn_timer-=delta;
-        if(_mission_effect_spawn_timer<=0)
-        {
-            _mission_effect_spawn_timer = (rand()%3)+8;
-            
-            if(_mission_allowed_effect == -1){
-                //Nothing to spawn
-            }
-            else{
-                //Check how many traps we have in map
-                generateEffect();
-            }
-        }
-    }
+    // The power item updates !!!
+    updateActiveInGamePowers(delta);
 }
 
 void GameScene::updatePlants(float delta)
 {
+    /*
 //    CCLog("_plantCrystalTime:%f",_plantCrystalTime);
     _plantCrystalTime+=delta*_gameSpeed;
     //Grow faster !!! by 20%
@@ -11299,6 +9605,7 @@ void GameScene::updatePlants(float delta)
         //Start to grow up a plant !!!
         generatePlantCrystal();
     }
+    */
     
     //For now disabled - we will have power machines
     //For first time start to plant somwehere some special plants
@@ -11366,62 +9673,63 @@ void GameScene::generatePlantFuzz()
     this->addChild(plant,getSpriteOrderZ(plant->getPositionY()));
 }
 
+/*
 void GameScene::generatePlantCrystal()
 {
     if (this->getChildByTag(kPlant_Crystal))
         return;//Wait a bit
     
     //The new stuff
-    if(User::getInstance()->mNewMissionBuild){
-        if(User::getInstance()->mNewMissionProgress >= 4){
-            //All ok
-            
-        }
-        else{
-            return;
-        }
-    }
-    else
-    {
-        if(User::getInstance()->getMachine_PlantLvl()<1)
-            return;
-    }
+    
+    if(User::getInstance()->getMachine_PlantLvl()<1)
+        return;
     
     Plant_Crystal_Weed* plant = Plant_Crystal_Weed::create(this);
     CCPoint aPosition = getRandomPointFromBlock(rand()%8);
     plant->setPosition(aPosition.x, aPosition.y);
     plant->setTag(kPlant_Crystal);
     addChild(plant,getSpriteOrderZ(plant->getPositionY()));
+}
+*/
+
+void GameScene::generatePowerItem(int theID)
+{
+    // Universall item generator by item data from xml and saved stuff for user
+    Universal_PowerItem* item = Universal_PowerItem::create(this, theID);
     
-    //===========
+    // ToDo - add some check what was the last stuff
+    /* // This is the reference
+    _mushroomSpawnPositions.clear();
+    for (int i = 0;i<8;i++)
+    {
+        if (i != _mushroomLastSpawnBlockID)
+            _mushroomSpawnPositions.push_back(i);
+    }
+    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
     
-//    PlantCrystal* plant = PlantCrystal::create(this);
-//    plant->setTag(kPlant_Crystal);
-//    
-//    CCPoint aPosition = getRandomPointFromBlock(rand()%8);
-////    CCPoint aPosition = ccp(200,200);
-//    plant->setPosition(aPosition.x, aPosition.y);
+    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
     
-    //////////////////////////////////////////////////////////////////////
-    //Create the possible spawn points,except last one
+    mushroom->setPosition(aPosition);
+    */
     
-//    _mushroomSpawnPositions.clear();
-//    for(int i = 0;i<8;i++)
-//    {
-//        if (i!=mMushroomLastSpawnBlockID)
-//            _mushroomSpawnPositions.push_back(i);
-//    }
-//    mMushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-//    
-//    CCPoint aPosition = getRandomPointFromBlock(mMushroomLastSpawnBlockID);
-//    
-//    mushroom->setPosition(aPosition);
+    // Add to global array where can update it !!!
+    CCPoint aPosition = getRandomPointFromBlock(rand()%8);
+    item->setPosition(aPosition.x, aPosition.y);
+    addChild(item,getSpriteOrderZ(item->getPositionY()));
     
-    //////////////////////////////////////////////////////////////////////
+    if(theID == ITEM_CRYSTAL_PLANT)
+    {
+        // This will spawn one time - so no stuff here
+    }
+    else
+    {
+        mUniversalItems->addObject(item);
+    }
     
-//    this->addChild(plant, getSpriteOrderZ(plant->getPositionY()));
 }
 
+
+// Meeen this is a fucked up mess :D - needs cleaning up
 void GameScene::updateDwarfs(float delta)
 {
 	// update dwarves
@@ -11451,6 +9759,7 @@ void GameScene::updateDwarfs(float delta)
             
             _foundWarning = false;
             
+            /*
             if(mTutorialEnabled)
             {
                 //Set the timer to 1sec to spawn the crystal
@@ -11460,6 +9769,7 @@ void GameScene::updateDwarfs(float delta)
                     mTutorialTimer = 1.0f;
                 }
             }
+            */
             
             /*
             if(mCheckSpecialSpotTouch)
@@ -11695,10 +10005,12 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type ==MissionType_DwarfCount)
                     {
+                        
                     	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
                     	{
                     		showWinScreen();
                     	}
+                        
                     }
                 
                     if(mAttackFunctionalActive)
@@ -11884,12 +10196,14 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type ==MissionType_DwarfCount)
                     {
+                        
                     	if((mTotalBlueDwarfs+mTotalOrangeDwarfs)>=mCurrentMission.Task_DwarfWinCon)
                     	{
                     		showWinScreen();
                     	}else if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
                     		 lose();
                     	}
+                        
                     }
                     
                     if(mCurrentMission.Task_type ==MissionType_DestroyTotem || mCurrentMission.Task_type ==MissionType_CrystalCollect)
@@ -11979,7 +10293,7 @@ void GameScene::updateDwarfs(float delta)
                 for(int beeIndex = _otherEnemy->count()-1;beeIndex>=0;--beeIndex)
                 {
                     Enemy_Bee* gob = static_cast<Enemy_Bee*>(_otherEnemy->objectAtIndex(beeIndex));
-                    if(gob->isVisible() && getGhostTimer() <= 0)
+                    if(gob->isVisible() && mPowerItem_GhostsActive <= 0)
                     {
                         //Check for crash now !!!
                         if (ccpDistanceSQ(dwarf->getPosition(), gob->getPosition())<= powf(TROLL_DISTANCE, 2)*GLOBAL_SCALE)
@@ -12108,7 +10422,7 @@ void GameScene::updateDwarfs(float delta)
 					Troll* troll = static_cast<Troll*>(_trolls->objectAtIndex(trollIndex));
 					
                     //Little update - warning light on gnome !!!
-                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove() && _boostNoEnemyTimer<=0 && getGhostTimer() <= 0)
+                    if (troll->isVisible() && troll->getTouchable() && troll->getCanMove() && _boostNoEnemyTimer<=0 && mPowerItem_GhostsActive <= 0)
                     {
                         //Check the warning distance
                         //Check the real stuff here
@@ -12463,19 +10777,33 @@ void GameScene::updateDwarfs(float delta)
                         
                         if(mAttackFunctionalActive)
                         {
-                            if(crystal->_color == CRYSTAL_COLOR_BLUE) mMasterTroll_Attack+=20;
-                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) mMasterTroll_Attack+=15;
-                            else if(crystal->_color == CRYSTAL_COLOR_RED) mMasterTroll_Attack+=30;
-                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW) mMasterTroll_Attack+=50;
+                            if(crystal->_color == CRYSTAL_COLOR_BLUE) {
+//                                mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalDoublerValue; // Old stuff
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_BLUE+(ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_GREEN) {
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_GREEN+(ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_RED){
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_RED+(ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
+                            else if(crystal->_color == CRYSTAL_COLOR_YELLOW){
+                                //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_YELLOW+(ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                            }
                             UpdateBattleLabel();
                         }
                         
                         if(mCurrentMission.Task_type == MissionType_CrystalCollect)//Collect crystals to win a mission.
 						{
+                            
 							if(_crystal_Point_counter>=mCurrentMission.Task_CrystalsWinCon)
 							{
 								showWinScreen();
 							}
+                            
                         }
                         
                         //----------------------------------------------------------------
@@ -12743,12 +11071,13 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_TEST)
 				{
-					if(mCurrentMission.Task_SurviveLives <=0)
+                    if(mTask_SurviveLives <= 0) //if(mCurrentMission.Task_SurviveLives <=0)
 					{
 						lose();
 					}else if(_gameTime <= 0){
 						showWinScreen();
 					}
+                    
 					std::stringstream theDwarfsLeft;
             		theDwarfsLeft << _SaveDwarfsCounter;
             		_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
@@ -12763,23 +11092,27 @@ void GameScene::updateDwarfs(float delta)
             		_timeLabel->setString(TimeLeft.str().c_str());
             		
             		std::stringstream LivesLeft;
-            		LivesLeft << mCurrentMission.Task_SurviveLives;
+                    LivesLeft << mTask_SurviveLives; // LivesLeft << mCurrentMission.Task_SurviveLives;
             		_lifesLabel->setString(LivesLeft.str().c_str());
             		
 				}
                 
 				if(mCurrentMission.Task_type == MissionType_DwarfCount)
 				{
-                std::stringstream theDwarfsSaved;
-            	theDwarfsSaved << (mTotalBlueDwarfs+mTotalOrangeDwarfs) <<"/"<<mCurrentMission.Task_DwarfWinCon;
-            	_dwarfsSavedLabel->setString(theDwarfsSaved.str().c_str());
+                    
+                    std::stringstream theDwarfsSaved;
+                    theDwarfsSaved << (mTotalBlueDwarfs+mTotalOrangeDwarfs) <<"/"<<mCurrentMission.Task_DwarfWinCon;
+                    _dwarfsSavedLabel->setString(theDwarfsSaved.str().c_str());
+                    
             	}
             	
             	if(mCurrentMission.Task_type == MissionType_CrystalCollect)
                 {
-            	std::stringstream theCrystalsGathered;
-            	theCrystalsGathered << _crystal_Point_counter <<"/"<<mCurrentMission.Task_CrystalsWinCon;
-            	_dwarfsCrystalsLabel->setString(theCrystalsGathered.str().c_str()); 
+                    
+                    std::stringstream theCrystalsGathered;
+                    theCrystalsGathered << _crystal_Point_counter <<"/"<<mCurrentMission.Task_CrystalsWinCon;
+                    _dwarfsCrystalsLabel->setString(theCrystalsGathered.str().c_str());
+                    
                 }
             	
             	if(mCurrentMission.Task_type == MissionType_DwarfSave || mCurrentMission.Task_type == MissionType_DwarfCount 
@@ -12921,55 +11254,35 @@ void GameScene::updateDwarfs(float delta)
     			}
     		}
             
-            if (dwarf)
+            //........................................................................
+            // The new power item check !!!
+            
+            if(dwarf)
             {
-                for (int diamondIndex = _mushrooms->count() - 1; diamondIndex >= 0; --diamondIndex)
+                for(int itemIndex = mUniversalItems->count()-1;itemIndex >= 0; --itemIndex)
                 {
-                    Mushroom* diamond = static_cast<Mushroom*>(_mushrooms->objectAtIndex(diamondIndex));
+                    Universal_PowerItem* itemToCheck = static_cast<Universal_PowerItem*>(mUniversalItems->objectAtIndex(itemIndex));
                     
-                    if (diamond->isVisible() &&
-                        ccpDistanceSQ(dwarf->getPosition(), diamond->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
+                    // If it is not visible - ignore it !!!
+                    if(itemToCheck->isVisible())
                     {
-                        this->removeChild(diamond);
-                        _mushrooms->removeObjectAtIndex(diamondIndex);
-                        
-                        playInGameSound("crystal_pick_up");
-                        
-                        User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
-                        
-                        mTotalMushroom+=1;
-                        CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
-                        
-                        // For now - activate ghost dwarfs
-                        
-                        // Make all dwarfs tansparent
-                        _boostGhostTimer = 10;//Just enable it
-                        
-                        _mission_AP_GhostDwarfs+=1;
-                        CheckMissionByValue(MissionType_AP_GhostDwarfs,_mission_AP_GhostDwarfs);
+                        // Is the dwarf in the range?
+                        if(ccpDistanceSQ(dwarf->getPosition(), itemToCheck->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
+                        {
+                            // Remove it from game - maybe latter add some special FX
+                            itemToCheck->onDwarfPickUp(dwarf);
+                            
+                            // Clean map from it !!!
+                            this->removeChild(itemToCheck);
+                            mUniversalItems->removeObject(itemToCheck);
+                        }
                     }
                 }
-                
-                /*
-                Mushroom* mushroom = static_cast<Mushroom*>(getChildByTag(kMushroom));
-                
-                if (mushroom!=NULL &&
-                   ccpDistanceSQ(dwarf->getPosition(), mushroom->getPosition()) <= (MUSHROOM_DISTANCE * MUSHROOM_DISTANCE) * GLOBAL_SCALE)
-                {
-                    this->removeChild(mushroom);
-                    //Get some random boost !!!
-                    createRandomBoos(dwarf->getPosition());
-                    
-                    playInGameSound("crystal_pick_up");
-                    
-                    User::getInstance()->getMissionManager().CheckSubMission(SUB_COLLECT_MUSHROOM,1);
-                    
-                    mTotalMushroom+=1;
-                    CheckMissionByValue(MissionType_Mushroom,mTotalMushroom);
-                }
-                */
             }
             
+            //........................................................................
+            
+            // Is this dwarf forced to remove from game?
             if (dwarf && dwarf->getForceRemove())
             {
                 CheckForDwarfCancel(dwarf);
@@ -13296,7 +11609,7 @@ void GameScene::updateIntroAnimations(float delta)
 	{
 		IntroAnimation* introAnimation = static_cast<IntroAnimation*>(_introAnimations->objectAtIndex(introAnimationIndex));
 		
-		introAnimation->update(delta);
+        if(introAnimation) introAnimation->update(delta);
 	}
 }
 
@@ -15765,6 +14078,17 @@ void GameScene::generateCrystalSpecial(int theX,int theY)
     _crystals->addObject(crystal);
     crystal->onFinishedIntro();
     */
+    
+    int theCrystalID = rand()%4;
+//    CCLog("Plant will spawn crystal with ID:%i",theCrystalID);
+    
+    Crystal* crystal = Crystal::create(this,theCrystalID,mCurrentMission.ItemTimeOnMap);
+    crystal->setPosition(ccp(theX,theY));
+    
+    addChild(crystal, getSpriteOrderZ(crystal->getPositionY()));
+    _crystals->addObject(crystal);
+    
+    crystal->onFinishedIntro();
 }
 
 void GameScene::removeCrystal(Crystal* crystal)
@@ -15786,84 +14110,6 @@ void GameScene::removeDiamond(Diamond* diamond)
 {
 	this->removeChild(diamond);
 	_diamonds->removeObject(diamond);
-}
-
-void GameScene::generateMushroom(float theTime)
-{
-    Mushroom* mushroom = Mushroom::create(this,theTime);
-    
-    _mushroomSpawnPositions.clear();
-    for (int i = 0;i<8;i++)
-    {
-        if (i != _mushroomLastSpawnBlockID)
-            _mushroomSpawnPositions.push_back(i);
-    }
-    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-    
-    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
-    
-    mushroom->setPosition(aPosition);
-    
-    addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
-    _mushrooms->addObject(mushroom);
-    
-    //---------------------------------------------------------------
-    //The old stuff
-    /*
-//    bool aCanBeActivated = true;
-    int aCanActivateCount = 0;
-    
-    //Check if we can generate mushroom !!!
-    Machine_Ghost* aMachineG = static_cast<Machine_Ghost*>(getChildByTag(1020));
-    if(aMachineG->mCanBeActivated)
-        aCanActivateCount+=1;
-    
-    Machine_Enemies* aMachineE = static_cast<Machine_Enemies*>(getChildByTag(1030));
-    if(aMachineE->mCanBeActivated)
-        aCanActivateCount+=1;
-    
-    if(aCanActivateCount==0)
-    {
-        _mushroomTimer = 5;//Check after 5 sec again !!!
-        return;
-    }
-    
-//    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    
-    Mushroom* mushroom = Mushroom::create(this);
-    mushroom->setTag(kMushroom);
-    
-    //Get some position
-//    CCPoint position = ccp(rand() % ((int)visibleSize.width+40),
-//                           rand() % ((int)visibleSize.height+40));
-//    
-//    while (getMask(position.x, position.y))
-//    {
-//        position = ccp(rand() % ((int)visibleSize.width+40),
-//                       rand() % ((int)visibleSize.height+40));
-//    }
-//    
-//    mushroom->setPosition(position.x,position.y);
-    
-    //////////////////////////////////////////////////////////////////////
-    //Create the possible spawn points,except last one
-    
-    _mushroomSpawnPositions.clear();
-    for (int i = 0;i<8;i++)
-    {
-        if (i != _mushroomLastSpawnBlockID)
-            _mushroomSpawnPositions.push_back(i);
-    }
-    _mushroomLastSpawnBlockID = _mushroomSpawnPositions[rand()%_mushroomSpawnPositions.size()];
-    
-    CCPoint aPosition = getRandomPointFromBlock(_mushroomLastSpawnBlockID);
-    
-    mushroom->setPosition(aPosition);
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    addChild(mushroom, getSpriteOrderZ(mushroom->getPositionY()));
-    */
 }
 
 void GameScene::generateEffectSpecial(int theX,int theY, int theType)
@@ -17628,6 +15874,8 @@ void GameScene::stopInGameSound(const char* theName,bool theForce)
 void GameScene::onEnterTransitionDidFinish()
 {
     CreateMachines();
+    
+    return; //[Debug] disabled music
     
     if(!CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying())
         CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music/music_GriegLoop.mp3", true);
@@ -19485,6 +17733,9 @@ void GameScene::CheckMissionByValue(int theType,float theValue)
 
 void GameScene::SetMasterTrollAnimation(const char* theAnimation)
 {
+    _MasterTrollBase->setAnimationByName(theAnimation);
+    
+    /*
     if(strcmp(theAnimation,"idle") == 0)
     {
         //Do the idle stuff
@@ -19492,6 +17743,9 @@ void GameScene::SetMasterTrollAnimation(const char* theAnimation)
     }
     else if(strcmp(theAnimation,"HitGround") == 0)
     {
+        // Now we have correct Master Troll which can be used :)
+        _MasterTrollBase->setAnimationByName(theAnimation);
+        
         // Just jump up and down
         CCMoveTo* aJump = CCMoveTo::create(0.25f,ccp(64,420));
         CCMoveTo* aJumpBack = CCMoveTo::create(0.25f,ccp(64,360));
@@ -19500,6 +17754,7 @@ void GameScene::SetMasterTrollAnimation(const char* theAnimation)
         
         _MasterTrollBase->runAction(aJumps);
     }
+    */
 }
 
 void GameScene::OnMasterHitGroundSFX(CCNode* sender)
@@ -19507,17 +17762,24 @@ void GameScene::OnMasterHitGroundSFX(CCNode* sender)
     playInGameSound("meteorite_hit_ground");
 }
 
-void GameScene::SetMasterTrollAction(int theType)
+void GameScene::CreateTheRealTrollAction(cocos2d::CCObject *sender)
 {
+    CCSprite* aSprite = static_cast<CCSprite*>(sender);
+    CCString* state = (CCString*)aSprite->getUserObject();
+    
+    removeChild(aSprite,true);
+    
+    int theType = state->intValue();
+    
     mMasterTrollLastActionID = theType;
     
     // All the actions that master can do !!!
     if(theType == MASTER_ACTION_CONFUSE)
     {
         // Play the hit ground animation
-        SetMasterTrollAnimation("HitGround");
+        SetMasterTrollAnimation("SmashGround");
         // Set the action after some delay on animation
-        CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+        CCDelayTime* aDelay = CCDelayTime::create(2.0f);
         CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Confusion));
         CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
         
@@ -19526,7 +17788,7 @@ void GameScene::SetMasterTrollAction(int theType)
     else if(theType == MASTER_ACTION_SPAWN_TRAP)
     {
         // Play the hit ground animation
-        SetMasterTrollAnimation("idle");
+        SetMasterTrollAnimation("Magic");
         // Set the action after some delay on animation
         CCDelayTime* aDelay = CCDelayTime::create(1.0f);
         CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::generateEffect));
@@ -19544,9 +17806,9 @@ void GameScene::SetMasterTrollAction(int theType)
         mCurrentBulletType = theType;
         
         // Play the hit ground animation
-        SetMasterTrollAnimation("HitGround");
+        SetMasterTrollAnimation("Shoot");
         // Set the action after some delay on animation
-        CCDelayTime* aDelay = CCDelayTime::create(0.5f);
+        CCDelayTime* aDelay = CCDelayTime::create(0.75f);
         CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Bullet));
         CCSequence* aSeq = CCSequence::create(aDelay,aFunction,NULL);
         
@@ -19561,7 +17823,7 @@ void GameScene::SetMasterTrollAction(int theType)
         
         // Try to spawn a troll?
         // Play the hit ground animation
-        SetMasterTrollAnimation("idle");
+        SetMasterTrollAnimation("HitGround");
         // Set the action after some delay on animation
         CCDelayTime* aDelay = CCDelayTime::create(1.0f);
         CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::MasterAction_Enemy));
@@ -19569,6 +17831,51 @@ void GameScene::SetMasterTrollAction(int theType)
         
         _MasterTrollBase->runAction(aSeq);
     }
+}
+
+void GameScene::SetMasterTrollAction(int theType)
+{
+    // 1st add it to quae - pre warning stuff - then really do it !!!
+    CCSprite* aPreWarnSprite;// = CCSprite::create();
+    
+    if(theType == MASTER_ACTION_BULLET || theType == MASTER_ACTION_BULLET_ICE || theType == MASTER_ACTION_BULLET_POISON || theType == MASTER_ACTION_BULLET_STRAIGHT || theType == MASTER_ACTION_BULLET_SPLIT_MIDDLE || theType == MASTER_ACTION_BULLET_ZIGZAG || theType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || theType == MASTER_ACTION_BULLET_ONE_LINE || theType == MASTER_ACTION_BULLET_SPLIT_UP)
+    {
+        aPreWarnSprite = CCSprite::create("InGameIcons/BubbleBullet.png");
+    }
+    else if(theType == MASTER_ACTION_CONFUSE)
+    {
+        aPreWarnSprite = CCSprite::create("InGameIcons/BubbleTroll.png");
+    }
+    else if(theType == MASTER_ACTION_SPAWN_TRAP)
+    {
+        aPreWarnSprite = CCSprite::create("InGameIcons/BubbleTrap.png");
+    }
+    else if(theType == MASTER_ACTION_TROLL)
+    {
+        // This one needs more deeper stuff
+        aPreWarnSprite = CCSprite::create("InGameIcons/BubbleGoblin.png");
+    }
+    else{
+        return; //No clue what action is this !!!
+    }
+    
+    aPreWarnSprite->setUserObject(CCString::createWithFormat("%i",theType));
+    
+    int aWarningX = _MasterTrollBase->getPositionX();
+    int aWarningY = _MasterTrollBase->getPositionY()+120;
+    
+    aPreWarnSprite->setPosition(ccp(aWarningX,aWarningY));
+    aPreWarnSprite->setScale(0);
+    addChild(aPreWarnSprite,kHUD_Z_Order-1);
+    
+    // Hide it after some time !!!
+    CCScaleTo* aScaleWarn = CCScaleTo::create(0.5f, 1.0f);
+    CCEaseElasticOut* aScaleEase = CCEaseElasticOut::create(aScaleWarn);
+    CCDelayTime* aDelay = CCDelayTime::create(1.0f);
+    CCCallFuncN* aFunction = CCCallFuncN::create(this, callfuncN_selector(GameScene::CreateTheRealTrollAction));
+    CCSequence* aWarnSeq = CCSequence::create(aScaleEase,aDelay,aFunction,NULL);
+    
+    aPreWarnSprite->runAction(aWarnSeq);
 }
 
 bool GameScene::CanSpawnMasteTrollExtraEnemy()
@@ -19720,6 +18027,9 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     cocos2d::CCArray* _dwarvesToAttack = CCArray::create();
     _dwarvesToAttack->retain();
     
+    int aBulletX = _MasterTrollBase->getPositionX()+54;
+    int aBulletY = _MasterTrollBase->getPositionY()+30;
+    
     // Collect all far dwarfs !!!
     for (int dwarfIndex = _dwarves->count() - 1; dwarfIndex >= 0; --dwarfIndex)
     {
@@ -19738,6 +18048,13 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     }
     
     if(_dwarvesToAttack->count() == 0){
+        //Create particle that nothing gone good
+        
+        CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+        p->setPosition(aBulletX, aBulletY);
+        p->setAutoRemoveOnFinish(true);
+        addChild(p,kHUD_Z_Order-1);
+        
         return;//No luck
     }
     
@@ -19751,6 +18068,11 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         // Check what should we do to the dwarf !!!
         
         dwarf->setAction(mCurrentBulletType);
+        
+        CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
+        p->setPosition(aBulletX, aBulletY);
+        p->setAutoRemoveOnFinish(true);
+        addChild(p,kHUD_Z_Order-1);
         
         return;
     }
@@ -19767,7 +18089,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
 
     
     TrollBullet* aBullet = TrollBullet::create(this,mCurrentBulletType);
-    aBullet->setPosition(_MasterTrollBase->getPositionX(),_MasterTrollBase->getPositionY());
+    aBullet->setPosition(aBulletX,aBulletY);
     aBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
     aBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
     aBullet->_speedAddValue = (aBullet->_speedMax-aBullet->_speed)*0.1;
@@ -19781,7 +18103,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
     if(mCurrentBulletType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING)
 	{
 		TrollBullet* bBullet = TrollBullet::create(this,mCurrentBulletType);
-        bBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        bBullet->setPosition(aBulletX,aBulletY);
         bBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         bBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         bBullet->_speedAddValue = (bBullet->_speedMax-bBullet->_speed)*0.1;
@@ -19789,7 +18111,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         bBullet->setAngle(5.8);//90,90 //5.8
             
         TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
-        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->setPosition(aBulletX,aBulletY);
         cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
@@ -19806,7 +18128,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
 	if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_MIDDLE)
 	{
 		TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
-        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->setPosition(aBulletX,aBulletY);
         cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
@@ -19822,7 +18144,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
 	if(mCurrentBulletType == MASTER_ACTION_BULLET_SPLIT_UP)
 	{
 		TrollBullet* cBullet = TrollBullet::create(this,mCurrentBulletType);
-        cBullet->setPosition(aBullet->getPositionX(),aBullet->getPositionY());
+        cBullet->setPosition(aBulletX,aBulletY);
         cBullet->_speed = mCurrentMission.MT_Bullet_Speed_Min;
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
@@ -19946,6 +18268,10 @@ void GameScene::UpdateMasterTroll(float delta)
 //    if(mCurrentMission.MT_Event_ForceSpawnEnemy>0){
 //        // Check by time if enemy was spawned here !!!
 //    }
+    
+    if(_MasterTrollBase != NULL){
+        _MasterTrollBase->update(delta);
+    }
     
     if(MasterTroll_CheckForEnemy_Timer>0){
         MasterTroll_CheckForEnemy_Timer-=delta;
@@ -20570,7 +18896,7 @@ void GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)
 
 void GameScene::StartIceBlitz()//Intro before big freezing
 {
-	SetMasterTrollAnimation("HitGround");
+	SetMasterTrollAnimation("SmashGround");
 	
 	CCDelayTime* aDelay = CCDelayTime::create(2.0f);
     CCCallFuncN* aFunc1 = CCCallFuncN::create(this, callfuncN_selector(GameScene::IceBlitz));
@@ -20804,6 +19130,14 @@ void GameScene::CreateBattleArena()
     mMasterTroll_CurrentHP = mMasterTroll_HP;
     mMasterTroll_CurrentAttack = mMasterTroll_Attack = 0;
     
+    mPowerItem_CrystalRefiner = 0;
+    if(User::getInstance()->getItemDataManager().isPowerItemUnlocked(ITEM_CRYSTAL_REFINERY)){
+        int theLevel = User::getInstance()->getItemDataManager().getPowerItemLevel(ITEM_CRYSTAL_REFINERY);
+        mPowerItem_CrystalRefiner = User::getInstance()->getItemDataManager().getPowerByID(ITEM_CRYSTAL_REFINERY).upgrade_power[theLevel-1];
+//        CCLog("mPowerItem_CrystalRefiner:%f",mPowerItem_CrystalRefiner);
+    }
+    
+    
     // The progress bar !!!
     // Dwarf king or electro machine
     CCSize aScreenSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -20916,6 +19250,8 @@ void GameScene::UpdateSmoothBattleBars(float delta)
     {
         if(mMasterTroll_CurrentAttack != mMasterTroll_Attack)
         {
+//            CCLog("mMasterTroll_Attack:%d | mCurrentSpellCharge:%d",mMasterTroll_Attack,mCurrentSpellCharge);
+            
             if(mMasterTroll_Attack == 0 && mMasterTroll_CurrentAttack>0)
             {
                 mMasterTroll_CurrentAttack -= delta*(float)(mCurrentSpellCharge/2);
@@ -21004,43 +19340,55 @@ void GameScene::UpdateBattleLabel()
                 // Spawn near cave ???
                 CCPoint spawnSpot;
                 
-                // The offset from cave center
-                int aCaveOff_X = (rand()%50+50);
-                int aCaveOff_Y = (rand()%50+50);
-                
-                int aPositionID = rand()%2;
-                if(aPositionID == 0){
-                    if(_SpawnOrangeDwarf){
-                        spawnSpot.x = _caveTall->getPositionX();
-                        spawnSpot.y = _caveTall->getPositionY();
-                    }
-                    else
-                    {
-                        spawnSpot.x = _caveFat->getPositionX();
-                        spawnSpot.y = _caveFat->getPositionY();
-                    }
+                // Check if mission does not have some precise cords for spawn !!!
+                if(mCurrentMission.SpellSpawnPoints.size()>0)
+                {
+                    // Do the forced stuff
+                    int theSpawnRandomSpot = rand()%(mCurrentMission.SpellSpawnPoints.size()/2);
+                    spawnSpot.x = mCurrentMission.SpellSpawnPoints[theSpawnRandomSpot*2];
+                    spawnSpot.y = mCurrentMission.SpellSpawnPoints[theSpawnRandomSpot*2+1];
                 }
-                else{
-                    if(_SpawnBlueDwarf){
-                        spawnSpot.x = _caveFat->getPositionX();
-                        spawnSpot.y = _caveFat->getPositionY();
+                else
+                {
+                    // The offset from cave center
+                    int aCaveOff_X = (rand()%50+50);
+                    int aCaveOff_Y = (rand()%50+50);
+                    
+                    int aPositionID = rand()%2;
+                    if(aPositionID == 0){
+                        if(_SpawnOrangeDwarf){
+                            spawnSpot.x = _caveTall->getPositionX();
+                            spawnSpot.y = _caveTall->getPositionY();
+                        }
+                        else
+                        {
+                            spawnSpot.x = _caveFat->getPositionX();
+                            spawnSpot.y = _caveFat->getPositionY();
+                        }
                     }
-                    else
-                    {
-                        spawnSpot.x = _caveTall->getPositionX();
-                        spawnSpot.y = _caveTall->getPositionY();
+                    else{
+                        if(_SpawnBlueDwarf){
+                            spawnSpot.x = _caveFat->getPositionX();
+                            spawnSpot.y = _caveFat->getPositionY();
+                        }
+                        else
+                        {
+                            spawnSpot.x = _caveTall->getPositionX();
+                            spawnSpot.y = _caveTall->getPositionY();
+                        }
                     }
-                }
-                
-                // Quick stuff for more random
-                int aNegativeOrPositive = rand()%2;
-                if(aNegativeOrPositive == 0){
-                    spawnSpot.x-=aCaveOff_X;
-                    spawnSpot.y-=aCaveOff_Y;
-                }
-                else{
-                    spawnSpot.x+=aCaveOff_X;
-                    spawnSpot.y+=aCaveOff_Y;
+                    
+                    // Quick stuff for more random
+                    int aNegativeOrPositive = rand()%2;
+                    if(aNegativeOrPositive == 0){
+                        spawnSpot.x-=aCaveOff_X;
+                        spawnSpot.y-=aCaveOff_Y;
+                    }
+                    else{
+                        spawnSpot.x+=aCaveOff_X;
+                        spawnSpot.y+=aCaveOff_Y;
+                    }
+
                 }
                 
                 // Puff

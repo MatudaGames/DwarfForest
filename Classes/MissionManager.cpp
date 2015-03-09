@@ -463,17 +463,7 @@ void MissionManager::Donwloaded()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //For MissionType_DwarfCount, number of dwarfs to win a mission
-		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
-		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
-		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
-		//For MissionType_TimeUpdate
-		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
-		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
-		//Some Extra store stuff
-		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
-        
-		//---------------------------------------------------------------------------------------------------
+        //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
         //        const char* test = missionDict->valueForKey("ItemInterval")->getCString();
@@ -2707,15 +2697,6 @@ void MissionManager::AddExtraDownloadedMissions_1()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //For MissionType_DwarfCount, number of dwarfs to win a mission
-		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
-        //For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
-		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
-		//For MissionType_TimeUpdate
-		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
-		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
-		//Some Extra store stuff
-		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
@@ -3480,15 +3461,6 @@ void MissionManager::AddExtraDownloadedMissions_2()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //For MissionType_DwarfCount, number of dwarfs to win a mission
-		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
-		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
-		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
-		//For MissionType_TimeUpdate
-		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
-		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
-        //Some Extra store stuff
-		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
@@ -4252,15 +4224,6 @@ void MissionManager::AddExtraDownloadedMissions_3()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //For MissionType_DwarfCount, number of dwarfs to win a mission
-		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
-        //For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
-		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
-		//For MissionType_TimeUpdate
-		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
-		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
-		//Some Extra store stuff
-		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //
         
         //---------------------------------------------------------------------------------------------------
@@ -4729,7 +4692,7 @@ void MissionManager::OnDownloadSpecialMissions()
             curl_easy_setopt(pCurl,CURLOPT_FILE,pFile);                   //The specified file write
             curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, pWriteCallback);//Callback function to write data
             curl_easy_setopt(pCurl, CURLOPT_VERBOSE, true);                //Let CURL report every suddenness
-            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 60);                  //Setting the timeout
+            curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 30);                  //Setting the timeout
             curl_easy_setopt(pCurl, CURLOPT_NOPROGRESS,0L);
             curl_easy_setopt(pCurl, CURLOPT_PROGRESSFUNCTION, DownProgresss);//Specify a callback function
             curl_easy_setopt(pCurl, CURLOPT_SSL_VERIFYPEER,false);
@@ -5234,7 +5197,7 @@ void MissionManager::OnDownloadedSpecial()
                         theQuadAction.flame_angle = quadSubDict->valueForKey("flame_angle")->intValue();
                         theQuadAction.flame_radius = quadSubDict->valueForKey("flame_radius")->intValue();
                         theQuadAction.flame_active_time = quadSubDict->valueForKey("flame_active_time")->intValue();
-                        theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue();
+                        theQuadAction.flame_rotate_speed = quadSubDict->valueForKey("flame_rotate_speed")->intValue()*0.001;
                         
                         //Special stuff for more precise stuff
                         if(i == 1)
@@ -5338,15 +5301,6 @@ void MissionManager::OnDownloadedSpecial()
         mission->MT_Snipe = missionDict->valueForKey("MT_Snipe")->intValue();
         mission->MT_Snipe_Delay = missionDict->valueForKey("MT_Snipe_Delay")->intValue();
         
-        //For MissionType_DwarfCount, number of dwarfs to win a mission
-		mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
-		//For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
-		mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
-		//For MissionType_TimeUpdate
-		mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
-		mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
-        //Some Extra store stuff
-		mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         //---------------------------------------------------------------------------------------------------
         // Crystal spawn stuff
         
@@ -5369,8 +5323,26 @@ void MissionManager::OnDownloadedSpecial()
         mission->ItemNumProbs = SplitString(missionDict->valueForKey("ItemNumProbs")->getCString(),',');
         mission->ItemTypeProbs = SplitString(missionDict->valueForKey("ItemTypeProbs")->getCString(),',');
         
+        if(missionDict->valueForKey("SpellForcedSpots")->compare("") != 0) mission->SpellSpawnPoints = SplitString(missionDict->valueForKey("SpellForcedSpots")->getCString(),',');
         
         //---------------------------------------------------------------------------------------------------
+        
+        // Set default values
+        mission->Task_DwarfWinCon = 0;
+        mission->Task_CrystalsWinCon = 0;
+        mission->Task_SurviveTime = 0;
+        mission->Task_SurviveLives = 0;
+        mission->STORE_Booster_DwarfPrice = 0;
+        
+        //For MissionType_DwarfCount, number of dwarfs to win a mission
+        if(missionDict->valueForKey("Task_DwarfWinCon")->compare("") != 0) mission->Task_DwarfWinCon = missionDict->valueForKey("Task_DwarfWinCon")->intValue();
+        //For MissionType_MissionType_CrystalCollect, number of crystals to win a mission
+        if(missionDict->valueForKey("Task_CrystalsWinCon")->compare("") != 0) mission->Task_CrystalsWinCon = missionDict->valueForKey("Task_CrystalsWinCon")->intValue();
+        //For MissionType_TimeUpdate
+        if(missionDict->valueForKey("Task_SurviveTime")->compare("") != 0) mission->Task_SurviveTime = missionDict->valueForKey("Task_SurviveTime")->intValue();
+        if(missionDict->valueForKey("Task_SurviveLives")->compare("") != 0) mission->Task_SurviveLives = missionDict->valueForKey("Task_SurviveLives")->intValue();
+        //Some Extra store stuff
+        if(missionDict->valueForKey("STORE_Booster_DwarfPrice")->compare("") != 0) mission->STORE_Booster_DwarfPrice = missionDict->valueForKey("STORE_Booster_DwarfPrice")->intValue();
         
         // TEST STUFF
         // The bee stuff
@@ -5489,6 +5461,17 @@ void MissionManager::OnDownloadedSpecial()
         
         if(missionDict->valueForKey("ItemSpecial_Prob")->compare("") != 0) mission->PowerTypeProbs = SplitString(missionDict->valueForKey("ItemSpecial_Prob")->getCString(),',');
         else mission->PowerTypeProbs = std::vector<int>(2,50);
+        
+        if(missionDict->valueForKey("ItemPowerups_Prob")->compare("") != 0) mission->PowerupItemsProbs = SplitString(missionDict->valueForKey("ItemPowerups_Prob")->getCString(),',');
+        else {
+            int defaultInts[] = {30,30,40};
+            mission->PowerupItemsProbs.assign(&defaultInts[0],&defaultInts[0]+3);// = { 30,30,403 }; //std::vector<int>(defaultInts, defaultInts + sizeof(defaultInts) / sizeof(int) );
+        }
+        
+        for(int x=0;x<mission->PowerupItemsProbs.size();x++)
+        {
+            CCLog("Value in PowerItem (%i)=[%i]",x,mission->PowerupItemsProbs[x]);
+        }
         
         
         //------------------------------------------------------------------
