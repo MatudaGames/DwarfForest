@@ -78,6 +78,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/LevelEndMissions.cpp \
                    ../../Classes/MissionScene.cpp \
                    ../../Classes/Rain.cpp \
+                   ../../Classes/ItemDataManager.cpp \
                    ../../Classes/Wind.cpp \
                    ../../Classes/StoreBox.cpp \
                    ../../Classes/LoadingScreen.cpp \
