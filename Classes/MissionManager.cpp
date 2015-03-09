@@ -1935,6 +1935,36 @@ MissionSet MissionManager::GetActiveMission()
     return *aMission;
 }
 
+MissionSet MissionManager::AddDwarfs(int theID)
+{
+	  //Safe check
+    if(mAllMission.size()<=theID)
+    {
+        //Return some dummy mission
+        return *new MissionSet();
+    }
+    
+    MissionSet *aMission = &mAllMission[theID];
+   aMission->Mission_SaveDwarfs=aMission->Mission_SaveDwarfs+1;
+//    MissionSet *aMission = &mAllMission[mCurrentActiveMission];
+    return *aMission;
+}
+
+MissionSet MissionManager::Reset(int theID)
+{
+	  //Safe check
+    if(mAllMission.size()<=theID)
+    {
+        //Return some dummy mission
+        return *new MissionSet();
+    }
+    
+    MissionSet *aMission = &mAllMission[theID];
+    aMission->Mission_SaveDwarfs = aMission->OrginalDwarfCount;
+//    MissionSet *aMission = &mAllMission[mCurrentActiveMission];
+    return *aMission;
+}
+
 int MissionManager::GetActiveMissionID()
 {
 //    if(User::getInstance()->mNewMissionBuild)
@@ -5181,6 +5211,7 @@ void MissionManager::OnDownloadedSpecial()
                         theQuadAction.active_time = quadSubDict->valueForKey("active_time")->intValue();
                         theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
                         theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
+                        mission->TOTEM_Event_Type1 = theQuadAction.event_type;
                     }
                     else if(theQuadAction.type == 2) // The Deadzones
                     {
@@ -5188,12 +5219,13 @@ void MissionManager::OnDownloadedSpecial()
                         theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
                         theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
                         theQuadAction.deadzone_radius = quadSubDict->valueForKey("deadzone_radius")->intValue();
+                        mission->TOTEM_Event_Type2 = theQuadAction.event_type;
                     }
                     else if(theQuadAction.type == 3) // The Projectiles
                     {
                         theQuadAction.event_type = quadSubDict->valueForKey("event_type")->intValue();
                         theQuadAction.activate_time = quadSubDict->valueForKey("activate_time")->intValue();
-                        
+                        mission->TOTEM_Event_Type3 = theQuadAction.event_type;
                         // The bullet part
                         theQuadAction.bullet_distance = quadSubDict->valueForKey("bullet_distance")->intValue();
                         theQuadAction.bullet_amount = quadSubDict->valueForKey("bullet_amount")->intValue();
@@ -5378,6 +5410,7 @@ void MissionManager::OnDownloadedSpecial()
         mission->Mission_SaveDwarfs = 0;
         aDummyVar = missionDict->valueForKey("Task_DwarfCount")->floatValue();
         if(aDummyVar>=1){
+        	mission->OrginalDwarfCount = aDummyVar;
             mission->Mission_SaveDwarfs = aDummyVar;
         }
         

@@ -965,7 +965,7 @@ void PauseScene::menuMainMenuCallback(cocos2d::CCObject *sender)
 {
     if(getChildByTag(1111))
         return;
-    
+    User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID()); 
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
     
     AnalyticX::flurryLogEvent("Game Menu Pause: Exit To Main");

@@ -67,7 +67,7 @@ bool WorldMap::init()
     PanZoomLayer *pzLayer = PanZoomLayer::create();
     this->addChild( pzLayer );
     
-
+	moveBackground = false;
     
     // Add the map layers !!!
     CCSprite *map_1 = CCSprite::create("WorldMap/WorldMapHD_1.png");
@@ -125,6 +125,8 @@ bool WorldMap::init()
     PrepeareSmallMissionScreen();
     
     CreateHud();
+    
+    //ResetStats();
     
     return true;
 }
@@ -330,6 +332,36 @@ void WorldMap::MissionTaskInditificator(int theID)
     	std::stringstream _totemHPReal;
     	_totemHPReal<<int(mCall.TOTEM_HP);
     	_totemHP->setString(_totemHPReal.str().c_str());
+    	
+    	if(mCall.TOTEM_Event_Type1==1)
+    	{
+    	_totemShield = CCLabelTTF::create("Bubble Shield","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	_totemShield->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-80,mSmallMissionScreen->getContentSize().height/1.2-20));//160,700
+		_totemShield->setTag(30010);
+    	_totemShield->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(_totemShield);
+    	}else if (mCall.TOTEM_Event_Type1==2){
+    	_totemShield = CCLabelTTF::create("Spike Shield","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    	_totemShield->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-80,mSmallMissionScreen->getContentSize().height/1.2-20));//160,700
+		_totemShield->setTag(30010);
+    	_totemShield->setColor(ccc3(36,102,102));
+    	mSmallMissionScreen->addChild(_totemShield);	
+    	}
+    	
+    	if(mCall.TOTEM_Event_Type3==1)
+    	{
+    		_totemAttack = CCLabelTTF::create("Bullets","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    		_totemAttack->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-75,mSmallMissionScreen->getContentSize().height/1.2-55));//160,700
+			_totemAttack->setTag(30011);
+    		_totemAttack->setColor(ccc3(36,102,102));
+    		mSmallMissionScreen->addChild(_totemAttack);
+    	}else if (mCall.TOTEM_Event_Type3==2){
+    		_totemAttack = CCLabelTTF::create("Flamethrower","fonts/Marker Felt.ttf", TITLE_FONT_SIZE*0.5, CCSize(250,250), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+    		_totemAttack->setPosition(ccp(mSmallMissionScreen->getContentSize().width/2.0-75,mSmallMissionScreen->getContentSize().height/1.2-55));//160,700
+			_totemAttack->setTag(30011);
+    		_totemAttack->setColor(ccc3(36,102,102));
+    		mSmallMissionScreen->addChild(_totemAttack);
+    	}
     	
     	mSmallMissionScreen->addChild(Tootem);
     	mSmallMissionScreen->addChild(TaskVariables);		
@@ -714,6 +746,11 @@ void WorldMap::MissionTaskInditificator(int theID)
     }
 }
 
+void WorldMap::ResetStats()
+{
+	//mCall = User::getInstance()->getMissionManager().Reset();
+}
+
 void WorldMap::BuyMoreDwarfs()
 {
 	CCLog("Works so far!!!");
@@ -732,50 +769,49 @@ void WorldMap::BuyMoreDwarfs()
         	//mCall = User::getInstance()->getMissionManager().GetMissionByID(WhatMission+1);
 			if(WhatMission == 1)//Identificate what mission number we need
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(0);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(0);
 			mCall.Mission_SaveDwarfs;
 			}else if(WhatMission == 2)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(1);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(1);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 3)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(2);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(2);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 4)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(3);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(3);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 5)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(4);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(4);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 6)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(5);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(5);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 7)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(6);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(6);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 8)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(7);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(7);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 9)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(8);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(8);
 			mCall.Mission_SaveDwarfs;	
 			}else if(WhatMission == 10)
 			{
-			//mCall = User::getInstance()->getMissionManager().AddDwarfs(9);
+			mCall = User::getInstance()->getMissionManager().AddDwarfs(9);
 			mCall.Mission_SaveDwarfs;	
 			}
 			
         	}
 		}
-	
-	
+
 	UpdateStats();
 	
 }
@@ -935,7 +971,7 @@ void WorldMap::PrepeareSmallMissionScreen()
                                                         "WorldMap/NewPregame/ButtonUpgrades.png",
                                                         "WorldMap/NewPregame/ButtonUpgrades.png",
                                                         this,
-                                                        menu_selector(WorldMap::HideMissionScreen));
+                                                        menu_selector(WorldMap::Hud_ShowStore));
     upgradeItem->setTag(1);//Play the level
     upgradeItem->setPosition(ccp(aScreenPlay->getContentSize().width/2.0+300,aScreenPlay->getContentSize().height/3));
     
@@ -983,6 +1019,9 @@ void WorldMap::PrepeareSmallMissionScreen()
 
 void WorldMap::ShowMissionScreen(int theID)
 {
+	moveBackground = true;
+	mSmallMissionScreen->removeChildByTag(30011);
+	mSmallMissionScreen->removeChildByTag(30010);
 	mSmallMissionScreen->removeChildByTag(30009);
 	mSmallMissionScreen->removeChildByTag(30008);
 	mSmallMissionScreen->removeChildByTag(30007);
@@ -1005,9 +1044,13 @@ void WorldMap::ShowMissionScreen(int theID)
 
 void WorldMap::HideMissionScreen(CCObject * pSender)
 {
+	moveBackground = false;
+	//moveBackground = false;
     CCMenuItem* pMenuItem = (CCMenuItem *)(pSender);
     int tag = (int)pMenuItem->getTag();
     
+    mSmallMissionScreen->removeChildByTag(30011);
+    mSmallMissionScreen->removeChildByTag(30010);
     mSmallMissionScreen->removeChildByTag(30009);
     mSmallMissionScreen->removeChildByTag(30008);
     mSmallMissionScreen->removeChildByTag(30007);
@@ -1119,7 +1162,7 @@ void WorldMap::Hud_ShowChallenges(CCObject* sender)
     
     ChallengesScene* challengeLayer = ChallengesScene::create();
     this->addChild(challengeLayer,100);
-    
+    moveBackground = true;
 //    SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
 }
 

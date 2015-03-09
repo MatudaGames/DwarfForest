@@ -67,6 +67,12 @@ public:
     cocos2d::CCPointArray* _movePoints;
     bool _moveInCircle;
     int _moveValue;
+    bool canMove;
+    
+    void letsMove();
+    
+    void AddShootAni();
+    int aCurrentAngle;
     
     bool mTutorialTroll;
     bool mMoveByNodes;

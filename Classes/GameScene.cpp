@@ -3370,6 +3370,8 @@ void GameScene::OnExitWithSpecialMission()
 //        CCDirector::sharedDirector()->replaceScene(transition);
         
 //        CCScene* options = MissionScene::scene();
+		
+		User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID());
         CCScene* options = WorldMap::scene();
         CCTransitionScene* transition = CCTransitionFade::create(0.5f,options,ccBLACK);
         CCDirector::sharedDirector()->replaceScene(transition);
@@ -13042,7 +13044,7 @@ void GameScene::UpdateDwarfSaveLabel()
     
     //Update timer
     std::stringstream theMT_Timer;
-    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left<<"/"<<_mission_dwarfs_spawned;
+    theMT_Timer<<mCurrentMission.Mission_SaveDwarfs<<"/"<<_mission_SaveDwarfs_Left;
     
     mDwarfSaveCounter->setString(theMT_Timer.str().c_str());
 }
@@ -14127,6 +14129,8 @@ void GameScene::lose(bool ignoreMissionSave)
         
 //        CCScene* options = DF::StaticSceneManager::getInstance()->getScene(DF::StaticSceneManager::MISSIONS);
 //        CCScene* options = MissionScene::scene();
+    
+        User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID());
         CCScene* worldMap = WorldMap::scene();
         CCTransitionScene* transition = CCTransitionFade::create(0.5f,worldMap,ccBLACK);
         CCDirector::sharedDirector()->replaceScene(transition);
@@ -14276,6 +14280,8 @@ void GameScene::NewMissionCompleted()
     
     _gamePause = true;
     pauseSchedulerAndActionsRecursive(this,false);
+    
+    User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID()); 
     
     //hide the crystal bar !!! daily
     if(mPopUpPanel != NULL){
@@ -14459,6 +14465,7 @@ void GameScene::NewMissionCompleted()
 
 void GameScene::OnExitWithNewMission()
 {
+	User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID()); 
     User::getInstance()->mCurrentMissionLevel += 1;
     
     removeChildByTag(2014);
@@ -14468,8 +14475,8 @@ void GameScene::OnExitWithNewMission()
     //        CCTransitionScene* transition = CCTransitionSlideInL::create(0.5f, options);
 //    CCTransitionScene* transition = CCTransitionFade::create(0.5f,options,ccBLACK);
 //    CCDirector::sharedDirector()->replaceScene(transition);
-    
-    
+   
+    User::getInstance()->getMissionManager().Reset(User::getInstance()->getMissionManager().GetActiveMissionID()); 
     CCScene* options = WorldMap::scene();
     CCTransitionScene* transition = CCTransitionFade::create(0.5f,options,ccBLACK);
     CCDirector::sharedDirector()->replaceScene(transition);

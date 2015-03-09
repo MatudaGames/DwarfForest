@@ -1,4 +1,5 @@
 #include "PanZoomLayer.h"
+#include "WorldMap.h"
 
 PanZoomLayer::PanZoomLayer()
 {
@@ -71,6 +72,9 @@ void PanZoomLayer::onExit()
 
 void PanZoomLayer::update( float dt )
 {
+	WorldMap* worldMap = static_cast<WorldMap*>(this->getParent());
+    if(worldMap->moveBackground == false)
+    {
     // Skip smoothe panning when dt is high value
     if( dt > 1.0f / 55 )
         return;
@@ -107,11 +111,15 @@ void PanZoomLayer::update( float dt )
             this->setPosition( this->getPosition() + adder * 2.5 * _accelerationFactor );
         }
     }
+	}
 }
 
 
 void PanZoomLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 {
+	WorldMap* worldMaap = static_cast<WorldMap*>(this->getParent());
+	if(worldMaap->moveBackground == false)
+    {
     if( _isHolding ) return;
     
     CCTouch *pTouch;
@@ -126,6 +134,7 @@ void PanZoomLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
     _deltaSum = ccp( 0, 0 );
     _accelerationFactor = 0;
     CCTime::gettimeofdayCocos2d( &_timeStamp, NULL );
+}
 }
 
 

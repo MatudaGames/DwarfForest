@@ -50,6 +50,7 @@ public:
     
     void OnPlayerFinishedMove();
     
+    void ResetStats();
     void BuyMoreDwarfs();
     
     cocos2d::CCMenu* mPlayer;
@@ -59,6 +60,10 @@ public:
     cocos2d::CCLabelTTF * _crystalsLabel;
     cocos2d::CCLabelBMFont * dwarfPrice;
     cocos2d::CCLabelTTF * _totemHP;
+    cocos2d::CCLabelTTF * _totemShield;
+    cocos2d::CCLabelTTF * _totemAttack;
+    
+    bool moveBackground;
     
     int mCurrentMissionID;
     int mLastMissionID;
@@ -78,6 +83,7 @@ public:
     void Hud_ShowChallenges(CCObject* sender);
     void Hud_ShowUpgades(CCObject* sender);
     
+
 };
 
 #endif // __DwarfForest__WorldMap__

@@ -72,6 +72,8 @@ bool Enemy_Bee::init(GameScene* game)
     
     beeWillShoot = false;
     
+    canMove = true;
+    
     _movingToFinish = true;
     _speed = 10;
     _angle = 0;
@@ -198,46 +200,6 @@ void Enemy_Bee::update(float delta)
     
     CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
 	
-	    if(_beeIdleBeforeFire>0){
-        _beeIdleBeforeFire-=delta;
-        bulletCount--;
-        if(_beeIdleBeforeFire<=0){
-            mCatchRadar->setVisible(false);
-            setAnimation(_shootDownAnimation);
-            beeWillShoot = true;
-            _beeIdleBeforeFire = 0;
-            //Fire the bullet !!!
-            CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis.png");
-            aBullet->setPosition(getPosition());
-            CCMoveBy* aMoveBy;
-            aBullet->setFlipX(!_animation->isFlipX());
-            if(!_animation->isFlipX()){
-                aMoveBy = CCMoveBy::create(1.0f,ccp(bullet_speed,0));
-            }
-            else{
-                aMoveBy = CCMoveBy::create(1.0f,ccp(-bullet_speed,0));
-            }
-            
-            //Where will it move???
-            
-            CCRepeatForever* aRepeat = CCRepeatForever::create(aMoveBy);
-            aBullet->runAction(aRepeat);
-            
-            aBullet->setRotation(atan2f(point.y, point.x));
-            if(bulletCount>=2)
-			{
-            _bulletArr->addObject(aBullet);
-            
-            _game->addChild(aBullet);
-            //beeWillShoot = false;
-        	}
-        	
-        	CCLog("Play music [bulletCount]:%i",bulletCount);
-        }
-
-        return;
-    }
-	
 	if (ccpDistanceSQ(point, getPosition()) <= 800)
     {
         if(_moveInCircle){
@@ -264,8 +226,8 @@ void Enemy_Bee::update(float delta)
             }
         }
         bulletCount = 2;
-        _beeIdleBeforeFire = 3;
         setAngle(atan2f(_moveTo.y - y, _moveTo.x - x));
+        _beeIdleBeforeFire = 1,5;//1,5 i hope will be good.
         
         // The radar?
         // Draw the conus from settings
@@ -297,8 +259,86 @@ void Enemy_Bee::update(float delta)
         setAngle(atan2f(point.y - y, point.x - x));
     }
     
+    if(_beeIdleBeforeFire>0){
+        _beeIdleBeforeFire-=delta;
+        bulletCount--;
+        if(_beeIdleBeforeFire<=0){
+            mCatchRadar->setVisible(false);
+            beeWillShoot = true;
+            _beeIdleBeforeFire = 0;
+            //Fire the bullet !!!
+            CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis.png");
+            aBullet->setPosition(getPosition());
+            CCMoveBy* aMoveBy;
+            aBullet->setFlipX(!_animation->isFlipX());
+            /*
+			if(!_animation->isFlipX()){
+                aMoveBy = CCMoveBy::create(bullet_speed,ccp(0, 10));
+            }
+            else{
+                aMoveBy = CCMoveBy::create(1.0f,ccp(bullet_speed,0));
+            }
+            */
+            /*
+            if (_angle < 5.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, 10));
+				aBullet->setRotation(-90);	
+            }else if (_angle < 13.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, -10));
+            	aBullet->setRotation(90);
+            }else if(_angle >= 15.0f * M_PI / 2.0f || _angle < M_PI / 8.0f || _angle < 3.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, 0));
+            	aBullet->setRotation(atan2f(90, 0));	
+            }else if (_angle < 9.0f * M_PI / 8.0f || _angle < 7.0f * M_PI / 8.0f || _angle < 11.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, 0));
+            	aBullet->setRotation(atan2f(-90, 0));
+            }
+            */
+            
+         	if((point.y >=380) || (point.y <=360))
+         	{
+         		if (_angle < 5.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, 10));
+				aBullet->setRotation(90);	
+            }else if (_angle < 13.0f * M_PI / 8.0f){
+            	aMoveBy = CCMoveBy::create(0.1f,ccp(0, -10));
+            	aBullet->setRotation(-90);
+			}
+         	}else{
+         		if(!_animation->isFlipX()){
+                aMoveBy = CCMoveBy::create(0.1f,ccp(10, 0));
+				aBullet->setRotation(180);	
+            	}
+            else{
+                aMoveBy = CCMoveBy::create(0.1f,ccp(-10, 0));
+                aBullet->setRotation(180);
+            	}
+         	}
+            
+            //Where will it move???
+            
+            CCRepeatForever* aRepeat = CCRepeatForever::create(aMoveBy);
+            aBullet->runAction(aRepeat);
+           
+            _bulletArr->addObject(aBullet);
+            canMove = true;
+            _game->addChild(aBullet);
+            //beeWillShoot = false;
+        	
+        	CCDelayTime* aDelay = CCDelayTime::create(2.0f);
+            CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(Enemy_Bee::letsMove));
+            CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+            runAction(aSeq1);
+        	
+        	CCLog("Play music [bulletCount]:%i",bulletCount);
+        }
+
+        return;
+    }
+    
      mGULGUL = 0;
-	
+	if(canMove==false)
+	{
     CCPoint point2 = _movePoints->getControlPointAtIndex(mGULGUL);
    
     CCPoint newPosition = ccp(x + cosf(_angle) * delta * (_speed * _game->getGameSpeed()),
@@ -380,14 +420,12 @@ void Enemy_Bee::update(float delta)
     cocos2d::CCNode::setPosition(newPosition.x,newPosition.y);
     */
     
-    
+	}
 }
 
 void Enemy_Bee::setAngle(float value)
 {
     _angle = wrapTwoPI(value);
-    
-    CCLog("tiek uzskadits lenkis!!!");
         
     //if(_angle>0 || _angle<0){
         //if(!_upAnimation->isFlipX()){
@@ -407,56 +445,102 @@ void Enemy_Bee::setAngle(float value)
     if (_angle >= 15.0f * M_PI / 8.0f || _angle < M_PI / 8.0f)
     {
         //right
-        _downAnimation->setFlipX(false);
-        _downAnimation->setFlipY(false);
+        //_downAnimation->setFlipX(false);
+        //_downAnimation->setFlipY(false);
         //aBullet->setFlipX(false);
-        setAnimation(_downAnimation);
+        //setAnimation(_downAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_downAnimation->setFlipX(false);
+        	_downAnimation->setFlipY(false);
+        	setAnimation(_downAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    	  	_shootDownAnimation->setFlipX(false);
+        	_shootDownAnimation->setFlipY(false);
+    		setAnimation(_shootDownAnimation);	
+    	}
     }
     else if (_angle < 3.0f * M_PI / 8.0f)
     {
         //right up
-        _upAnimation->setFlipX(true);
-        _upAnimation->setFlipY(false);
-        setAnimation(_upAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_upAnimation->setFlipX(true);
+        	_upAnimation->setFlipY(false);
+        	setAnimation(_upAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    	  	_shootUpAnimation->setFlipX(true);
+        	_shootUpAnimation->setFlipY(false);
+    		setAnimation(_shootUpAnimation);	
+    	}
     }
     else if (_angle < 5.0f * M_PI / 8.0f)
     {
         //up
-        setAnimation(_upAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	setAnimation(_upAnimation);
+    	  }else if (_beeIdleBeforeFire<1 || _beeIdleBeforeFire==0){
+    		setAnimation(_shootDownAnimation);	
+    	}
         //aBullet->setFlipX(false);
     }
     else if (_angle < 7.0f * M_PI / 8.0f)
     {
         //left up
-        _upAnimation->setFlipX(false);
-        _upAnimation->setFlipY(false);
-        setAnimation(_upAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_upAnimation->setFlipX(false);
+        	_upAnimation->setFlipY(false);
+        	setAnimation(_upAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    	  	_shootUpAnimation->setFlipX(false);
+        	_shootUpAnimation->setFlipY(false);
+    		setAnimation(_shootUpAnimation);	
+    	}
     }
     else if (_angle < 9.0f * M_PI / 8.0f)
     {
         //left
-        _downAnimation->setFlipX(true);
-        _downAnimation->setFlipY(false);
-        setAnimation(_downAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_downAnimation->setFlipX(true);
+        	_downAnimation->setFlipY(false);
+        	setAnimation(_downAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    	  	_shootDownAnimation->setFlipX(true);
+        	_shootDownAnimation->setFlipY(false);
+    		setAnimation(_shootDownAnimation);	
+    	}
     }
     else if (_angle < 11.0f * M_PI / 8.0f)
     {
         //left down
-        _downAnimation->setFlipX(true);
-        _downAnimation->setFlipY(false);
-        setAnimation(_downAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_downAnimation->setFlipX(true);
+        	_downAnimation->setFlipY(false);
+        	setAnimation(_downAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    	  	_shootDownAnimation->setFlipX(true);
+        	_shootDownAnimation->setFlipY(false);
+    		setAnimation(_shootDownAnimation);	
+    	}
     }
     else if (_angle < 13.0f * M_PI / 8.0f)
     {
         //down
-        setAnimation(_downAnimation);
+        //setAnimation(_downAnimation);
+          if(_beeIdleBeforeFire<=0){
+        	setAnimation(_downAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    		setAnimation(_shootDownAnimation);	
+    	}
     }
     else
    {
         //right down
-        _downAnimation->setFlipX(false);
-        _downAnimation->setFlipY(false);
-        setAnimation(_downAnimation);
+        if(_beeIdleBeforeFire<=0){
+        	_downAnimation->setFlipX(false);
+        	_downAnimation->setFlipY(false);
+        	setAnimation(_downAnimation);
+    	  }else if (_beeIdleBeforeFire>0){
+    		setAnimation(_shootDownAnimation);	
+    	}
    }
 }
 
@@ -484,6 +568,16 @@ void Enemy_Bee::setAnimation(SpriteAnimation* animation)
         // Forced radar update
         //_changedAnimation = true;
 	}
+}
+
+void Enemy_Bee::letsMove()
+{
+	canMove = false;
+}
+
+void Enemy_Bee::AddShootAni()
+{
+	setAnimation(_shootDownAnimation);
 }
 
 void Enemy_Bee::CreateFromMissionParams()
@@ -539,9 +633,9 @@ void Enemy_Bee::SetMissionStuff(MissionTroll theMission)
     _speed = theMission._speed;
     
     _moveInCircle = false;
-    
+   
     if(theMission._circle>0){
-        
+       
         //The params of circles
         float precision = 0;
         float cir = 0;

@@ -916,6 +916,9 @@ void ChallengesScene::HideOneSpinBubble()
 
 void ChallengesScene::RemovePopup()
 {
+	WorldMap* worldMaap = static_cast<WorldMap*>(this->getParent());
+	worldMaap->moveBackground = false;
+
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("Tap_Back").c_str());
     
     mDidFinishEnter = false;
@@ -937,6 +940,7 @@ void ChallengesScene::RemovePopup()
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("Popup_Exit").c_str());
     
     AnalyticX::flurryLogEvent("Menu Clouse: Challenges");
+
 }
 
 void ChallengesScene::RealRemove()

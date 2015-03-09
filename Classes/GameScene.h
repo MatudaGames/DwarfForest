@@ -252,6 +252,7 @@ public:
     void BulletDwarf();
     int mMasterTroll_Bullets;
     
+    
     int _mission_escaped_trolls;
     int _mission_AP_Freezer;
     int _mission_AP_GhostDwarfs;

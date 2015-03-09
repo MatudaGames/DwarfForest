@@ -327,6 +327,8 @@ struct MissionSet
     
     int32_t Mission_KillEnemys;
     
+    int32_t OrginalDwarfCount;
+    
     // The master troll attack stuff
     int32_t MT_Battle_HP;
     int32_t MT_Battle_Damage;
@@ -336,6 +338,9 @@ struct MissionSet
     // The totem stuff
     bool Mission_Totem;
     int32_t TOTEM_HP;
+    int32_t TOTEM_Event_Type1;
+    int32_t TOTEM_Event_Type2;
+    int32_t TOTEM_Event_Type3;
     int32_t TOTEM_PASSIVE_TYPE;
     int32_t TOTEM_RADIUS;
     int32_t TOTEM_x;
@@ -411,6 +416,8 @@ public:
     void OnDownloadedSpecial();
     
     MissionSet GetActiveMission();
+    MissionSet AddDwarfs(int theID);
+    MissionSet Reset(int theID);
     std::string GetSubMissionText(int theMissionID,int theSubMissionID,bool thePause,bool theDone);
     
     void CheckForStuckMission();
