@@ -77,6 +77,8 @@ public:
     bool mTutorialTroll;
     bool mMoveByNodes;
     int mMoveIndex;
+    int mMoveIndex2;
+    int mMoveIndex3;
     bool mMoveClock;
     int mMoveCurrentDir;
     

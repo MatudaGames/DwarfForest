@@ -14,6 +14,7 @@
 #include "Utils.h"
 #include "User.h"
 
+#define kHUD_Z_Order 200
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -2379,7 +2380,7 @@ void Enemy_Totem::CreateSpecialBullet(int theType,int theStartX,int theStartY,in
     aBullet->_distanceActive = theLife;
     aBullet->_angle = theAngle*M_PI/180;//atanhf(30);
     
-    _game->addChild(aBullet, 1000);
+    _game->addChild(aBullet, kHUD_Z_Order-1);
     _game->_bullets->addObject(aBullet);
     
     //-----------------------------------------

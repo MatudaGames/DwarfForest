@@ -99,7 +99,6 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/WorldMap.cpp \
                    ../../Classes/Enemy_Totem.cpp \
                    ../../Classes/Universal_PowerItem.cpp \
-                   ../../Classes/ItemDataManager.cpp \
                    ../../Classes/MasterTroll.cpp \
                    ../../Classes/HelloWorldScene.cpp
 

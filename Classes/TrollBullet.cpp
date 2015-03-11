@@ -151,7 +151,7 @@ bool TrollBullet::init(GameScene* game,int theType)
     _animation = SpriteAnimation::create("Characters/master_troll/mt_bullet.plist");
     _animation->retain();
     _animation->setOpacity(0);
-    addChild(_animation);
+    addChild(_animation, kHUD_Z_Order-1);
     
     CCFadeIn* aFadeIn = CCFadeIn::create(1.0f);
     _animation->runAction(aFadeIn);

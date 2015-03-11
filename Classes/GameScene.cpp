@@ -10208,7 +10208,7 @@ void GameScene::updateDwarfs(float delta)
                     
                     if(mCurrentMission.Task_type ==MissionType_DestroyTotem || mCurrentMission.Task_type ==MissionType_CrystalCollect)
                     {
-                    	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+                    	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()+1<=1 && !mIgnoreDwarfSave){
                     		 lose();
                     	}
                     }
@@ -11057,7 +11057,7 @@ void GameScene::updateDwarfs(float delta)
 				std::stringstream theDwarfsLeft;
             	theDwarfsLeft << _mission_SaveDwarfs_Left;
             	_dwarfsLeftLabel->setString(theDwarfsLeft.str().c_str());
-            	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1 && !mIgnoreDwarfSave){
+            	if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()+1<=1 && !mIgnoreDwarfSave){
                     lose();
                 }
 				}else{
@@ -11293,7 +11293,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=0){
+                    if(_mission_SaveDwarfs_Left <= 0 && _dwarves->count()<=1){
                         // Game over
                         lose();
                     }
@@ -11316,7 +11316,7 @@ void GameScene::updateDwarfs(float delta)
                 
                 if(mCurrentMission.Task_type == MissionType_DwarfSave)
                 {
-                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=0){
+                    if(_mission_SaveDwarfs_Left<=0 && _dwarves->count()<=1){
                         // Game over
                         lose();
                     }
@@ -12890,7 +12890,7 @@ void GameScene::generateDwarfMission(bool theInstant)
     {
         if(_mission_SaveDwarfs_Left<=0){
             // Check if dwarfs on map are 0
-            if(_dwarves->count()+1 <= 0 && _missionCurrentValue<_mission_star_points_1)
+            if(_dwarves->count()+1<= 1 && _missionCurrentValue<_mission_star_points_1)
             {
                 if(getChildByTag(5544) != NULL){
                     return;// Do not come here !!!
@@ -18014,7 +18014,7 @@ void GameScene::CreateBulletByType(int theType,int theStartX,int theStartY)
     }
     
     // Add it now
-    this->addChild(aBullet, 1000);
+    this->addChild(aBullet, kHUD_Z_Order-1);
     _bullets->addObject(aBullet);
     //clear the arr !!!
     _dwarvesToAttack->release();
@@ -18116,10 +18116,10 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->_speedMax = mCurrentMission.MT_Bullet_Speed_Max;
         cBullet->_speedAddValue = (cBullet->_speedMax-cBullet->_speed)*0.1;
         cBullet->setScale(0.7f);
-        cBullet->setAngle(0.6);//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
+        cBullet->setAngle(0.6);//90,90 
             
-        this->addChild(bBullet, 1000);
-        this->addChild(cBullet, 1000);
+        this->addChild(bBullet, kHUD_Z_Order-1);
+        this->addChild(cBullet, kHUD_Z_Order-1);
             
         _bullets->addObject(bBullet);
 		_bullets->addObject(cBullet);
@@ -18136,7 +18136,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         cBullet->setVisible(false);
             
         //this->addChild(bBullet, 1000);
-        this->addChild(cBullet, 1000);
+        this->addChild(cBullet, kHUD_Z_Order-1);
             
         //_bullets->addObject(bBullet);
 		_bullets->addObject(cBullet);
@@ -18153,7 +18153,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         //cBullet->setAngle(atan2f(600 - aBullet->getPositionY(), visibleSize.width - aBullet->getPositionX()));//90,90 -2.75 kreisais apaksejais sturis //1.17 tuvu tam! :D //0.8 v?l tuv?k.,, :D //0.6 pan?k rezult?tu
             
         //this->addChild(bBullet, 1000);
-        this->addChild(cBullet, 1000);
+        this->addChild(cBullet, kHUD_Z_Order-1);
             
         //_bullets->addObject(bBullet);
 		_bullets->addObject(cBullet);
@@ -18182,7 +18182,7 @@ void GameScene::MasterAction_Bullet(cocos2d::CCObject *sender)
         aBullet->_dwarf = dwarf;
     }
     
-    this->addChild(aBullet, 1000);
+    this->addChild(aBullet, kHUD_Z_Order-1);
     _bullets->addObject(aBullet);        
     //clear the arr !!!
     _dwarvesToAttack->release();
@@ -18756,7 +18756,7 @@ void GameScene::BulletDwarf()
     aBullet->setPosition(mMasterTroll->getPositionX(),mMasterTroll->getPositionY());
     aBullet->_dwarf = dwarf;
     
-    this->addChild(aBullet, 1000);
+    this->addChild(aBullet, kHUD_Z_Order-1);
     _bullets->addObject(aBullet); 
     //    CCLOG("Bullet amount 1: %f",_bullets->count());
     
@@ -18786,7 +18786,7 @@ void GameScene::UpdateBullets(float delta)
             CCParticleSystemQuad* p = CCParticleSystemQuad::create("Particles/bullet_explode.plist");
             p->setPosition(troll->getPositionX(), troll->getPositionY());
             p->setAutoRemoveOnFinish(true);
-            addChild(p,1000);
+            addChild(p,kHUD_Z_Order-1);
             
             if(troll->_dwarf != NULL && troll->_dwarf->getChildByTag(MT_BULLET_ID) != NULL){
                 troll->_dwarf->removeChildByTag(MT_BULLET_ID);

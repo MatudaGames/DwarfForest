@@ -198,7 +198,11 @@ void Enemy_Bee::update(float delta)
     float x = getPositionX();
     float y = getPositionY();
     
+    mMoveIndex2 = 0;
+    
     CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
+    CCPoint point2 = _movePoints->getControlPointAtIndex(mMoveIndex2);
+    CCPoint point3 = _movePoints->getControlPointAtIndex(mMoveIndex3+1);
 	
 	if (ccpDistanceSQ(point, getPosition()) <= 800)
     {
@@ -267,7 +271,7 @@ void Enemy_Bee::update(float delta)
             beeWillShoot = true;
             _beeIdleBeforeFire = 0;
             //Fire the bullet !!!
-            CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis.png");
+            CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis2.png");
             aBullet->setPosition(getPosition());
             CCMoveBy* aMoveBy;
             aBullet->setFlipX(!_animation->isFlipX());
@@ -295,14 +299,15 @@ void Enemy_Bee::update(float delta)
             }
             */
             
-         	if((point.y >=380) || (point.y <=360))
+         	if(point2.x == point3.x)
          	{
          		if (_angle < 5.0f * M_PI / 8.0f){
             	aMoveBy = CCMoveBy::create(0.1f,ccp(0, 10));
 				aBullet->setRotation(90);	
-            }else if (_angle < 13.0f * M_PI / 8.0f){
+            }else{
             	aMoveBy = CCMoveBy::create(0.1f,ccp(0, -10));
-            	aBullet->setRotation(-90);
+            	aBullet->setRotation(270);
+            	aBullet->setFlipX(true);
 			}
          	}else{
          		if(!_animation->isFlipX()){
@@ -311,7 +316,7 @@ void Enemy_Bee::update(float delta)
             	}
             else{
                 aMoveBy = CCMoveBy::create(0.1f,ccp(-10, 0));
-                aBullet->setRotation(180);
+                aBullet->setRotation(540);
             	}
          	}
             
@@ -478,7 +483,7 @@ void Enemy_Bee::setAngle(float value)
         if(_beeIdleBeforeFire<=0){
         	setAnimation(_upAnimation);
     	  }else if (_beeIdleBeforeFire<1 || _beeIdleBeforeFire==0){
-    		setAnimation(_shootDownAnimation);	
+    		setAnimation(_shootUpAnimation);	
     	}
         //aBullet->setFlipX(false);
     }
