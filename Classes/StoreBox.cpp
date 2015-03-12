@@ -2161,12 +2161,12 @@ void StoreBox::CheckSpellButtons(bool OnlySpells, bool OnlyPowers)
     
     float fontSize;
     
-    for(int i=0;i<mBaseShop->getChildrenCount();i++)
+    for(int i=0;i<mBase->getChildrenCount();i++)
     {
         //..................................................................
         // The powerup part !!!
             
-        aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i+1000); // The powerup tag 1000
+        aButtonBase = (CCSprite*)mBase->getChildByTag(i+1000); // The powerup tag 1000
         
         if(aButtonBase != NULL && OnlyPowers == true)
         {
@@ -2400,7 +2400,7 @@ void StoreBox::CheckSpellButtons(bool OnlySpells, bool OnlyPowers)
         //..................................................................
         // The spell part !!!
         
-        aButtonBase = (CCSprite*)mBaseShop->getChildByTag(i+100); // The spell tag 100
+        aButtonBase = (CCSprite*)mBase->getChildByTag(i+100); // The spell tag 100
         
         if(aButtonBase != NULL && OnlySpells == true)
         {
