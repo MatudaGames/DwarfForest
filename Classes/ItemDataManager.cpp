@@ -12,6 +12,11 @@
 #include "Utils.h"
 #include <algorithm>
 
+int CHARGE_DWARF_ENTER_CAVE = 30;
+int CHARGE_CRYSTAL_BLUE = 20;
+int CHARGE_CRYSTAL_GREEN = 10;
+int CHARGE_CRYSTAL_RED = 30;
+int CHARGE_CRYSTAL_YELLOW = 50;
 
 ItemDataManager::ItemDataManager()
 {
@@ -299,6 +304,28 @@ void ItemDataManager::OnDownloadedData()
             }
             
             std::sort(mPowerDataVector.begin(), mPowerDataVector.end(),sortByID_Powers);
+        }
+        else if(aPathValue.compare("GlobalValues") == 0)
+        {
+            // Some default values that can be changed if needed !!!
+            CCLog("CHARGE_DWARF_ENTER_CAVE Before: %i",CHARGE_DWARF_ENTER_CAVE);
+            
+            if(missionDict->valueForKey("CHARGE_DWARF_ENTER_CAVE")->compare("") != 0){
+                CHARGE_DWARF_ENTER_CAVE = missionDict->valueForKey("CHARGE_DWARF_ENTER_CAVE")->intValue();
+                CCLog("CHARGE_DWARF_ENTER_CAVE After: %i",CHARGE_DWARF_ENTER_CAVE);
+            }
+            if(missionDict->valueForKey("CHARGE_CRYSTAL_BLUE")->compare("") != 0){
+                CHARGE_CRYSTAL_BLUE = missionDict->valueForKey("CHARGE_CRYSTAL_BLUE")->intValue();
+            }
+            if(missionDict->valueForKey("CHARGE_CRYSTAL_GREEN")->compare("") != 0){
+                CHARGE_CRYSTAL_GREEN = missionDict->valueForKey("CHARGE_CRYSTAL_GREEN")->intValue();
+            }
+            if(missionDict->valueForKey("CHARGE_CRYSTAL_RED")->compare("") != 0){
+                CHARGE_CRYSTAL_RED = missionDict->valueForKey("CHARGE_CRYSTAL_RED")->intValue();
+            }
+            if(missionDict->valueForKey("CHARGE_CRYSTAL_YELLOW")->compare("") != 0){
+                CHARGE_CRYSTAL_YELLOW = missionDict->valueForKey("CHARGE_CRYSTAL_YELLOW")->intValue();
+            }
         }
     }
     

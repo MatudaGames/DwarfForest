@@ -5828,7 +5828,9 @@ void GameScene::dwarfEnterDoor(bool theFat, Dwarf* theDwarf)
     
     if(mAttackFunctionalActive)
     {
-        mMasterTroll_Attack+=ATTACK_BAR_DWARF_ENTER_CAVE;
+//        mMasterTroll_Attack+=ATTACK_BAR_DWARF_ENTER_CAVE;
+        CCLog("CHARGE_DWARF_ENTER_CAVE: %i",CHARGE_DWARF_ENTER_CAVE);
+        mMasterTroll_Attack+=CHARGE_DWARF_ENTER_CAVE;
         UpdateBattleLabel();
     }
     
@@ -10779,19 +10781,19 @@ void GameScene::updateDwarfs(float delta)
                         {
                             if(crystal->_color == CRYSTAL_COLOR_BLUE) {
 //                                mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalDoublerValue; // Old stuff
-                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_BLUE+(ATTACK_BAR_CRYSTAL_BLUE*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (CHARGE_CRYSTAL_BLUE+(CHARGE_CRYSTAL_BLUE*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
                             }
                             else if(crystal->_color == CRYSTAL_COLOR_GREEN) {
                                 //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalDoublerValue;
-                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_GREEN+(ATTACK_BAR_CRYSTAL_GREEN*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (CHARGE_CRYSTAL_GREEN+(CHARGE_CRYSTAL_GREEN*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
                             }
                             else if(crystal->_color == CRYSTAL_COLOR_RED){
                                 //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalDoublerValue;
-                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_RED+(ATTACK_BAR_CRYSTAL_RED*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (CHARGE_CRYSTAL_RED+(CHARGE_CRYSTAL_RED*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
                             }
                             else if(crystal->_color == CRYSTAL_COLOR_YELLOW){
                                 //mMasterTroll_Attack+=ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalDoublerValue;
-                                mMasterTroll_Attack += (ATTACK_BAR_CRYSTAL_YELLOW+(ATTACK_BAR_CRYSTAL_YELLOW*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
+                                mMasterTroll_Attack += (CHARGE_CRYSTAL_YELLOW+(CHARGE_CRYSTAL_YELLOW*mPowerItem_CrystalRefiner/100))*mPowerItem_CrystalDoublerValue;
                             }
                             UpdateBattleLabel();
                         }
