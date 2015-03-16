@@ -248,6 +248,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		751332461AA4E4F3004669B8 /* Universal_PowerItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */; };
+		752481811AACB50500E547C8 /* GameTutorial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7524817F1AACB50500E547C8 /* GameTutorial.cpp */; };
 		752F543B1A02D248007A817F /* AdvancedAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752F54391A02D248007A817F /* AdvancedAnimation.cpp */; };
 		753502BF1A89308000758EC8 /* Enemy_Totem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753502BD1A89308000758EC8 /* Enemy_Totem.cpp */; };
 		753D4A721AAA493400B7F0F7 /* MasterTroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 753D4A701AAA493400B7F0F7 /* MasterTroll.cpp */; };
@@ -890,6 +891,8 @@
 		37C62C0718E156AE00D16FC4 /* ExtensionExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionExport.h; sourceTree = "<group>"; };
 		751332441AA4E4F3004669B8 /* Universal_PowerItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Universal_PowerItem.cpp; sourceTree = "<group>"; };
 		751332451AA4E4F3004669B8 /* Universal_PowerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Universal_PowerItem.h; sourceTree = "<group>"; };
+		7524817F1AACB50500E547C8 /* GameTutorial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTutorial.cpp; sourceTree = "<group>"; };
+		752481801AACB50500E547C8 /* GameTutorial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTutorial.h; sourceTree = "<group>"; };
 		752F54391A02D248007A817F /* AdvancedAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdvancedAnimation.cpp; sourceTree = "<group>"; };
 		752F543A1A02D248007A817F /* AdvancedAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAnimation.h; sourceTree = "<group>"; };
 		753502BD1A89308000758EC8 /* Enemy_Totem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy_Totem.cpp; sourceTree = "<group>"; };
@@ -1826,6 +1829,8 @@
 				75BCB16619E9238D000C7C65 /* Wind.h */,
 				75B12F861A3F8F3C00E8101A /* WorldMap.cpp */,
 				75B12F871A3F8F3C00E8101A /* WorldMap.h */,
+				7524817F1AACB50500E547C8 /* GameTutorial.cpp */,
+				752481801AACB50500E547C8 /* GameTutorial.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -2830,6 +2835,7 @@
 				15A3DA5C1682F826002FB0C5 /* CCTableViewCell.cpp in Sources */,
 				75BCB10019E92383000C7C65 /* HighScore.cpp in Sources */,
 				15A3DA5D1682F826002FB0C5 /* HttpClient.cpp in Sources */,
+				752481811AACB50500E547C8 /* GameTutorial.cpp in Sources */,
 				15C0B558196D412F007F909D /* CCTween.cpp in Sources */,
 				15A3DA5E1682F826002FB0C5 /* CCPhysicsDebugNode.cpp in Sources */,
 				75BCB10719E92383000C7C65 /* LevelEndMissions.cpp in Sources */,

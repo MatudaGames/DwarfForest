@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "12862"
-            endingLineNumber = "12862"
-            landmarkName = "GameScene::generateGoblin(int theX,int theY,float theRadius)"
+            startingLineNumber = "12890"
+            endingLineNumber = "12890"
+            landmarkName = "GameScene::generateHidra(int theX,int theY,float theRadius)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13075"
-            endingLineNumber = "13075"
+            startingLineNumber = "13103"
+            endingLineNumber = "13103"
             landmarkName = "GameScene::generateDwarf(int theType,int theSpawnPoint)"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13101"
-            endingLineNumber = "13101"
+            startingLineNumber = "13129"
+            endingLineNumber = "13129"
             landmarkName = "GameScene::generateDwarf(int theType,int theSpawnPoint)"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13118"
-            endingLineNumber = "13118"
+            startingLineNumber = "13146"
+            endingLineNumber = "13146"
             landmarkName = "GameScene::generateDwarf(int theType,int theSpawnPoint)"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13226"
-            endingLineNumber = "13226"
+            startingLineNumber = "13254"
+            endingLineNumber = "13254"
             landmarkName = "GameScene::generateDwarf(int theType,int theSpawnPoint)"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447370919.007928"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13629"
-            endingLineNumber = "13629"
+            startingLineNumber = "13657"
+            endingLineNumber = "13657"
             landmarkName = "GameScene::generateTrollMission(int theX,int theY,float theRadius,bool theCircle, bool theControlPoint,cocos2d::CCPoint theControlPoint_1,cocos2d::CCPoint theControlPoint_2,int theDrawLine)"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameScene.cpp"
-            timestampString = "447380950.822121"
+            timestampString = "448242022.266577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18879"
-            endingLineNumber = "18879"
-            landmarkName = "GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)"
+            startingLineNumber = "18907"
+            endingLineNumber = "18907"
+            landmarkName = "GameScene::StartDwarfFreeze()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -169,8 +169,52 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "3172"
             endingLineNumber = "3172"
-            landmarkName = "MissionManager::AddExtraDownloadedMissions_2()"
+            landmarkName = "MissionManager::GetExtraMissions_2()"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MissionManager::GetExtraMissions_2()"
+                  moduleName = "DwarfForest"
+                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
+                  timestampString = "448242022.682608"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "3172"
+                  endingLineNumber = "3172"
+                  offsetFromSymbolStart = "758">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MissionManager::GetExtraMissions_2()"
+                  moduleName = "DwarfForest"
+                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
+                  timestampString = "448242022.682775"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "3172"
+                  endingLineNumber = "3172"
+                  offsetFromSymbolStart = "846">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MissionManager::GetExtraMissions_2()"
+                  moduleName = "DwarfForest"
+                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
+                  timestampString = "448242022.682923"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "3172"
+                  endingLineNumber = "3172"
+                  offsetFromSymbolStart = "868">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -201,38 +245,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2395"
             endingLineNumber = "2395"
-            landmarkName = "MissionManager::AddExtraDownloadedMissions_1()"
+            landmarkName = "MissionManager::GetExtraMissions_1()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MissionManager::AddExtraDownloadedMissions_1()"
-                  moduleName = "DwarfForest"
-                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "447380951.249347"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2400"
-                  endingLineNumber = "2400"
-                  offsetFromSymbolStart = "241">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MissionManager::AddExtraDownloadedMissions_1()"
-                  moduleName = "DwarfForest"
-                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "447380951.249497"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2400"
-                  endingLineNumber = "2400"
-                  offsetFromSymbolStart = "249">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

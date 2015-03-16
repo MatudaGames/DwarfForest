@@ -522,7 +522,10 @@ void ItemDataManager::onSetSelectedItem(int theType, int theID)
     std::vector<int> activeSpells = SplitString(User::getInstance()->mActiveSpells,',');
     // Remove the 1st and add the last
     std::stringstream theSaveData;
-    theSaveData << activeSpells[1] << "," << theID;
+    // If want to select 2 items
+//    theSaveData << activeSpells[1] << "," << theID;
+    // For now only 1 possible to select
+    theSaveData << theID;
     
     // Replace current stuff
     User::getInstance()->mActiveSpells = theSaveData.str();
@@ -540,6 +543,7 @@ void ItemDataManager::onRemoveSelectedItem(int theType, int theID)
     // For now only 2 possible to activate :)
     std::stringstream theSaveData;
     
+    /*
     if(activeSpells[0] == theID)
     {
         theSaveData << "0" << "," << activeSpells[1];
@@ -548,6 +552,9 @@ void ItemDataManager::onRemoveSelectedItem(int theType, int theID)
     {
         theSaveData << "0" << "," << activeSpells[0];
     }
+    */
+    // For 1 possible active
+    theSaveData << "0";
     
     // Replace current stuff
     User::getInstance()->mActiveSpells = theSaveData.str();

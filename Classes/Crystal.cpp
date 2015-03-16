@@ -59,6 +59,7 @@ bool Crystal::init(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
 	}
     
     // Update crystal amount by game item stuff
+    /* // OLD STUFF - NOW CRYSTAL VALUE CAN BE CHANGED - IGNORE THIS !!!
     if(gameScene->mPowerItem_CrystalRefiner>0)
     {
         // New values !!!
@@ -74,6 +75,7 @@ bool Crystal::init(GameScene* gameScene,int theCrystalID,int theTimeOnMap)
         BIG_CRYSTAL_SCORE = BIG_CRYSTAL_SCORE_DEFAULT;
         XXL_CRYSTAL_SCORE = XXL_CRYSTAL_SCORE_DEFAULT;
     }
+    */
 	
 	_color = static_cast<CrystalColor>(rand() % CRYSTAL_COLOR_COUNT);
     
@@ -361,6 +363,8 @@ void Crystal::pickUp(Dwarf* dwarf,int aMulti)
     CCParticleSystemQuad* p;
     
     //TODO add mPowerItem_CrystalDoublerValue ???
+    // This is one old whacky functional :(
+    int aScoreToAdd = 0;
     
     switch (_color)
 	{
@@ -376,48 +380,53 @@ void Crystal::pickUp(Dwarf* dwarf,int aMulti)
             
             break;
 		case CRYSTAL_COLOR_BLUE:
-            _gameScene->addDebugCrystalPoints(MEDIUM_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
+            aScoreToAdd = (CHARGE_CRYSTAL_BLUE+(CHARGE_CRYSTAL_BLUE*_gameScene->mPowerItem_CrystalRefiner/100))*_gameScene->mPowerItem_CrystalDoublerValue;
+//            _gameScene->addDebugCrystalPoints(MEDIUM_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
+            _gameScene->addDebugCrystalPoints(aScoreToAdd);
             
-            _gameScene->createPoints(MEDIUM_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
-//			_gameScene->addScore(MEDIUM_CRYSTAL_SCORE+_gameScene->mBoost_ExtraPoints);
+//            _gameScene->createPoints(MEDIUM_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+            _gameScene->createPoints(aScoreToAdd*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
 			_gameScene->addPickedUpCrystall(_color); // avoiding strang bug, when _color out of bounds
             
-            if(User::getInstance()->mNewMissionBuild){
-                dwarf->mCrystalPoints+=MEDIUM_CRYSTAL_SCORE*aMulti;
-            }
+//            if(User::getInstance()->mNewMissionBuild){
+//                dwarf->mCrystalPoints+=MEDIUM_CRYSTAL_SCORE*aMulti;
+//            }
 			break;
 		case CRYSTAL_COLOR_GREEN:
-            _gameScene->addDebugCrystalPoints(SMALL_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
+            aScoreToAdd = (CHARGE_CRYSTAL_GREEN+(CHARGE_CRYSTAL_GREEN*_gameScene->mPowerItem_CrystalRefiner/100))*_gameScene->mPowerItem_CrystalDoublerValue;
+//            _gameScene->addDebugCrystalPoints(SMALL_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
             
-            _gameScene->createPoints(SMALL_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+//            _gameScene->createPoints(SMALL_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+            _gameScene->createPoints(aScoreToAdd, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
 			_gameScene->addPickedUpCrystall(_color); // avoiding strang bug, when _color out of bounds
-//			_gameScene->addScore(SMALL_CRYSTAL_SCORE+_gameScene->mBoost_ExtraPoints);
             
-            if(User::getInstance()->mNewMissionBuild){
-                dwarf->mCrystalPoints+=SMALL_CRYSTAL_SCORE*aMulti;
-            }
+//            if(User::getInstance()->mNewMissionBuild){
+//                dwarf->mCrystalPoints+=SMALL_CRYSTAL_SCORE*aMulti;
+//            }
 			break;
 		case CRYSTAL_COLOR_RED:
-            _gameScene->addDebugCrystalPoints(BIG_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
+            aScoreToAdd = (CHARGE_CRYSTAL_RED+(CHARGE_CRYSTAL_RED*_gameScene->mPowerItem_CrystalRefiner/100))*_gameScene->mPowerItem_CrystalDoublerValue;
+//            _gameScene->addDebugCrystalPoints(BIG_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
             
-            _gameScene->createPoints(BIG_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+//            _gameScene->createPoints(BIG_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+            _gameScene->createPoints(aScoreToAdd, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
 			_gameScene->addPickedUpCrystall(_color); // avoiding strang bug, when _color out of bounds
-//			_gameScene->addScore(BIG_CRYSTAL_SCORE+_gameScene->mBoost_ExtraPoints);
             
-            if(User::getInstance()->mNewMissionBuild){
-                dwarf->mCrystalPoints+=BIG_CRYSTAL_SCORE*aMulti;
-            }
+//            if(User::getInstance()->mNewMissionBuild){
+//                dwarf->mCrystalPoints+=BIG_CRYSTAL_SCORE*aMulti;
+//            }
 			break;
 		case CRYSTAL_COLOR_YELLOW:
-            _gameScene->addDebugCrystalPoints(XXL_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
+            aScoreToAdd = (CHARGE_CRYSTAL_YELLOW+(CHARGE_CRYSTAL_YELLOW*_gameScene->mPowerItem_CrystalRefiner/100))*_gameScene->mPowerItem_CrystalDoublerValue;
+//            _gameScene->addDebugCrystalPoints(XXL_CRYSTAL_SCORE+_gameScene->getBoostExtraPoints());
             
-            _gameScene->createPoints(XXL_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+//            _gameScene->createPoints(XXL_CRYSTAL_SCORE*aMulti, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
+            _gameScene->createPoints(aScoreToAdd, _gameScene->getBoostExtraPoints(), dwarf->getPosition(),ccc3(0, 232, 225));
 			_gameScene->addPickedUpCrystall(_color); // avoiding strang bug, when _color out of bounds
-//			_gameScene->addScore(XXL_CRYSTAL_SCORE+_gameScene->mBoost_ExtraPoints);
             
-            if(User::getInstance()->mNewMissionBuild){
-                dwarf->mCrystalPoints+=XXL_CRYSTAL_SCORE*aMulti;
-            }
+//            if(User::getInstance()->mNewMissionBuild){
+//                dwarf->mCrystalPoints+=XXL_CRYSTAL_SCORE*aMulti;
+//            }
 			break;
 		default:
 			break;

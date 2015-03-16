@@ -1706,6 +1706,7 @@ void GameScene::CreateGameStartHUD()
     if(User::getInstance()->getItemDataManager().getActiveItems().size()>0)
     {
         // We need to show spell switch
+        /*
         mPowerMenu = InGamePowers::create();
         mPowerMenu->setPosition(ccp(visibleSize.width/2,50));
         mPowerMenu->mGameScene = this;
@@ -1714,6 +1715,16 @@ void GameScene::CreateGameStartHUD()
         mCurrentSpellCharge = mPowerMenu->mButtonSpell_1.charge;
         
         addChild(mPowerMenu,kHUD_Z_Order+1);
+        */
+        // No more power switch at game - instant set
+        std::vector<int> theActiveSpells = User::getInstance()->getItemDataManager().getActiveItems();
+        mCurrentSpellCharge = User::getInstance()->getItemDataManager().getSpellByID(theActiveSpells[0]).charge;
+        
+        //Update battle bar for any case !!!
+        float aTotalValue = float(mMasterTroll_Attack) / float(mCurrentSpellCharge);
+        if(aTotalValue>1)aTotalValue = 1;
+        mBattleBar_MachinePower->setTextureRect(CCRect(0, 0,mBattleBar_MachinePower->getTexture()->getContentSize().width*(aTotalValue),
+                                                       mBattleBar_MachinePower->getTexture()->getContentSize().height));
     }
     
     // Not needed for now !!!
@@ -9001,11 +9012,16 @@ void GameScene::UpdateDwarfSpawn(float delta)
                     
                     float aPossibleSpawnTImes = mCurrentMission.DSpawn_zone_step/_DSpawnGameMinCurrent;//The min random time
                     float aRandomTIme = 0;
+                    int aSafeCheck = 0;
                     for(int t = 0;t<_DSpawnGameMinCurrent;t++)
                     {
-                        aRandomTIme = (rand() % int(aPossibleSpawnTImes*100))/100+(t*aPossibleSpawnTImes);
-//                        CCLOG("Random time for spawn: %f",aRandomTIme);
-                        _dwarfSpawnArrTimers.push_back(aRandomTIme);
+                        // Safe check
+                        aSafeCheck = (rand() % int(aPossibleSpawnTImes*100));
+                        if(aSafeCheck>0)
+                        {
+                            aRandomTIme = aSafeCheck/100+(t*aPossibleSpawnTImes);
+                            _dwarfSpawnArrTimers.push_back(aRandomTIme);
+                        }
                     }
                 }
             }
@@ -9184,7 +9200,6 @@ void GameScene::UpdateCrystalSpawn(float delta)
                     }
                 }
             }
-            
             
             //Now check what can we spawn for each crystal
             int aRandomColorFin = 0;//What type of crystal should spawn
@@ -19587,6 +19602,26 @@ void GameScene::OnAttackHitTroll(CCNode* sender)
     
     // Take damage - and check if not dead
     mMasterTroll_HP -= mMasterTroll_Damege;
+    
+    //...................................................................
+    // Show the daage fly out !!
+    std::stringstream theDamageValue;
+    theDamageValue<<"-"<<mMasterTroll_Damege;
+    
+    CCLabelTTF *theDamage = CCLabelTTF::create(theDamageValue.str().c_str(), FONT_SKRANJI_BOLD, TITLE_FONT_SIZE*0.6, CCSize(300,240),
+                                               kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+    theDamage->setColor(ccc3(222,0,0));
+    theDamage->setAnchorPoint(ccp(0.5f,0.5f));
+    theDamage->setPosition(ccp(_MasterTrollBase->getPositionX()+_MasterTrollBase->getContentSize().height-10,_MasterTrollBase->getPositionY()));
+    addChild(theDamage, kHUD_Z_Order-1);
+    
+    // The animation for remove !!!
+    CCMoveBy* aMoveBy = CCMoveBy::create(1.0f,ccp(0,50));
+    CCEaseExponentialInOut* aEase = CCEaseExponentialInOut::create(aMoveBy);
+    CCCallFuncN* aFuncDone = CCCallFuncN::create(this, callfuncN_selector(GameScene::removeNode));
+    CCSequence* aSeq = CCSequence::create(aEase,aFuncDone,NULL);
+    theDamage->runAction(aSeq);
+    //...................................................................
     
     //Update label
     /*
