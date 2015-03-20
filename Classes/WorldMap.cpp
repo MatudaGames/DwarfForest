@@ -14,6 +14,10 @@
 #include "StoreScene.h"
 #include "ChallengesScene.h"
 #include "UpgradeScene.h"
+#include "OptionsScene.h"
+#include <SimpleAudioEngine.h>
+#include "ParseX.h"
+#include "FacebookX.h"
 
 USING_NS_CC;
 
@@ -1101,6 +1105,8 @@ void WorldMap::CreateHud()
     CCMenuItemSprite *storeItem = CCMenuItemSprite::create(storeNormalSprite, storeSelectedlSprite,
                                                            this,
                                                            menu_selector(WorldMap::Hud_ShowStore));
+    storeItem->setAnchorPoint(ccp(0,0));
+    storeItem->setPosition(ccp(0,4));
     
     CCSprite * challengesNormalSprite= CCSprite::create("Interfeiss/main_menu/new/challenges_btn_new0001.png");
     CCSprite * challengesSelectedlSprite= CCSprite::create("Interfeiss/main_menu/new/challenges_btn_new0002.png");
@@ -1108,26 +1114,52 @@ void WorldMap::CreateHud()
     CCMenuItemSprite *challengesItem = CCMenuItemSprite::create(challengesNormalSprite, challengesSelectedlSprite,
                                                                 this,
                                                                 menu_selector(WorldMap::Hud_ShowChallenges));
+    challengesItem->setAnchorPoint(ccp(1,0));
+    challengesItem->setPosition(ccp(mScreenSize.width,4));
+    
+    CCMenuItemImage* optionsItem = CCMenuItemImage::create(
+                                                           "Interfeiss/main_menu/new/options_btn0001.png",
+                                                           "Interfeiss/main_menu/new/options_btn0002.png",
+                                                           this,
+                                                           menu_selector(WorldMap::Hud_ShowOptions));
+    optionsItem->setAnchorPoint(ccp(0,1));
+    optionsItem->setPosition(ccp(0,mScreenSize.height-8));
+    
     
     CCMenuItemImage* backButtonReload = CCMenuItemImage::create(
                                                                 "DebugStuff/load_mission_1.png",
                                                                 "DebugStuff/load_mission_1.png",
                                                                 this,
                                                                 menu_selector(WorldMap::OnReloadStuff));
-    backButtonReload->setAnchorPoint(ccp(0,0));
+    backButtonReload->setAnchorPoint(ccp(1,1));
+    backButtonReload->setPosition(ccp(mScreenSize.width-8,mScreenSize.height-8));
     
     CCMenu *mMainMenu = CCMenu::create(storeItem,
-                               challengesItem,backButtonReload,
+                               challengesItem,backButtonReload,optionsItem,
                                NULL);
     
-    mMainMenu->alignItemsHorizontally();
+//    mMainMenu->alignItemsHorizontally();
     
-    mMainMenu->setPosition(ccp(mScreenSize.width/2-27,44));
+    mMainMenu->setPosition(ccp(0,0));
     
     mMainMenu->setTag(67881);
     
-    map_base->addChild(mMainMenu);
+//    map_base->addChild(mMainMenu);
+    addChild(mMainMenu);
     
+}
+
+void WorldMap::Hud_ShowOptions(CCObject* sender)
+{
+//    ParseX::createUser();
+    FacebookX::logInUser();
+    
+    return;
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
+    
+    OptionsScene* optionsLayer = OptionsScene::create();
+    optionsLayer->setAnchorPoint(ccp(0,0));
+    addChild(optionsLayer,100);
 }
 
 void WorldMap::OnReloadStuff()

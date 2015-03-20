@@ -96,12 +96,12 @@ bool Enemy_Totem::init(GameScene* game)
     _movePoints->retain();
     
     _base = CCSprite::create("beta/Totem1.png");
-    _base->setAnchorPoint(ccp(0.5,0.5));
+    _base->setAnchorPoint(ccp(0.5,0));
 //    _base->setOpacity(128);
     addChild(_base,1);
     
     mBar_TotemBase = CCSprite::create("small_dot_red.png");
-    mBar_TotemBase->setPosition(ccp(0,-_base->getContentSize().height/2));
+    mBar_TotemBase->setPosition(ccp(0,0));
     mBar_TotemBase->setScaleX(0.0f);     //(0.15);
     mBar_TotemBase->setScaleY(0.0f);     //(0.3);
     
@@ -293,6 +293,35 @@ void Enemy_Totem::AttackFromPlayer(cocos2d::CCPoint position,SpellInfo theSpell)
                 }
             }
         }
+    }
+    
+    // Show the damage
+    if(finalDamage>0)
+    {
+        //...................................................................
+        // Show the daage fly out !!
+        
+        // Quick damage blob
+        CCBlink* aBlink = CCBlink::create(0.25f, 2);
+        runAction(aBlink);
+        
+        std::stringstream theDamageValue;
+        theDamageValue<<"-"<<finalDamage;
+        
+        CCLabelTTF *theDamage = CCLabelTTF::create(theDamageValue.str().c_str(), FONT_SKRANJI_BOLD, TITLE_FONT_SIZE*0.7, CCSize(300,240),
+                                                   kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+        theDamage->setColor(ccc3(222,0,0));
+        theDamage->setAnchorPoint(ccp(0.5f,0.5f));
+        theDamage->setPosition(ccp(getPositionX(),getPositionY()+_base->getContentSize().height+30));
+        _game->addChild(theDamage, kHUD_Z_Order-1);
+        
+        // The animation for remove !!!
+        CCMoveBy* aMoveBy = CCMoveBy::create(1.0f,ccp(0,50));
+        CCEaseExponentialOut* aEase = CCEaseExponentialOut::create(aMoveBy);
+        CCCallFuncN* aFuncDone = CCCallFuncN::create(_game, callfuncN_selector(GameScene::removeNode));
+        CCSequence* aSeq = CCSequence::create(aEase,aFuncDone,NULL);
+        theDamage->runAction(aSeq);
+        //...................................................................
     }
     
     // Take the damage now

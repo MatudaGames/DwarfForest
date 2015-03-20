@@ -19,6 +19,17 @@
 #define SHOP_SPELLS 1
 #define SHOP_POWERS 2
 
+// For gameplay defined stuff
+//-----------------------------------
+// Charge values for spells
+extern int CHARGE_CRYSTAL_BLUE;
+extern int CHARGE_CRYSTAL_GREEN;
+extern int CHARGE_CRYSTAL_RED;
+extern int CHARGE_CRYSTAL_YELLOW;
+extern int CHARGE_DWARF_ENTER_CAVE;
+
+//-----------------------------------
+
 using namespace cocos2d;
 
 struct SpellInfo
@@ -70,6 +81,7 @@ struct PowerInfo
 class ItemDataManager
 {
 public:
+    
     ItemDataManager();
     
     std::vector<SpellInfo> mSpellDataVector;
