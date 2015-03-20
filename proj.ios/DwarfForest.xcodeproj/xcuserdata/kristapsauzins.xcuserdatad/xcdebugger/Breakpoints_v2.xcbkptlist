@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "12890"
             endingLineNumber = "12890"
-            landmarkName = "GameScene::generateHidra(int theX,int theY,float theRadius)"
+            landmarkName = "GameScene::generateGoblin(int theX,int theY,float theRadius)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -127,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "18907"
             endingLineNumber = "18907"
-            landmarkName = "GameScene::StartDwarfFreeze()"
+            landmarkName = "GameScene::FreezeDwarfTotal(cocos2d::CCObject *sender)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -144,7 +144,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MissionManager.cpp"
@@ -160,7 +160,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MissionManager.cpp"
@@ -171,56 +171,12 @@
             endingLineNumber = "3172"
             landmarkName = "MissionManager::GetExtraMissions_2()"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MissionManager::GetExtraMissions_2()"
-                  moduleName = "DwarfForest"
-                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "448242022.682608"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3172"
-                  endingLineNumber = "3172"
-                  offsetFromSymbolStart = "758">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MissionManager::GetExtraMissions_2()"
-                  moduleName = "DwarfForest"
-                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "448242022.682775"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3172"
-                  endingLineNumber = "3172"
-                  offsetFromSymbolStart = "846">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "MissionManager::GetExtraMissions_2()"
-                  moduleName = "DwarfForest"
-                  urlString = "file:///Users/kristapsauzins/Desktop/GameDev/2014/cocos2dx/cocos2d-x-2.2.5/projects/DwarfForest/Classes/MissionManager.cpp"
-                  timestampString = "448242022.682923"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3172"
-                  endingLineNumber = "3172"
-                  offsetFromSymbolStart = "868">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MissionManager.cpp"
@@ -236,7 +192,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MissionManager.cpp"

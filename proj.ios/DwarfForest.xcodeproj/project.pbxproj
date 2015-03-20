@@ -264,6 +264,18 @@
 		758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E951A42080C00CECB9F /* CoreText.framework */; };
 		758E3E981A42081E00CECB9F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E971A42081E00CECB9F /* MobileCoreServices.framework */; };
 		758E3E9A1A42083100CECB9F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 758E3E991A42083100CECB9F /* QuickLook.framework */; };
+		75A3B63F1AB8BBDE00E19C6C /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B63E1AB8BBDE00E19C6C /* Parse.framework */; };
+		75A3B6411AB8BC2300E19C6C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6401AB8BC2300E19C6C /* Accounts.framework */; };
+		75A3B6431AB8BC3400E19C6C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6421AB8BC3400E19C6C /* CFNetwork.framework */; };
+		75A3B6451AB8BC4300E19C6C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6441AB8BC4300E19C6C /* CoreLocation.framework */; };
+		75A3B6471AB8BC5F00E19C6C /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6461AB8BC5F00E19C6C /* Social.framework */; };
+		75A3B6491AB8BC6500E19C6C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6481AB8BC6500E19C6C /* StoreKit.framework */; };
+		75A3B64B1AB8BC8300E19C6C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B64A1AB8BC8300E19C6C /* libsqlite3.dylib */; };
+		75A3B64D1AB8C1C400E19C6C /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B64C1AB8C1C400E19C6C /* Bolts.framework */; };
+		75A3B64F1AB8C45800E19C6C /* ParseX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75A3B64E1AB8C45800E19C6C /* ParseX.mm */; };
+		75A3B6521AB8C77400E19C6C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6511AB8C77400E19C6C /* FacebookSDK.framework */; };
+		75A3B6551AB8C8BC00E19C6C /* FacebookX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 75A3B6531AB8C8BC00E19C6C /* FacebookX.mm */; };
+		75A3B6571AB8D03100E19C6C /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A3B6561AB8D03100E19C6C /* ParseFacebookUtils.framework */; };
 		75B12F881A3F8F3C00E8101A /* WorldMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B12F861A3F8F3C00E8101A /* WorldMap.cpp */; };
 		75B12F8B1A3F951700E8101A /* PanZoomLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75B12F891A3F951700E8101A /* PanZoomLayer.cpp */; };
 		75BCB0AC19E9236F000C7C65 /* BeforeQuitScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75BCB0A219E9236F000C7C65 /* BeforeQuitScene.cpp */; };
@@ -915,6 +927,20 @@
 		758E3E951A42080C00CECB9F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		758E3E971A42081E00CECB9F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		758E3E991A42083100CECB9F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		75A3B63E1AB8BBDE00E19C6C /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		75A3B6401AB8BC2300E19C6C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		75A3B6421AB8BC3400E19C6C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		75A3B6441AB8BC4300E19C6C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		75A3B6461AB8BC5F00E19C6C /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		75A3B6481AB8BC6500E19C6C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		75A3B64A1AB8BC8300E19C6C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		75A3B64C1AB8C1C400E19C6C /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		75A3B64E1AB8C45800E19C6C /* ParseX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParseX.mm; sourceTree = SOURCE_ROOT; };
+		75A3B6501AB8C47A00E19C6C /* ParseX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseX.h; sourceTree = SOURCE_ROOT; };
+		75A3B6511AB8C77400E19C6C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		75A3B6531AB8C8BC00E19C6C /* FacebookX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FacebookX.mm; sourceTree = SOURCE_ROOT; };
+		75A3B6541AB8C8BC00E19C6C /* FacebookX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookX.h; sourceTree = SOURCE_ROOT; };
+		75A3B6561AB8D03100E19C6C /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		75B12F861A3F8F3C00E8101A /* WorldMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WorldMap.cpp; sourceTree = "<group>"; };
 		75B12F871A3F8F3C00E8101A /* WorldMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorldMap.h; sourceTree = "<group>"; };
 		75B12F891A3F951700E8101A /* PanZoomLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PanZoomLayer.cpp; sourceTree = "<group>"; };
@@ -1115,25 +1141,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				75A3B64B1AB8BC8300E19C6C /* libsqlite3.dylib in Frameworks */,
+				BF1712471292920000B8313A /* libz.dylib in Frameworks */,
 				75BCB19F19E92650000C7C65 /* SystemConfiguration.framework in Frameworks */,
+				75A3B6571AB8D03100E19C6C /* ParseFacebookUtils.framework in Frameworks */,
+				75A3B6491AB8BC6500E19C6C /* StoreKit.framework in Frameworks */,
+				75A3B6471AB8BC5F00E19C6C /* Social.framework in Frameworks */,
 				75BCB1A119E9265B000C7C65 /* Security.framework in Frameworks */,
-				758E3E9A1A42083100CECB9F /* QuickLook.framework in Frameworks */,
 				BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */,
 				758E3E981A42081E00CECB9F /* MobileCoreServices.framework in Frameworks */,
+				75A3B6451AB8BC4300E19C6C /* CoreLocation.framework in Frameworks */,
+				75A3B64D1AB8C1C400E19C6C /* Bolts.framework in Frameworks */,
+				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
+				75A3B6521AB8C77400E19C6C /* FacebookSDK.framework in Frameworks */,
+				75A3B6431AB8BC3400E19C6C /* CFNetwork.framework in Frameworks */,
+				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
+				75A3B6411AB8BC2300E19C6C /* Accounts.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				758E3E9A1A42083100CECB9F /* QuickLook.framework in Frameworks */,
+				75A3B63F1AB8BBDE00E19C6C /* Parse.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				758E3E961A42080C00CECB9F /* CoreText.framework in Frameworks */,
-				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				758E3E941A4207EE00CECB9F /* AssetsLibrary.framework in Frameworks */,
 				75BCB1A319E926B6000C7C65 /* libFlurry_4.4.0.a in Frameworks */,
 				15A3DA6A1682F886002FB0C5 /* libcocos2dx.a in Frameworks */,
 				1ACB3244164770DE00914215 /* libcurl.a in Frameworks */,
 				BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */,
 				BF1712461292920000B8313A /* libxml2.dylib in Frameworks */,
-				BF1712471292920000B8313A /* libz.dylib in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
-				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
 				1AB8703C175E0A92005D39BF /* libwebsockets.a in Frameworks */,
 				755DD4F81A439C8C005E1E0B /* HockeySDK.framework in Frameworks */,
 			);
@@ -1145,6 +1181,10 @@
 		080E96DDFE201D6D7F000001 /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				75A3B6501AB8C47A00E19C6C /* ParseX.h */,
+				75A3B64E1AB8C45800E19C6C /* ParseX.mm */,
+				75A3B6541AB8C8BC00E19C6C /* FacebookX.h */,
+				75A3B6531AB8C8BC00E19C6C /* FacebookX.mm */,
 				1AC3624216D4A1E8000847F2 /* AppController.h */,
 				75BCB1A419E92732000C7C65 /* Flurry.h */,
 				75BCB1A519E9275B000C7C65 /* AnalyticX.mm */,
@@ -1693,6 +1733,8 @@
 				75BCB0CE19E92383000C7C65 /* GameScene.h */,
 				75BCB0CF19E92383000C7C65 /* GameStats.cpp */,
 				75BCB0D019E92383000C7C65 /* GameStats.h */,
+				7524817F1AACB50500E547C8 /* GameTutorial.cpp */,
+				752481801AACB50500E547C8 /* GameTutorial.h */,
 				75BCB0D119E92383000C7C65 /* Goblin.cpp */,
 				75BCB0D219E92383000C7C65 /* Goblin.h */,
 				1AFAF8B516D35DE700DB1158 /* HelloWorldScene.cpp */,
@@ -1829,8 +1871,6 @@
 				75BCB16619E9238D000C7C65 /* Wind.h */,
 				75B12F861A3F8F3C00E8101A /* WorldMap.cpp */,
 				75B12F871A3F8F3C00E8101A /* WorldMap.h */,
-				7524817F1AACB50500E547C8 /* GameTutorial.cpp */,
-				752481801AACB50500E547C8 /* GameTutorial.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -2424,23 +2464,33 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				75A3B6401AB8BC2300E19C6C /* Accounts.framework */,
 				758E3E931A4207EE00CECB9F /* AssetsLibrary.framework */,
 				D44C620F132DFF4E0009C878 /* AudioToolbox.framework */,
 				D44C620D132DFF430009C878 /* AVFoundation.framework */,
+				75A3B64C1AB8C1C400E19C6C /* Bolts.framework */,
+				75A3B6421AB8BC3400E19C6C /* CFNetwork.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				75A3B6441AB8BC4300E19C6C /* CoreLocation.framework */,
 				758E3E951A42080C00CECB9F /* CoreText.framework */,
+				75A3B6511AB8C77400E19C6C /* FacebookSDK.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				755DD4F31A439C8C005E1E0B /* HockeySDK.embeddedframework */,
 				1ACB3243164770DE00914215 /* libcurl.a */,
 				75BCB1A219E926B6000C7C65 /* libFlurry_4.4.0.a */,
+				75A3B64A1AB8BC8300E19C6C /* libsqlite3.dylib */,
 				BF170DB212928DE900B8313A /* libxml2.dylib */,
 				BF170DB412928DE900B8313A /* libz.dylib */,
 				758E3E971A42081E00CECB9F /* MobileCoreServices.framework */,
 				D44C620B132DFF330009C878 /* OpenAL.framework */,
 				BF170DB012928DE900B8313A /* OpenGLES.framework */,
+				75A3B63E1AB8BBDE00E19C6C /* Parse.framework */,
+				75A3B6561AB8D03100E19C6C /* ParseFacebookUtils.framework */,
 				BF1C47EA1293683800B63C5D /* QuartzCore.framework */,
 				758E3E991A42083100CECB9F /* QuickLook.framework */,
 				75BCB1A019E9265B000C7C65 /* Security.framework */,
+				75A3B6461AB8BC5F00E19C6C /* Social.framework */,
+				75A3B6481AB8BC6500E19C6C /* StoreKit.framework */,
 				75BCB19E19E92650000C7C65 /* SystemConfiguration.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 			);
@@ -2641,6 +2691,7 @@
 				15C0B57B196D412F007F909D /* UILabel.cpp in Sources */,
 				15C0B575196D412F007F909D /* UIListView.cpp in Sources */,
 				15A3D91C1682F7D5002FB0C5 /* b2EdgeAndCircleContact.cpp in Sources */,
+				75A3B64F1AB8C45800E19C6C /* ParseX.mm in Sources */,
 				15A3D91D1682F7D5002FB0C5 /* b2EdgeAndPolygonContact.cpp in Sources */,
 				15A3D91E1682F7D5002FB0C5 /* b2PolygonAndCircleContact.cpp in Sources */,
 				15C0B54F196D412F007F909D /* CCActionNode.cpp in Sources */,
@@ -2741,6 +2792,7 @@
 				15C0B58A196D412F007F909D /* LabelBMFontReader.cpp in Sources */,
 				75BCB0F019E92383000C7C65 /* DailyDaysCompletePopup.cpp in Sources */,
 				15C0B54E196D412F007F909D /* CCActionManager.cpp in Sources */,
+				75A3B6551AB8C8BC00E19C6C /* FacebookX.mm in Sources */,
 				15A3DA341682F826002FB0C5 /* CCBReader.cpp in Sources */,
 				15C0B574196D412F007F909D /* UITouchGroup.cpp in Sources */,
 				15A3DA351682F826002FB0C5 /* CCBSequence.cpp in Sources */,
@@ -2929,7 +2981,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Janis Krekovskis (2QF3JQ47L4)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2971,6 +3023,7 @@
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
 				);
 				OTHER_CFLAGS = "-O2";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = DwarfForest;
 				PROVISIONING_PROFILE = "a7d53459-e820-48ca-8135-24ec98c6d0fb";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "a7d53459-e820-48ca-8135-24ec98c6d0fb";
@@ -2987,7 +3040,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iOS Distribution: SIA \"GameVision\"";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Distribution: SIA \"GameVision\"";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3026,6 +3079,7 @@
 					"\"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries\"",
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = DwarfForest;
 				PROVISIONING_PROFILE = "96728f92-181c-4c2c-85f0-4e73256d5b82";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "96728f92-181c-4c2c-85f0-4e73256d5b82";

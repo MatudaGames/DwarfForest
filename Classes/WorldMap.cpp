@@ -16,6 +16,8 @@
 #include "UpgradeScene.h"
 #include "OptionsScene.h"
 #include <SimpleAudioEngine.h>
+#include "ParseX.h"
+#include "FacebookX.h"
 
 USING_NS_CC;
 
@@ -1149,6 +1151,10 @@ void WorldMap::CreateHud()
 
 void WorldMap::Hud_ShowOptions(CCObject* sender)
 {
+//    ParseX::createUser();
+    FacebookX::logInUser();
+    
+    return;
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(getSoundFx("button_click").c_str());
     
     OptionsScene* optionsLayer = OptionsScene::create();

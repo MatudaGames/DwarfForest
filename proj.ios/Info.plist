@@ -22,8 +22,21 @@
 	<string>1.015</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb636956119737838</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1.016</string>
+	<key>FacebookAppID</key>
+	<string>636956119737838</string>
+	<key>FacebookDisplayName</key>
+	<string>Dwarf Forest</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

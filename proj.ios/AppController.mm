@@ -6,6 +6,10 @@
 
 #import <HockeySDK/HockeySDK.h>
 
+#import <Parse/Parse.h>
+#import <FacebookSDK/FacebookSDK.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+
 @implementation AppController
 
 #pragma mark -
@@ -58,10 +62,27 @@ static AppDelegate s_sharedApplication;
     [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"fdf74220c60838542510502e978b9496"];
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
+    
+    // Parse stuff
+    [Parse setApplicationId:@"lRtb4hs9PIil1aA0jRiTWcSHvdDT7SLGzseIHt6A"
+                  clientKey:@"r5slwLNF9DuBtp6fXIYNSE9WJ2xlOF1Pr0RzgBpZ"];
+    
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+//    [Parse setApplicationId:@"parseAppId" clientKey:@"parseClientKey"];
+    [PFFacebookUtils initializeFacebook];
 
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication
+                        withSession:[PFFacebookUtils session]];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     /*
@@ -76,6 +97,11 @@ static AppDelegate s_sharedApplication;
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
     cocos2d::CCDirector::sharedDirector()->resume();
+    
+    // Logs 'install' and 'app activate' App Events.
+    [FBAppEvents activateApp];
+    
+    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
