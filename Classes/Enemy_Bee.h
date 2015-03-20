@@ -41,6 +41,9 @@ public:
     int coneRadius; // konusa garums pikseļos
     int coneWidth; // konusa platums grādos
     
+    int Dir;
+    int mLastDir;
+    
     cocos2d::CCSprite* _base;
     cocos2d::CCSprite* aBullet;
     

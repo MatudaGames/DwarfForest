@@ -68,6 +68,9 @@ bool Enemy_Bee::init(GameScene* game)
     
     _game = game;
     
+    Dir = 0;
+    mLastDir = 1;
+    
     _allCreated = false;
     
     beeWillShoot = false;
@@ -203,6 +206,17 @@ void Enemy_Bee::update(float delta)
     CCPoint point = _movePoints->getControlPointAtIndex(mMoveIndex);
     CCPoint point2 = _movePoints->getControlPointAtIndex(mMoveIndex2);
     CCPoint point3 = _movePoints->getControlPointAtIndex(mMoveIndex3+1);
+    
+    for (int bulletIndex = _bulletArr->count() - 1; bulletIndex >= 0; --bulletIndex)
+            {
+                CCSprite* _bullet = static_cast<CCSprite*>(_bulletArr->objectAtIndex(bulletIndex));
+                	if(_bullet->getPositionX() == point2.x || _bullet->getPositionX() == point3.x)
+                	{
+                    _bulletArr->removeObject(_bullet);
+                    _game->removeChild(_bullet);
+                    _bullet = NULL;
+                	}			
+            }
 	
 	if (ccpDistanceSQ(point, getPosition()) <= 800)
     {
@@ -253,7 +267,7 @@ void Enemy_Bee::update(float delta)
         
         //mCatchRadar->drawPolygon_fromVector(points, points.size(), ccc4f(1, 0, 0, 0.4f), 2, ccc4f(0, 0, 0, 0.1) );
         
-        int aCurrentAngle = (-_angle * 180.0 / M_PI)+coneWidth/2;
+        aCurrentAngle = (-_angle * 180.0 / M_PI)+coneWidth/2;
         mCatchRadar->setRotation(aCurrentAngle);
         
         mCatchRadar->setVisible(true);
@@ -270,10 +284,11 @@ void Enemy_Bee::update(float delta)
             mCatchRadar->setVisible(false);
             beeWillShoot = true;
             _beeIdleBeforeFire = 0;
+            Dir = 1;
             //Fire the bullet !!!
             CCSprite* aBullet = CCSprite::create("Characters/bee/dzelonis2.png");
-            aBullet->setPosition(getPosition());
-            CCMoveBy* aMoveBy;
+            aBullet->setPosition(ccp(getPositionX()+5, getPositionY()+5));
+            CCMoveTo* aMoveBy;
             aBullet->setFlipX(!_animation->isFlipX());
             /*
 			if(!_animation->isFlipX()){
@@ -298,7 +313,7 @@ void Enemy_Bee::update(float delta)
             	aBullet->setRotation(atan2f(-90, 0));
             }
             */
-            
+            /*
          	if(point2.x == point3.x)
          	{
          		if (_angle < 5.0f * M_PI / 8.0f){
@@ -309,7 +324,7 @@ void Enemy_Bee::update(float delta)
             	aBullet->setRotation(270);
             	aBullet->setFlipX(true);
 			}
-         	}else{
+         	}else if (point2.y == point3.y){
          		if(!_animation->isFlipX()){
                 aMoveBy = CCMoveBy::create(0.1f,ccp(10, 0));
 				aBullet->setRotation(180);	
@@ -318,8 +333,52 @@ void Enemy_Bee::update(float delta)
                 aMoveBy = CCMoveBy::create(0.1f,ccp(-10, 0));
                 aBullet->setRotation(540);
             	}
+         	}else{
+         		if(!_animation->isFlipX()){
+                aMoveBy = CCMoveBy::create(2.0f,ccp(point2.y, point2.x));
+				aBullet->setRotation(180);	
+            	}
+            else{
+                aMoveBy = CCMoveBy::create(2.0f,ccp(point3.y, point3.x));
+				aBullet->setRotation(180);	
+            	}
          	}
+            */
+            //int pozicija = getPositionX() - 100;
+			//int DRR = aCurrentAngle*(-3);
+			 if(Dir == mLastDir)
+            {
+                if(Dir == 1)
+                    Dir = 2;
+                else
+                    Dir = 1;
+            }
+			int AngleDir = 0;
+         	if(Dir == 2){
+            	aMoveBy = CCMoveTo::create(1.0f,ccp(point2.x, point2.y));
+            	//int deltaY = getPositionY() - point2.y;
+				//int deltaX = getPositionX() - point2.x;
+				//int angleInDegrees = atan2(deltaY, deltaX)/ M_PI*180+180;
+				int aCurrentAnglee = (-_angle * 180.0 / M_PI)+coneWidth/2;
+				aCurrentAnglee += 180;
+				AngleDir = aCurrentAnglee;
+				aBullet->setRotation(aCurrentAnglee);
+				aBullet->setFlipY(true);
+				//Dir = 2;	
+            }
+            else if (Dir == 1) {
+                aMoveBy = CCMoveTo::create(1.0f,ccp(point3.x, point3.y));
+                //int deltaY = getPositionY() - point2.y;
+				//int deltaX = getPositionX() - point2.x;
+				//int angleInDegreess = atan2(deltaY, deltaX)/ M_PI*180;
+				int cCurrentAnglee = (-_angle * 180.0 / M_PI)+coneWidth/2;
+				AngleDir+=180;
+                aBullet->setRotation(cCurrentAnglee);
+                aBullet->setFlipY(true);
+                //Dir = 1;
+            }
             
+            mLastDir = Dir;
             //Where will it move???
             
             CCRepeatForever* aRepeat = CCRepeatForever::create(aMoveBy);

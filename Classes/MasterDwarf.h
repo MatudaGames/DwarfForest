@@ -32,8 +32,16 @@ public:
     virtual void onExit();
     
     cocos2d::CCSprite* _base;
+    cocos2d::CCSprite* mBasePad;
     
     void setAnimation(SpriteAnimation* animation);
+    void setAnimationByName(const char* theAnimation);
+    
+    void setSpellToDwarf();
+    
+    bool shootSpell;
+    
+    cocos2d::CCArray* _spellBullets;
     
     // Not needed for now
     //    virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
@@ -42,16 +50,13 @@ public:
     
     void SetMissionStuff(MissionSet theMission);
     
-    // The new stuff for master troll
-    cocos2d::CCSprite* mBasePad;
-    
 private:
     GameScene* _game;
     
     //Animations for bee
-    SpriteAnimation* _upAnimation;
-    SpriteAnimation* _downAnimation;
-    SpriteAnimation* _shootUpAnimation;
-    SpriteAnimation* _shootDownAnimation;
+    SpriteAnimation* _idleAnim;
+    SpriteAnimation* _spell_1_Anim;
+    SpriteAnimation* _spell_2_Anim;
+    
     SpriteAnimation* _animation;
 };

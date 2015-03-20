@@ -35,6 +35,8 @@
 
 #include "MasterTroll.h"
 
+#include "MasterDwarf.h"
+
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "fmod.hpp"
@@ -64,6 +66,7 @@
 #define MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING 17
 #define MASTER_ACTION_BULLET_ONE_LINE 18
 #define MASTER_ACTION_BULLET_SPLIT_UP 19
+#define MASTER_ACTION_BULLET_SPELL 20
 
 // Mission types
 #define MissionType_PointCount 0
@@ -195,6 +198,8 @@ public:
     void updatePowerUpSpawn(float delta);
     
     cocos2d::CCArray* _powersOnMap;
+    
+    cocos2d::CCArray* _spellBulletsOnMap;
     
     float mPowerUpSpawnTime;
     
@@ -511,6 +516,8 @@ public:
     
     cocos2d::CCLabelTTF* _pointsLabel;
     
+    bool spellMoveTo;
+    
     void onEnterTransitionDidFinish();
     void CreateMachines();
     float _SpawnSpecialTrolls;
@@ -552,9 +559,10 @@ public:
     
     //The new fellas
 //    cocos2d::CCSprite* _MasterTrollBase;
-    cocos2d::CCSprite* _MasterDwarfBase;
+//    cocos2d::CCSprite* _MasterDwarfBase;
     
     MasterTroll* _MasterTrollBase;
+    MasterDwarf* _MasterDwarfBase;
     
     void UpdateTestStuff(float delta);
     
@@ -568,6 +576,7 @@ public:
     void UpdateMasterTroll(float delta);
     
     //Some params for master troll
+    void SetDwarfKingAnimation(const char* theAnimation);
     float mMasterTrollActionTimer; // When should do some damage
     
 //    void OnMasterTrollFinishEnter();
@@ -874,6 +883,11 @@ public:
     
     cocos2d::CCArray* _otherEnemy;
     
+    void addSpellBullet();
+    void finishSpellBullet();
+    
+    Dwarf * addSpellDwarf;
+    
     bool _gamePause;
     
     //----------
@@ -968,6 +982,8 @@ private:
     void StartRain(bool theDisable);
     bool mRainActive;
     bool mTornadoActive;
+    
+    //int aPowerUpNum;
     
     bool mSnowActive;
     

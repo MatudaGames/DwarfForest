@@ -2538,6 +2538,21 @@ void Dwarf::setAction(int theType)
     else if(theType == MASTER_ACTION_BULLET_STRAIGHT || theType == MASTER_ACTION_BULLET_SPLIT_UP || theType == MASTER_ACTION_BULLET_ONE_LINE || theType == MASTER_ACTION_BULLET_DECOMPOSE_BEGINNING || theType == MASTER_ACTION_BULLET_ZIGZAG || theType == MASTER_ACTION_BULLET_SPLIT_MIDDLE)
     {
         removeFromSave();
+    }else if (_type == MASTER_ACTION_BULLET_SPELL)
+	{
+		if(_game->mCurrentMission.Task_type == MissionType_DwarfSave || _game->mCurrentMission.Task_type == MissionType_DestroyTotem)
+		{
+			for(int otherIndex = _game->_powersOnMap->count()-1;otherIndex>=0;--otherIndex)
+    		{
+    		GameItem_PowerUp* bee = static_cast<GameItem_PowerUp*>(_game->_powersOnMap->objectAtIndex(otherIndex));
+       			if (bee->mPowerID >= 100)
+				{            
+    			this->setPowerButton(bee->mPowerID);
+    
+    			bee->onRemove();
+    			}
+			}
+		}
     }
 }
 

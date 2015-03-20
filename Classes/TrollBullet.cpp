@@ -149,6 +149,7 @@ bool TrollBullet::init(GameScene* game,int theType)
     
     // The new style for bullets?
     _animation = SpriteAnimation::create("Characters/master_troll/mt_bullet.plist");
+	
     _animation->retain();
     _animation->setOpacity(0);
     addChild(_animation, kHUD_Z_Order-1);
@@ -186,6 +187,21 @@ void TrollBullet::OnDoAction(Dwarf* theForced)
     {
 //        _game->_mission_SaveDwarfs_KillMax-=1;
         theForced->setAction(_type);
+    }else if (_type == MASTER_ACTION_BULLET_SPELL)
+	{
+		if(_game->mCurrentMission.Task_type == MissionType_DwarfSave || _game->mCurrentMission.Task_type == MissionType_DestroyTotem)
+		{
+			for(int otherIndex = _game->_powersOnMap->count()-1;otherIndex>=0;--otherIndex)
+    		{
+    		GameItem_PowerUp* bee = static_cast<GameItem_PowerUp*>(_game->_powersOnMap->objectAtIndex(otherIndex));
+       			if (bee->mPowerID >= 100)
+				{            
+    			theForced->setPowerButton(bee->mPowerID);
+    
+    			bee->onRemove();
+    			}
+			}
+		}
     }
 }
 

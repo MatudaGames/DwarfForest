@@ -38,7 +38,7 @@ MasterDwarf* MasterDwarf::create(GameScene* game)
 }
 
 MasterDwarf::MasterDwarf():
-_game(NULL), _animation(NULL), _upAnimation(NULL), _downAnimation(NULL), _shootDownAnimation(NULL), _shootUpAnimation(NULL)
+_game(NULL), _animation(NULL), _idleAnim(NULL), _spell_1_Anim(NULL), _spell_2_Anim(NULL) 
 {
     
 }
@@ -49,10 +49,9 @@ MasterDwarf::~MasterDwarf()
     {
         _game->release();
     }
-    if (_upAnimation) _upAnimation->release();
-    if (_downAnimation) _downAnimation->release();
-    if (_shootDownAnimation) _shootDownAnimation->release();
-    if (_shootUpAnimation) _shootUpAnimation->release();
+    if (_idleAnim) _idleAnim->release();
+    if (_spell_1_Anim) _spell_1_Anim->release();
+    if (_spell_2_Anim) _spell_2_Anim->release();
 }
 
 bool MasterDwarf::init(GameScene* game)
@@ -66,24 +65,24 @@ bool MasterDwarf::init(GameScene* game)
     
     // The base pad where Object stands
     _base = CCSprite::create("small_dot_red.png");
-    _base->setAnchorPoint(ccp(0.5f,1));
+    //_base->setAnchorPoint(ccp(0.5f,1));
     addChild(_base);
     
-    // The bottom of MT
-    mBasePad = CCSprite::create("small_dot_red.png");
+    // The bottom of MD
+    mBasePad = CCSprite::create("Characters/master_troll/mt_base.png");
+    mBasePad->setAnchorPoint(ccp(0.3f,1));
     _base->addChild(mBasePad);
     
-    _downAnimation = SpriteAnimation::create("Characters/bee/bee_fly_down.plist");
-    _downAnimation->retain();
+    _idleAnim = SpriteAnimation::create("Characters/dwarf_king/king_idle.plist");
+    _idleAnim->retain();
     
-    _upAnimation = SpriteAnimation::create("Characters/bee/bee_fly_up.plist");
-    _upAnimation->retain();
+    _spell_1_Anim = SpriteAnimation::create("Characters/dwarf_king/king_spell1.plist");
+    _spell_1_Anim->retain();
     
-    _shootDownAnimation = SpriteAnimation::create("Characters/bee/bee_shoot_down.plist");
-    _shootDownAnimation->retain();
+    _spell_2_Anim = SpriteAnimation::create("Characters/dwarf_king/king_spell2.plist");
+    _spell_2_Anim->retain();
     
-    _shootUpAnimation = SpriteAnimation::create("Characters/bee/bee_shoot_up.plist");
-    _shootUpAnimation->retain();
+    shootSpell = false;
     
     return true;
 }
@@ -92,9 +91,7 @@ bool MasterDwarf::init(GameScene* game)
 
 void MasterDwarf::update(float delta)
 {
-    CCLog("Update Master Troll");
-    
-    
+    CCLog("Update Master Dwarf");
 }
 
 void MasterDwarf::setAnimation(SpriteAnimation* animation)
@@ -118,9 +115,42 @@ void MasterDwarf::setAnimation(SpriteAnimation* animation)
     }
 }
 
+void MasterDwarf::setAnimationByName(const char* theAnimation)
+{
+    // The checker if all correct and what to play how long?
+    if(strcmp(theAnimation,"Idle") == 0)
+    {
+        // Lets hit the ground !!!
+        setAnimation(_idleAnim);
+    }
+    else if(strcmp(theAnimation,"Spell1") == 0)
+    {
+		setAnimation(_spell_1_Anim);
+		
+    }
+    else if(strcmp(theAnimation,"Spell2") == 0)
+    {
+        setAnimation(_spell_2_Anim);
+        
+        CCDelayTime* aDelay = CCDelayTime::create(3.0f);
+        CCCallFuncN* func = CCCallFuncN::create(this, callfuncN_selector(MasterDwarf::setSpellToDwarf));
+        CCSequence* aSeq1 = CCSequence::create(aDelay,func,NULL);
+        runAction(aSeq1);
+    }
+    
+}
+
+void MasterDwarf::setSpellToDwarf()
+{
+	setAnimation(_idleAnim);
+    _game->addSpellBullet();
+}
+
 void MasterDwarf::onEnter()
 {
     CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+    
+    setAnimation(_idleAnim);
     
     CCNode::onEnter();
 }
